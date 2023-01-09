@@ -1,0 +1,185 @@
+\chapter{C\'{a}lculo de la exponencial de una  matriz}\label{chapter:EXPM-Krylov}
+
+En este capitulo se presentan los resultados básicos sobre el c\'{a}lculo de la exponencial matricial que se requieren para esta tesis.
+
+\begin{definition}
+    \label{EXPM}\cite{Golub96} Sea $A$ una matriz de $n\times n$ real o compleja. La exponencial de $A$ denotada por 
+    $ \me{A} $ o $\mathrm{exp}(A)$ es una matriz de $n\times n$ dada por la serie de potencias
+    \[\me{A}=\sum_{k=0}^{\infty}\frac{1}{k!}A^{k}.\]
+\end{definition}
+En muchas aplicaciones se utiliza $\me{tA}$ donde $t$ es un escalar, por tanto 
+\begin{equation}
+\me{tA}=I+tA+\frac{t^{2}A^{2}}{2!}+\cdots\label{EXPM-SERIE}
+\end{equation}
+\begin{theorem}\cite{IntroMatrix}
+    La serie de matrices definida en~(\ref{EXPM-SERIE}) existe para toda matriz $A$ para $t$ fijo y
+    para todo $t$ para $A$ fija. La serie converge uniformemente en cualquier regi\'on de t del plano complejo.
+\end{theorem}
+
+En \cite{VanLoan03} se presenta una revisi\'on de los m\'etodos num\'ericos
+para aproximar
+la exponencial de matrices. Los m\'etodos m\'as utilizados son la aproximaci\'on de Pad\'e con escalamiento
+y potenciaci\'on para matrices peque\~nas y densas, y el de los subespacios de Krylov para matices grandes y esparcidas. 
+
+\section{Aproximaci\'on de Pad\'e}
+
+\begin{definition}
+    \cite{Golub96} La aproximaci\'{o}n racional de Pad\'{e} $P_{\pf,\qf}(z)$
+    de $\me{z}$ est\'{a} dada por 
+    \begin{equation*}
+    P_{\pf,\qf}(z)=\dfrac{R_{\pf,\qf}(z)}{Q_{\pf,\qf}(z)},  \label{FORM PADE}
+    \end{equation*}%
+    donde 
+    \[
+    R_{\pf,\qf}(z)=1+\dfrac{\pf}{\pf+\qf}z+\dfrac{\pf(\pf-1)}{(\pf+\qf)(\pf+\qf-1)}\dfrac{z^{2}}{2!}%
+    +\ldots +\frac{\pf(\pf-1)\ldots 1}{(\pf+\qf)(\pf+\qf-1)\ldots (\qf+1)}\dfrac{z^{\pf}}{\pf!}
+    \]%
+    y 
+    \[
+    Q_{\pf,\qf}(z)=R_{\qf,\pf}(-z).
+    \]
+\end{definition}
+
+Cuando la norma de $A$ es grande, el costo computacional  y los errores de redondeo aumentan, por lo que
+es necesaria la alternativa de escalamiento y potenciaci\'on.
+
+\begin{definition}\cite{Golub96}~
+    Sea $A$ una matriz cuadrada, y sea $P_{\pf,\qf}(2^{-k}A%
+    )$ la aproximaci\'{o}n de Pad\'{e} de orden $(\pf,\qf)\ $de $\me{2^{-k}A%
+    }$, donde $k$ es el menor número natural tal que $\left\vert 2^{-k}A%
+    \right\vert \leq \frac{1}{2}$. \ Se define la aproximación de  Pad\'{e}-$(\pf,\qf)$ con escalamiento y potenciación como 
+    \begin{equation}
+    F_{k}^{\pf,\qf}(A)=(P_{\pf,\qf}(2^{-k}A))^{2^{k}}.
+    \label{P-MA-2}
+    \end{equation}
+\end{definition}
+
+Resultados sobre el error y la estabilidad de las aproximaciones de Padé se presentan a continuación.
+
+\begin{theorem}
+    \label{Conv. Pade}\cite{errorpade} El error
+    relativo y absoluto de la aproximaci\'on de Pad\'{e} con escalamiento y
+    potenciaci\'on (\ref{P-MA-2}) de $\me{A}$ est\'{a} dado por: 
+    \[
+    \frac{\left\vert e^{A}-F_{k}^{\pf,\qf}(A)\right\vert 
+    }{\left\vert e^{A}\right\vert }\leq \epsilon _{p,q}\left\vert 
+    A\right\vert e^{\epsilon _{p,q}\left\vert A\right\vert }
+    \]%
+    y 
+    \begin{equation}
+    \left\vert \me{A}-F_{k}^{\pf,\qf}(A)\right\vert \leq
+    c_{p,q}(k,\left\vert A\right\vert )\left\vert A\right\vert
+    ^{p+q+1}, \label{errpade}
+    \end{equation}
+    donde $\epsilon _{p,q}=\alpha (\frac{1}{2})^{p+q-3}$, $%
+    c_{p,q}(k,\left\vert A\right\vert )=\alpha
+    2^{-k(p+q)+3}\me{(1+\epsilon _{p,q})\left\vert A\right\vert }$ y $%
+    \alpha =\frac{p!q!}{(p+q)!(p+q+1)!}$.
+\end{theorem}
+
+\begin{theorem}\label{Stab. Pade}[Teorema 4.12 en \cite{Hairer-Wanner96}] 
+    La aproximaci\'on de Pad\'e $P_{\pf,\qf}(z)$  es \emph{A-estable} si y solo si $\pf\leq \qf\leq \pf+2$. 
+    Todos los ceros y todos los polos son simples.
+\end{theorem}
+
+\section{Aproximación de Krylov\label{section:Krylov-sp}}
+Los estudios muestran que la aproximaci\'on de Pad\'e con escalamiento y potenciaci\'on
+es efectiva para calcular exponenciales de matrices relativamente peque\~nas y densas; pero no as\'i para matrices de dimensiones moderadas o grandes.
+
+Es conocido del \'Algebra Lineal Num\'erica que para problemas de
+grandes dimensiones los m\'etodos iterativos son preferidos por sobre los m\'etodos directos.
+En particular,
+los m\'etodos iterativos de los subespacios de Krylov han cobrado auge en la resoluci\'on de
+problemas de \'Algebra Lineal que involucran el producto de una funci\'on matricial y un vector,
+tales como la resoluci\'on de grandes sistemas lineales y en el c\'alculo de valores
+propios~\cite{Golub96}.
+
+Es importante destacar que en la mayor\'ia de los integradores exponenciales
+ no se necesita el c\'alculo de la matriz $\me{A}$ completa, sino
+el producto $\me{A}b$ donde $b$ es un vector determinado. Por ejemplo, la soluci\'on del problema de valor inicial homog\'eneo $\dot{x}(t)=Ax(t),\;x(0)=x_0$, es $x(t)=\me{At}x_0$ en forma de producto exponencial de matriz y vector. Esta es la raz\'on por la que
+los m\'etodos de los subespacios de Krylov han sido ampliamente utilizados para evaluar productos de esta forma.
+
+\begin{definition}
+        \cite{hoch97} Para $\mf\geq 1$, el $\mf$-\'esimo subespacio de Krylov de la matriz $A\in\mathbb{C}^{N\times N}$
+    y el vector $b\in\mathbb{C}^{N}$ se define como
+    \[ \mathcal{K}_\mf(A,b)=\mathrm{span}\left\{ b,Ab,A^{2},b,\ldots,A^{\mf-1}b \right\}. \]
+\end{definition}
+
+%\textcolor{red}{?donde se usa?: Este subespacio es invariante ante traslaci\'on $\mathcal{K}_m(A,b)=\mathcal{K}_m(A-\gamma I,b),\gamma\in\mathbb{C}$. Mas adelante se usa: invarianza ante escalado del algoritmo de Arnoldi}
+
+%\begin{theorem}
+%   Sea $p_{A,b}^{\mathrm{min}}$ polinomio de grado m\'inimo de $A$ respecto a $b$ y sea $\mu=deg\left( p_{A,b}^{\mathrm{min}} \right)$ el
+% \'indice de invarianza. Para $\mf\geq \mu$ los subespacios de Krylov son invariantes por A y $\mathcal{K}_\mf(A,b)=\mathcal{K}_\mu(A,b)$
+%   \[ \mathcal{K}_1(A,b) \subsetneq \mathcal{K}_2(A,b) \subsetneq  \cdots \subsetneq \mathcal{K}_\mu(A,b)=\mathcal{K}_{\mu+1}(A,b)=\cdots \]
+%\end{theorem}
+%El \'indice de invarianza suele ser grande, por lo que se elige una aproximaci\'on en un subespacio de orden $m\leq \mu$ utilizando la
+%compresi\'on de $A$ en $\mathcal{K}_\mf(A,b)$. 
+
+Antes de definir la aproximaci\'on por subespacios de Krylov del producto de una funci\'on matricial y un vector es 
+necesario construir una base ortonormal. Para construir dicha base se utiliza el algoritmo de
+Arnoldi~\ref{alg:Arnoldi} para matrices generales y el algoritmo de 
+Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
+
+\begin{algorithm}
+    \caption{Algoritmo de Arnoldi para construir una base ortonormal del subespacio de Krylov $\mathcal{K}_\mf(\tau A,b)$}
+    \label{alg:Arnoldi}
+    \KwIn{Matriz $A\in \mathbb{R}^{d\times d}$, vector $b\in \mathbb{R}^{d}$ y constante $\tau$}
+    \KwOut{Base ortonormal $\{v_1,v_2,\ldots,v_\mf,v_{\mf+1}\}$ de $K_\mf(\tau A,b)$ y matriz de Hessenberg $H_\mf=V_\mf^{\intercal}\tau A V_\mf $,
+        donde $V_{\mf+1}=[v_1\,v_2\,\cdots \,v_\mf\,v_{\mf+1}]\in \mathbb{R}^{d\times \mf+1}$, $breakdown$ }
+    $breakdown=false$\\
+    $v_1=b/\lVert b \rVert_2$\\
+    \For{ $j=1,2,\ldots,\mf$ }{
+        $w_j=\tau A v_j$\\
+        \For{ $i=1,\ldots,j$}{ 
+            $\hf_{ij}=\langle w_j,v_i \rangle$\\
+            $w_j=w_j-\hf_{ij}v_i$       
+        }
+        $\hf_{j+1,i}=\lVert w_j \rVert_2$\\
+        \eIf(\tcp*[h] \emph{Break Down}\label{alg:breakdown}){$\hf_{j+1,i}<2\epsilon_{mach}$}{
+            $\mf_{cut}=j$\\
+             $breakdown=true$\\
+            Stop
+        }{
+            $v_{j+1}=w_j/\hf_{j+1,i}$
+        }
+    }
+\end{algorithm}
+
+
+\begin{definition}
+    \cite{hoch97} Sea $V_\mf$ una base ortonormal de $\mathcal{K}_\mf(A,b)$ y sea $f$ una funci\'on matricial definida
+    en el espectro de $A$. La aproximaci\'on de $f(A)b$ por el  $\mf$-\'esimo subespacio de Krylov se define
+    \begin{equation}
+        f(A)b\approx ||b||_2 V_\mf f(H_\mf)e_1, \label{MFUNC-APROX}
+    \end{equation}
+    donde $H_\mf=V_\mf^{\intercal}AV_\mf$ y $e_1$ es el primer vector canónico de $\mathbb{R}^\mf$.
+    
+\end{definition}
+
+Cuando la funci\'on $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obtiene el siguiente resultado.
+\begin{theorem}\label{exp-bound}
+	\cite{Saad92} Sea $A\in\mathbb{C}^{N\times N}$ una matriz. El error de aproximaci\'on de $\me{A}b$ por el $\mf$-\'esimo subespacio
+	de Krylov es
+	\begin{equation*}
+	\left\lvert\left\lvert \me{A}b - \lvert\lvert b \rvert\rvert_2 V_\mf\me{H_\mf}e_1 \right\rvert\right\rvert_2 
+	\leq \frac{2\vert\lvert b \rvert\rvert_2 \left( \sigma(A) \right)^{\mf}\me{\sigma(A)}}{\mf!},
+	\end{equation*}
+	donde $\sigma(A)$ es el radio espectral de $A$.
+\end{theorem}
+
+Cuando la funci\'on $f$ en~(\ref{MFUNC-APROX}) es la función $\phi_k$ definida en (\ref{DEF-PHI}) se obtiene el siguiente resultado.
+\begin{theorem}
+    \cite{Saad92,Sidje98}~Sea $A\in\mathbb{C}^{N\times N}$ una matriz. El error de aproximaci\'on de $\phi_k(A)b$ por el $\mf$-\'esimo subespacio de Krylov es
+    \begin{equation}
+        ||\phi_k(A)b - ||b||_2 V_\mf \phi_k(H_\mf)e_1||_2  \leq ||b||_2\left\lvert\hf_{\mf+1,\mf} e_\mf^T\phi_{k+1}(H_\mf)e_1\right\rvert\left\lvert\left\lvert v_{\mf+1}\right\rvert\right\rvert_2.
+    \end{equation}
+\end{theorem}
+
+En general, para la familia de funciones $\phi_k$ se establece la expansión en serie \cite{Saad92,Sidje98}
+\begin{equation}
+\phi_k(\tau A)b=||b||_2\tau^{k} V_\mf \phi_k(\tau H_\mf)e_1 + ||b||_2\hf_{\mf+1,\mf}
+\sum_{j=k+1}^{\infty}\tau^{j} e_\mf^T\phi_j(\tau H_\mf)e_1A^{j-k-1}v_{m+1} \label{PHI-EXPANSION}
+\end{equation}
+donde $\tau$ es un número positivo y $e_\mf$ es el  $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$.
+
+

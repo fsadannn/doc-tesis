@@ -1,0 +1,653 @@
+\chapter{Esquemas de Linealizaci\'on Local para sistemas de ecuaciones no pequeños}\label{chapter:SCHEME}
+
+En la Secci\'on~\ref{section:ESQ-LLRK} se present\'o el esquema Runge Kutta de Dormand y Prince localmente linealizado
+para problemas de valor inicial de dimensiones peque\~nas. En este capítulo se introducen dos esquemas an\'alogos, pero
+para problemas de dimensiones moderadas o grandes. Uno de ellos est\'a basado en el m\'etodo de Krylov para
+exponeciales matriciales y el otro  en el llamado m\'etodo de Krylov libre de Jacobiano~(\emph{Jacobian free Krylov Method}). Se propone adem\'as una estrategia adaptativa para seleccionar autom\'aticamente el tama\~no de paso de los esquemas, la dimensi\'on de los subespacios de Krylov y el orden de la  aproximaci\'on de Pad\'e. También se propone un criterio para decidir cuando reutilizar o no el Jacobiano del campo vectorial evaluado en un paso de integración anterior al actual. 
+
+Sin perdida de generalidad, consideraremos problemas de valor inicial autónomos.
+\section{Esquemas embebidos LLDP\label{KRLOV-PADE}}
+
+En la secci\'on~\ref{section:ESQ-LLRK} se present\'o los esquemas embebidos  Runge Kutta de Dormand y Prince localmente linealizados
+para problemas de valor inicial de  dimensiones peque\~nas. Para extender este esquema a problemas de dimensiones no pequeñas se sustituye la aproximaci\'on de Pad\'e de la exponencial matricial por la aproximaci\'on con subespacios
+de Krylov. Con este objetivo, utilizando el 
+Teorema \ref{exp-phi}, la función $\varphi_j=L\;\me{c_{j}h_{n}M_{n}}\;r$ definida en Sección \ref{section:ESQ-LLRK} puede reescribirse como
+\[\varphi_j=c_jh_n\phi_1(c_jh_nf_x(t_n,y_n))f(t_n,y_n),\]
+%por Teorema \ref{exp-phi} se tiene
+%\begin{equation*}
+%\me{M_nc_jh_n}=\left[ 
+%\begin{array}{cc}
+%\me{c_jh_nf_x(t_n,y_n)} & c_jh_n\phi_1(c_jh_nf_x(t_n,y_n))f(t_n,y_n)\\ 
+%0 & 1%
+%\end{array}%
+%\right]
+%\end{equation*}%
+donde  $\phi_1(z)=\frac{\me{z}-I}{z}$. 
+
+Una primera aproximación $\widetilde{\varphi}_j$ para $\varphi_j$ puede obtenerse utilizando la aproximaci\'on básica especificada en (\ref{MFUNC-APROX}) para el subespacio $\mathcal{K}_\mf(h_nf_x,f)$. Esto es, 
+%En lugar de aproximar $\varphi$ por Pad\'e, se har\'a con un subespacio de Krylov de orden
+% $\mf$, por lo que la aproximaci\'on~(\ref{MFUNC-APROX})~\cite{Saad92} ser\'a
+\begin{equation*}
+\widetilde{\varphi}_j = \beta c_jV_{\mf}\phi_1\left( c_j H_{\mf} \right) e_1, %\label{phi1-aprox}
+\end{equation*}
+ donde $\beta=\vert\vert h_nf(t_n,y_n) \vert\vert_2$.
+ 
+ Como se explic\'o en la Secci\'on \ref{section:Krylov-sp}, para aproximar $\varphi_j$ con el  $\mf$-\'esimo subespacio de Krylov es necesario disponer de una base ortonormal de dicho subespacio. Esta base se construye utilizando el Algoritmo~\ref{alg:Arnoldi} y, mediante el cual, también se obtienen un vector adicional de la base $v_{\mf+1}$ y un elemento adicional de la matriz de Heissenber $\hf_{\mf+1,\mf}$. De esta forma, utilizando el segundo termino de la serie (\ref{PHI-EXPANSION}), se puede
+ agregar, sin costo computacional extra, una correcci\'on a la anterior aproximaci\'on $\widetilde{\varphi}_j$ obteni\'endose la nueva aproximación
+\begin{equation}\label{kaprox}
+K_{\mf}\left(c_j,h_nf_x , f \right)=\beta c_jV_{\mf}\phi_1\left( c_j H_{\mf} \right) e_1 + \beta c_j^{2}\hf_{\mf+1,\mf}e_\mf^T\phi_2\left(c_j H_\mf\right) e_1.
+\end{equation}
+
+En el esquema~(\ref{LLDP scheme}) tambi\'en es necesario calcular los términos
+$h_n\phi_1(h_n f_x)f$, $\frac{1}{5}h_n\phi_1(\frac{1}{5}h_nf_x)f$, $\frac{3}{10}h_n\phi_1(\frac{3}{10}h_n f_x)f$, 
+$\frac{4}{5}h_n\phi_1(\frac{4}{5} h_nf_x)f$, $\frac{8}{9}h_n\phi_1(\frac{8}{9}h_n f_x)f$
+por lo que, en principio, habr\'ia que construir un subespacio de Krylov por cada uno de ellos. Sin embargo, utilizando la propiedad de invarianza 
+ante escalado del algoritmo de Arnoldi, la relaci\'on entre las funciones $\phi_k$ y la exponencial matricial dada por Teorema \ref{exp-phi}, y la propiedad de flujo de la exponencial solamente es necesario construir un solo subespacio de Krylov. Para ello se comienza construyendo la base ortonormal del subespacio $\mathcal{K}_\mf(h_nf_x,f)$ utilizando el Algoritmo~\ref{alg:Arnoldi} y con la calculada matriz de Heissenber $H_\mf$ se crea la matriz 
+\begin{equation}
+    \overline{H} = \left[\begin{array}{cccc}
+        H_\mf & e_1 & 0 & 0\\
+        0_{1\times\mf} & 0 & 1 & 0\\
+        0_{1\times\mf} & 0 & 0 & 1\\
+        0_{1\times\mf} & 0 & 0 & 0
+    \end{array}\right] \label{hhat}
+\end{equation} definida en Teorema~\ref{exp-phi}. De esta forma se obtiene que 
+\begin{equation}
+\left[\begin{array}{cccc}
+\me{\tau H_m} & \tau\phi_1(\tau H_m)e_1 & \tau^{2}\phi_2(\tau H_m)e_1 &
+\tau^{3}\phi_3(\tau H_m)e_1 \\
+& 1 & \tau & \frac{\tau^{2}}{2}\\
+&  & 1 & \tau \\
+&   &   & 1 \\
+\end{array}\right] = \me{\tau\overline{H}} \; \label{phi_hhat}
+\end{equation}
+para todo $\tau \in \mathbb{R}$. Como $\frac{1}{90}$ es el m\'inimo com\'un denominador de $\frac{1}{5},\frac{3}{10},\frac{4}{5},\frac{8}{9},1$, por la propiedad de invarianza 
+ante escalado del algoritmo de Arnoldi podemos utilizar la matriz $\frac{1}{90}\overline{H}$ y calcular su exponencial. Denotemos por $E_{1/90}$ dicha exponencial matricial. Las restantes exponenciales matriciales se calculan entonces por la propiedad de flujo. Mas precisamente, por las expresiones
+\begin{align*}
+    E_{2/90} &= E_{1/90}E_{1/90} & E_{4/90} &= E_{2/90}E_{2/90}\\
+    E_{8/90} &= E_{4/90}E_{4/90} & E_{16/90} &= E_{8/90}E_{8/90}\\
+    E_{32/90} &= E_{16/90}E_{16/90} & E_{80/90} &= E_{32/90}E_{16/90}E_{32/90}\\
+    E_{1/10} &= E_{8/90}E_{1/90} & E_{1/5} &= E_{1/10}E_{1/10}\\
+    E_{2/5} &= E_{1/5}E_{1/5} & E_{4/5} &= E_{2/5}E_{2/5}\\
+    E_{3/10} &= E_{1/10}E_{1/5} & E_1 &= E_{4/5}E_{1/5}.
+\end{align*}
+Con las calculadas exponenciales $E_{1}=\me{\overline{H}},E_{\frac{1}{5}}=\me{\frac{1}{5}\overline{H}},
+E_{\frac{3}{10}}=\me{\frac{3}{10}\overline{H}},E_{\frac{4}{5}}=\me{\frac{4}{5}\overline{H}},
+E_{\frac{8}{9}}=\me{\frac{8}{9}\overline{H}}$ y usando (\ref{phi_hhat}) en (\ref{kaprox}) finalmente se obtiene las siguientes aproximaciones 
+\begin{eqnarray*}
+    \frac{1}{5}h_n\phi_1\left(\frac{1}{5}h_n f_x\right)f & \approx & \beta  \frac{1}{5} V_{\mf}\; [E_{\frac{1}{5}}]_{12}\; e_1 + \beta \left(\frac{1}{5}\right)^{2}\hf_{\mf+1,\mf}e_\mf^T\; [E_{\frac{1}{5}}]_{13}\; e_1 v_{\mf+1} \\
+    \frac{3}{10}h_n\phi_1\left(\frac{3}{10}h_n f_x\right)f & \approx & \beta  \frac{3}{10} V_{\mf}\; [E_{\frac{3}{10}}]_{12}\; e_1 + \beta \left(\frac{3}{10}\right)^{2}\hf_{\mf+1,\mf}e_\mf^T\; [E_{\frac{3}{10}}]_{13}\; e_1 v_{\mf+1} \\
+    \frac{4}{5}h_n\phi_1\left(\frac{4}{5}h_n f_x\right)f & \approx & \beta  \frac{4}{5} V_{\mf}\; [E_{\frac{4}{5}}]_{12}\; e_1 + \beta \left(\frac{4}{5}\right)^{2}\hf_{\mf+1,\mf}e_\mf^T\; [E_{\frac{4}{5}}]_{13}\; e_1 v_{\mf+1} \\
+    \frac{8}{9}h_n\phi_1\left(\frac{8}{9}h_n f_x\right)f & \approx & \beta  \frac{8}{9} V_{\mf}\; [E_{\frac{8}{9}}]_{12}\; e_1 + \beta \left(\frac{8}{9}\right)^{2}\hf_{\mf+1,\mf}e_\mf^T\; [E_{\frac{8}{9}}]_{13}\; e_1 v_{\mf+1}  \\
+    h_n\phi_1(h_n f_x)f & \approx &  \beta V_{\mf}\; [E_1]_{12}\; e_1 + \beta\hf_{\mf+1,\mf}e_\mf^T\; [E_1]_{13}\; e_1 v_{\mf+1},
+\end{eqnarray*}
+donde $[E_{c_j}]_{ik}$ denota la submatriz $i,k$ de la matriz particionada $E_{c_j}$ definida por (\ref{phi_hhat}) con $\tau=c_j$.
+
+Como estas aproximaciones para $\phi_1$ se obtienen de truncar la expansi\'on en serie (\ref{PHI-EXPANSION}) en el segundo t\'ermino, el tercer término de (\ref{PHI-EXPANSION}) puede tomarse como un estimado crudo del error absoluto $\varepsilon$ de esa aproximaciones, es decir,
+\[ \varepsilon \approx \beta\left\lvert  c_j^{3}\hf_{\mf+1,\mf} e_\mf^{T}\phi_3( c_jH_\mf)e_1 \right\rvert \left\lvert\left\lvert h_nf_x v_{\mf+1} \right\rvert\right\rvert_2. \] 
+Como $\phi_3$ es mon\'otona creciente, entonces
+calculando el error de la aproximaci\'on con el mayor de los $c_j$ tendremos el m\'aximo de los errores. Así, el error relativo $\varepsilon_{K}$ de esas aproximaciones respecto a las tolerancias del esquema puede acotarse por 
+\begin{equation}
+\varepsilon_{K} \approx \left(\sum\limits_{i=1}^{d} \left(\frac{\beta\left\vert \mathfrak{c}^{3}\hf_{\mf+1,\mf}
+   e_\mf^{T}\phi_3(\mathfrak{c}H_\mf)e_1 \right\vert \rho^{i}}{AbsTol + RelTol*y_{n}^{i}}\right)^{2}\right)^{1/2},\label{errrel}
+\end{equation}
+donde AbsTol y RelTol son las tolerancias absoluta y relativa, $\rho=h_nf_x v_{\mf+1}$ y $\mathfrak{c}=\maxx{c_j}$.
+
+Con fines pr\'acticos la exponencial matricial $E_{\frac{1}{90}}$ debe ser calculada mediante alguna aproximaci\'on. Para ello se utiliza la aproximaci\'on de Padé con escalamiento y potenciación definida en (\ref{P-MA-2}). De esta forma tenemos la aproximación
+\[\widetilde{E}_{\frac{1}{90}} = F_k^{\pf,\qf}\left(\frac{1}{90}\overline{H}\right) \]
+para $E_{\frac{1}{90}}$ mediante la cual se define la siguiente aproximaci\'on $(\mf , \pf ,\qf , k)$-Krylov-Padé truncada de segundo orden
+\begin{equation} \label{kp_aprox}
+K_{\mf,k}^{\pf,\qf}\left(c_j,h_nf_x , f \right)=\beta c_jV_{\mf}\;[\widetilde{E}_{c_j}]_{12}\; e_1 + \beta c_j^{2}\hf_{\mf+1,\mf}e_\mf^T\;[\widetilde{E}_{c_j}]_{13}\; e_1
+\end{equation}
+para $\varphi_j$. Remarcamos nuevamente que ésta aproximación se obtiene como subproducto del algoritmo de Arnoldi con un costo computacional mínimo y que es obviamente más precisa que la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé truncada de primer orden \cite{errorpade} definida solo por el primer término de (\ref{kp_aprox}). 
+
+Finalmente, sustituyendo la aproximación $\widetilde{\varphi}_j$ de (\ref{LLDP scheme}) por $K_{\mf,k}^{\pf,\qf}\left(c_j,h_nf_x , f \right)$ se obtienen las siguientes fórmulas embebidas LLDP para problemas de valor inicial no pequeños
+\begin{equation}
+\widetilde{y}_{n+1}\,=\,\widetilde{y}_n+\widetilde{\varphi}_s+h_n \sum_{j=1}^{s}b_j \kt_j \,\,\, \text{and} \,\,\, \
+\widehat{y}_{n+1}\,=\, \widetilde{y}_n+\widetilde{\varphi}_s+h_n \sum_{j=1}^{s}\widehat{b}_j \kt_j,
+\label{LLDPK scheme}
+\end{equation}
+donde $s = 7$ es el número de estados, $ \widetilde{\varphi }_j =K_{\mf,k}^{\pf,\qf}\left(c_j,h_nf_x,f \right)$ y 
+\[ \kt_j = f\left( t_n+c_jh_n\, , \, \widetilde{y}_n+\widetilde{\varphi}_j+h_n \sum_{i=1}^{j-1}a_{j,i}\kt_i \right) - f(t_n\, ,\, \widetilde{y}_n) - f_x(t_n\, , \, \widetilde{y}_n)\widetilde{\varphi}_j. \]
+
+\section{Esquemas embebidos LLDP libre de Jacobiano\label{KRLOV-PADE-FJ}}
+
+ Note que en el Algoritmo \ref{alg:Arnoldi} se requiere del producto de una matriz por un vector y nunca se utiliza la matriz completa por si sola.
+Esto permite que al aplicar ese algoritmo para construir una base ortonormal del subespacio $\mathcal{K}_\mf(h_nf_x,v_{d\times 1})$ el producto $h_nf_x\cdot v_{d\times 1}$ pueda ser reemplazado su correspondiente derivada por cociente diferencial \cite{carr11,newtonkry}. Como el Jacobiano existe entonces la derivada de cada componente de la funci\'on vectorial existe. 
+La derivada direccional es aproximada~\cite{numerical} con orden 1 por
+\[f_x\cdot v = \lim\limits_{\delta\to 0}\frac{f(x + \delta v)-f(x)}{\delta} \approx \frac{f(x + \delta v)-f(x)}{\delta}\]
+y con orden 2 por
+\[  f_x\cdot v = \lim\limits_{\delta\to 0}\frac{f(x + \delta v)-f(x-\delta v)}{2\delta} \approx \frac{f(x + \delta v)-f(x-\delta v)}{2\delta},\]
+donde $x,v\in\mathbb{R}^{d}$. Esta aproximaci\'on es buena para un $\delta$ suficientemente pequeño. Para obtener un $\delta$ balanceado 
+entre el error de redondeo y $\epsilon_{mach}$ se utiliza la siguiente f\'ormula~\cite{freej}
+\begin{equation}
+	\delta = \frac{\sqrt{(1+ \vert\vert x \vert\vert_2)\epsilon_{mach}}}{\vert\vert v \vert\vert_2}. \label{deltavar}
+\end{equation}
+%\[\delta = \frac{\sqrt{(1+ \vert\vert x \vert\vert_2)\epsilon_{mach}}}{\vert\vert v \vert\vert_2}. \]
+
+Si en las fórmulas embebidas (\ref{LLDPK scheme}) se utiliza la aproximación de segundo orden para $f_x(t_n\, , \, \widetilde{y}_n)\widetilde{\varphi}_j$ y en el proceso de construcci\'on de la base ortonormal de $\mathcal{K}_\mf(h_nf_x,v_{d\times 1})$ mediante el Algoritmo~\ref{alg:Arnoldi} se utiliza la aproximaci\'on de primer orden para el producto $h_nf_x\cdot v_{d\times 1}$, entonces se obtienen las siguientes fórmulas embebidas LLDP-FJ para problemas de valor inicial no pequeños
+\begin{equation}
+\widetilde{y}_{n+1}\,=\,\widetilde{y}_n+\widetilde{\varphi}_s+h_n \sum_{j=1}^{s}b_j k_j \,\,\, \text{and} \,\,\, \
+\widehat{y}_{n+1}\,=\, \widetilde{y}_n+\widetilde{\varphi}_s+h_n \sum_{j=1}^{s}\widehat{b}_j k_j,
+\label{LLDPKFJ scheme}
+\end{equation}
+donde $s = 7$ es el número de estados,
+\[ \kt_j = f\left( t_n+c_jh_n\, , \, \widetilde{y}_n+\widetilde{\varphi}_j+h_n \sum_{i=1}^{j-1}a_{j,i}\kt_i \right) - f(t_n\, ,\, \widetilde{y}_n) - \frac{f(t_n\, ,\, \widetilde{y}_n+\delta\widetilde{\varphi}_j)-f(t_n\, ,\, \widetilde{y}_n-\delta\widetilde{\varphi}_j)}{2\delta} \]
+y
+\[ \widetilde{\varphi }_j =\widetilde{K}_{\mf,k}^{\pf,\qf}\left(c_j,h_nf_x,f \right). \] Aquí, 
+\begin{equation}
+\widetilde{K}_{\mf,k}^{\pf,\qf}\left(c_j,h_nf_x , f \right)=\beta c_jV^{FJ}_{\mf}\;[\widetilde{E}^{FJ}_{c_j}]_{12}\; e_1 + \beta c_j^{2}\hf^{FJ}_{\mf+1,\mf}(e^{FJ}_\mf)^T\;[\widetilde{E}^{FJ}_{c_j}]_{13}\; e_1. \label{kp_fj_aprox}
+\end{equation}
+es la aproximaci\'on $(\mf , \pf ,\qf , k)$-Krylov-Padé libre de Jacobiano de
+$c_jh_n\phi_1(c_jh_nf_x(t_n,\widetilde{y}_n))f(t_n,\widetilde{y}_n)$, donde las matrices $\widetilde{E}^{FJ}_{c_j}$ son calculadas como las $\widetilde{E}_{c_j}$ en la sección anterior pero usando la matriz de Heissenber libre de Jacobiano $H^{FJ}_m$ en lugar de $H_m$ en (\ref{hhat}).
+
+\section{Orden de convergencia de los esquemas embebidos LLDP}
+
+Con el propósito de determinar el orden de convergencia de los esquemas embebidos LLDP, se hace necesario encontrar cotas más precisas que el estimado $\varepsilon_{abs}$ para el error de la aproximación (\ref{kp_aprox}) de  $\varphi_j$. Los próximos resultados están orientados a alcanzar ese objetivo.
+
+%En el Teorema~\ref{exp-bound} se tiene una cota para la aproximaci\'on de la exponencial, pero es necesaria una cota m\'as general para la familia de funciones $\phi$.
+\begin{lemma}
+    \label{PHI-REST}
+    Sea $s_{\mf-1}$ un polinomio de grado $\mf-1$ obtenido de la expansi\'on en serie de Taylor
+    de $\phi_k$
+    \[ s_{\mf-1}(x)= \sum_{j=0}^{\mf-1}\frac{x^{j}}{(j+k)!}\]
+    y sea $t_\mf(z)=\phi_k(x)-s_{\mf-1}$ el resto. Entonces $\forall x\in\mathbb{R}_+$
+    y $\forall \mf\in\mathbb{Z}_+$
+    \[ t_\mf(x)\leq \frac{x^\mf\me{x}}{\mf(\mf+k-1)!} \]
+\end{lemma}
+\emph{Demostraci\'on} El resto integral de la serie de Taylor de $\phi_k$ es
+\begin{equation*}
+t_m(x)= \frac{x^\mf}{(\mf+k-1)!}\int_{0}^{1} \me{(1-\tau)x}\tau^{\mf-1} \,d\tau.
+\label{PHI-INTEG-REST}
+\end{equation*}
+Utilizando la desigualdad $\me{(1-\tau)x}\leq\me{x}$ tenemos
+\begin{eqnarray*}
+    t_m(x) & \leq & \frac{x^\mf}{(\mf+k-1)!}\int_{0}^{1} \me{x}\tau^{\mf-1} \,d\tau\\
+    %& \leq & \frac{x^\mf\me{x}}{(\mf+k-1)!} \left. \frac{ \tau^{\mf} }{ \mf } \right\vert_{0}^{1}\\
+    & \leq & \frac{x^\mf\me{x}}{\mf(\mf+k-1)!},
+\end{eqnarray*}
+lo cual concluye la prueba. $\Box$
+\newline
+
+El siguiente teorema brinda una cota para el error en la aproximaci\'on de $\phi_k$ por un vector mediante la serie (\ref{PHI-EXPANSION}) truncada hasta el segundo termino.
+\begin{theorem}\label{CORRECTED-ERROR}
+    Sea $A\in\mathbb{C}^{N\times N}$ una matriz y \[{\widetilde{\phi}_k(A,b) = ||b||_2 V_\mf \phi_k(H_\mf)e_1}+||b||_2 \hf_{\mf+1,\mf}e_\mf^T\phi_2\left(H_\mf\right) e_1 v_{\mf+1} \] una aproximación para $\phi_k(A)b$ en términos del $\mf$-\'esimo subespacio de Krylov de $A$. 
+     Entonces el error de aproximaci\'on esta acotado por  
+    \begin{gather*}
+     \left\lvert\left\lvert \phi_k(A)b - \widetilde{\phi}_k(A,b) \right\rvert\right\rvert_2%\nonumber\\
+     \leq \frac{2\vert\lvert b \rvert\rvert_2 \left( \sigma(A) \right)^{\mf+1}\me{\sigma(A)}}{(\mf+1)(\mf+k)!},
+    \end{gather*}
+    donde $\sigma(A)$ es el radio espectral de $A$.
+\end{theorem}
+\emph{Demostraci\'on}
+
+ De la demostraci\'on del Teorema 4.7 en~\cite{Saad92} y sustituyendo el Lema 4.2 en~\cite{Saad92} por el Lema~\ref{PHI-REST}
+se demuestra lo propuesto. $\Box$\\
+
+\begin{lemma}\label{H-bound}
+Sea $H_\mf=hV^{T}_\mf f_xV_\mf$ y $\overline{H}$ la matriz definida en  (\ref{hhat}). Si $\lVert H_\mf \rVert_2\leq\lVert hf_x\rVert_2$, entonces
+\[ \lVert\overline{H}\rVert_2 \leq \lVert hf_x\rVert_2. \]
+\end{lemma}
+\emph{Demostraci\'on}
+De (\ref{hhat}) se tiene que
+\begin{eqnarray*}
+	\overline{H}&=&I_{(\mf+3)\times\mf}H_\mf I_{\mf\times(\mf+3)}+B
+\end{eqnarray*}
+con
+\[B=\left[\begin{array}{ccc}
+0_{\mf\times\mf} & e_1 & 0_{\times 2}\\
+0_{2\times\mf} & 0 & I_2\\
+0_{1\times\mf} & 0 & 0_{1\times 2}
+\end{array}\right].\]
+Luego, 
+\begin{eqnarray*}
+    \lVert\overline{H}\rVert_2 &\leq& \lVert I_{(\mf+3)\times\mf} \rVert_2 \lVert H_\mf \rVert_2 \lVert I_{\mf\times(\mf+3)} \rVert_2+ \lVert B \rVert_2\\
+    &\leq&\lVert H_\mf \rVert_2\\
+    &\leq& \lVert hf_x\rVert_2
+\end{eqnarray*}
+dado que $\lVert B\rVert_2=0$ y $\lVert I_{(\mf+3)\times\mf}\rVert_2=
+\lVert I_{\mf\times(\mf+3)}\rVert_2=1$.   $\Box$\\
+
+\begin{lemma}\label{lemma-Krylov}
+    Sea $K_{\mf,k}^{\pf,\qf}\left( h,  f_x , f \right)$ la aproximaci\'on $(\mf , \pf ,\qf , k)$-Krylov-Padé  truncada segundo orden de $h\phi_1(hf_x)f$ definida en (\ref{kp_aprox}). Entonces el error de la aproximaci\'on est\'a 
+    acotado por
+    \begin{equation}
+    \left\lvert\left\lvert  h\phi_1(hf_x)f - 
+    K_{\mf,k}^{\pf,\qf}\left( h,  f_x , f \right)\right\rvert\right\rvert_2%\nonumber\\
+     \leq C_{\mf,k}^{\pf,\qf}\left(\lvert\lvert hf \rvert\rvert_2, \lvert\lvert hf_x \rvert\rvert_2\right)
+    \left(\lvert\lvert hf_x \rvert\rvert_2\right)^{\mathrm{min}\left\{ \mf+1,\pf+\qf+1 \right\}}
+    \end{equation}
+    donde $C_{\mf,k}^{\pf,\qf}(\vartheta,\varLambda)=\frac{2\vartheta\me{\varLambda}}{(\mf+1)(\mf+1)!}+
+    \alpha\vartheta(1+\hf_{\mf+1,\mf}) 2^{-k(\pf+\qf)+3}\me{(1+\alpha(\frac{1}{2})^{\pf+\qf-3})\varLambda }$, 
+    con $\alpha=\frac{\pf!\qf!}{(\pf+\qf)!(\pf+\qf+1)!}$.
+\end{lemma}
+\emph{Demostraci\'on} \\
+Por desigualdad triangular,
+\begin{eqnarray}\label{importatdeq}
+\left\lvert\left\lvert  h\phi_1(hf_x)f-  K_{\mf,k}^{\pf,\qf}\left( h,  f_x , f \right)\right\rvert\right\rvert_2
+&\leq&\left\lvert\left\lvert  h\phi_1(hf_x)f -  K_{\mf}\left( h,f_x , f \right) \right\rvert\right\rvert_2 \\ 
+&+&\left\lvert\left\lvert  K_{\mf}\left( h,f_x , f \right) - 
+K_{\mf,k}^{\pf,\qf}\left( h,  f_x , f \right)\right\rvert\right\rvert_2\nonumber
+\end{eqnarray}
+donde $K_{\mf}\left( h,f_x , f \right)$ es la aproximaci\'on de Krylov de $h\phi_1(hf_x)f$ definida en~(\ref{kaprox}).
+
+Sea $\beta=\lVert hf \rVert_2$, $\lVert V_\mf \rVert_2=1$ donde
+ $\overline{H}$ est\'a definido en (\ref{hhat}), $F_k^{\pf,\qf}(A)$ definido en f\'ormula~(\ref{P-MA-2}),
+  entonces de las expresiones (\ref{kaprox}) y (\ref{kp_aprox}), y por desigualdad triangular se tiene
+ \begin{equation}\label{proffktheouneq} 
+ %\begin{array}{ccc}
+      \left\lvert\left\lvert  K_{\mf}\left( hf_x , hf \right) -  
+ K_{\mf,k}^{\pf,\qf}\left( h,  f_x , f \right)\right\rvert\right\rvert_2 
+ \leq \left\lvert\left\lvert T_0 - 
+  \widehat{T}_0\right\rvert\right\rvert_2 \\
+ +\left\lvert\left\lvert T_1 - \widehat{T}_1
+  \right\rvert\right\rvert_2
+ %\end{array}
+ \end{equation}
+ donde 
+ \begin{eqnarray*}
+T_0&=&\beta V_{\mf}I_{\mf\times (\mf+3)}\me{\overline{H}}e_{\mf+1}\\
+\widehat{T}_0&=&\beta V_{\mf}I_{\mf\times (\mf+3)}F_k^{\pf,\qf}(\overline{H})e_{\mf+1}\\
+T_1&=&\beta \hf_{\mf+1,\mf}e_\mf^TI_{\mf\times (\mf+3)}\me{\overline{H}}e_{\mf+2}v_{\mf+1}\\
+\widehat{T}_1&=&\beta \hf_{\mf+1,\mf}e_\mf^TI_{\mf\times (\mf+3)}F_k^{\pf,\qf}(\overline{H})e_{\mf+2}v_{\mf+1}
+ \end{eqnarray*}
+ 
+Para el primer t\'ermino en el miembro derecho de la desigualdad~(\ref{proffktheouneq}), por Teorema~\ref{Conv. Pade} y Lema~\ref{H-bound} se tiene que
+\begin{eqnarray}
+\left\lvert\left\lvert T_0 - \widehat{T}_0\right\rvert\right\rvert_2  
+&\leq& \beta \left\lvert\left\lvert  V_{\mf}I_{\mf\times (\mf+3)} \right\rvert\right\rvert_2 \left\lvert\left\lvert \me{\overline{H}}-F_k^{\pf,\qf}(\overline{H}) \right\rvert\right\rvert_2
+\left\lvert\left\lvert  e_{\mf+1} \right\rvert\right\rvert_2 \nonumber\\
+&\leq& \beta c_{\pf,\qf}(k,\lvert\lvert\overline{H}\rvert\rvert_2)
+ \left(\lvert\lvert\overline{H}\rvert\rvert_2\right)^{\pf+\qf+1}\nonumber\\
+&\leq& \beta c_{\pf,\qf}(k,\lvert\lvert hf_x \rvert\rvert_2) 
+\left(\lvert\lvert hf_x \rvert\rvert_2\right)^{\pf+\qf+1}\label{err1},
+\end{eqnarray}
+donde $c_{\pf,\qf}$ est\'a definido in (\ref{errpade}).
+Similarmente, para el segundo t\'ermino en el miembro derecho de la desigualdad~(\ref{proffktheouneq}) se tiene que 
+\begin{eqnarray}
+\left\lvert\left\lvert T_1 - \widehat{T}_1 \right\rvert\right\rvert_2 
+&\leq& \beta \lvert \hf_{\mf+1,\mf}\rvert \left\lvert\left\lvert I_{\mf\times (\mf+3)}\right\rvert\right\rvert_2 \left\lvert\left\lvert \me{\overline{H}}-
+F_k^{\pf,\qf}(\overline{H}) \right\rvert\right\rvert_2\left\lvert\left\lvert v_{\mf+1}\right\rvert\right\rvert_2 \nonumber\\
+&\leq&\beta \lvert \hf_{\mf+1,\mf}\rvert c_{\pf,\qf}
+(k,\lvert\lvert\overline{H}\rvert\rvert_2) 
+\left(\lvert\lvert\overline{H}\rvert\rvert_2\right)^{\pf+\qf+1}\nonumber\\
+&\leq&\beta \lvert \hf_{\mf+1,\mf}\rvert c_{\pf,\qf}(k,\lvert\lvert hf_x \rvert\rvert_2) 
+\left(\lvert\lvert hf_x \rvert\rvert_2\right)^{\pf+\qf+1}\label{err2}.
+\end{eqnarray}
+De (\ref{err1}) y (\ref{err2}) se tiene que
+%\begin{eqnarray}
+\begin{equation}
+\left\lvert\left\lvert  K_{\mf}\left( hf_x , hf \right) -  
+K_{\mf,k}^{\pf,\qf}\left( h,  f_x , f \right)\right\rvert\right\rvert_2
+%&\leq&\beta c_{\pf,\qf}(k,\lvert\lvert hf_x \rvert\rvert_2) 
+%\left(\lvert\lvert hf_x \rvert\rvert_2\right)^{\pf+\qf+1} \nonumber\\
+%&+& \beta \lvert \hf_{\mf+1,\mf}\rvert c_{\pf,\qf}(k,\lvert\lvert hf_x \rvert\rvert_2) 
+%\left(\lvert\lvert hf_x \rvert\rvert_2\right)^{\pf+\qf+1}\nonumber\\
+\leq \beta(1+\lvert\hf_{\mf+1,\mf}\rvert)c_{\pf,\qf}(k,\lvert\lvert hf_x \rvert\rvert_2) 
+\left(\lvert\lvert hf_x \rvert\rvert_2\right)^{\pf+\qf+1}\label{errp1}
+\end{equation}
+%\end{eqnarray}
+De las desigualdades~(\ref{importatdeq}) y (\ref{errp1}), y del  Teorema~\ref{CORRECTED-ERROR} se tiene que
+\begin{eqnarray*}
+\left\lvert\left\lvert  h\phi_1(hf_x)f-  K_{\mf,k}^{\pf,\qf}\left( h,  f_x , f \right)\right\rvert\right\rvert_2
+&\leq& \frac{2\beta \left( \vert\lvert hf_x\rvert\rvert_2 \right)^{\mf+1}
+    \me{\lvert\lvert hf_x\rvert\rvert_2}}{(\mf+1)(\mf+1)!}\\
+&+&
+\beta(1+\hf_{\mf+1,\mf})c_{\pf,\qf}(k,\lvert\lvert hf_x \rvert\rvert_2) 
+\lvert\lvert hf_x \rvert\rvert_2^{\pf+\qf+1}\\
+& \leq &  C_{\mf,k}^{\pf,\qf}\left(\lvert\lvert hf \rvert\rvert_2, \lvert\lvert hf_x \rvert\rvert_2\right)
+\left(\lvert\lvert hf_x \rvert\rvert_2\right)^{\mathrm{min}\left\{ \mf+1,\pf+\qf+1 \right\}}
+\end{eqnarray*}
+donde  $C_{\mf,k}^{\pf,\qf}$ est\'a definida como en el enunciado
+del Lema. $\Box$
+\newline
+
+Finalmente, el siguiente teorema establece el orden de convergencia de los esquemas embebidos LLDP.
+
+\begin{theorem}\label{Teorema Convergencia}
+    Sea $x$ la soluci\'on de la EDO (\ref{ODE-SYST}) con campo vectorial $f$ que satisface las condiciones
+    \begin{equation*}
+    f\in \mathcal{C}^{6}(\mathfrak{K}) ,\; \mathfrak{K}\subset \left([t_0,T]\times\mathfrak{D}\right),\; \mathfrak{K}\text{ conjunto compacto}
+    \end{equation*}
+    \begin{equation*}
+    ||f_x(z)||\leq \mathcal{M},\; \forall z\in \mathfrak{K},
+    \end{equation*}
+    y reescribamos las fórmulas embebidas (\ref{LLDPK scheme}) como 
+    \[
+    y_{n+1}=y_{n}+\digamma (t_{n},y_{n},h_{n})\text{ \ \ \ \ y \ \ \ \ }\widehat{y}%
+    _{n+1}=y_{n}+\widehat{\digamma }(t_{n},y_{n},h_{n}).
+    \]
+ Entonces las fómulas embebidas (\ref{LLDPK scheme}) tienen error de truncamiento local
+    \[\lvert\lvert x(t_{n+1}) - x(t_n) - \digamma(t_n,x(t_n),h_n) \rvert\rvert_2 \leq Kh_n^{\mathrm{min}\left\{ \mf+1,\pf+\qf+1  \right\}}+C_1h_n^{6}  \]
+    \[\lvert\lvert x(t_{n+1}) - x(t_n) - \widehat{\digamma }(t_n,x(t_n),h_n) \rvert\rvert_2 \leq Kh_n^{\mathrm{min}\left\{ \mf+1,\pf+\qf+1 \right\}}+C_2h_n^{5}  \]
+    y error global
+    \[ \lvert\lvert x(t_{n+1}) - y_{n+1} \rvert\rvert_2 \leq M_1h^{\mathrm{min}\left\{ \mf,\pf+\qf,5 \right\}} \]
+    \[ \lvert\lvert x(t_{n+1}) - \widehat{y}_{n+1} \rvert\rvert_2 \leq M_2h^{\mathrm{min}\left\{ \mf,\pf+\qf,4 \right\}} \]  
+    para todo $t_{n+1},t_n\in(t)_h$ y $h$ suficientemente pequeño, donde  $K,M_1,M_2$ son constantes positivas. 
+\end{theorem}
+\emph{Demostraci\'on} 
+
+Los errores de truncamiento locales y los errores globales se obtiene fácilmente de la
+cota en el Lema~(\ref{lemma-Krylov}) y de la demostración del Teorema 1 en~\cite{Jimenez14AMC}. $\Box$
+
+\section{Estrategia adaptativa\label{ADAPT-STR}}
+
+Para escribir un c\'odigo que, en cada paso de integración, seleccione automáticamente un tama\~no de paso y una dimensi\'on de Krylov adecuados para obtener un error local con la tolerancia
+requerida, una estrategia adaptativa es necesaria. 
+Dada la similitud entre las fórmulas embebidas LLRK (\ref{LLDP scheme}) con las fórmulas embebidas (\ref{LLDPK scheme}) y (\ref{LLDPKFJ scheme}) propuestas en esta tesis, la estrategia de selección y control del tamaño del paso para (\ref{LLDP scheme}) pude, en principio, funcionar para las nuevas fórmulas con ciertas modificaciones que tomen en cuenta las especificaciones relativas a las aproximaciones de Krylov. 
+
+A continuación se presentan desglosados varios aspectos a tener en cuenta por construir una estrategia adaptativa apropiada para los nuevos esquemas embebidos (\ref{LLDPK scheme}) y (\ref{LLDPKFJ scheme}).
+
+Denotemos por $ATol$ y $RTol$ las tolerancias absolutas y relativas del esquema numérico, por $h_{min}$ y $h_{max}$ los tamaños de paso mínimo y máximo permisibles. 
+  
+\subsection{Selecci\'on del tama\~no de paso inicial}\label{inicio}
+El tamaño de paso inicial $h_0$ se estima mediante la misma expresión usada para las fórmulas embebidas (\ref{LLDP scheme}) en \cite{Jimenez14AMC}. Esta es
+\begin{equation}
+h_0 = \minn{ h_{max}, \maxx{ h_{min} ,\Delta} } \label{hcero}
+\end{equation}
+donde
+\[ \Delta = \begin{cases}
+\frac{1}{r_h} & \text{si } h_{max}\cdot r_h>1\\
+h_{max} & \text{en otro caso}
+\end{cases} \]	
+con
+\[ r_h = \frac{1\mathord{.}25}{RTol^{1/5}}\max_{i=1\ldots d}\left\{\frac{ \left\lvert f^{[i]}(t_0,y_0) \right\rvert }
+{\maxx{\left\lvert y^{[i]}_0 \right\rvert ,tr}}\right\} \]
+y $tr = \frac{ATol}{RTol}$.
+
+\subsection{Control de la evaluaci\'on del Jacobiano}\label{jaccontrol}
+ Evaluar el Jacobiano del campo vectorial es costoso, sobre todo el de las ecuaciones de dimensiones no pequeñas. Por eso
+ es necesaria una estrategia para reutilizar el Jacobiano calculado en pasos anteriores siempre que sea posible. Para este fin se
+ necesita cuantificar cuanto difiere el Jacobiano que se va a reutilizar del actual. Como las bases de los
+ subespacios de Krylov se construyen a partir de potencias del Jacobiano por el campo vectorial de la ecuaci\'on
+ diferencial, entonces, una forma de cuantificar esta diferencia en el punto $(t_n,\widetilde{y}_n)$ sería por  
+ \begin{equation*}
+ 	\Delta J = J\cdot f(t_n,\widetilde{y}_n) - J_{old}\cdot f(t_n,\widetilde{y}_n),
+ \end{equation*}
+donde $J=f_x(t_n,\widetilde{y}_n)$, $J_{old}=f_x(t_i,\widetilde{y}_i),\, i<n,$ es el jacobiano evaluado en el \'ultimo
+$(t_i,\widetilde{y}_i)$ donde se acept\'o evaluarlo y $f_{old} = f(t_i,\widetilde{y}_i)$. Sin embargo, la cuantificación de la diferencia relativa 
+\begin{equation}\label{jerror}
+	\varepsilon_J = \max_{i=1\ldots d}\frac{\nnorm{\Delta J^{[i]}}}
+	{\maxx{\nnorm{ \left(J_{old}\cdot f_{old}\right)^{[i]} } ,\frac{ATol}{RTol}}},
+\end{equation}
+con respecto a las tolerancias del esquema numérico y con respecto a la \'ultima vez que se evalu\'o el Jacobiano es preferible.
+
+Como en la expresi\'on~(\ref{jerror}) no se tiene $J$, porque el Jacobiano no se ha evaluado todav\'ia, entonces 
+se va a aproximar $J\cdot f(t_n,\widetilde{y}_n)$, que es una derivada direccional, por el cociente diferencial hacia atr\'as
+\begin{equation}\label{backapprox}
+ J\cdot f(t_n,\widetilde{y}_n) \approx \frac{f(t_n,\widetilde{y}_n) -
+ 	f\left(t_n,\widetilde{y}_n-\delta f(t_n,\widetilde{y}_n)\right)}{\delta}
+\end{equation}
+para $\delta$ suficientemente peque\~no. Esta aproximaci\'on requiere evaluar el campo vectorial
+en un punto intermedio, para evitar tener que evaluarlo se utilizara una aproximaci\'on convexa de este punto
+\begin{equation}\label{aproxaprox}
+  f\left(t_n,\widetilde{y}_n-\delta f(t_n,\widetilde{y}_n)\right) \approx 
+  (1-\delta) f(t_n,\widetilde{y}_n)+ \delta \mathtt{K}
+\end{equation}
+donde $K = \kt_{6} + f(t_{n-1},\widetilde{y}_{n-1}) + f_x(t_{n-1},\widetilde{y}_{n-1})\widetilde{\varphi}_{6} $ y
+\[ \kt_6 = f\left( t_{n-1}+h_{n-1}\, , \, \widetilde{y}_{n-1}+\widetilde{\varphi}_6+h_{n-1} \sum_{i=1}^{5}a_{6,i}\kt_i \right) - f(t_{n-1}\, ,\, \widetilde{y}_{n-1}) - f_x(t_{n-1}\, , \, \widetilde{y}_{n-1})\widetilde{\varphi}_6 \]
+ es la etapa $6$ del esquema~(\ref{LLDPK scheme}) en el paso anterior. Es importante notar que como $\delta$
+es peque\~no el mayor peso de la aproximaci\'on lo tiene el campo vectorial en el punto actual $(t_n,\widetilde{y}_n)$. Sustituyendo~(\ref{backapprox})-(\ref{aproxaprox}) en (\ref{jerror}) se tiene finalmente la medida de diferencia relativa 
+\begin{equation}\label{jerroraprox}
+\varepsilon_J\approx \max_{i=1\ldots d}\frac{\nnorm{f^{[i]}(t_n,\widetilde{y}_n) - \mathtt{K}^{[i]} }}
+{\maxx{\nnorm{ \left(J_{old}\cdot f_{old}\right)^{[i]} } ,\frac{ATol}{RTol}}}.
+\end{equation}
+De esta forma, solo si $fac \cdot \varepsilon_J \geq 1$ el Jacobiano de $f$ se evalua en el punto $(t_n,y_n)$, donde $fac$ es un factor de seguridad. 
+
+\subsection{Control del tama\~no de paso}\label{hcontrol}
+Para obtener la tolerancia deseada al calcular la aproximación de Pad\'e (\ref{P-MA-2}) dentro del proceso de Krylov se recomienda
+cambiar el tama\~no de paso $h$ si $\nnorm{\nnorm{ \overline{H} }}_\infty\leq 600$ \cite{Jimenez14AMC}. Como $\overline{H}$ es escalado por $\frac{1}{90}$
+en el proceso, entonces es necesario que se cumpla $\nnorm{\nnorm{ \overline{H} }}_\infty\leq 54000$. Se tiene
+ $|| \overline{H} ||_2\leq || hf_x ||_2$, $|| \overline{H} ||_\infty\leq \sqrt{\mf}||\overline{H}||_2$, 
+ $||hf_x||_2\leq \sqrt{d} ||hf_x||_\infty$
+ 
+\begin{eqnarray*}
+	\left\lVert \overline{H} \right\rVert_\infty & \leq & \sqrt{\mf}\left\lVert \overline{H}\right\rVert_2 \\
+	& \leq & \sqrt{\mf}\left\lVert hf_x \right\rVert_2 \\
+	& \leq & \sqrt{\mf} \sqrt{d} \left\lVert hf_x \right\rVert_\infty \\    
+\end{eqnarray*}
+De la desigualdad anterior se tiene:
+\begin{eqnarray*}
+	\left\lVert hf_x \right\rVert_\infty & \leq & \frac{54000}{\sqrt{\mf} \sqrt{d}} \\
+	& \Downarrow & \\
+	\left\lVert \overline{H} \right\rVert_\infty & \leq 54000\\
+	& \Downarrow & \\
+	\left\lVert \frac{\overline{H}}{90} \right\rVert_\infty & \leq & 600    
+\end{eqnarray*}
+Si $\left\lVert hf_x \right\rVert_\infty  \geq  \frac{54000}{\sqrt{\mf} \sqrt{d}}$ el tama\~no de paso debe ser cambiado
+$h=\frac{54000}{\sqrt{\mf} \sqrt{d}\left\lVert f_x \right\rVert_\infty}$. Durante la experimentaci\'on se obtuvo que con
+una condici\'on m\'as débil se obten\'ian los mismos resultados. Dicha condici\'on es 
+$\left\lVert hf_x \right\rVert_\infty \leq 54000$, si no se cumple entonces se cambia $h$ por 
+$h=\frac{54000}{\left\lVert f_x \right\rVert_\infty}$.
+
+\subsection{Selecci\'on del orden de la aproximaci\'on de Pad\'e} \label{pade-order}
+ La precisión de la aproximación de Padé-$(\pf,\pf)$ con  escalamiento y potenciaci\'on aumenta con el orden $\pf$, pero también aumenta su costo computacional. Por esta razón es necesario controlar el orden $\pf$ de modo que preserve el orden de convergencia de los esquemas embebidos (dado en Teorema \ref{Teorema Convergencia}) y a la vez satisfaga la tolerancia deseada \cite{Jimenez14AMC}.
+ Para tolerancias RTol menores que $10^{-9}$,  $\pf = 3$ es el valor óptimo. De lo contrario $\pf$ se escoge según la Tabla \ref{tab:padep}.
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{c|ccc} 
+			$\lvert\lvert \frac{1}{90}h_n\overline{H} \rvert\rvert/\mathrm{RTol}$ & $10^{-9}$ & $10^{-12}$ & $10^{-15}$ \\ 
+			\hline 
+			$<1$ & 3 & 4 & 4 \\ 
+			$\geq 1$ & 4 & 5 & 6 \\  
+		\end{tabular} 
+		\caption{Valores \'optimos de $\pf$ para la aproximaci\'on $(\pf,\pf)$-Pad\'e con escalamiento y potenciaci\'on}
+		\label{tab:padep}
+	\end{center}
+\end{table}
+
+\subsection{Selecci\'on  de la dimensi\'on de Krylov}\label{selkrydim}
+Luego de construir la base ortogonal para el $\mf$-\'esimo subespacio de Krylov se tienen dos situaciones posibles: $\varepsilon_{K}/\gamma< 1$ o lo contrario, donde $\varepsilon_{K}$ es el error relativo (\ref{errrel}) y $\gamma$ es un factor de seguridad.
+
+En caso de cumplirse que $\varepsilon_{K}/\gamma< 1$ entonces la aproximación (\ref{kp_aprox}) derivada del $\mf$-\'esimo subespacio de Krylov es aceptada y se calcula la dimensión del subespacio que se utilizará en el siguiente paso de integración mediante la fórmula
+\begin{equation}
+\mathfrak{m}_{new}= \maxx{\mf_{min}, \minn{\mf , \mf_{max} }}  \label{calcmnew}
+\end{equation}
+donde 	
+\begin{equation*}
+\mf = \left\lfloor \mf_{n} + \maxx{\fac_{max} , \minn{\fac_{min}, 
+		\fac\cdot\Delta\mf} } \right\rfloor, 
+\end{equation*}	
+\begin{equation}
+\Delta\mf=\log(\varepsilon_{K}/\gamma) \label{delta_m} 
+\end{equation} 
+$\fac_{max}= -\frac{\mf_n}{4}$, $\fac_{min}= \frac{\mf_n}{3}$ y $\fac=\frac{1}{\log(2)}$. En el otro caso, $\mf$ se calcula por    
+\begin{equation*}
+\mf = \left\lceil \mf_{n} + \minn{\fac_{max} , \maxx{\fac_{min}, 
+		\fac\cdot\Delta\mf} } \right\rceil, 
+\end{equation*}
+donde $\fac_{max}= \maxx{ 1,\frac{\mf_{n}}{3} }$, $\fac_{min}= 1 $ y $\fac=\frac{1}{\log(2)}$.
+
+
+\subsection{Control del \emph{BreakDown}}\label{brcontrol}
+El \emph{BreakDown} en Algoritmo~\ref{alg:Arnoldi} (l\'inea $9$) ocurre cuando hay p\'erdida de ortogonalidad
+en el algoritmo de Arnoldi por acumulaci\'on de errores num\'ericos. Por tanto el algoritmo termina antes de
+alcanzar la iteración $\mf$ deseada y el \'ultimo vector de la base que se estaba construyendo es inservible. Cuando
+esto ocurre pueden suceder dos desenlaces: 1) que $\varepsilon_{K}/\gamma< 1$, o 2) que $\varepsilon_{K}/\gamma \geq 1$, donde $\varepsilon_{K}$ es el error relativo (\ref{errrel}) y $\gamma$ es un factor de seguridad. Independientemente del desenlace, la información aportada por este
+proceso fallido se va a reutilizar para los nuevos estimados.
+
+ En el caso que $\varepsilon_{K}/\gamma\geq 1$ las aproximación de Krylov-Padé no cumplen con la tolerancia 
+ requerida y son descartadas, por lo que es necesario repetir el proceso de ortogonalización con nuevos valores de $\mf$ y $h$. El nuevo valor de la dimensión del subespacio de Krylov se estima mediante la fórmula 
+ \begin{equation}\label{kry-reject-m1}
+ \mathfrak{m}_{new}= \maxx{\mf_{min}, \minn{\mf , \mf_{max} }}
+ \end{equation}
+ \begin{equation*}
+ \mf = \left\lceil \mf_{cut} + \minn{\fac_{max} , \maxx{\fac_{min}, 
+ 		\fac\cdot\Delta\mf} } \right\rceil,
+ \end{equation*}
+donde $\Delta\mf$ está definida en (\ref{delta_m}), $\fac_{max}= \maxx{ 1,\frac{\mf_{cut}}{3} }$, $\fac_{min}= 1 $, $\fac=\frac{1}{\log(2)}$ 
+y $\mf_{cut}$ es la dimensión donde ocurrió el \emph{BrakDown}. El nuevo valor para el tamaño de paso $h_{new}$ es recalculado por \cite{phi}
+\begin{equation}
+h_{new} = h_n\left(\frac{\gamma^{2}}{\varepsilon_{K}}\right)^{1/(\hat{q}+1)}\label{kry-reject-h1},
+\end{equation}
+donde $\hat{q}$ es una estimación heurística del orden del proceso de Krylov
+si se tiene la información de dos intentos en el mismo paso, en otro caso $\hat{q}=\mf/4$
+\begin{equation*}%\label{qestimkri}
+\hat{q} = \frac{\log\left( h/h_{old} \right)}{\log\left(\varepsilon_{K}/\varepsilon_{old}  \right)}.
+\end{equation*}
+
+En el caso que $\varepsilon_{K}/\gamma< 1$ hay que verificar la dimensión donde se interrumpió
+el algoritmo. Como se mencionó previamente el último vector de la base es inservible para ser usado en la aproximación (\ref{kp_aprox}). Por tanto para no violar los límites impuestos a la dimensión de Krylov se tiene que cumplir 
+$\mf_{cut}> \mf_{min}+2$ para aceptar dichas aproximaciones. En otro caso se estaría aproximando
+en una dimensión menor que la mínima fijada. Por esto si sucede que $\mf_{cut}\leq \mf_{min}+2$, 
+entonces $h_n$ es rechazada, y nuevos valores para $h$ y $\mf$ son estimados  por las fórmulas
+\begin{equation}
+h_{new}=0\mathord{.}9\cdot h_n\label{kry-reject-h2}
+\end{equation}
+y
+ \begin{equation}\label{kry-reject-m2}
+\mathfrak{m}_{new}= \maxx{\mf_{min}, \minn{\mf , \mf_{max} }}
+\end{equation}
+donde 
+\begin{equation*}
+\mf = \left\lceil \mf_{cut} + \minn{\fac_{max} , \maxx{\fac_{min}, 
+		\fac\cdot\Delta\mf} } \right\rceil,
+\end{equation*}
+$\fac_{max}= \maxx{ 1,\frac{\mf_{cut}}{3} }$, $\fac_{min}= 2 $ y $\fac=\frac{1}{\log(2)}$.
+
+
+\subsection{Estimaci\'on del nuevo tama\~no de paso}
+El nuevo tama\~no de paso $h_{new}$ se calcula mediante la misma expresión usada para las formulas embebidas (\ref{LLDP scheme}) en \cite{Jimenez14AMC}. Esta es
+\begin{equation}
+	h_{new} = \minn{h_{max},\maxx{h_{min},\Delta}}, \label{hnewcalc}
+\end{equation}
+donde 
+\[ \Delta = \begin{cases}
+h_n/\rho & \text{si } \varepsilon_y\leq RTol \text{ y } \rho>0\mathord{.}2\\
+5\cdot h_n & \text{si } \varepsilon_y\leq RTol \text{ y } \rho\leq 0\mathord{.}2\\
+\maxx{0\mathord{.}1,1/\rho}\cdot h_n & \text{si } \varepsilon_y > RTol \text{ y } fail=0\\
+0\mathord{.}5\cdot h_n & \text{si } \varepsilon_y > RTol \text{ y } fail=1
+\end{cases} \]
+siendo $\rho = 1\mathord{.}25 \left( \frac{\varepsilon_y}{RTol} \right)^{1/5}$, $\varepsilon_y$ una medida del error relativo entre los esquemas $y$ y $\hat y$, y $fail$ indica si un valor anterior de $h_{new}$ calculado a partir de $h_n$ fue rechazado.   
+
+\subsection{Esbozo general de la estrategia adaptativa para esquemas embebidos con paso variable}\label{adaptstrat}
+
+A continuación se presenta un esbozo general de una estrategia adaptativa con tamaño de paso y dimensión de Krylov variable para los esquemas embebidos (\ref{LLDPK scheme}), la cual tiene en cuenta todos los aspectos tratados en las siete subsecciones anteriores.   
+
+\begin{enumerate}
+    \item Inicio:
+    \begin{itemize}
+    	\item Inicializar $n=0$, $fail=0$.
+    	\item Calcular $h_0$ por fórmula (\ref{hcero})
+		\item Seleccionar $\mf_{min},\mf_{max}$, donde $\mf_{min}$ es la menor dimensión del subespacio de Krylov
+		y $\mf_{max}$ es la dimensión máxima y hacer $\mf_0=\mf_{min}$.
+		\item Evaluar $f_x(t_0,\widetilde{y}_{0})$. Inicializar $J_{old}=f_x(t_0,\widetilde{y}_{0})$ y $freshJ=1$
+    \end{itemize} 
+
+	\item Control de la evaluación del Jacobiano $f_x$ (subsección \ref{jaccontrol}):
+	\begin{itemize}
+	\item Si $fail=0$ y $n>0$, se calcula $\varepsilon_J$ por 
+	f\'ormula~(\ref{jerroraprox}),
+	\begin{itemize}
+		\item Si $\fac\cdot\varepsilon_J \geq 1$, con $\fac = 0\mathord{.}25$, se eval\'ua $f_x$ en el punto actual ($t_n,\widetilde{y}_{n}$). Entonces,  $J_{old}=f_x(t_n,\widetilde{y}_{n})$ y $freshJ=1$,
+		\item Si $\fac\cdot\varepsilon_J<1$ se reutiliza el Jacobiano $J_{old}$. Entonces, $f_x(t_n,\widetilde{y}_{n})=J_{old}$ y $freshJ=0$
+	\end{itemize}
+
+	\item Si $fail=1$ y $freshJ=0$, se eval\'ua $f_x$ en el punto actual ($t_n,\widetilde{y}_{n}$). Entonces, $J_{old}=f_x(t_n,\widetilde{y}_{n})$ y $freshJ=1$.
+
+	\end{itemize} 
+
+    \item Control del tama\~no de paso (subsecci\'on \ref{hcontrol}):
+
+    Si $||f_xh_n||_\infty>54000$ entonces $h_n$ es recalculada $h_n=\frac{54000}{||f_x||_\infty}$
+    
+    \item Construir un subespacio de Krylov de dimensión $\mf_n$ mediante Algoritmo~\ref{alg:Arnoldi},
+    seleccionar el orden $\pf$ de Pad\'e (subsección \ref{pade-order}) según las tolerancias y estimar el error relativo $\varepsilon_{K}$ por la f\'ormula~(\ref{errrel}).
+
+    \item Control del error $\varepsilon_{K}$:
+    \begin{itemize}
+        \item si $breakdown$ es $false$
+        \begin{itemize}
+            \item Si $\varepsilon_{K}/\gamma< 1$, con $\gamma=0\mathord{.}1$, se acepta $\mf_n$.
+            \item Si $\varepsilon_{K}/\gamma\geq 1$ y $\mf_n<\mf_{max}$,  entonces $\mf_{new}$ es calculada por la f\'ormula (\ref{calcmnew}), se extiende el actual subespacio de Krylov hasta la dimensión $\mf_{new}$ 
+            mediante Algoritmo~\ref{alg:Arnoldi},
+            se selecciona el orden $\pf$ de Pad\'e (subsección \ref{pade-order}) según las tolerancias, se reestima el error relativo $\varepsilon_{K}$ por la f\'ormula~(\ref{errrel}), y se retorna al paso 5 con $\mf_n=\mf_{new}$.
+            \item Si $\varepsilon_{K}/\gamma\geq 1$ y $\mf_n=\mf_{max}$,  entonces $h_n$ es rechazada, $h_{new}$ es calculada por la fórmula (\ref{kry-reject-h1}), $\mf_{new}$ es calculada por la 
+            fórmula (\ref{calcmnew}) y se regresa al paso 4 con $h_n=h_{new}$ y $\mf_n=\mf_{new}$.
+        \end{itemize}
+         \item si $breakdown$ es $true$ (subsección \ref{brcontrol}):
+        \begin{itemize}
+            \item Si $\varepsilon_{K}/\gamma< 1$ y $\mf_{cut}> \mf_{min}+2$,  se acepta $\mf_n$.
+            
+            \item Si $\varepsilon_{K}/\gamma< 1$ y $\mf_{cut}\leq \mf_{min}+2$, entonces $h_n$ es rechazada, $h_{new}$ es calculada por la fórmula (\ref{kry-reject-h2}), $\mf_{new}$ es calculada por la 
+            fórmula (\ref{kry-reject-m2}) y se regresa al paso 4 con $h_n=h_{new}$ y $\mf_n=\mf_{new}$.
+            
+            \item Si $\varepsilon_{K}/\gamma\geq 1$, entonces $\mf_{new}$ es calculada por la f\'ormula (\ref{kry-reject-m1}), $h_{new}$ es calculada por la fórmula (\ref{kry-reject-h1})
+            y se regresa al paso 4 con $h_n=h_{new}$ y $\mf_n=\mf_{new}$.
+        \end{itemize}
+    \end{itemize}
+
+
+    \item Estimar la  nueva dimensión de Krylov $\mf_{new}$ por la fórmula (\ref{calcmnew})
+
+    \item Calcular $c_jh_n\phi_1(c_jh_nf_x)f$ por la f\'ormula (\ref{kp_aprox})
+
+    \item Evaluar los esquemas embebidos (\ref{LLDPK scheme})
+
+    \item Estimaci\'on del error relativo
+    \[ \varepsilon_y =  \max_{i=1\ldots d}\left\{ \frac{\left\lvert \widetilde{y}^{[i]}_{n+1}-\hat{y}^{[i]}_{n+1} \right\rvert}
+    {\maxx{\left\lvert \widetilde{y}^{[i]}_{n+1}  \right\rvert,\left\lvert\widetilde{y}^{[i]}_{n}\right\rvert,tr}} \right\} \]
+
+    \item Estimar el nuevo tama\~no de paso $h_{new}$ por fórmula (\ref{hnewcalc})   
+
+    \item Validaci\'on  de $\widetilde{y}_{n+1}$:\\
+    Si $\varepsilon_y<RTol$ se acepta $\widetilde{y}_{n+1}$ como aproximaci\'on de $x$ en $t_{n+1}=t_n+h_n$. En caso contrario, se retorna al paso 2 con $h_n=h_{new}$, $\mf_n = \mf_{new}$ y $fail = 1$.
+
+    \item Control del paso final:\\
+    Si $t_n+h_n=T$, se detiene. Si $t_n+h_n+h_{new}>T$ entonces se redefine $h_{new}=T-(t_n+h_n)$.
+
+    \item Regresar al paso 2 con $n=n+1$, $h_n=h_{new}$, $\mf_n = \mf_{new}$ y $fail=0$.
+    
+\end{enumerate}
+Para los esquemas embebidos (\ref{LLDPKFJ scheme}) libres de Jacobiano, la estrategia adaptativa es similar a la anterior pero con los siguientes cambios: \
+\begin{itemize}
+	\item Se eliminan los pasos $2$ y $3$, y la última inicialización del paso 1.
+	\item El paso $7$ se sustituye por: Calcular $c_jh_n\phi_1(c_jh_nf_x)f$ por f\'ormula (\ref{kp_fj_aprox}).
+	\item El paso $8$ se sustituye por: Evaluar la f\'ormula~(\ref{LLDPKFJ scheme})
+\end{itemize}
+
+\subsection{Esbozo general de la estrategia adaptativa para esquemas con paso fijo y dimensi\'on de Krylov variable}\label{adaptstratfix}
+
+Se propone la siguiente estrategia adaptativa para el esquema de paso fijo $h$ y dimensi\'on de Krylov variable construido con la f\'ormula~(\ref{LLDPK scheme}) de orden $r(=4,5)$. 
+
+\begin{enumerate}
+    \item Inicio:
+    \begin{itemize}
+        \item Inicializar $n=0$.
+        \item Seleccionar $\mf_{min},\mf_{max}$, donde $\mf_{min}$ es la menor dimensión del subespacio de Krylov
+        y $\mf_{max}$ es la dimensión máxima y hacer $\mf_0=\mf_{min}$.
+    \end{itemize} 
+    
+    \item Construir un subespacio de Krylov de dimensión $\mf_n$ mediante Algoritmo~\ref{alg:Arnoldi},
+    seleccionar el orden $\pf$ de Pad\'e (subsección \ref{pade-order}) según las tolerancias y estimar el error relativo $\varepsilon_{K}$ por la f\'ormula~(\ref{errrel}).
+    
+    \item Control del error $\varepsilon_{K}$:
+    \begin{itemize}
+
+            \item Si $\varepsilon_{K}/\gamma< 1$, con $\gamma=0\mathord{.}1$, se acepta $\mf_n$.
+            \item Si $\varepsilon_{K}/\gamma\geq 1$ y $\mf_n<\mf_{max}$ entonces $\mf_{new}$ es calculada por la f\'ormula (\ref{kry-reject-m1}), se extiende
+             el actual subespacio de Krylov hasta la dimensión $\mf_{new}$ mediante Algoritmo~\ref{alg:Arnoldi},
+            se selecciona el orden $\pf$ de Pad\'e (subsección \ref{pade-order}) según las tolerancias, se reestima el error relativo $\varepsilon_{K}$ por la f\'ormula~(\ref{errrel}), y se retorna al paso 3 con $\mf_n=\mf_{new}$.
+            \item Si $\varepsilon_{K}/\gamma\geq 1$ y $\mf_n=\mf_{max}$, se acepta $\mf_n$.
+    \end{itemize}
+    
+    
+    \item Estimar la  nueva dimensión de Krylov $\mf_{new}$ por la fórmula (\ref{calcmnew})
+    
+    \item Calcular $c_jh_n\phi_1(c_jh_nf_x)f$ por la f\'ormula (\ref{kp_aprox})
+    
+    \item Evaluar la f\'ormula~(\ref{LLDPK scheme}) de orden $r$
+    
+    \item Control del paso final:\\
+    Si $t_n+h_n=T$, se detiene. Si $t_n+h_n+h_{new}>T$ entonces se redefine $h_{new}=T-(t_n+h_n)$.
+    
+    \item Regresar al paso 2 con $n=n+1$, $\mf_n = \mf_{new}$.
+    
+\end{enumerate}
+Para el esquema de paso fijo y dimensi\'on de Krylov variable construido con la
+f\'ormula~(\ref{LLDPKFJ scheme}) de orden $r$, la estrategia adaptativa es 
+similar a la anterior pero con los siguientes cambios: \
+\begin{itemize}
+    \item El paso $5$ se sustituye por: Calcular $c_jh_n\phi_1(c_jh_nf_x)f$ por f\'ormula (\ref{kp_fj_aprox}).
+    \item El paso $6$ se sustituye por: Evaluar la f\'ormula~(\ref{LLDPKFJ scheme}) de orden $r$.
+\end{itemize}
+

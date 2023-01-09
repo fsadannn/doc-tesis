@@ -1,0 +1,310 @@
+\chapter{Integradores exponenciales y m\'{e}todos de Linealizaci\'{o}n Local }\label{chapter:REV-LL}
+
+En \'este capítulo se presenta una breve revisión de la clase general de  integradores numéricos de tipo exponencial y de los M\'{e}todos de Linealizaci\'{o}n Local en particular. 
+
+En general, consideremos los problemas de valor inicial definidos por ecuaciones diferenciales no aut\'onomas
+ \begin{equation}
+ \frac{dx}{dt}=f(t,x), \;\; \label{ODE-SYST}
+ \end{equation}
+ \begin{equation*}
+ x(t_0)=x_0,
+ \end{equation*}
+ donde $x_0\in \mathfrak{D}$ es un valor inicial dado, $f: [t_0,T] \times \mathfrak{D}\longrightarrow \mathbb{R}^{d}$ es una función diferenciable y $\mathfrak{D}\subset\mathbb{R}^{d}$ un conjunto abierto. Se asumen condiciones de suavidad y condición de Lipschit en $f$ para asegurar la unicidad de la solución en $\mathfrak{D}$.
+
+Consideremos, ademas, una partici\'{o}n $(t)_{h}={t_{n}:n=0,1,\ldots,N}$ del
+intervalo $[t_{0},T]$ tal que $t_{0}<t_{1}<\ldots<t_{N}=T$, y $%
+h_{n}=t_{n+1}-t_{n}<h$; para $n=0,\ldots,N-1$.
+
+
+\section{Integradores exponenciales\label{section:EXPO-INTEG}}
+
+En general, se denomina integradores exponenciales a la familia
+de esquemas num\'ericos para EDOs que requieren del c\'alculo de alg\'un t\'ermino exponencial. Inicialmente, los integradores de este tipo comenzaron a desarrollarse en los a\~nos 60 del siglo pasado con el prop\'osito de resolver los grandes sistemas de ecuaciones semilineales de la
+forma
+\begin{equation}
+\frac{dx}{dt} = Ax + F(x)  \;\;  \label{ODE Lines Method}
+\end{equation}
+que resultan de la discretizaci\'on espacial de una ecuaci\'on diferencial en derivadas parciales, donde $A$ es una
+matriz cuadrada y $F$ una funci\'on no lineal. M\'as recientemente, en los a\~nos 90, \'esta clase de integradores fue extendida a EDOs de la forma general (\ref{ODE-SYST}). 
+
+Los integradores exponenciales para ambas clases de ecuaciones provienen de la aproximaci\'on de la integral
+que resulta de aplicar la f\'ormula de variaci\'on de la constante a estas ecuaciones. Para la ecuaci\'on (\ref{ODE Lines Method}), la f\'ormula de variaci\'on
+de la constante quedar\'ia
+\begin{equation}
+x(t_n+h)=\me{Ah}\left(x(t_n) +\int\limits_{0}^{h} \me{-As}F(x(t_n+s)) \,ds.\right) \label{VCF2}
+\end{equation}
+Los integradores exponenciales derivados de esta aproximaci\'on son, por ejemplo, los conocidos m\'etodos de Lawson, Lawson Generalizados, Exponential Time
+Differencing and the Exponential Runge--Kutta (ver \cite{Berland07} para una revisi\'on). Por otra parte, después de la linealización local de la ecuaci\'on (\ref{ODE-SYST}) en $t_{n}$,  la f\'ormula de variaci\'on
+de la constante queda
+\begin{equation}
+x(t_{n}+h)=x(t_{n})+\int\limits_{0}^{h}e^{A	_{n}(h-s)}(f(t_n,x(t_{n}))+sf_t(t_n,x(t_{n})))ds+\int\limits_{0}^{h}e^{A
+	_{n}(h-s)}g_{n}(t_{n}+s,x(t_{n}+s))ds, \label{VCF}
+\end{equation}
+donde $A_{n}$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$ y $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))+f_t(s,u)(s-t_n)$. Ejemplos de integradores exponenciales derivados de \'esta aproximaci\'on son el m\'etodo cl\'asico de Pope \cite{pope} de orden 2, y los m\'etodos Runge Kutta Localmente 
+Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}, los m\'etodos Exponenciales de Propagaci\'on 
+Iterativa~\cite{tokman}, los m\'etodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
+m\'etodos Exponenciales tipo Rosenbrok~\cite{ross} y los m\'etodos Exponenciales tipo Adams~\cite{adams}, todos de orden superior a 2.
+
+Por lo tanto, construir un integrador exponencial requiere de dos tareas b\'asicas: (\textbf{I}) calcular una aproximaci\'on para integrales de la forma 
+genérica $\int_{0}^{h} \me{-As}F(x(t_n+s)) \,ds$, y (\textbf{II}) evaluar productos de funciones exponenciales matriciales con vectores. 
+
+
+Típicamente, una aproximaci\'on polinomial del t\'ermino no lineal $F$ en (\ref{VCF2}) (o $g_n$ en (\ref{VCF})) resulta en un esquema
+exponencial que aproxima la soluci\'on de la EDO como una combinaci\'on lineal de productos de tipo $\phi_k(\gamma hA)v_k$, con 
+$v_k\in \mathbb{R}^{d}$, donde la funci\'on $\phi_k$ está definida como
+\begin{eqnarray}
+    \phi_k(z) & = &\int\limits_{0}^{1}\me{z(1-s)}\frac{s^{k-1}}{(k-1)!}\,ds \nonumber \\
+    \phi_k(z) & = &\sum\limits_{j=0}^{\infty}\frac{z^{j}}{(k+j)!}\label{DEF-PHI}\\
+    \phi_0(z) &=& \me{z} \nonumber\\
+    \phi_{k+1}(z) &=& \frac{\phi_k(z)-\phi_k(0)}{z}\,,\,k\geq0. \nonumber
+\end{eqnarray}
+
+Entre la familia de funciones $\phi_k$ y la exponencial matricial existe la siguiente importante relaci\'on.
+
+\begin{theorem}\label{exp-phi}
+    \cite{Sidje98} Sea $c\in\mathbb{C}^{m}$, $H_m\in\mathbb{C}^{m\times m}$ y 
+    \begin{equation}
+    \overline{H}_{m+p} = \left[\begin{array}{ccccc}
+    H_m & c & 0 & \cdots & 0 \\
+          & 0 & 1 & \ddots & \vdots \\
+          &   & 0 & \ddots & 0 \\
+          &   &   & \ddots & 1 \\
+       0  &   &   &        & 0
+    \end{array}\right]\in \mathbb{C}^{(m+p)\times(m+p)}
+    \end{equation}
+    entonces
+     \begin{equation}
+    \me{\tau\overline{H}_{m+p}} = \left[\begin{array}{ccccc}
+    \me{\tau H_m} & \tau\phi_1(\tau H_m)c & \tau^{2}\phi_2(\tau H_m)c & \cdots & \tau^{p}\phi_p(\tau H_m)c \\
+      & 1 & \frac{\tau}{1!} & \cdots & \frac{\tau^{p-1}}{(p-1)!} \\
+      &   & 1 & \ddots & \vdots \\
+      &   &   & \ddots & \frac{\tau}{1!} \\
+    0 &   &   &        & 1
+    \end{array}\right]  \;.
+    \end{equation}
+\end{theorem} 
+%En esta tesis se trabaja con el m\'etodo de Linealizaci\'on Local, de ah\'i que en las pr\'oximas
+%secciones de revisi\'on 
+
+
+\section{M\'{e}todos de Linealizaci\'{o}n Local}
+
+En \'esta sección se presentan los resultados básicos los M\'{e}todos de Linealizaci\'{o}n Local que se requieren para esta tesis.
+
+\subsection{Aproximaci\'{o}n Lineal Local \label{section:REV-LL}}
+
+El m\'{e}todo cl\'{a}sico de Linealizaci\'{o}n Local de orden 2 de Pope~\cite{pope}
+ consiste en aproximar en cada paso el campo vectorial de (%
+\ref{ODE-SYST}) mediante la expansi\'{o}n de Taylor de primer orden, para
+luego resolver exactamente la ecuaci\'{o}n lineal resultante. M\'{a}s
+precisamente, si $A_{n}y(t)+a_{n}(t)$ denota la aproximaci\'{o}n de Taylor
+de primer orden de $f$ en una vecindad de $(t_n,y_{n})$, donde \mbox{$
+	A_{n}=f_{x}(t_n,y_{n})$} y $a_{n}(t)=f(t_n,y_{n})-A_{n}y_{n}+f_t(t_n,y_n)(t-t_n)$, entonces la
+soluci\'{o}n de la ecuaci\'{o}n 
+\begin{eqnarray*}
+\frac{dy}{dt} & = & A_{n}y_n+a_{n}(t) \\ %\label{ODE-SYST-LINEAL-1} \\
+y(t_{n})& = & y_{n}  \nonumber
+\end{eqnarray*}
+para todo $t\in[t_{n},t_{n+1}]$ es una aproximaci\'{o}n de la soluci\'{o}n
+de (\ref{ODE-SYST}) con condici\'{o}n inicial \mbox{$x(t_{n})=y_{n}$}. Mediante la f\'{o}rmula de variaci\'{o}n de la constante obtenemos 
+\begin{equation}
+y(t)=y_{n}+\varphi(t_{n},y_{n},t-t_{n})  \label{ODE-SYST-FORM-LL}
+\end{equation}
+donde 
+\begin{equation*}
+\varphi(t_{n},y_{n};t-t_{n})=\int\limits^{t-t_{n}}_{0} e^{{A_{n}(t-t_{n}-u)}}
+(A_{n}y_{n}+a_{n}(t_{n}+u))\,du.  %\label{REV-PHI-DEF-2}
+\end{equation*}
+
+Aplicando recursivamente la expresi\'{o}n anterior obtenemos la siguiente
+definici\'{o}n.
+
+\begin{definition}
+	\label{definition LLD} Dada una partici\'{o}n $(t)_{h}$, la discretizaci\'{o}n Lineal Local de la soluci\'{o}n de (\ref{ODE-SYST}) est\'{a} dada por la expresi\'{o}n recursiva
+	\begin{equation}
+	y_{n+1}=y_{n}+\varphi \left( t_{n},y_{n},h_{n}\right) ,  \label{ODE-LLA-4}
+	\end{equation}%
+	con $y_{0}=x_{0}$ y $n=0,1,\ldots,N-1$.
+\end{definition}
+
+Para todo $t\in[t_{0},T]$ se define la siguiente aproximación.
+\begin{definition}
+	\label{definition LLA} Dada una partici\'{o}n $(t)_{h}$, la aproximaci\'{o}n
+	Lineal Local de la soluci\'{o}n de (\ref{ODE-SYST}) est\'{a} dada por 
+	\begin{equation}
+	y(t)=y_{n_{t}}+\varphi(t_{n_{t}},y_{n_{t}},t-t_{n_{t}})
+	\label{ODE-REV-FORM-LLA}
+	\end{equation}
+	para todo $t\in[t_{0},T]$, donde $y_{0}=x_{0}$, $y_{n_{t}}$ es la discretizaci\'{o}n Lineal Local (\ref{ODE-LLA-4}) y ${n_{t}=\maxx{n:t_{n}\leq t}}$.
+\end{definition}
+%Otros  integradores que provienen de esta aproximaci\'on son~\cite{Jimenez02AMC,Jimenez05AMC}.
+
+ La convergencia, la estabilidad lineal y varias propiedades din\'{a}micas de  la discretizaci\'on Lineal Local (\ref{ODE-LLA-4}) se pueden encontrar en \cite{Jimenez02AMC}.
+ 
+\subsection{Aproximaci\'{o}n Lineal Local de orden superior \label{section:REV-HOLL}}
+
+La estabilidad y las propiedades din\'{a}micas que la discretizaci\'on Lineal Local (\ref{ODE-LLA-4}) posee son de vital importancia para la integración de EDOs, no obstante su bajo orden de convergencia constituye una limitante en algunas circunstancias. Para solucionar esa dificultad se construyen los m\'{e}todos de Linealizaci\'{o}n Local de Orden Superior los cuales retienen las propiedades mencionadas, pero con orden de convergencia mayor. 
+
+Estos nuevos m\'{e}todos se obtienen de agregar a la aproximaci\'{o}n (\ref%
+{ODE-REV-FORM-LLA}) un t\'{e}rmino adicional $\xi$ de orden superior a 2 
+que resulta de aproximar la segunda integral de la expresión (\ref{VCF}) por algún método de cuadratura o por la soluci\'{o}n num\'{e}rica de una ecuaci\'{o}n diferencial auxiliar \cite{delaCruz06}. Usando diferentes tipos de cuadraturas se obtienen los m\'etodos Exponenciales de Propagaci\'on 
+Iterativa~\cite{tokman}, los m\'etodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
+m\'etodos Exponenciales tipo Rosenbrok~\cite{ross} y los m\'etodos Exponenciales tipo Adams~\cite{adams}. Por otra parte, usando esquemas Runge Kutta (RK) para resolver la mencionada ecuación auxiliar se obtienen los métodos Runge Kutta Localmente Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}.
+
+Por su relevancia en ésta tesis, a continuación se expondrá con mas detalle los métodos Runge Kutta Localmente Linealizados. 
+
+Dada una partici\'{o}n $(t)_{h}$, una aproximaci\'{o}n Lineal Local de orden $%
+\gamma$ de la soluci\'{o}n de (\ref{ODE-SYST}) se define por la expresi\'{o}n 
+\begin{equation}
+y(t)=y_{n_{t}}+\varphi(t_{n_{t}},y_{n_{t}},t-t_{n_{t}})+\xi(t,t_{n_{t}},y_{n_{t}}),
+\label{ODE-REV-HOLL}
+\end{equation}
+donde $\xi(t,t_{n_{t}},y_{n_{t}})$ es la soluci\'{o}n num\'{e}rica de orden $\gamma >2$ de la ecuaci\'{o}n auxiliar
+\begin{eqnarray}
+\frac{du}{dt} & = & q(t_{n},y_{n},t,u(t))  \label{ODE r} \\
+u(t_{n}) & = & 0 \nonumber
+\end{eqnarray}
+para todo $t\in [t_{n},t_{n+1})$, con campo vectorial 
+\begin{eqnarray*}
+q(t_n,y_n,s,\varsigma)&=&f(s,y_n+\varphi(t_n,y_n,s-t_n)+\varsigma)-f_x(t_n,y_n)\varphi(t_n,y_n,s-t_n)-f(t_n,y_n)%\\
+% & &-f_t(t_n,y_n)(s-t_n) -f(t_n,y_n) ,
+%\label{AUX-ODE}
+\end{eqnarray*}
+con $s\in [t_{n},t_{n+1})$ y $\varsigma \in \mathbb{R}^d $. 
+
+Cuando $\xi$ es la aproximaci\'{o}n obtenida mediante un esquema Runge Kutta de orden $\gamma$ se llega a las definiciones siguientes.
+\begin{definition}
+	\label{definition HLLD} \cite{Jimenez13} Dada una partici\'{o}n $(t)_{h}$, la discretizaci\'{o}n Lineal Local-Runge Kutta 
+    de orden $\gamma >2$ se define por la expresi\'{o}n recursiva:
+	\begin{equation*}
+	y_{n+1}=y_{n}+\varphi \left( t_{n},y_{n},h_{n}\right) +h_{n}\sum_{j=1}^{s}b_{j}\kt_{j}
+	%\label{LLRK_Discretizat}
+	\end{equation*}%
+	con $y_{0}=x_{0}$, donde las constantes $b_{j}$ y las funciones $k_{j}$ est\'{a}n definidas por el m\'{e}todo Runge Kutta de $s$ estados aplicado a la ecuaci\'on~(\ref{ODE r}).
+\end{definition}
+
+\begin{table}[h] 
+	\begin{center}
+		\begin{tabular}{ l@{\vrule height 5pt depth 10pt width 0pt}|lllllll}
+			$0$ & \\
+			$\frac{1}{5}\quad$ & $\frac{1}{5}$ \\
+			$\frac{3}{10}\quad$ & $\frac{3}{40}$ & $\frac{9}{40}$ \\
+			$\frac{4}{5}\quad$ & $\frac{44}{45}$ & $-\frac{56}{15}$ & $\frac{32}{9}$ \\
+			$\frac{8}{9}\quad$ & $\frac{19372}{6561}$ & $-\frac{25360}{2187}$ & $\frac{64448}{6561}$ & $-\frac{212}{729}$ \\
+			$1\quad$ & $\frac{9017}{3168}$ & $-\frac{355}{33}$ & $\frac{46732}{5247}$ & $\frac{49}{176}$ 
+			& $-\frac{5103}{18656}$ \\
+			$1\quad$ & $\frac{35}{384}$ & $0$ & $\frac{500}{1113}$ & $\frac{125}{192}$ 
+			& $-\frac{2187}{6784}$ & $\frac{11}{84}$ \\
+			\hline
+			$\widetilde{y}$ & $\frac{35}{384}$ & $0$ & $\frac{500}{1113}$ & $\frac{125}{192}$ 
+			& $-\frac{2187}{6784}$ & $\frac{11}{84}$ & $0$ \rule[-0.3cm]{0cm}{0.8cm}\\
+			$\widehat{y}$ & $\frac{5179}{57600}$ & $0$ & $\frac{7571}{16695}$ & $\frac{393}{640}$ 
+			& $-\frac{92097}{339200}$ & $\frac{187}{2100}$ & $\frac{1}{40}$ \\
+		\end{tabular}
+		\caption{Tabla de coeficientes para f\'ormulas embebidas Runge-Kutta de Dormand \& Prince} \label{ButcherTabla}
+	\end{center} 
+\end{table}
+
+
+\begin{definition}
+	\label{definition HOLLA} \cite{Jimenez13} Dada una partici\'{o}n $(t)_{h}$, la aproximaci\'{o}%
+	n Lineal Local-Runge Kutta de orden $\gamma$ se define por 
+	\begin{equation*}
+	y(t)=y_{n_{t}}+\varphi(t_{n_{t}},y_{n_{t}},t-t_{n_{t}})+(t-t_{n_{t}})%
+	\sum_{j=1}^{s}b_{j}\kt_{j}(t_{n_{t}},y_{n_{t}},t-t_{n_{t}}) %\label{LLRK_Approx}
+	\end{equation*}
+	para todo $t\in[t_{0},T]$, donde $y_{n_{t}}$ es la discretizaci\'{o}n Lineal Local-Runge Kutta de orden $\gamma$, y $n_{t}=\maxx{n:t_{n}\leq t}$.
+\end{definition}
+
+\subsection{Esquemas de Linealizaci\'on Local\label{section:ESQ-LLRK}}
+
+ Como puede notarse de sus respetivas definiciones, las
+discretizaciones Lineales Locales no pueden ser implementadas directamente por
+estar expresadas en término de integrales que en general no pueden ser
+calculadas anal\'{\i}ticamente. Dependiendo de la forma de calcular  num\'{e}ricamente esas integrales,
+ diferentes esquemas num\'{e}ricos pueden ser obtenidos \cite{Jimenez05AMC,Jimenez13}.
+ M\'{a}s precisamente tenemos la siguiente definici\'{o}n.
+\begin{definition}
+	\label{definition LLS} Dada la discretizaci\'{o}n Lineal Local 
+	  $y_n=y_{n}+\digamma(t_{n},y_{n},t-t_{n})$
+	 de orden $\gamma $, toda f\'{o}rmula recursiva de la forma 
+	\begin{equation*}
+	 \widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\digamma}(t_{n},\widetilde{y}_{n},t-t_{n})
+	 , \text{ \ \ \ \
+		\ con }\widetilde{y}_{0}=y_{0},
+	\end{equation*}%
+	donde $\widetilde{\digamma}$ denota una aproximaci\'{o}n
+	de $\digamma$ mediante un algoritmo num\'{e}rico, es
+	llamada gen\'{e}ricamente esquema de Linealizaci\'{o}n Local (LL).
+\end{definition}
+
+Por ejemplo, cuando la f\'{o}rmula de Pad\'{e} con escalamiento y potenciaci\'{o}n para exponenciales matriciales \cite{VanLoan03} es utilizada para
+aproximar $\varphi$ en la ecuaci\'on~(\ref{ODE-SYST-FORM-LL}) se obtiene el siguiente esquema LL de orden $2$ \cite{Jimenez02AMC}:
+\begin{equation} 
+\widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\varphi}\left( t_{n},\widetilde{y}_{n},h_{n}\right) \label{LL-scheme}
+\end{equation} 
+donde $\widetilde{\varphi }\left( t_{n},\widetilde{y}
+_{n},h_{n}\right) =L\,(P_{\pf,\qf}(2^{-k_{n}}\widetilde{M}_{n}h_{n}))^{2^{k_{n}}}\,r$, 
+$(P_{\pf,\qf}(2^{-k_{n}}\widetilde{M}_{n}h_{n}))^{2^{k_{n}}}$ es la aproximaci\'{o}n
+de Pad\'{e} de orden $(\pf,\qf)$ de  $\me{\widetilde{M}_{n}h_{n}}$, donde
+$k$ es el menor número natural tal que $\left\Vert 2^{-k_{n}}\widetilde{M}_{n}h_{n}\right\Vert \leq \frac{1}{2}$, 
+y las matrices $\widetilde{M}_{n}$, $L$, $r$ est\'{a}n definidas como
+
+\begin{equation*}
+\widetilde{M}_{n}=\left[ 
+\begin{array}{ccc}
+f_{x}(t_{n},\widetilde{y}_{n}) &f%
+_{t}(t_{n},\widetilde{y}_{n}) & f(t_{n},\widetilde{
+		y}_{n}) \\ 
+0 & 0 & 1 \\ 
+0 & 0 & 0%
+\end{array}%
+\right] \in \mathbb{R}^{(d+2)\times (d+2)},
+\end{equation*}%
+$L=\left[ 
+\begin{array}{ll}
+I_{d} & 0_{d\times 2}%
+\end{array}%
+\right] $ y $r^{\intercal }=\left[ 
+\begin{array}{ll}
+\mathbf{0}_{1\times (d+1)} & 1%
+\end{array}%
+\right] $ para EDOs no aut\'{o}nomas; y 
+\begin{equation*}
+\widetilde{M}_{n}=\left[ 
+\begin{array}{cc}
+f_{x}(t_{n},\widetilde{y}_{n}) & f(t_{n},%
+\widetilde{y}_{n}) \\ 
+0 & 0%
+\end{array}%
+\right] \in \mathbb{R}^{(d+1)\times (d+1)},
+\end{equation*}%
+$L=\left[ 
+\begin{array}{ll}
+I_{d} & 0_{d\times 1}%
+\end{array}%
+\right] $ y $r^{\intercal }=\left[ 
+\begin{array}{ll}
+\mathbf{0}_{1\times d} & 1%
+\end{array}%
+\right] $ para ecuaciones aut\'{o}nomas.
+
+Si se utiliza la mencionada aproximación de Padé para la exponencial matricial en $\varphi_j=L\;\me{c_j\widetilde{M}_{n}h_{n}}\;r$ y las f\'{o}rmulas embebidas Runge Kutta de Dormand y Prince para integrar la ecuaci\'{o}n auxiliar (\ref{ODE r}), entonces se obtiene el siguiente esquema LLRK embebido~\cite{Jimenez14AMC}:
+
+\begin{equation}
+\widetilde{y}_{n+1}\,=\,\widetilde{y}_n+\widetilde{\varphi}_s+h_n \sum_{j=1}^{s}b_j \kt_j \quad \text{y} \quad
+\widehat{y}_{n+1}\,=\, \widetilde{y}_n+\widetilde{\varphi}_s+h_n \sum_{j=1}^{s}\widehat{b}_j \kt_j
+\label{LLDP scheme}
+\end{equation}
+donde $s = 7$ es el número de estados,
+\[ \kt_j = f\left( t_n+c_jh_n\, , \, \widetilde{y}_n+\widetilde{\varphi}_j+h_n \sum_{i=1}^{j-1}a_{j,i}\kt_i \right)  
+- f_x(t_n\, , \, \widetilde{y}_n)\widetilde{\varphi}_j - f(t_n\, ,\, \widetilde{y}_n),\]
+\[ \widetilde{\varphi }_j =L\,(P_{\pf,\qf}(2^{-k_{n}}c_j\widetilde{M}_{n}h_{n}))^{2^{k_{n}}}\,r, \]
+y coeficientes Runge-Kutta $a_{j,i}$, $b_j$, $\hat{b}_j$ and $c_j$ definidos en la Tabla \ref{ButcherTabla}.
+
+Los esquemas (\ref{LL-scheme}) y (\ref{LLDP scheme}) están orientados a resolver problemas de valor inicial no stiff de dimensiones pequeñas. 
+
+%\\ \\
+%Las matrices $\widetilde{M}_{n}$, $L$, $r$ est\'{a}n definidas como en el esquema anterior.\\
+%El esquema~(\ref{LLDP scheme}) lo denotaremos LLDP y su principal objetivo es resolver 
+%problemas donde la parte stiff es solo la lineal.

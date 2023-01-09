@@ -16,16 +16,16 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v2
         with:
-          root_file: main.tex
+          root_file: Thesis.tex
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: main.pdf
+          files: Thesis.pdf
       - name: Send document to me
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: Customized text here. Version ${{ env.RELEASE_VERSION }}
-          document: main.pdf
+          document: Thesis.pdf
