@@ -1,17 +1,439 @@
 \chapter{Integradores exponenciales y método de Linealización Local}\label{chapter:exp-int-and-ll-methods}
 
+En este capítulo se presenta una revisión de la clase general de  integradores numéricos de tipo exponencial y de los Métodos de Linealización Local en particular, así como resultados básicos sobre el cálculo de la exponencial matricial.
+
+En general, se considerarán los problemas de valor inicial definidos por las ecuaciones diferenciales no autónomas
+ \begin{equation}
+ \frac{dx}{dt}=f(t,x), \;\; \label{ODE-SYST}
+ \end{equation}
+ \begin{equation*}
+ x(t_0)=x_0,
+ \end{equation*}
+ donde $x_0\in \mathfrak{D}$ es un valor inicial dado, $f: [t_0,T] \times \mathfrak{D}\longrightarrow \mathbb{R}^{d}$ es una función diferenciable y $\mathfrak{D}\subset\mathbb{R}^{d}$ un conjunto abierto. Se asumen condiciones de suavidad y condición de Lipschit en $f$ para asegurar la unicidad de la solución en $\mathfrak{D}$.
+
+Consideremos, ademas, una partición $(t)_{h}={t_{n}:n=0,1,\ldots,N}$ del
+intervalo $[t_{0},T]$ tal que $t_{0}<t_{1}<\ldots<t_{N}=T$, y $%
+h_{n}=t_{n+1}-t_{n}\leq h$; para $n=0,\ldots,N-1$.
+
 \section{Integradores exponenciales}
 
+En general, se denomina integradores exponenciales a la familia
+de esquemas numéricos para EDOs que requieren del cálculo de algún término exponencial. Inicialmente, los integradores de este tipo comenzaron a desarrollarse en los años 60 del siglo pasado\cite{pope1963exponential} con el propósito de resolver sistemas de ecuaciones semilineales de la forma
+\begin{equation}
+\frac{dx}{dt} = Ax(t) + F(x(t))  \;\;  \label{ODE Lines Method}
+\end{equation}
+que resultan de la discretización espacial de una ecuación diferencial en derivadas parciales, donde $A$ es una
+matriz cuadrada y $F$ una función no lineal de $x(t)\in\mathbb{R}^d$ y $t\geq t_0 \in \mathbb{R}$. Más recientemente, en los años 90, esta clase de integradores fue extendida a EDOs de la forma general (\ref{ODE-SYST}).
+
+Los integradores exponenciales tanto para ecuaciones semilineales como para ecuaciones generales provienen de la aproximación de la integral
+que resulta de aplicar la fórmula de variación de la constante a estas ecuaciones. Al aplicar la fórmula de variación
+de la constante a la ecuación (\ref{ODE Lines Method}) se obtiene
+\begin{equation}
+x(t_n+h)=\me{Ah}\left(x(t_n) +\int\limits_{0}^{h} \me{-As}F(x(t_n+s)) \,ds.\right) \label{VCF2}
+\end{equation}
+
+Los integradores exponenciales derivados de esta aproximación son, por ejemplo, los conocidos métodos de Lawson, Lawson Generalizados, Exponential Time
+Differencing and the Exponential Runge-Kutta (ver \cite{Berland07} para una revisión). Por otra parte, después de la linealización local de la ecuación (\ref{ODE-SYST}) en $t_{n}$,  la fórmula de variación
+de la constante queda
+\begin{eqnarray}
+x(t_{n}+h) &= & x(t_{n})+\int\limits_{0}^{h}e^{A	_{n}(h-s)}(f(t_n,x(t_{n}))+sf_t(t_n,x(t_{n})))ds \nonumber \\
+ & & +\int\limits_{0}^{h}e^{A
+	_{n}(h-s)}g_{n}(t_{n}+s,x(t_{n}+s))ds, \label{VCF}
+\end{eqnarray}
+donde $A_{n}$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$ y $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))+f_t(s,u)(s-t_n)$. 
+Ejemplos de integradores exponenciales derivados de esta aproximación son el método clásico de Pope~\cite{pope1963exponential} de orden 2, los métodos Runge Kutta Localmente 
+Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}, los métodos Exponenciales de Propagación 
+Iterativa~\cite{tokman2013comparative}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
+métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los métodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}, todos de orden superior a 2.
+
+Los integradores exponenciales también son aplicados a otras áreas además de las ecuaciones diferenciales. Dichos integradores fueron introducidos primeramente en la solución de Ecuaciones Diferenciales Estocásticas~\cite{ozaki19852,ozaki1985statistical}, problemas de filtrado continuo-discreto~\cite{ozaki1993local} y estimación de procesos de difusión~\cite{ozaki19852,ozaki1985statistical,ozaki1994local}. Luego fueron extendidos para la integración de Ecuaciones diferenciales aleatorias~\cite{carbonell2005local} y con retardo~\cite{jimenez2006local} y también para Ecuaciones Diferenciales
+Parciales Estocásticas semilineales~\cite{jentzen2009overcoming,kloeden2011exponential}.
+
+En general los integradores exponenciales representan una alternativa a los métodos implícitos para resolver ecuaciones diferenciales \textit{stiff} o altamente oscilatorias. Teniendo en cuenta que una parte significativa de la estabilidad y las propiedades dinámicas del sistema debe estar contenida en la linealización dela ecuación tratada. Estos integradores por lo general son explícitos y están formados por una solución tan exacta como se requiera de la aproximación lineal y una aproximación numérica de la parte no lineal. Por lo tanto, construir un integrador exponencial requiere de dos tareas básicas: (\textbf{I}) calcular una aproximación para integrales de la forma 
+genérica $\int_{0}^{h} \me{-As}F(x(t_n+s)) \,ds$, y (\textbf{II}) evaluar productos de funciones exponenciales matriciales con vectores.
+
+Típicamente, una aproximación polinomial del término no lineal $F$ en (\ref{VCF2}) (o $g_n$ en (\ref{VCF})) resulta en un esquema
+exponencial que aproxima la solución de la EDO como una combinación lineal de productos de tipo $\phi_k(\gamma hA)v_k$, con 
+$v_k\in \mathbb{R}^{d}$, donde la función $\phi_k$ está definida como
+\begin{eqnarray}
+    \phi_k(z) & = &\int\limits_{0}^{1}\me{z(1-s)}\frac{s^{k-1}}{(k-1)!}\,ds \nonumber \\
+    \phi_k(z) & = &\sum\limits_{j=0}^{\infty}\frac{z^{j}}{(k+j)!}\label{DEF-PHI}\\
+    \phi_0(z) &=& \me{z} \nonumber\\
+    \phi_{k+1}(z) &=& \frac{\phi_k(z)-\phi_k(0)}{z}\,,\,k\geq0. \nonumber
+\end{eqnarray}
+
+Entre la familia de funciones $\phi_k$ y la exponencial matricial existe la siguiente importante relación.
+
+\begin{theorem}\label{exp-phi}
+    \cite{sidje1998expokit} Sea $c\in\mathbb{C}^{m}$, $H_m\in\mathbb{C}^{m\times m}$ y 
+    \begin{equation}
+    \overline{H}_{m+p} = \left[\begin{array}{ccccc}
+    H_m & c & 0 & \cdots & 0 \\
+          & 0 & 1 & \ddots & \vdots \\
+          &   & 0 & \ddots & 0 \\
+          &   &   & \ddots & 1 \\
+       0  &   &   &        & 0
+    \end{array}\right]\in \mathbb{C}^{(m+p)\times(m+p)}
+    \end{equation}
+    entonces
+     \begin{equation}
+    \me{\tau\overline{H}_{m+p}} = \left[\begin{array}{ccccc}
+    \me{\tau H_m} & \tau\phi_1(\tau H_m)c & \tau^{2}\phi_2(\tau H_m)c & \cdots & \tau^{p}\phi_p(\tau H_m)c \\
+      & 1 & \frac{\tau}{1!} & \cdots & \frac{\tau^{p-1}}{(p-1)!} \\
+      &   & 1 & \ddots & \vdots \\
+      &   &   & \ddots & \frac{\tau}{1!} \\
+    0 &   &   &        & 1
+    \end{array}\right]  \;.
+    \end{equation}
+\end{theorem} 
+
+
 \section{Método de Linealización Local}
+En esta sección se presentan los resultados básicos los Métodos de Linealización Local que se requieren para esta tesis.
 
 \subsection{Aproximación Lineal Local}
 
+El método clásico de Linealización Local de orden 2 de Pope~\cite{pope1963exponential}
+ consiste en aproximar en cada paso el campo vectorial de (%
+\ref{ODE-SYST}) mediante la expansión de Taylor de primer orden, para
+luego resolver exactamente la ecuación lineal resultante. Más
+precisamente, si $A_{n}y(t)+a_{n}(t)$ denota la aproximación de Taylor
+de primer orden de $f$ en una vecindad de $(t_n,y_{n})$, donde \mbox{$
+	A_{n}=f_{x}(t_n,y_{n})$} y $a_{n}(t)=f(t_n,y_{n})-A_{n}y_{n}+f_t(t_n,y_n)(t-t_n)$, entonces la
+solución de la ecuación 
+\begin{eqnarray*}
+\frac{dy}{dt} & = & A_{n}y_n+a_{n}(t) \\ %\label{ODE-SYST-LINEAL-1} \\
+y(t_{n})& = & y_{n}  \nonumber
+\end{eqnarray*}
+para todo $t\in[t_{n},t_{n+1}]$ es una aproximación de la solución
+de (\ref{ODE-SYST}) con condición inicial \mbox{$x(t_{n})=y_{n}$}. Mediante la fórmula de variación de la constante obtenemos 
+\begin{equation}
+y(t)=y_{n}+\varphi(t_{n},y_{n},t-t_{n})  \label{ODE-SYST-FORM-LL}
+\end{equation}
+donde 
+\begin{equation*}
+\varphi(t_{n},y_{n};t-t_{n})=\int\limits^{t-t_{n}}_{0} e^{{A_{n}(t-t_{n}-u)}}
+(A_{n}y_{n}+a_{n}(t_{n}+u))\,du.  %\label{REV-PHI-DEF-2}
+\end{equation*}
+
+Aplicando recursivamente la expresión anterior obtenemos la siguiente
+definición.
+
+\begin{definition}
+	\label{definition LLD} Dada una partición $(t)_{h}$, la discretización Lineal Local de la solución de (\ref{ODE-SYST}) está dada por la expresión recursiva
+	\begin{equation}
+	y_{n+1}=y_{n}+\varphi \left( t_{n},y_{n},h_{n}\right) ,  \label{ODE-LLA-4}
+	\end{equation}%
+	con $y_{0}=x_{0}$ y $n=0,1,\ldots,N-1$.
+\end{definition}
+
+Para todo $t\in[t_{0},T]$ se define la siguiente aproximación.
+\begin{definition}
+	\label{definition LLA} Dada una partición $(t)_{h}$, la aproximación
+	Lineal Local de la solución de (\ref{ODE-SYST}) está dada por 
+	\begin{equation}
+	y(t)=y_{n_{t}}+\varphi(t_{n_{t}},y_{n_{t}},t-t_{n_{t}})
+	\label{ODE-REV-FORM-LLA}
+	\end{equation}
+	para todo $t\in[t_{0},T]$, donde $y_{0}=x_{0}$, $y_{n_{t}}$ es la discretización Lineal Local (\ref{ODE-LLA-4}) y ${n_{t}=\maxx{n:t_{n}\leq t}}$.
+\end{definition}
+%Otros  integradores que provienen de esta aproximación son~\cite{Jimenez02AMC,Jimenez05AMC}.
+
+ La convergencia, la estabilidad lineal y varias propiedades dinámicas de  la discretización Lineal Local (\ref{ODE-LLA-4}) se pueden encontrar en \cite{jimenez2002dynamic}.
+
 \subsection{Aproximación Lineal Local de Orden Superior}
+
+La estabilidad y las propiedades dinámicas que la discretización Lineal Local (\ref{ODE-LLA-4}) posee son de vital importancia para la integración de EDOs, no obstante su bajo orden de convergencia constituye una limitante en algunas circunstancias. Para solucionar esa dificultad se construyen los métodos de Linealización Local de Orden Superior los cuales retienen las propiedades mencionadas, pero con orden de convergencia mayor. 
+
+Estos nuevos métodos se obtienen de agregar a la aproximación (\ref%
+{ODE-REV-FORM-LLA}) un término adicional $\xi$ de orden superior a 2 
+que resulta de aproximar la segunda integral de la expresión (\ref{VCF}) por algún método de cuadratura o por la solución numérica de una ecuación diferencial auxiliar \cite{delaCruz06}. Usando diferentes tipos de cuadraturas se obtienen los méodos Exponenciales de Propagación 
+Iterativa~\cite{tokman2006efficient}, los méodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
+méodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los méodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}. Por otra parte, usando esquemas Runge Kutta (RK) para resolver la mencionada ecuación auxiliar se obtienen los métodos Runge Kutta Localmente Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}.
+
+Por su relevancia en esta tesis, a continuación se expondrá con mas detalle los métodos Runge Kutta Localmente Linealizados. 
+
+Dada una partición $(t)_{h}$, una aproximación Lineal Local de orden $%
+\gamma$ de la solución de (\ref{ODE-SYST}) se define por la expresión 
+\begin{equation}
+y(t)=y_{n_{t}}+\varphi(t_{n_{t}},y_{n_{t}},t-t_{n_{t}})+\xi(t,t_{n_{t}},y_{n_{t}}),
+\label{ODE-REV-HOLL}
+\end{equation}
+donde $\xi(t,t_{n_{t}},y_{n_{t}})$ es la solución numérica de orden $\gamma >2$ de la ecuación auxiliar
+\begin{eqnarray}
+\frac{du}{dt} & = & q(t_{n},y_{n},t,u(t))  \label{ODE r} \\
+u(t_{n}) & = & 0 \nonumber
+\end{eqnarray}
+para todo $t\in [t_{n},t_{n+1})$, con campo vectorial 
+\begin{eqnarray*}
+q(t_n,y_n,s,\varsigma)&=&f(s,y_n+\varphi(t_n,y_n,s-t_n)+\varsigma)-f_x(t_n,y_n)\varphi(t_n,y_n,s-t_n)-f(t_n,y_n)%\\
+% & &-f_t(t_n,y_n)(s-t_n) -f(t_n,y_n) ,
+%\label{AUX-ODE}
+\end{eqnarray*}
+con $s\in [t_{n},t_{n+1})$ y $\varsigma \in \mathbb{R}^d $. 
+
+Cuando $\xi$ es la aproximación obtenida mediante un esquema Runge Kutta de orden $\gamma$ se llega a las definiciones siguientes.
+\begin{definition}
+	\label{definition HLLD} \cite{Jimenez13} Dada una partición $(t)_{h}$, la discretización Lineal Local-Runge Kutta 
+    de orden $\gamma >2$ se define por la expresión recursiva:
+	\begin{equation*}
+	y_{n+1}=y_{n}+\varphi \left( t_{n},y_{n},h_{n}\right) +h_{n}\sum_{j=1}^{s}b_{j}\kt_{j}
+	%\label{LLRK_Discretizat}
+	\end{equation*}%
+	con $y_{0}=x_{0}$, donde las constantes $b_{j}$ y las funciones $k_{j}$ están definidas por el método Runge Kutta de $s$ estados aplicado a la ecuación~(\ref{ODE r}).
+\end{definition}
+
+\begin{definition}
+	\label{definition HOLLA} \cite{Jimenez13} Dada una partición $(t)_{h}$, la aproximación Lineal Local-Runge Kutta de orden $\gamma$ se define por 
+	\begin{equation*}
+	y(t)=y_{n_{t}}+\varphi(t_{n_{t}},y_{n_{t}},t-t_{n_{t}})+(t-t_{n_{t}})%
+	\sum_{j=1}^{s}b_{j}\kt_{j}(t_{n_{t}},y_{n_{t}},t-t_{n_{t}}) %\label{LLRK_Approx}
+	\end{equation*}
+	para todo $t\in[t_{0},T]$, donde $y_{n_{t}}$ es la discretización Lineal Local-Runge Kutta de orden $\gamma$, y $n_{t}=\maxx{n:t_{n}\leq t}$.
+\end{definition}
 
 \subsection{Esquemas de Linealización Local}
 
+Como puede notarse de sus respetivas definiciones, las
+discretizaciones Lineales Locales no pueden ser implementadas directamente por
+estar expresadas en término de integrales que en general no pueden ser
+calculadas analíticamente. Dependiendo de la forma de calcular  numéricamente esas integrales,
+ diferentes esquemas numéricos pueden ser obtenidos \cite{Jimenez05AMC,Jimenez13}.
+ Más precisamente tenemos la siguiente definición.
+\begin{definition}
+	\label{definition LLS} Dada la discretización Lineal Local 
+	  $y_n=y_{n}+\digamma(t_{n},y_{n},t-t_{n})$
+	 de orden $\gamma $, toda fórmula recursiva de la forma 
+	\begin{equation*}
+	 \widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\digamma}(t_{n},\widetilde{y}_{n},t-t_{n})
+	 , \text{ \ \ \ \
+		\ con }\widetilde{y}_{0}=y_{0},
+	\end{equation*}%
+	donde $\widetilde{\digamma}$ denota una aproximación
+	de $\digamma$ mediante un algoritmo numérico, es
+	llamada genéricamente esquema de Linealización Local (LL).
+\end{definition}
+
+Por ejemplo, cuando la fórmula de Padé con escalamiento y potenciación para exponenciales matriciales \cite{moler2003nineteen} es utilizada para
+aproximar $\varphi$ en la ecuación~(\ref{ODE-SYST-FORM-LL}) se obtiene el siguiente esquema LL de orden $2$ \cite{Jimenez02AMC}:
+\begin{equation} 
+\widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\varphi}\left( t_{n},\widetilde{y}_{n},h_{n}\right) \label{LL-scheme}
+\end{equation} 
+donde $\widetilde{\varphi }\left( t_{n},\widetilde{y}
+_{n},h_{n}\right) =L\,(P_{\pf,\qf}(2^{-k_{n}}\widetilde{M}_{n}h_{n}))^{2^{k_{n}}}\,r$, 
+$(P_{\pf,\qf}(2^{-k_{n}}\widetilde{M}_{n}h_{n}))^{2^{k_{n}}}$ es la aproximación
+de Padé de orden $(\pf,\qf)$ de  $\me{\widetilde{M}_{n}h_{n}}$, donde
+$k$ es el menor número natural tal que $\left\Vert 2^{-k_{n}}\widetilde{M}_{n}h_{n}\right\Vert \leq \frac{1}{2}$, 
+y las matrices $\widetilde{M}_{n}$, $L$, $r$ están definidas como
+
+\begin{equation*}
+\widetilde{M}_{n}=\left[ 
+\begin{array}{ccc}
+f_{x}(t_{n},\widetilde{y}_{n}) &f%
+_{t}(t_{n},\widetilde{y}_{n}) & f(t_{n},\widetilde{
+		y}_{n}) \\ 
+0 & 0 & 1 \\ 
+0 & 0 & 0%
+\end{array}%
+\right] \in \mathbb{R}^{(d+2)\times (d+2)},
+\end{equation*}%
+$L=\left[ 
+\begin{array}{ll}
+I_{d} & 0_{d\times 2}%
+\end{array}%
+\right] $ y $r^{\intercal }=\left[ 
+\begin{array}{ll}
+\mathbf{0}_{1\times (d+1)} & 1%
+\end{array}%
+\right] $ para EDOs no autónomas; y 
+\begin{equation*}
+\widetilde{M}_{n}=\left[ 
+\begin{array}{cc}
+f_{x}(t_{n},\widetilde{y}_{n}) & f(t_{n},%
+\widetilde{y}_{n}) \\ 
+0 & 0%
+\end{array}%
+\right] \in \mathbb{R}^{(d+1)\times (d+1)},
+\end{equation*}%
+$L=\left[ 
+\begin{array}{ll}
+I_{d} & 0_{d\times 1}%
+\end{array}%
+\right] $ y $r^{\intercal }=\left[ 
+\begin{array}{ll}
+\mathbf{0}_{1\times d} & 1%
+\end{array}%
+\right] $ para ecuaciones autónomas.
+
 \section{Cálculo de la exponencial de una matriz}
+
+\begin{definition}
+    \label{EXPM}\cite{golub2013matrix} Sea $A$ una matriz de $n\times n$ real o compleja. La exponencial de $A$ denotada por
+    $ \me{A} $ o $\mathrm{exp}(A)$ es una matriz de $n\times n$ dada por la serie de potencias
+    \[\me{A}=\sum_{k=0}^{\infty}\frac{1}{k!}A^{k}.\]
+\end{definition}
+En muchas aplicaciones se utiliza $\me{tA}$ donde $t$ es un escalar, por tanto 
+\begin{equation}
+\me{tA}=I+tA+\frac{t^{2}A^{2}}{2!}+\cdots\label{EXPM-SERIE}
+\end{equation}
+\begin{theorem}\cite{IntroMatrix}
+    La serie de matrices definida en~(\ref{EXPM-SERIE}) existe para toda matriz $A$ para $t$ fijo y
+    para todo $t$ para $A$ fija. La serie converge uniformemente en cualquier región de t del plano complejo.
+\end{theorem}
+
+En \cite{golub2013matrix} se presenta una revisión de los méodos numéricos
+para aproximar
+la exponencial de matrices. Los méodos más utilizados son la aproximación de Padé con escalamiento
+y potenciación para matrices pequeñas y densas, y el de los subespacios de Krylov para matices grandes y esparcidas.
+
 
 \subsection{Aproximación de Padé}
 
+\begin{definition}
+    \cite{golub2013matrix}~La aproximación racional de Padé $P_{\pf,\qf}(z)$
+    de $\me{z}$ est\'{a} dada por 
+    \begin{equation*}
+    P_{\pf,\qf}(z)=D_{\pf,\qf}(z)^{-1}N_{\pf,\qf}(z),  \label{FORM PADE}
+    \end{equation*}%
+    donde 
+    \[
+    N_{\pf,\qf}(z)=\sum\limits_{k=0}^p\frac{(p+q-k)!p!}{(p+q)!k!(p-k)!}z^k
+    \]%
+    y 
+    \[
+    D_{\pf,\qf}(z)=\sum\limits_{k=0}^q\frac{(p+q-k)!q!}{(p+q)!k!(q-k)!}(-z)^k
+    \]
+\end{definition}
+
+Cuando la norma de $A$ es grande, el costo computacional  y los errores de redondeo aumentan, por lo que
+es necesaria la alternativa de escalamiento y potenciación.
+
+\begin{definition}\cite{golub2013matrix}~
+    Sea $A$ una matriz cuadrada, y sea $P_{\pf,\qf}(2^{-k}A%
+    )$ la aproximación de Padé de orden $(\pf,\qf)\ $de $\me{2^{-k}A%
+    }$, donde $k$ es el menor número natural tal que $\left\vert 2^{-k}A%
+    \right\vert \leq \frac{1}{2}$. \ Se define la aproximación de  Padé-$(\pf,\qf)$ con escalamiento y potenciación como 
+    \begin{equation}
+    F_{k}^{\pf,\qf}(A)=(P_{\pf,\qf}(2^{-k}A))^{2^{k}}.
+    \label{P-MA-2}
+    \end{equation}
+\end{definition}
+
+Resultados sobre el error y la estabilidad de las aproximaciones de Padé se presentan a continuación.
+
+\begin{theorem}
+    \label{Conv. Pade}\cite{jimenez2012convergence} El error
+    relativo y absoluto de la aproximación de Padé con escalamiento y
+    potenciación (\ref{P-MA-2}) de $\me{A}$ est\'{a} dado por: 
+    \[
+    \frac{\left\vert e^{A}-F_{k}^{\pf,\qf}(A)\right\vert 
+    }{\left\vert e^{A}\right\vert }\leq \epsilon _{p,q}\left\vert 
+    A\right\vert e^{\epsilon _{p,q}\left\vert A\right\vert }
+    \]%
+    y 
+    \begin{equation}
+    \left\vert \me{A}-F_{k}^{\pf,\qf}(A)\right\vert \leq
+    c_{p,q}(k,\left\vert A\right\vert )\left\vert A\right\vert
+    ^{p+q+1}, \label{errpade}
+    \end{equation}
+    donde $\epsilon _{p,q}=\alpha (\frac{1}{2})^{p+q-3}$, $%
+    c_{p,q}(k,\left\vert A\right\vert )=\alpha
+    2^{-k(p+q)+3}\me{(1+\epsilon _{p,q})\left\vert A\right\vert }$ y $%
+    \alpha =\frac{p!q!}{(p+q)!(p+q+1)!}$.
+\end{theorem}
+
+\begin{theorem}\label{Stab. Pade}[Teorema 4.12 en \cite{wanner1996solving}] 
+    La aproximación de Padé $P_{\pf,\qf}(z)$  es \emph{A-estable} si y solo si $\pf\leq \qf\leq \pf+2$. 
+    Todos los ceros y todos los polos son simples.
+\end{theorem}
+
 \subsection{Aproximación de Krylov}
+
+Los estudios muestran que la aproximación de Padé con escalamiento y potenciación
+es efectiva para calcular exponenciales de matrices relativamente peque\~nas y densas; pero no as\'i para matrices de dimensiones moderadas o grandes.
+
+Es conocido del \'Algebra Lineal Numérica que para problemas de
+grandes dimensiones los métodos iterativos son preferidos por sobre los métodos directos.
+En particular,
+los métodos iterativos de los subespacios de Krylov han cobrado auge en la resolución de
+problemas de \'Algebra Lineal que involucran el producto de una función matricial y un vector,
+tales como la resolución de grandes sistemas lineales y en el c\'alculo de valores
+propios~\cite{golub2013matrix}.
+
+Es importante destacar que en la mayor\'ia de los integradores exponenciales
+ no se necesita el c\'alculo de la matriz $\me{A}$ completa, sino
+el producto $\me{A}b$ donde $b$ es un vector determinado. Por ejemplo, la solución del problema de valor inicial homogéneo $\dot{x}(t)=Ax(t),\;x(0)=x_0$, es $x(t)=\me{At}x_0$ en forma de producto exponencial de matriz y vector. Esta es la razón por la que
+los métodos de los subespacios de Krylov han sido ampliamente utilizados para evaluar productos de esta forma.
+
+\begin{definition}
+        \cite{hochbruck1997krylov} Para $\mf\geq 1$, el $\mf$-ésimo subespacio de Krylov de la matriz $A\in\mathbb{C}^{N\times N}$
+    y el vector $b\in\mathbb{C}^{N}$ se define como
+    \[ \mathcal{K}_\mf(A,b)=\mathrm{span}\left\{ b,Ab,A^{2},b,\ldots,A^{\mf-1}b \right\}. \]
+\end{definition}
+
+Antes de definir la aproximación por subespacios de Krylov del producto de una función matricial y un vector es
+necesario construir una base ortonormal. Para construir dicha base se utiliza el algoritmo de
+Arnoldi~\ref{alg:Arnoldi} para matrices generales y el algoritmo de 
+Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
+
+\begin{algorithm}
+    \caption{Algoritmo de Arnoldi para construir una base ortonormal del subespacio de Krylov $\mathcal{K}_\mf(\tau A,b)$}
+    \label{alg:Arnoldi}
+    \KwIn{Matriz $A\in \mathbb{R}^{d\times d}$, vector $b\in \mathbb{R}^{d}$ y constante $\tau$}
+    \KwOut{Base ortonormal $\{v_1,v_2,\ldots,v_\mf,v_{\mf+1}\}$ de $K_\mf(\tau A,b)$ y matriz de Hessenberg $H_\mf=V_\mf^{\intercal}\tau A V_\mf $,
+        donde $V_{\mf+1}=[v_1\,v_2\,\cdots \,v_\mf\,v_{\mf+1}]\in \mathbb{R}^{d\times \mf+1}$, $breakdown$ }
+    $breakdown=false$\\
+    $v_1=b/\lVert b \rVert_2$\\
+    \For{ $j=1,2,\ldots,\mf$ }{
+        $w_j=\tau A v_j$\\
+        \For{ $i=1,\ldots,j$}{ 
+            $\hf_{ij}=\langle w_j,v_i \rangle$\\
+            $w_j=w_j-\hf_{ij}v_i$       
+        }
+        $\hf_{j+1,i}=\lVert w_j \rVert_2$\\
+        \eIf(\tcp*[h] \emph{Break Down}\label{alg:breakdown}){$\hf_{j+1,i}<2\epsilon_{mach}$}{
+            $\mf_{cut}=j$\\
+             $breakdown=true$\\
+            Stop
+        }{
+            $v_{j+1}=w_j/\hf_{j+1,i}$
+        }
+    }
+\end{algorithm}
+
+
+\begin{definition}
+    \cite{hochbruck1997krylov} Sea $V_\mf$ una base ortonormal de $\mathcal{K}_\mf(A,b)$ y sea $f$ una función matricial definida
+    en el espectro de $A$. La aproximación de $f(A)b$ por el  $\mf$-ésimo subespacio de Krylov se define
+    \begin{equation}
+        f(A)b\approx ||b||_2 V_\mf f(H_\mf)e_1, \label{MFUNC-APROX}
+    \end{equation}
+    donde $H_\mf=V_\mf^{\intercal}AV_\mf$ y $e_1$ es el primer vector canónico de $\mathbb{R}^\mf$.
+    
+\end{definition}
+
+Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obtiene el siguiente resultado.
+\begin{theorem}\label{exp-bound}
+	\cite{Saad92} Sea $A\in\mathbb{C}^{N\times N}$ una matriz. El error de aproximación de $\me{A}b$ por el $\mf$-ésimo subespacio
+	de Krylov es
+	\begin{equation*}
+	\left\lvert\left\lvert \me{A}b - \lvert\lvert b \rvert\rvert_2 V_\mf\me{H_\mf}e_1 \right\rvert\right\rvert_2 
+	\leq \frac{2\vert\lvert b \rvert\rvert_2 \left( \sigma(A) \right)^{\mf}\me{\sigma(A)}}{\mf!},
+	\end{equation*}
+	donde $\sigma(A)$ es el radio espectral de $A$.
+\end{theorem}
+
+Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la función $\phi_k$ definida en (\ref{DEF-PHI}) se obtiene el siguiente resultado.
+\begin{theorem}
+    \cite{Saad92,Sidje98}~Sea $A\in\mathbb{C}^{N\times N}$ una matriz. El error de aproximación de $\phi_k(A)b$ por el $\mf$-ésimo subespacio de Krylov es
+    \begin{equation}
+        ||\phi_k(A)b - ||b||_2 V_\mf \phi_k(H_\mf)e_1||_2  \leq ||b||_2\left\lvert\hf_{\mf+1,\mf} e_\mf^T\phi_{k+1}(H_\mf)e_1\right\rvert\left\lvert\left\lvert v_{\mf+1}\right\rvert\right\rvert_2.
+    \end{equation}
+\end{theorem}
+
+En general, para la familia de funciones $\phi_k$ se establece la expansión en serie \cite{Saad92,Sidje98}
+\begin{equation}
+\phi_k(\tau A)b=||b||_2\tau^{k} V_\mf \phi_k(\tau H_\mf)e_1 + ||b||_2\hf_{\mf+1,\mf}
+\sum_{j=k+1}^{\infty}\tau^{j} e_\mf^T\phi_j(\tau H_\mf)e_1A^{j-k-1}v_{m+1} \label{PHI-EXPANSION}
+\end{equation}
+donde $\tau$ es un número positivo y $e_\mf$ es el  $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$.
