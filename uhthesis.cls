@@ -161,7 +161,7 @@
     \vskip 0.5cm
     {\Large Tutores: \textbf{\@advisor}} \\
     \vfill
-    {\large Trabajo de Diploma \\presentado en opción al título de \\ \@degree} \\
+    {\large Tesis de Doctorado \\presentado en opción al título de \\ \@degree} \\
     \vskip 1cm
     \@date
   \end{center}

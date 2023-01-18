@@ -18,7 +18,7 @@ h_{n}=t_{n+1}-t_{n}\leq h$; para $n=0,\ldots,N-1$.
 \section{Integradores exponenciales}
 
 En general, se denomina integradores exponenciales a la familia
-de esquemas numéricos para EDOs que requieren del cálculo de algún término exponencial. Inicialmente, los integradores de este tipo comenzaron a desarrollarse en los años 60 del siglo pasado\cite{pope1963exponential} con el propósito de resolver sistemas de ecuaciones semilineales de la forma
+de esquemas numéricos para EDOs que requieren del cálculo de algún término exponencial. Inicialmente, los integradores de este tipo comenzaron a desarrollarse en los años 60 del siglo pasado~\cite{Berland07} con el propósito de resolver sistemas de ecuaciones semilineales de la forma
 \begin{equation}
 \frac{dx}{dt} = Ax(t) + F(x(t))  \;\;  \label{ODE Lines Method}
 \end{equation}
@@ -29,11 +29,12 @@ Los integradores exponenciales tanto para ecuaciones semilineales como para ecua
 que resulta de aplicar la fórmula de variación de la constante a estas ecuaciones. Al aplicar la fórmula de variación
 de la constante a la ecuación (\ref{ODE Lines Method}) se obtiene
 \begin{equation}
-x(t_n+h)=\me{Ah}\left(x(t_n) +\int\limits_{0}^{h} \me{-As}F(x(t_n+s)) \,ds.\right) \label{VCF2}
+x(t_n+h)=\me{Ah}\left(x(t_n) +\int\limits_{0}^{h} \me{-As}F(x(t_n+s)) \,ds\right)\,. \label{VCF2}
 \end{equation}
-
 Los integradores exponenciales derivados de esta aproximación son, por ejemplo, los conocidos métodos de Lawson, Lawson Generalizados, Exponential Time
-Differencing and the Exponential Runge-Kutta (ver \cite{Berland07} para una revisión). Por otra parte, después de la linealización local de la ecuación (\ref{ODE-SYST}) en $t_{n}$,  la fórmula de variación
+Differencing and the Exponential Runge-Kutta (ver \cite{Berland07} para una revisión). 
+
+Por otra parte, después de la linealización local de la ecuación (\ref{ODE-SYST}) en $t_{n}$,  la fórmula de variación
 de la constante queda
 \begin{eqnarray}
 x(t_{n}+h) &= & x(t_{n})+\int\limits_{0}^{h}e^{A	_{n}(h-s)}(f(t_n,x(t_{n}))+sf_t(t_n,x(t_{n})))ds \nonumber \\
@@ -139,7 +140,7 @@ Para todo $t\in[t_{0},T]$ se define la siguiente aproximación.
 \end{definition}
 %Otros  integradores que provienen de esta aproximación son~\cite{Jimenez02AMC,Jimenez05AMC}.
 
- La convergencia, la estabilidad lineal y varias propiedades dinámicas de  la discretización Lineal Local (\ref{ODE-LLA-4}) se pueden encontrar en \cite{jimenez2002dynamic}.
+ La convergencia, la estabilidad lineal y varias propiedades dinámicas de  la discretización Lineal Local (\ref{ODE-LLA-4}) se pueden encontrar en \cite{Jimenez02AMC}.
 
 \subsection{Aproximación Lineal Local de Orden Superior}
 
@@ -191,6 +192,32 @@ Cuando $\xi$ es la aproximación obtenida mediante un esquema Runge Kutta de ord
 	\end{equation*}
 	para todo $t\in[t_{0},T]$, donde $y_{n_{t}}$ es la discretización Lineal Local-Runge Kutta de orden $\gamma$, y $n_{t}=\maxx{n:t_{n}\leq t}$.
 \end{definition}
+\todo[inline]{mejorar o cambiar siguiente oración}
+A continuación se construirán dos discretizaciones Lineales Locales-Runge Kutta de orden 4 y 4-5 respectivamente.
+
+Si se utiliza la fórmula Runge-Kutta clásica de order 4~\cite{hairer1993solving} para integrar la ecuación auxiliar (\ref{ODE r}), entonces se obtiene la siguiente discretización Lineal Local-Runge Kutta de orden 4~\cite{Jimenez13}:
+
+\begin{equation}
+    y_{n+1}\,=\,y_n+\varphi(t_n,y_n,h_n)+\frac{h_n}{6}(2\kt+2\kt_3+\kt_4)
+    \label{LLDP scheme}
+    \end{equation}
+    \[ \kt_j = f\left( t_n+c_jh_n\, , \, y_n+\varphi(t_n,y_n,c_jh_n)+c_jh_n\kt_{j-1} \right)
+- f_x(t_n\, , \, y_n)\varphi(t_n,y_n,c_jh_n) - f(t_n\, ,\, y_n) ,\]
+
+donde $\kt_1=0$ y $c = \left[ 0 \; \frac{1}{2} \; \frac{1}{2} \; 1  \right]$.
+
+Si se utilizan las fórmulas embebidas Runge-Kutta de Dormand y Prince para integrar la ecuación auxiliar (\ref{ODE r}), entonces se obtiene la siguiente discretización Lineal Local-Runge Kutta de orden 5-4~\cite{Jimenez14AMC}:
+
+\begin{equation}
+y_{n+1}\,=\,y_n+\varphi_s+h_n \sum_{j=1}^{s}b_j \kt_j \quad \text{y} \quad
+\widehat{y}_{n+1}\,=\, y_n+\varphi_s+h_n \sum_{j=1}^{s}b_j \kt_j
+\label{LLDP scheme}
+\end{equation}
+donde $s = 7$ es el número de estados,
+\[ \kt_j = f\left( t_n+c_jh_n\, , \, y_n+\varphi_j+h_n \sum_{i=1}^{j-1}a_{j,i}\kt_i \right)  
+- f_x(t_n\, , \, y_n)\varphi_j - f(t_n\, ,\, y_n),\]
+\[ \varphi _j = \varphi \left( t_{n},y_{n},c_jh_{n}\right), \]
+y coeficientes Runge-Kutta $a_{j,i}$, $b_j$, $\hat{b}_j$ and $c_j$ definidos en~\cite{hairer1993solving} Tabla 5.2.
 
 \subsection{Esquemas de Linealización Local}
 
@@ -264,6 +291,8 @@ I_{d} & 0_{d\times 1}%
 \mathbf{0}_{1\times d} & 1%
 \end{array}%
 \right] $ para ecuaciones autónomas.
+
+Si se utiliza la fórmula de Padé para aproximar $\varphi_j$ que aparecen en las discretizaciones (\ref{LL-scheme}) y (\ref{LLDP scheme}) se obtienen los esquemas propuestos en \cite{Jimenez13,Jimenez14AMC} que están orientados a resolver problemas de valor inicial de dimensiones pequeñas. 
 
 \section{Cálculo de la exponencial de una matriz}
 
@@ -366,7 +395,7 @@ el producto $\me{A}b$ donde $b$ es un vector determinado. Por ejemplo, la soluci
 los métodos de los subespacios de Krylov han sido ampliamente utilizados para evaluar productos de esta forma.
 
 \begin{definition}
-        \cite{hochbruck1997krylov} Para $\mf\geq 1$, el $\mf$-ésimo subespacio de Krylov de la matriz $A\in\mathbb{C}^{N\times N}$
+        \cite{Saad92} Para $\mf\geq 1$, el $\mf$-ésimo subespacio de Krylov de la matriz $A\in\mathbb{C}^{N\times N}$
     y el vector $b\in\mathbb{C}^{N}$ se define como
     \[ \mathcal{K}_\mf(A,b)=\mathrm{span}\left\{ b,Ab,A^{2},b,\ldots,A^{\mf-1}b \right\}. \]
 \end{definition}
@@ -403,7 +432,7 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
 
 
 \begin{definition}
-    \cite{hochbruck1997krylov} Sea $V_\mf$ una base ortonormal de $\mathcal{K}_\mf(A,b)$ y sea $f$ una función matricial definida
+    \cite{Saad92} Sea $V_\mf$ una base ortonormal de $\mathcal{K}_\mf(A,b)$ y sea $f$ una función matricial definida
     en el espectro de $A$. La aproximación de $f(A)b$ por el  $\mf$-ésimo subespacio de Krylov se define
     \begin{equation}
         f(A)b\approx ||b||_2 V_\mf f(H_\mf)e_1, \label{MFUNC-APROX}
@@ -421,14 +450,6 @@ Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obt
 	\leq \frac{2\vert\lvert b \rvert\rvert_2 \left( \sigma(A) \right)^{\mf}\me{\sigma(A)}}{\mf!},
 	\end{equation*}
 	donde $\sigma(A)$ es el radio espectral de $A$.
-\end{theorem}
-
-Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la función $\phi_k$ definida en (\ref{DEF-PHI}) se obtiene el siguiente resultado.
-\begin{theorem}
-    \cite{Saad92,Sidje98}~Sea $A\in\mathbb{C}^{N\times N}$ una matriz. El error de aproximación de $\phi_k(A)b$ por el $\mf$-ésimo subespacio de Krylov es
-    \begin{equation}
-        ||\phi_k(A)b - ||b||_2 V_\mf \phi_k(H_\mf)e_1||_2  \leq ||b||_2\left\lvert\hf_{\mf+1,\mf} e_\mf^T\phi_{k+1}(H_\mf)e_1\right\rvert\left\lvert\left\lvert v_{\mf+1}\right\rvert\right\rvert_2.
-    \end{equation}
 \end{theorem}
 
 En general, para la familia de funciones $\phi_k$ se establece la expansión en serie \cite{Saad92,Sidje98}

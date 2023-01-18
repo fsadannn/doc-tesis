@@ -1,0 +1,18 @@
+{
+"files.exclude": {
+    "**/.git": true,
+    "**/Thumbs.db": true,
+    "**/*.aux":true,
+    "**/*.bbl":true,
+    "**/*.blg":true,
+    "**/*.brf":true,
+    "**/*.fdb_latexmk":true,
+    "**/*.fls":true,
+    "**/*.log":true,
+    "**/*.nlo":true,
+    "**/*.out":true,
+    "**/*.synctex.gz":true,
+    "**/*.loa":true,
+    "**/*.lot":true,
+  }
+}
