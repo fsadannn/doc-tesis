@@ -1,6 +1,17 @@
 \chapter{Solución de ecuaciones lineales de dimensiones no pequeñas}\label{chapter:solve-non-smal-lineal-eq}
 
+En el capítulo anterior, se presentó la discretización Lineal Local~(\ref{definition LLS}) , así como su implementación basada en Padé~(\ref{LL-scheme}) para pequeños PVI. Para PVI de medianas y grandes dimensiones la aproximación de Padé(\ref{section:pade-approx}) para $\varphi$ ya no es computacionalmente eficiente y necesita ser reemplazada por alguna aproximación basada en subspacios de Krylov o alguna técnica proyectiva similar. Con este propósito, utilizando el Teorema \ref{theorem:exp-phi}, la función $\varphi_j=L\me{c_jh_nM_n}r$ definida en la sección \ref{section:ll-methods} puede reescribirse como
+\begin{equation*}
+    \varphi_j=c_jh_n\phi_1(c_jh_nf_x(t_n,y_n))f(t_n,y_n)
+\end{equation*}
+donde $\phi_1$ está definida en (\ref{phi-definition}).
+
+\todo[inline]{mejorar oración}
+En este capítulo se introducen las aproximaciones Krylov-Padé para exponeciales matriciales, así como dichas aproximaciones sin evaluar el Jacobiano. También se derivan cotas para las aproximaciones propuestas.
+
 \section{Aproximaciones Krylov-Padé}
+
+
 
 
 \section{Aproximaciones Krylov-Padé libre de Jacobiano}

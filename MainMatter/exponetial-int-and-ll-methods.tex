@@ -56,7 +56,7 @@ genérica $\int_{0}^{h} \me{-As}F(x(t_n+s)) \,ds$, y (\textbf{II}) evaluar produ
 Típicamente, una aproximación polinomial del término no lineal $F$ en (\ref{VCF2}) (o $g_n$ en (\ref{VCF})) resulta en un esquema
 exponencial que aproxima la solución de la EDO como una combinación lineal de productos de tipo $\phi_k(\gamma hA)v_k$, con 
 $v_k\in \mathbb{R}^{d}$, donde la función $\phi_k$ está definida como
-\begin{eqnarray}
+\begin{eqnarray}\label{phi-definition}
     \phi_k(z) & = &\int\limits_{0}^{1}\me{z(1-s)}\frac{s^{k-1}}{(k-1)!}\,ds \nonumber \\
     \phi_k(z) & = &\sum\limits_{j=0}^{\infty}\frac{z^{j}}{(k+j)!}\label{DEF-PHI}\\
     \phi_0(z) &=& \me{z} \nonumber\\
@@ -65,7 +65,7 @@ $v_k\in \mathbb{R}^{d}$, donde la función $\phi_k$ está definida como
 
 Entre la familia de funciones $\phi_k$ y la exponencial matricial existe la siguiente importante relación.
 
-\begin{theorem}\label{exp-phi}
+\begin{theorem}\label{theorem:exp-phi}
     \cite{sidje1998expokit} Sea $c\in\mathbb{C}^{m}$, $H_m\in\mathbb{C}^{m\times m}$ y 
     \begin{equation}
     \overline{H}_{m+p} = \left[\begin{array}{ccccc}
@@ -89,7 +89,7 @@ Entre la familia de funciones $\phi_k$ y la exponencial matricial existe la sigu
 \end{theorem} 
 
 
-\section{Método de Linealización Local}
+\section{Método de Linealización Local}\label{section:ll-methods}
 En esta sección se presentan los resultados básicos los Métodos de Linealización Local que se requieren para esta tesis.
 
 \subsection{Aproximación Lineal Local}
@@ -316,7 +316,7 @@ la exponencial de matrices. Los méodos más utilizados son la aproximación de 
 y potenciación para matrices pequeñas y densas, y el de los subespacios de Krylov para matices grandes y esparcidas.
 
 
-\subsection{Aproximación de Padé}
+\subsection{Aproximación de Padé}\label{section:pade-approx}
 
 \begin{definition}
     \cite{golub2013matrix}~La aproximación racional de Padé $P_{\pf,\qf}(z)$
@@ -406,11 +406,11 @@ Arnoldi~\ref{alg:Arnoldi} para matrices generales y el algoritmo de
 Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
 
 \begin{algorithm}
-    \caption{Algoritmo de Arnoldi para construir una base ortonormal del subespacio de Krylov $\mathcal{K}_\mf(\tau A,b)$}
+    \caption{Algoritmo de Arnoldi para construir una base ortonormal $\{ v_1,\ldots,v_\mf \}$ del $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(\tau A,b)=\mathrm{span} \{ b,Ab,\ldots, A^{\mf-1}b \}$}
     \label{alg:Arnoldi}
     \KwIn{Matriz $A\in \mathbb{R}^{d\times d}$, vector $b\in \mathbb{R}^{d}$ y constante $\tau$}
-    \KwOut{Base ortonormal $\{v_1,v_2,\ldots,v_\mf,v_{\mf+1}\}$ de $K_\mf(\tau A,b)$ y matriz de Hessenberg $H_\mf=V_\mf^{\intercal}\tau A V_\mf $,
-        donde $V_{\mf+1}=[v_1\,v_2\,\cdots \,v_\mf\,v_{\mf+1}]\in \mathbb{R}^{d\times \mf+1}$, $breakdown$ }
+    \KwOut{$V_\mf=\left[ v_1 \, \cdots \, v_\mf \right]\in\mathbb{R}^{d\times\mf}$, matriz de Hessenberg $H_\mf=V_\mf^{\intercal}\tau A V_\mf $, $v_{\mf}\in\mathbb{R}^d$, $\hf_{\mf+1,\mf}$,$\mf_{cut}$ , $breakdown$ }
+
     $breakdown=false$\\
     $v_1=b/\lVert b \rVert_2$\\
     \For{ $j=1,2,\ldots,\mf$ }{
@@ -438,7 +438,6 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
         f(A)b\approx ||b||_2 V_\mf f(H_\mf)e_1, \label{MFUNC-APROX}
     \end{equation}
     donde $H_\mf=V_\mf^{\intercal}AV_\mf$ y $e_1$ es el primer vector canónico de $\mathbb{R}^\mf$.
-    
 \end{definition}
 
 Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obtiene el siguiente resultado.
@@ -457,4 +456,4 @@ En general, para la familia de funciones $\phi_k$ se establece la expansión en 
 \phi_k(\tau A)b=||b||_2\tau^{k} V_\mf \phi_k(\tau H_\mf)e_1 + ||b||_2\hf_{\mf+1,\mf}
 \sum_{j=k+1}^{\infty}\tau^{j} e_\mf^T\phi_j(\tau H_\mf)e_1A^{j-k-1}v_{m+1} \label{PHI-EXPANSION}
 \end{equation}
-donde $\tau$ es un número positivo y $e_\mf$ es el  $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$.
+donde $\tau$ es un número positivo, $A\in\mathbb{R}^{d\times d}$, $b\in\mathbb{R}^d$, $e_\mf$ es el $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$ y $V_\mf,H_\mf,v_{\mf+1},\hf_{\mf+1,\mf}$ son salidas del Algoritmo de Arnoldi \ref{alg:Arnoldi}
