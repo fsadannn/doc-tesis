@@ -16,7 +16,7 @@ En este capítulo se introducen las aproximaciones Krylov-Padé para exponeciale
     K_\mf(\tau,A,b) = \norme{b}\tau V_\mf\phi_1(\tau H_\mf)e_1 + \norme{b}\tau^2\hf_{\mf+1,\mf}e^T_\mf\phi_2(\tau H_\mf)e_1v_{\mf+1}
  \end{equation}
 para aproximar $\tau\phi_1(\tau A)b$ y el tercer término como medida del error.
-
+-
 Al aplicar el algoritmo de Arnoldi (\ref{alg:Arnoldi}), la propiedad de invarianza ante escalado de la base ortonormal del subspacion y el Teorema \ref{theorem:exp-phi} podemos calcular las $\phi_j$ necesarias realizando una exponencial; del Algoritmo (\ref{alg:Arnoldi}) se obtiene la matrix de Hessenberg $H^*\mf$ para $\mathcal{K}_\mf(h_n f_x,f)$. Escalando esta matriz se obtiene $H_\mf=H^*\mf/h_n$ para $\mathcal{K}_\mf(f_x,f)$ y al realizar la exponencial de la matriz particionada
 \begin{equation*}
     \overline{H} = \left[\begin{array}{cccc}
