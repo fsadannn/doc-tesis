@@ -2,9 +2,9 @@
 
 En el capítulo anterior, se presentó la discretización Lineal Local~(\ref{definition LLS}) , así como su implementación basada en Padé~(\ref{LL-scheme}) para pequeños PVI. Para PVI de medianas y grandes dimensiones la aproximación de Padé(\ref{section:pade-approx}) para $\varphi$ ya no es computacionalmente eficiente y necesita ser reemplazada por alguna aproximación basada en subspacios de Krylov o alguna técnica proyectiva similar. Con este propósito, utilizando el Teorema \ref{theorem:exp-phi}, la función $\varphi_j=L\me{c_jh_nM_n}r$ definida en la sección \ref{section:ll-methods} puede reescribirse como
 \begin{equation*}
-    \varphi_j=c_jh_n\phi_1(c_jh_nf_x(t_n,y_n))f(t_n,y_n)
+    \phi_j=c_jh_n\varphi_1(c_jh_nf_x(t_n,y_n))f(t_n,y_n)
 \end{equation*}
-donde $\phi_1$ está definida en (\ref{phi-definition}).
+donde $\varphi_1$ está definida en (\ref{phi-definition}).
 
 \todo[inline]{mejorar oración}
 En este capítulo se introducen las aproximaciones Krylov-Padé para exponeciales matriciales, así como dichas aproximaciones sin evaluar el Jacobiano. También se derivan cotas para las aproximaciones propuestas.
@@ -54,7 +54,7 @@ donde $F_k^{\pf,\qf}$~(\ref{P-MA-2}) denota la aproximación de Padé con estrat
  \subsection{Cotas para aproximaciones Krylov-Padé}
  En está sección se enunciará un teorema para acotar el error de la (\ref{eq:kp_aprox}) en función de tamaño de paso $h$, la dimensión del subespacio de Krylov $\mf$ y los órdenes de Padé $\pf$ y $\qf$. Para poder enunciar dicho teorema dos lemas adicionales son necesarios. El primer lema extiende para $\tau \phi_1(\tau A)b$ los resultados del Teorema 4.7 en~\cite{Saad92} para aproximaciones de $\phi_0(A)b$ mediante subespacios de Krylov. El segundo lema ofrece una cota para la matrix $\overline{H}$.
 
- \begin{lemma}\label{lemma:CORRECTED-ERROR}
+ \begin{lemma}\cite{naranjo2021locally}\label{lemma:CORRECTED-ERROR}
 	Sea $A\in\mathbb{C}^{d\times d}$ una matrix, $b\in\mathbb{C}^{d}$ un vector, $\tau$ un número positivo, y \[{K_{\mf}\left(\tau,A , b \right) = \tau ||b||_2 V_\mf \phi_1(\tau H_\mf)e_1}+\tau^2 ||b||_2 \hf_{\mf+1,\mf}e_\mf^T\phi_2\left(\tau H_\mf\right) e_1 v_{\mf+1} \] la aproximación a $\tau \phi_1(\tau A)b$ tomando los dos primeros términos de la serie (\ref{PHI-EXPANSION}). Entonces,
 	\begin{gather*}
 	\left\lvert\left\lvert \tau\phi_1(\tau A)b - K_{\mf}\left(\tau,A , b \right) \right\rvert\right\rvert_2%\nonumber\\
@@ -117,7 +117,7 @@ Finalmente, de estas desigualdades and (\ref{eq:phidiffasm}) se obtiene
 \end{equation*}
 lo cual completa la prueba. $\Box$
 
-\begin{lemma}\label{H-bound}
+\begin{lemma}\cite{naranjo2021locally}\label{H-bound}
 	Sea $\overline{H}$ la matrix definida en in~(\ref{hhat_hessenberg_matrix}), sea  $H_\mf=V^{T}_\mf AV_\mf$ la matrix de Hessenberg asociada al subespacio de Krylov $\mathcal{K}_\mf(A,b)$ con base ortonormal $V_m$. Entonces
 	\[ \lVert\overline{H}\rVert_2 \leq 1 +  \lVert A\rVert_2. \]
 \end{lemma}
@@ -140,7 +140,7 @@ Ya que $\lVert B\rVert_2 = \lVert L \rVert_2 = 1$, y $\lVert H_m\rVert_2 \le \lV
 $\Box$\\ \\
 
 
-\begin{theorem}\label{theorem:Krylov-bound}
+\begin{theorem}\cite{naranjo2021locally}\label{theorem:Krylov-bound}
 	Sea 
 	\begin{equation} \label{eq:gen_kp_aprox}
 	K_{\mf,k}^{\pf,\qf}\left(\tau, A , b \right)=\nnorm{\nnorm{b}}_2 V_{\mf}\;[\widetilde{E}_{\tau}]_{12} + \nnorm{\nnorm{b}}_2 \hf_{\mf+1,\mf}e_\mf^T\;[\widetilde{E}_{\tau}]_{13} v_{\mf+1}
@@ -247,6 +247,14 @@ lo cual concluye la prueba.
 $\Box$
 
 \section{Aproximaciones Krylov-Padé libre de Jacobiano}
+
+Por construcción, la discretización discretización Lineal Local~(\ref{definition LLS}), contiene productos de la matriz jacobiana por un vector. Tradicionalmente, en los casos que no es posible evaluar or almacenar la matriz jacobiana o es muy difícil obtenerla, los products de dicha matriz por un vector son reemplazados por aproximaciones~(ver~\cite{steihaug1979attempt,schmitt1995matrix,weiner1997rowmap,hochbruck1998exponential,hosseini1999matrix,tranquilli2014rosenbrock}), preferiblemente diferencias finitas. Aunque estas aproximaciones son útiles en la práctica, estudios teóricos y simulaciones muestran que los esquemas resultantes sufren de pérdida de precisión y dismibuciónb del orden de convergencia (ver~\cite{wanner1996solving,hochbruck1998exponential,tranquilli2014rosenbrock})
+
+
+By construction, the mentioned numerical schemes involve the computation of products of Jacobian matrix times vector and, in some of them, the whole or partial evaluation of Jacobian matrices to form preconditioner matrices when are required. Routinely, in the case that evaluating and storing Jacobian matrices is unfeasible or when the exact Jacobian matrix is difficult to obtain - due to the insufficient capability of the available computational resources or to the use of complex spatial discretizations - the mentioned products of Jacobian matrix times vector are replaced by approximations (see, e.g., \cite{Steihaug79,Schmitt95,Weiner97,Hochbruck98,Hosseini99,Tranquilli14_SIAM}), preferably, by finite differences. Although this procedure is useful in practice, theoretical and simulation studies have shown that the resulting Jacobian-free schemes may suffer from a loss of precision and order of convergence (see, e.g., \cite{Hairer96,hochbruck1998exponential,tranquilli2014rosenbrock}). 
+
+In the previous section, a new family of Jacobian-free methods was introduced for integrating both, small and large systems of IVPs. With the purpose of design Jacobian-free schemes for large systems of IVPs, in this section, we will adapt the Krylov-Padé approximation to the phi-function times vector $\tau \varphi_1(\tau A)b$ introduced in \cite{Naranjo-Noda21}, for the operator $\varphi_1(z)=(e^z-z)/z$, squared matrix $A$, vector $b$ and $\tau>0$. With this aim, we will use an important result from \cite{brown1987local} that relates the classic Arnoldi algorithm specified in Algorithm \ref{alg:Arnoldi} with the Matrix-free Arnoldi algorithm listed in Algorithm \ref{alg:iArnoldi}.
+
 
 
 \section{Aproximaciones de ecuaciones no autónomas}
