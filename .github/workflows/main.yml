@@ -20,6 +20,7 @@ jobs:
         uses: xu-cheng/latex-action@v2
         with:
           root_file: Thesis.tex
+          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode -f -verbose
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
