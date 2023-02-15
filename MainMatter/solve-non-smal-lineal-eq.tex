@@ -356,8 +356,7 @@ con lo que concluye la demostración. $\blacksquare$\\
 	\end{equation}
 	con $\tau,\delta \in [0,1]$, donde $\mathfrak{c}_0$ y $\mathfrak{c}_1$ son constantes positivas q dependen de $\mf,\pf,\qf,k$, $\nnnorm{A}_2$, $\nnnorm{b}_2$ y $L$, siendo $L$ la constante~(\ref{eq:g_bound}) correspondiente a la aproximación $g(.;\delta)$ en el algoritmo de Arnoldi sin matriz~\ref{alg:iArnoldi}.
 \end{theorem}
-
-\textbf{Proof} Del \ref{theorem:krilobapproxequality}, se tiene
+\textbf{Demostración} Del \ref{theorem:krilobapproxequality}, se tiene
 \[ \widehat{\mathcal{K}}_\mf(\tau^\beta A,b;\delta)=\mathcal{K}_\mf(\tau^\beta A+R_\mf,b) \]
 y
 \begin{equation}
@@ -386,12 +385,12 @@ De la Desigualdad de Increment Finito y la cota~(\ref{eq:fjbound3}) se obtiene
 \begin{align}
 	\nnnorm{\me{\tau A}b - \me{\tau A + \tau \widehat{R}_\mf}b}_2&\leq \nnnorm{b}_2 \nnnorm{\tau \widehat{R}_\mf}_2\me{\tau\nnnorm{A}_2+\tau\nnnorm{\widehat{R}_\mf}_2} \\ &\leq \nnnorm{b}_2   \sqrt{\mf}L \tau^{\beta\eta+1}\delta^\eta\me{\tau(\nnnorm{A}_2+\sqrt{\mf}L)} \nonumber\label{eq:fjbound1}
 \end{align}
-y, del Teorema 3.1 en \cite{Naranjo-Noda21}, 
+y, del Teorema 3.1 en \cite{naranjo2021locally}, 
 \vspace{-0.25cm}
 \begin{equation}
 	\nnnorm{\tau \varphi_1(\tau A+\widehat{R}_\mf)b-K_{\mf,k}^{\pf,\qf}\left( \tau, A+\widehat{R}_\mf , b \right)}_2  \leq \nnnorm{b}_2C_{\mf,\kt}^{\pf,\qf}(\nnnorm{A}_2+\sqrt{\mf}L)\tau^{\min\{\mf+2,\pf+\qf+1\}}, \label{eq:fjbound2}
 \end{equation}
-donde $C_{\mf,\kt}^{\pf,\qf}$ está definido en el Teorema 3.1 in \cite{Naranjo-Noda21}.
+donde $C_{\mf,\kt}^{\pf,\qf}$ está definido en el Teorema 3.1 in \cite{naranjo2021locally}.
 
 Utilizando las desigualdades (\ref{eq:fjbound})-(\ref{eq:fjbound2})
 \vspace{-0.25cm}
