@@ -199,7 +199,7 @@ Si se utiliza la fórmula Runge-Kutta clásica de order 4~\cite{hairer1993solvin
 
 \begin{equation}
     y_{n+1}\,=\,y_n+\phi(t_n,y_n,h_n)+\frac{h_n}{6}(2\kt+2\kt_3+\kt_4)
-    \label{LLDP scheme}
+    \label{LL-scheme-4}
     \end{equation}
     \[ \kt_j = f\left( t_n+c_jh_n\, , \, y_n+\phi(t_n,y_n,c_jh_n)+c_jh_n\kt_{j-1} \right)
 - f_x(t_n\, , \, y_n)\phi(t_n,y_n,c_jh_n) - f(t_n\, ,\, y_n) ,\]
@@ -210,7 +210,7 @@ Si se utilizan las fórmulas embebidas Runge-Kutta de Dormand y Prince para inte
 \begin{equation}
 y_{n+1}\,=\,y_n+\phi_s+h_n \sum_{j=1}^{s}b_j \kt_j \quad \text{y} \quad
 \widehat{y}_{n+1}\,=\, y_n+\phi_s+h_n \sum_{j=1}^{s}b_j \kt_j
-\label{LLDP scheme}
+\label{LLDP-scheme-dp}
 \end{equation}
 donde $s = 7$ es el número de estados,
 \[ \kt_j = f\left( t_n+c_jh_n\, , \, y_n+\phi_j+h_n \sum_{i=1}^{j-1}a_{j,i}\kt_i \right)  
@@ -291,7 +291,7 @@ I_{d} & 0_{d\times 1}%
 \end{array}%
 \right] $ para ecuaciones autónomas.
 
-Si se utiliza la fórmula de Padé para aproximar $\varphi_j$ que aparecen en las discretizaciones (\ref{LL-scheme}) y (\ref{LLDP scheme}) se obtienen los esquemas propuestos en \cite{Jimenez13,Jimenez14AMC} que están orientados a resolver problemas de valor inicial de dimensiones pequeñas. 
+Si se utiliza la fórmula de Padé para aproximar $\varphi_j$ que aparecen en las discretizaciones (\ref{LL-scheme-4}) y (\ref{LLDP-scheme-dp}) se obtienen los esquemas propuestos en \cite{Jimenez13,Jimenez14AMC} que están orientados a resolver problemas de valor inicial de dimensiones pequeñas. 
 
 \section{Cálculo de la exponencial de una matriz}
 
