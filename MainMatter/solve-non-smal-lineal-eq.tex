@@ -1,23 +1,38 @@
 \chapter{Solución de ecuaciones lineales de dimensiones no pequeñas}\label{chapter:solve-non-smal-lineal-eq}
 
-En el capítulo anterior, se presentó la discretización Lineal Local~(\ref{definition LLS}) , así como su implementación basada en Padé~(\ref{LL-scheme}) para pequeños PVI. Para PVI de medianas y grandes dimensiones la aproximación de Padé(\ref{section:pade-approx}) para $\varphi$ ya no es computacionalmente eficiente y necesita ser reemplazada por alguna aproximación basada en subspacios de Krylov o alguna técnica proyectiva similar. Con este propósito, utilizando el Teorema \ref{theorem:exp-phi}, la función $\varphi_j=L\me{c_jh_nM_n}r$ definida en la sección \ref{section:ll-methods} puede reescribirse como
+En el capítulo anterior, se presentó la discretización Lineal Local~(\ref{definition LLS}), así como su implementación basada en Padé~(\ref{LL-scheme}) para pequeños PVI. Para PVI de medianas y grandes dimensiones la aproximación de Padé(\ref{section:pade-approx}) para la exponencial ya no es computacionalmente eficiente y necesita ser reemplazada por alguna aproximación basada en subespacios de Krylov o alguna técnica proyectiva similar. Con el propósito de aplicar aproximación basadas en subespacios de Krylov primero se reescribirá la solución de la ecuación lineal. Nótese que dada la ecuación lineal
 \begin{equation*}
-    \phi_j=c_jh_n\varphi_1(c_jh_nf_x(t_n,y_n))f(t_n,y_n)
+	\frac{dx(t)}{dt}=Ax(t)\;,\;\; x(t_0)=x_0,\;\;\; A\in\mathbb{R}^{d\times d}
 \end{equation*}
-donde $\varphi_1$ está definida en (\ref{phi-definition}).
-
+además de la forma integral, la solución puede ser escrita de las siguientes formados
+\begin{eqnarray}
+	x(t) & = & \me{tA}x_0 \label{eqaux:lineal-solution-ex} \\
+	x(t) & = & x_0 + L\me{tM}r \label{eqaux:lineal-solution-xex} \\
+	x(t) & = & x_0 + t\varphi_1(tA)Ax_0 \label{eqaux:lineal-solution-xphix}
+\end{eqnarray}
+donde $\varphi_1$ está definida en (\ref{phi-definition}) y
+\begin{equation*}
+	L=\left[ \begin{array}{ll} I_{d} & 0_{d\times 1}\end{array} \right] \;,\;\;
+	r^{\intercal }=\left[ \begin{array}{ll} \mathbf{0}_{1\times d} & 1\end{array}\right] \;,\;\;
+	M=\left[
+	\begin{array}{cc}
+	A & Ax_0 \\
+	0 & 0
+	\end{array}
+	\right]\;.
+\end{equation*}
 \todo[inline]{mejorar oración}
-En este capítulo se introducen las aproximaciones Krylov-Padé para exponeciales matriciales, así como dichas aproximaciones sin evaluar el Jacobiano. También se derivan cotas para las aproximaciones propuestas.
+En trabajos como~\cite{Saad92,jimenez2012convergence} se utilizan aproximaciones de Krylov para las soluciones de las forma~(\ref{eqaux:lineal-solution-ex},\ref{eqaux:lineal-solution-xex}), dichas aproximaciones de orden $\mf$, donde $\mf$ es la dimensión del subespacio utilizado. Las soluciones de la forma~(\ref{eqaux:lineal-solution-xphix}) se han aproximado con orden $\mf+1$ en trabajos como~\cite{sidje1998expokit,hochbruck1998exponential}. Tomando soluciones de la forma~(\ref{eqaux:lineal-solution-xphix}) es necesario tener buenas aproximaciones de $\varphi_1$, por lo que en este capítulo se introducirán las aproximaciones Krylov-Padé para $\varphi_1$, así como dichas aproximaciones sin evaluar el Jacobiano. También se derivarán cotas para las aproximaciones propuestas y se propondrá una estrategia para la selección de la dimensión de los subespacios.
 
 \section{Aproximaciones Krylov-Padé}\label{section:krylov-pade-approx}
 
- La familia de operadors $\phi$ tiene un papel fundamental en las aproximaciones Localmente Linealizadas, por esto es necesario poder evaluar estos operadores de forma rápida y precisa. Además, como estos operadores aparecen actuando sobre un vector, entonces se aproxima la acción sobre el vector. La expansión en serie~(\ref{PHI-EXPANSION}) permite relacionar la acción de un operador sobre un vector por un subspacio de Krylov. Truncando la serie~(\ref{PHI-EXPANSION}) diferentes aproximaciones son obtenidas. Típicamente~\cite{niesen2009krylov,sidje1998expokit,tokman2006efficient} el primer término de la serie es tomado y el segundo término es utilizado como medida del error; pero, en este trabajo, similar a~\cite{Saad92} se tomarán los dos primeros términos de la serie (\ref{PHI-EXPANSION})
+ La familia de operadors $\varphi$ tiene un papel fundamental en las aproximaciones Localmente Linealizadas, por esto es necesario poder evaluar estos operadores de forma rápida y precisa. Además, como estos operadores aparecen actuando sobre un vector, entonces se aproxima la acción sobre el vector. La expansión en serie~(\ref{PHI-EXPANSION}) permite relacionar la acción de un operador sobre un vector por un subespacio de Krylov. Truncando la serie~(\ref{PHI-EXPANSION}) diferentes aproximaciones son obtenidas. Típicamente~\cite{niesen2009krylov,sidje1998expokit,tokman2006efficient} el primer término de la serie es tomado y el segundo término es utilizado como medida del error; pero, en este trabajo, similar a~\cite{Saad92} se tomarán los dos primeros términos de la serie (\ref{PHI-EXPANSION})
  \begin{equation}\label{exact-two-terms-km}
-    K_\mf(\tau,A,b) = \norme{b}\tau V_\mf\phi_1(\tau H_\mf)e_1 + \norme{b}\tau^2\hf_{\mf+1,\mf}e^T_\mf\phi_2(\tau H_\mf)e_1v_{\mf+1}
+    K_\mf(\tau,A,b) = \norme{b}\tau V_\mf\varphi_1(\tau H_\mf)e_1 + \norme{b}\tau^2\hf_{\mf+1,\mf}e^T_\mf\varphi_2(\tau H_\mf)e_1v_{\mf+1}
  \end{equation}
-para aproximar $\tau\phi_1(\tau A)b$ y el tercer término como medida del error.
+para aproximar $\tau\varphi_1(\tau A)b$ y el tercer término como medida del error.
 -
-Al aplicar el algoritmo de Arnoldi (\ref{alg:Arnoldi}), la propiedad de invarianza ante escalado de la base ortonormal del subspacion y el Teorema \ref{theorem:exp-phi} podemos calcular las $\phi_j$ necesarias realizando una exponencial; del Algoritmo (\ref{alg:Arnoldi}) se obtiene la matrix de Hessenberg $H^*\mf$ para $\mathcal{K}_\mf(h_n f_x,f)$. Escalando esta matriz se obtiene $H_\mf=H^*\mf/h_n$ para $\mathcal{K}_\mf(f_x,f)$ y al realizar la exponencial de la matriz particionada
+Al aplicar el algoritmo de Arnoldi (\ref{alg:Arnoldi}), la propiedad de invarianza ante escalado de la base ortonormal del subespacio y el Teorema \ref{theorem:exp-phi} podemos calcular las $\phi_j$ necesarias realizando una exponencial; del Algoritmo (\ref{alg:Arnoldi}) se obtiene la matriz de Hessenberg $H^*\mf$ para $\mathcal{K}_\mf(h_n f_x,f)$. Escalando esta matriz se obtiene $H_\mf=H^*\mf/h_n$ para $\mathcal{K}_\mf(f_x,f)$ y al realizar la exponencial de la matriz particionada
 \begin{equation*}
     \overline{H} = \left[\begin{array}{cccc}
     H_\mf & e_1 & 0_{\mf\times 1} & 0_{\mf\times 1}\\
@@ -29,8 +44,8 @@ Al aplicar el algoritmo de Arnoldi (\ref{alg:Arnoldi}), la propiedad de invarian
 se obtiene de aplicar el Teorema \ref{theorem:exp-phi}
 \begin{equation}
     \me{\tau\overline{H}} = \left[\begin{array}{cccc}
-    \me{\tau H_m} & \tau\phi_1(\tau H_m)e_1 & \tau^{2}\phi_2(\tau H_m)e_1 &
-    \tau^{3}\phi_3(\tau H_m)e_1 \\
+    \me{\tau H_m} & \tau\varphi_1(\tau H_m)e_1 & \tau^{2}\varphi_2(\tau H_m)e_1 &
+    \tau^{3}\varphi_3(\tau H_m)e_1 \\
     & 1 & \tau & \frac{\tau^{2}}{2}\\
     &  & 1 & \tau \\
     &   &   & 1 \\
@@ -52,51 +67,51 @@ donde $F_k^{\pf,\qf}$~(\ref{P-MA-2}) denota la aproximación de Padé con estrat
  \end{equation}
 
  \subsection{Cotas para aproximaciones Krylov-Padé}
- En está sección se enunciará un teorema para acotar el error de la (\ref{eq:kp_aprox}) en función de tamaño de paso $h$, la dimensión del subespacio de Krylov $\mf$ y los órdenes de Padé $\pf$ y $\qf$. Para poder enunciar dicho teorema dos lemas adicionales son necesarios. El primer lema extiende para $\tau \phi_1(\tau A)b$ los resultados del Teorema 4.7 en~\cite{Saad92} para aproximaciones de $\phi_0(A)b$ mediante subespacios de Krylov. El segundo lema ofrece una cota para la matrix $\overline{H}$.
+ En está sección se enunciará un teorema para acotar el error de la (\ref{eq:kp_aprox}) en función de tamaño de paso $h$, la dimensión del subespacio de Krylov $\mf$ y los órdenes de Padé $\pf$ y $\qf$. Para poder enunciar dicho teorema dos lemas adicionales son necesarios. El primer lema extiende para $\tau \phi_1(\tau A)b$ los resultados del Teorema 4.7 en~\cite{Saad92} para aproximaciones de $\phi_0(A)b$ mediante subespacios de Krylov. El segundo lema ofrece una cota para la matriz $\overline{H}$.
 
  \begin{lemma}\cite{naranjo2021locally}\label{lemma:CORRECTED-ERROR}
-	Sea $A\in\mathbb{C}^{d\times d}$ una matrix, $b\in\mathbb{C}^{d}$ un vector, $\tau$ un número positivo, y \[{K_{\mf}\left(\tau,A , b \right) = \tau ||b||_2 V_\mf \phi_1(\tau H_\mf)e_1}+\tau^2 ||b||_2 \hf_{\mf+1,\mf}e_\mf^T\phi_2\left(\tau H_\mf\right) e_1 v_{\mf+1} \] la aproximación a $\tau \phi_1(\tau A)b$ tomando los dos primeros términos de la serie (\ref{PHI-EXPANSION}). Entonces,
+	Sea $A\in\mathbb{C}^{d\times d}$ una matriz, $b\in\mathbb{C}^{d}$ un vector, $\tau$ un número positivo, y \[{K_{\mf}\left(\tau,A , b \right) = \tau ||b||_2 V_\mf \varphi_1(\tau H_\mf)e_1}+\tau^2 ||b||_2 \hf_{\mf+1,\mf}e_\mf^T\varphi_2\left(\tau H_\mf\right) e_1 v_{\mf+1} \] la aproximación a $\tau \phi_1(\tau A)b$ tomando los dos primeros términos de la serie (\ref{PHI-EXPANSION}). Entonces,
 	\begin{gather*}
-	\left\lvert\left\lvert \tau\phi_1(\tau A)b - K_{\mf}\left(\tau,A , b \right) \right\rvert\right\rvert_2%\nonumber\\
+	\left\lvert\left\lvert \tau\varphi_1(\tau A)b - K_{\mf}\left(\tau,A , b \right) \right\rvert\right\rvert_2%\nonumber\\
 	\leq \frac{2\vert\lvert b \rvert\rvert_2\tau^{\mf+2}\rho^{\mf+1}\me{\tau \rho}}{(\mf+2)!},
 	\end{gather*}
 	donde $\rho=\nnorm{\nnorm{A}}_2$.
 \end{lemma}
 
 \emph{Demostración}
-Sigiendo la definión (\ref{phi-definition}), $\tau \phi_1(\tau A)b$ puede ser reecrito como
+Siguiendo la definición (\ref{phi-definition}), $\tau \varphi_1(\tau A)b$ puede ser reescrito como
 \begin{eqnarray*}
-	\tau \phi_1(\tau A)b &=& \tau b+\tau^{2}A\phi_{2}(\tau A)b \\
-	&=& \tau b+\tau^{2}A \,\ (\,\ \nnorm{\nnorm{b}}_2V_\mf\phi_{2}(\tau H_\mf)e_1 +s_\mf(\tau A) \,\ ), %\label{eq:tauaphi1tauab}
+	\tau \varphi_1(\tau A)b &=& \tau b+\tau^{2}A\varphi_{2}(\tau A)b \\
+	&=& \tau b+\tau^{2}A \,\ (\,\ \nnorm{\nnorm{b}}_2V_\mf\varphi_{2}(\tau H_\mf)e_1 +s_\mf(\tau A) \,\ ), %\label{eq:tauaphi1tauab}
 \end{eqnarray*}
-donde \[ s_\mf (\tau A)= \phi_{2}(\tau A)b -\nnorm{\nnorm{b}}_2V_\mf\phi_{2}(\tau H_\mf)e_1 .\]
+donde \[ s_\mf (\tau A)= \varphi_{2}(\tau A)b -\nnorm{\nnorm{b}}_2V_\mf\varphi_{2}(\tau H_\mf)e_1 .\]
 De la reescritura de $\phi$, utilizando $AV_\mf=V_\mf H_\mf + \hf_{\mf+1,\mf}v_{\mf+1}e^{T}_\mf$ y  $\nnorm{\nnorm{b}}_2V_\mf e_1=b$ se obtiene
 \begin{equation}
-\tau\phi_1(\tau A)b = \tau\nnorm{\nnorm{b}}_2V_\mf\phi_1(\tau H_\mf)e_1 + \tau^{2}\nnorm{\nnorm{b}}_2\hf_{\mf+1,\mf}e^T_\mf\phi_{2}(\tau H_\mf)e_1v_{\mf+1}+\tau^{2}As_\mf (\tau A), %\label{eq:tauaphi1tauabapprox}
+\tau\varphi_1(\tau A)b = \tau\nnorm{\nnorm{b}}_2V_\mf\varphi_1(\tau H_\mf)e_1 + \tau^{2}\nnorm{\nnorm{b}}_2\hf_{\mf+1,\mf}e^T_\mf\varphi_{2}(\tau H_\mf)e_1v_{\mf+1}+\tau^{2}As_\mf (\tau A), %\label{eq:tauaphi1tauabapprox}
 \end{equation}
 y se tiene que
 \begin{equation}
-\tau\phi_1(\tau A)b - K_{\mf}\left(\tau,A , b \right) = \tau^{2}As_\mf(\tau A), \label{eq:phidiffasm}
+\tau\varphi_1(\tau A)b - K_{\mf}\left(\tau,A , b \right) = \tau^{2}As_\mf(\tau A), \label{eq:phidiffasm}
 \end{equation}
-donde \[{K_{\mf}\left(\tau,A , b \right) = \tau ||b||_2 V_\mf \phi_1(\tau H_\mf)e_1}+\tau^2 ||b||_2 \hf_{\mf+1,\mf}e_\mf^T\phi_2\left(\tau H_\mf\right) e_1 v_{\mf+1} \] es una aproximación de $\tau \phi_1(\tau A)b$.
+donde \[{K_{\mf}\left(\tau,A , b \right) = \tau ||b||_2 V_\mf \varphi_1(\tau H_\mf)e_1}+\tau^2 ||b||_2 \hf_{\mf+1,\mf}e_\mf^T\varphi_2\left(\tau H_\mf\right) e_1 v_{\mf+1} \] es una aproximación de $\tau \varphi_1(\tau A)b$.
 
 Utilizando el Lema 4.1 en \cite{Saad92} se tiene
 \begin{equation}
 s_\mf(\tau A)=\nnorm{\nnorm{b}}_2 ( r_\mf(\tau A)v_1-V_\mf r_\mf(\tau H_\mf)e_1) ,\label{eq:smeq}
 \end{equation}
-donde $r_\mf(z) = \phi_{2}(z)-p_{2,\mf-1}(z)$, and $p_{2,\mf-1}$ es un polinomio de grado $\mf-1$. Tomando
+donde $r_\mf(z) = \varphi_{2}(z)-p_{2,\mf-1}(z)$, y $p_{2,\mf-1}$ es un polinomio de grado $\mf-1$. Tomando
 \begin{equation*}
 p_{2,\mf-1}(z)\equiv \frac{p_{1,\mf}(z)-1}{z},
 \end{equation*}
-donde $p_{1,\mf}$ es la expansion de Taylor de $\phi_1$ hasta el orden  $\mf$
+donde $p_{1,\mf}$ es la expansión de Taylor de $\phi_1$ hasta el orden  $\mf$
 definida por
 \[ p_{1,\mf}(z)= \frac{p_{0,\mf+1}(z)-1}{z}, \]
-donde $p_{0,\mf+1}(z)$  es la expansion de Taylor de $\me{z}$ hasta el orden $\mf+1$ dada por
+donde $p_{0,\mf+1}(z)$  es la expansión de Taylor de $\me{z}$ hasta el orden $\mf+1$ dada por
 \[ p_{0,m+1}(z)=\sum\limits^{\mf+1}_{j=0}\frac{z^j}{j!}. \]
 
 Con estos polinomios y (\ref{phi-definition}) se tiene
 \begin{equation*}
-r_\mf(z) = \frac{\phi_1(z)-1}{z}-\frac{p_{1,\mf}(z)-1}{z}=\frac{\me{z}-1}{z^2}-\frac{p_{0,m+1}(z)-1}{z^2}
+r_\mf(z) = \frac{\varphi_1(z)-1}{z}-\frac{p_{1,\mf}(z)-1}{z}=\frac{\me{z}-1}{z^2}-\frac{p_{0,m+1}(z)-1}{z^2}
 =\frac{\me{z}-p_{0,m+1}(z)}{z^2}.
 \end{equation*}
 
@@ -110,7 +125,7 @@ donde $\rho=\nnorm{\nnorm{\tau A}}_2 $ y  $\widehat{\rho}=\nnorm{\nnorm{\tau H_\
 \begin{equation*}
 \nnorm{\nnorm{\tau As_\mf(\tau A)}}_2  \leq \frac{2 \nnorm{\nnorm{b}}_2\rho^{\mf+1}\me{\rho}}{(\mf+2)!}.
 \end{equation*}
-Finalmente, de estas desigualdades and (\ref{eq:phidiffasm}) se obtiene
+Finalmente, de estas desigualdades y (\ref{eq:phidiffasm}) se obtiene
 \begin{equation*}
 \nnorm{\nnorm{\tau\phi_1(\tau A)b - K_{\mf}\left(\tau,A , b \right)}}_2  \leq
 \frac{2 \nnorm{\nnorm{b}}_2\tau^{\mf+2}\nnorm{\nnorm{A}}_2^{\mf+1}\me{\tau \nnorm{\nnorm{A}}_2}}{(\mf+2)!},
@@ -118,7 +133,7 @@ Finalmente, de estas desigualdades and (\ref{eq:phidiffasm}) se obtiene
 lo cual completa la prueba. $\Box$
 
 \begin{lemma}\cite{naranjo2021locally}\label{H-bound}
-	Sea $\overline{H}$ la matrix definida en in~(\ref{hhat_hessenberg_matrix}), sea  $H_\mf=V^{T}_\mf AV_\mf$ la matrix de Hessenberg asociada al subespacio de Krylov $\mathcal{K}_\mf(A,b)$ con base ortonormal $V_m$. Entonces
+	Sea $\overline{H}$ la matriz definida en in~(\ref{hhat_hessenberg_matrix}), sea  $H_\mf=V^{T}_\mf AV_\mf$ la matriz de Hessenberg asociada al subespacio de Krylov $\mathcal{K}_\mf(A,b)$ con base ortonormal $V_m$. Entonces
 	\[ \lVert\overline{H}\rVert_2 \leq 1 +  \lVert A\rVert_2. \]
 \end{lemma}
 \emph{Demostración}
@@ -145,21 +160,21 @@ $\Box$\\ \\
 	\begin{equation} \label{eq:gen_kp_aprox}
 	K_{\mf,k}^{\pf,\qf}\left(\tau, A , b \right)=\nnorm{\nnorm{b}}_2 V_{\mf}\;[\widetilde{E}_{\tau}]_{12} + \nnorm{\nnorm{b}}_2 \hf_{\mf+1,\mf}e_\mf^T\;[\widetilde{E}_{\tau}]_{13} v_{\mf+1}
 	\end{equation}
-	la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé de $\tau \phi_1(\tau A)b$, donde las matrices $V_{\mf}\in\mathbb{R}^{d\times \mf}$ y $H_{\mf}\in\mathbb{R}^{{\mf} \times {\mf}}$, el vector $v_{\mf+1}$, y el número $\hf_{\mf+1,\mf}$ son obtenidos del algoritmo de Arnoldi para el $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(A,b)$;  $\widetilde{E}_{\tau}=F_k^{\pf,\qf}\left(\tau\overline{H}\right)$ es la aproximación $(\pf,\qf)$-Padé con escalamiento $k$ para la exponencial matricial (\ref{phi_hhat_exponential}), y $e_m$ el $m$-ésimo vector canónico de $\mathbb{R}^\mf$.
+	la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé de $\tau \varphi_1(\tau A)b$, donde las matrices $V_{\mf}\in\mathbb{R}^{d\times \mf}$ y $H_{\mf}\in\mathbb{R}^{{\mf} \times {\mf}}$, el vector $v_{\mf+1}$, y el número $\hf_{\mf+1,\mf}$ son obtenidos del algoritmo de Arnoldi para el $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(A,b)$;  $\widetilde{E}_{\tau}=F_k^{\pf,\qf}\left(\tau\overline{H}\right)$ es la aproximación $(\pf,\qf)$-Padé con escalamiento $k$ para la exponencial matricial (\ref{phi_hhat_exponential}), y $e_m$ el $m$-ésimo vector canónico de $\mathbb{R}^\mf$.
 	Entonces,
 	\begin{equation}
-	\left\lvert\left\lvert  \tau \phi_1(\tau A)b -
+	\left\lvert\left\lvert  \tau \varphi_1(\tau A)b -
 	K_{\mf,k}^{\pf,\qf}\left( \tau, A , b \right)\right\rvert\right\rvert_2%\nonumber\\
 	\leq C_{\mf,k}^{\pf,\qf}\left(\lvert\lvert A \rvert\rvert_2\right) \;
 	\nnorm{\nnorm{b}}_2 \; \tau^{\mathrm{min}\left\{ \mf+2,\pf+\qf+1 \right\}}
 	\end{equation}
 	donde $C_{\mf,k}^{\pf,\qf}(\varLambda)= \frac{2 \varLambda^{m+1} \me{\varLambda}}{(\mf+2)!}+
 	\alpha (1+\hf_{\mf+1,\mf}) (1+\varLambda^{p+q+1}) 2^{-k(\pf+\qf)+3}\me{(1+\alpha(\frac{1}{2})^{\pf+\qf-3})(1+\varLambda)} $,
-	con $\alpha=\frac{\pf!\qf!}{(\pf+\qf)!(\pf+\qf+1)!}$ and $\tau \in [0,1]$.
+	con $\alpha=\frac{\pf!\qf!}{(\pf+\qf)!(\pf+\qf+1)!}$ y $\tau \in [0,1]$.
 \end{theorem}
 \textbf{Demostración}. Por desigualdad triangular
 \begin{eqnarray} \label{importatdeq}
-\left\lvert\left\lvert  \tau \phi_1(\tau A)b -
+\left\lvert\left\lvert  \tau \varphi_1(\tau A)b -
 K_{\mf,k}^{\pf,\qf}\left( \tau , A , b \right)\right\rvert\right\rvert_2
 & \leq & \left\lvert\left\lvert \tau \phi_1(\tau A)b -  K_{\mf}\left( \tau , A , b \right) \right\rvert\right\rvert_2 \\
 & & + \left\lvert\left\lvert  K_{\mf}\left( \tau , A , b \right) -
@@ -167,16 +182,16 @@ K_{\mf,k}^{\pf,\qf}\left( \tau, A , b \right)\right\rvert\right\rvert_2, \nonumb
 \end{eqnarray}
 donde
 \begin{equation*}
-K_{\mf}\left(\tau,A , b \right)=\nnorm{\nnorm{b}}_2 \tau V_{\mf}\phi_1\left( \tau H_{\mf} \right) e_1 + \nnorm{\nnorm{b}}_2 \tau^{2}\hf_{\mf+1,\mf}e_\mf^T\phi_2\left(\tau H_\mf\right) e_1 v_{\mf+1}
+K_{\mf}\left(\tau,A , b \right)=\nnorm{\nnorm{b}}_2 \tau V_{\mf}\varphi_1\left( \tau H_{\mf} \right) e_1 + \nnorm{\nnorm{b}}_2 \tau^{2}\hf_{\mf+1,\mf}e_\mf^T\varphi_2\left(\tau H_\mf\right) e_1 v_{\mf+1}
 \end{equation*}
-es la aproximación de Krylov de $\tau \phi_1(\tau A)b$ definida en~(\ref{eq:kp_aprox}), y
+es la aproximación de Krylov de $\tau \varphi_1(\tau A)b$ definida en~(\ref{eq:kp_aprox}), y
 \begin{equation*}
 K_{\mf,k}^{\pf,\qf}\left(\tau, A , b \right)=\nnorm{\nnorm{b}}_2 V_{\mf}\;[\widetilde{E}_{\tau}]_{12} + \nnorm{\nnorm{b}}_2 \hf_{\mf+1,\mf}e_\mf^T\;[\widetilde{E}_{\tau}]_{13} v_{\mf+1}
 \end{equation*}
-la aproximación Krylov-Padé de $\tau \phi_1(\tau A)b$ definida en~(\ref{eq:gen_kp_aprox}).
+la aproximación Krylov-Padé de $\tau \varphi_1(\tau A)b$ definida en~(\ref{eq:gen_kp_aprox}).
 
 De (\ref{phi_hhat_exponential}) se tiene que
-$\tau^j \phi_j\left( \tau H_{\mf} \right) e_1 = L \me{\tau \overline{H}} r_j$
+$\tau^j \varphi_j\left( \tau H_{\mf} \right) e_1 = L \me{\tau \overline{H}} r_j$
 y
 $[\widetilde{E}_{\tau}]_{1,j+1} = L F_k^{\pf,\qf}(\tau \overline{H}) r_j$,
 con $j=1,2$, donde $F_k^{\pf,\qf}(\tau \overline{H})$ es la aproximación $(\pf,\qf)$-Padé de $\me{\tau \overline{H}}$ con estrategia escalamiento y potenciación,
@@ -235,7 +250,7 @@ K_{\mf,k}^{\pf,\qf}\left( \tau, A , b \right) \right\rvert\right\rvert_2
 
 Finalmente, de las desigualdades~(\ref{importatdeq}) y (\ref{errp1}), el Lema \ref{lemma:CORRECTED-ERROR}, y la condición $\tau \in [0,1]$ se obtiene
 \begin{eqnarray*}
-	\left\lvert\left\lvert  \tau \phi_1(\tau A)b-  K_{\mf,k}^{\pf,\qf}\left( \tau,  A , b \right)\right\rvert\right\rvert_2
+	\left\lvert\left\lvert  \tau \varphi_1(\tau A)b-  K_{\mf,k}^{\pf,\qf}\left( \tau,  A , b \right)\right\rvert\right\rvert_2
 	&\leq& \frac{2 \nnorm{\nnorm{b}}_2 \tau^{\mf+2}  \vert\lvert A\rvert\rvert^{\mf+1}_2
 		\me{\tau \lvert\lvert A\rvert\rvert_2}}{(\mf+2)!}\\
 	&+&
@@ -288,7 +303,7 @@ Al utilizar el algoritmo de Arnoldi~(\ref{alg:Arnoldi}), la aproximación $K_{\m
 	\begin{equation} \label{eq:gen_kp_aprox_fj}
 		\widehat{K}_{\mf,k}^{\pf,\qf}\left(\tau, A , b ; \eta, \delta, \beta \right)=\nnorm{\nnorm{b}}_2 \widehat{V}_{\mf}\;[\widetilde{P}_{\tau}]_{12} + \nnorm{\nnorm{b}}_2 \widehat{\hf}_{\mf+1,\mf}e_\mf^T\;[\widetilde{P}_{\tau}]_{13} \widehat{v}_{\mf+1},
 	\end{equation}
-	donde $\widetilde{P}_{\tau}$ denota la aproximación $(\pf,\qf)$-Padé con escalamineto y potenciación $k$ para la exponencial matricial $\me{\tau\overline{H}}$, 
+	donde $\widetilde{P}_{\tau}$ denota la aproximación $(\pf,\qf)$-Padé con escalamiento y potenciación $k$ para la exponencial matricial $\me{\tau\overline{H}}$, 
 	\begin{equation}
 		\overline{H} = \left[\begin{array}{cccc}
 			\widehat{H}_\mf & e_1 & 0_{\mf\times 1} & 0_{\mf\times 1}\\

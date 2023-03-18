@@ -20,7 +20,7 @@ h_{n}=t_{n+1}-t_{n}\leq h$; para $n=0,\ldots,N-1$.
 En general, se denomina integradores exponenciales a la familia
 de esquemas numéricos para EDOs que requieren del cálculo de algún término exponencial. Inicialmente, los integradores de este tipo comenzaron a desarrollarse en los años 60 del siglo pasado~\cite{Berland07} con el propósito de resolver sistemas de ecuaciones semilineales de la forma
 \begin{equation}
-\frac{dx}{dt} = Ax(t) + F(x(t))  \;\;  \label{ODE Lines Method}
+\frac{dx(t)}{dt} = Ax(t) + F(x(t))  \;\;  \label{ODE Lines Method}
 \end{equation}
 que resultan de la discretización espacial de una ecuación diferencial en derivadas parciales, donde $A$ es una
 matriz cuadrada y $F$ una función no lineal de $x(t)\in\mathbb{R}^d$ y $t\geq t_0 \in \mathbb{R}$. Más recientemente, en los años 90, esta clase de integradores fue extendida a EDOs de la forma general (\ref{ODE-SYST}).
@@ -53,41 +53,6 @@ Parciales Estocásticas semilineales~\cite{jentzen2009overcoming,kloeden2011expo
 
 En general los integradores exponenciales representan una alternativa a los métodos implícitos para resolver ecuaciones diferenciales \textit{stiff} o altamente oscilatorias. Teniendo en cuenta que una parte significativa de la estabilidad y las propiedades dinámicas del sistema debe estar contenida en la linealización dela ecuación tratada. Estos integradores por lo general son explícitos y están formados por una solución tan exacta como se requiera de la aproximación lineal y una aproximación numérica de la parte no lineal. Por lo tanto, construir un integrador exponencial requiere de dos tareas básicas: (\textbf{I}) calcular una aproximación para integrales de la forma 
 genérica $\int_{0}^{h} \me{-As}F(x(t_n+s)) \,ds$, y (\textbf{II}) evaluar productos de funciones exponenciales matriciales con vectores.
-
-Típicamente, una aproximación polinomial del término no lineal $F$ en (\ref{VCF2}) (o $g_n$ en (\ref{VCF})) resulta en un esquema
-exponencial que aproxima la solución de la EDO como una combinación lineal de productos de tipo $\varphi_k(\gamma hA)v_k$, con 
-$v_k\in \mathbb{R}^{d}$, donde la función $\varphi_k$ está definida como
-\begin{eqnarray}\label{phi-definition}
-    \varphi_k(z) & = &\int\limits_{0}^{1}\me{z(1-s)}\frac{s^{k-1}}{(k-1)!}\,ds \nonumber \\
-    \varphi_k(z) & = &\sum\limits_{j=0}^{\infty}\frac{z^{j}}{(k+j)!}\label{DEF-PHI}\\
-    \varphi_0(z) &=& \me{z} \nonumber\\
-    \varphi_{k+1}(z) &=& \frac{\varphi_k(z)-\varphi_k(0)}{z}\,,\,k\geq0. \nonumber
-\end{eqnarray}
-
-Entre la familia de funciones $\phi_k$ y la exponencial matricial existe la siguiente importante relación.
-
-\begin{theorem}\label{theorem:exp-phi}
-    \cite{sidje1998expokit} Sea $c\in\mathbb{C}^{m}$, $H_m\in\mathbb{C}^{m\times m}$ y 
-    \begin{equation}
-    \overline{H}_{m+p} = \left[\begin{array}{ccccc}
-    H_m & c & 0 & \cdots & 0 \\
-          & 0 & 1 & \ddots & \vdots \\
-          &   & 0 & \ddots & 0 \\
-          &   &   & \ddots & 1 \\
-       0  &   &   &        & 0
-    \end{array}\right]\in \mathbb{C}^{(m+p)\times(m+p)}
-    \end{equation}
-    entonces
-     \begin{equation}
-    \me{\tau\overline{H}_{m+p}} = \left[\begin{array}{ccccc}
-    \me{\tau H_m} & \tau\varphi_1(\tau H_m)c & \tau^{2}\varphi_2(\tau H_m)c & \cdots & \tau^{p}\varphi_p(\tau H_m)c \\
-      & 1 & \frac{\tau}{1!} & \cdots & \frac{\tau^{p-1}}{(p-1)!} \\
-      &   & 1 & \ddots & \vdots \\
-      &   &   & \ddots & \frac{\tau}{1!} \\
-    0 &   &   &        & 1
-    \end{array}\right]  \;.
-    \end{equation}
-\end{theorem} 
 
 
 \section{Método de Linealización Local}\label{section:ll-methods}
@@ -168,7 +133,7 @@ u(t_{n}) & = & 0 \nonumber
 \end{eqnarray}
 para todo $t\in [t_{n},t_{n+1})$, con campo vectorial 
 \begin{eqnarray*}
-q(t_n,y_n,s,\varsigma)&=&f(s,y_n+\varphi(t_n,y_n,s-t_n)+\varsigma)-f_x(t_n,y_n)\phi(t_n,y_n,s-t_n)-f(t_n,y_n)%\\
+q(t_n,y_n,s,\varsigma)&=&f(s,y_n+\phi(t_n,y_n,s-t_n)+\varsigma)-f_x(t_n,y_n)\phi(t_n,y_n,s-t_n)-f(t_n,y_n)%\\
 % & &-f_t(t_n,y_n)(s-t_n) -f(t_n,y_n) ,
 %\label{AUX-ODE}
 \end{eqnarray*}
@@ -242,7 +207,7 @@ calculadas analíticamente. Dependiendo de la forma de calcular  numéricamente 
 \end{definition}
 
 Por ejemplo, cuando la fórmula de Padé con escalamiento y potenciación para exponenciales matriciales \cite{moler2003nineteen} es utilizada para
-aproximar $\varphi$ en la ecuación~(\ref{ODE-SYST-FORM-LL}) se obtiene el siguiente esquema LL de orden $2$ \cite{Jimenez02AMC}:
+aproximar $\phi$ en la ecuación~(\ref{ODE-SYST-FORM-LL}) se obtiene el siguiente esquema LL de orden $2$ \cite{Jimenez02AMC}:
 \begin{equation} 
 \widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\phi}\left( t_{n},\widetilde{y}_{n},h_{n}\right) \label{LL-scheme}
 \end{equation} 
@@ -292,7 +257,7 @@ I_{d} & 0_{d\times 1}%
 \end{array}%
 \right] $ para ecuaciones autónomas.
 
-Si se utiliza la fórmula de Padé para aproximar $\varphi_j$ que aparecen en las discretizaciones (\ref{LL-scheme-4}) y (\ref{LLDP-scheme-dp}) se obtienen los esquemas propuestos en \cite{Jimenez13,Jimenez14AMC} que están orientados a resolver problemas de valor inicial de dimensiones pequeñas. 
+Si se utiliza la fórmula de Padé para aproximar $\phi_j$ que aparecen en las discretizaciones (\ref{LL-scheme-4}) y (\ref{LLDP-scheme-dp}) se obtienen los esquemas propuestos en \cite{Jimenez13,Jimenez14AMC} que están orientados a resolver problemas de valor inicial de dimensiones pequeñas. 
 
 \section{Cálculo de la exponencial de una matriz}
 
@@ -450,10 +415,44 @@ Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obt
 	\end{equation*}
 	donde $\sigma(A)$ es el radio espectral de $A$.
 \end{theorem}
-
-En general, para la familia de funciones $\phi_k$ se establece la expansión en serie \cite{Saad92,sidje1998expokit}
+En general, para la familia de funciones $\varphi_k$ se establece la expansión en serie \cite{Saad92,sidje1998expokit}
 \begin{equation}
 \varphi_k(\tau A)b=||b||_2\tau^{k} V_\mf \varphi_k(\tau H_\mf)e_1 + ||b||_2\hf_{\mf+1,\mf}
 \sum_{j=k+1}^{\infty}\tau^{j} e_\mf^T\varphi_j(\tau H_\mf)e_1A^{j-k-1}v_{m+1} \label{PHI-EXPANSION}
 \end{equation}
-donde $\tau$ es un número positivo, $A\in\mathbb{R}^{d\times d}$, $b\in\mathbb{R}^d$, $e_\mf$ es el $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$ y $V_\mf,H_\mf,v_{\mf+1},\hf_{\mf+1,\mf}$ son salidas del Algoritmo de Arnoldi \ref{alg:Arnoldi}
+donde $\tau$ es un número positivo, $A\in\mathbb{R}^{d\times d}$, $b\in\mathbb{R}^d$, $e_\mf$ es el $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$ y $V_\mf,H_\mf,v_{\mf+1},\hf_{\mf+1,\mf}$ son salidas del Algoritmo de Arnoldi \ref{alg:Arnoldi}.\\
+
+Típicamente, una aproximación polinomial del término no lineal $F$ en (\ref{VCF2}) (o $g_n$ en (\ref{VCF})) resulta en un esquema
+exponencial que aproxima la solución de la EDO como una combinación lineal de productos de tipo $\varphi_k(\gamma hA)v_k$, con 
+$v_k\in \mathbb{R}^{d}$, donde la función $\varphi_k$ está definida como
+\begin{eqnarray}\label{phi-definition}
+    \varphi_k(z) & = &\int\limits_{0}^{1}\me{z(1-s)}\frac{s^{k-1}}{(k-1)!}\,ds \nonumber \\
+    \varphi_k(z) & = &\sum\limits_{j=0}^{\infty}\frac{z^{j}}{(k+j)!}\label{DEF-PHI}\\
+    \varphi_0(z) &=& \me{z} \nonumber\\
+    \varphi_{k+1}(z) &=& \frac{\varphi_k(z)-\varphi_k(0)}{z}\,,\,k\geq0. \nonumber
+\end{eqnarray}
+
+Entre la familia de funciones $\varphi_k$ y la exponencial matricial existe la siguiente importante relación.
+
+\begin{theorem}\label{theorem:exp-phi}
+    \cite{sidje1998expokit} Sea $c\in\mathbb{C}^{m}$, $H_m\in\mathbb{C}^{m\times m}$ y 
+    \begin{equation}
+    \overline{H}_{m+p} = \left[\begin{array}{ccccc}
+    H_m & c & 0 & \cdots & 0 \\
+          & 0 & 1 & \ddots & \vdots \\
+          &   & 0 & \ddots & 0 \\
+          &   &   & \ddots & 1 \\
+       0  &   &   &        & 0
+    \end{array}\right]\in \mathbb{C}^{(m+p)\times(m+p)}
+    \end{equation}
+    entonces
+     \begin{equation}
+    \me{\tau\overline{H}_{m+p}} = \left[\begin{array}{ccccc}
+    \me{\tau H_m} & \tau\varphi_1(\tau H_m)c & \tau^{2}\varphi_2(\tau H_m)c & \cdots & \tau^{p}\varphi_p(\tau H_m)c \\
+      & 1 & \frac{\tau}{1!} & \cdots & \frac{\tau^{p-1}}{(p-1)!} \\
+      &   & 1 & \ddots & \vdots \\
+      &   &   & \ddots & \frac{\tau}{1!} \\
+    0 &   &   &        & 1
+    \end{array}\right]  \;.
+    \end{equation}
+\end{theorem} 
