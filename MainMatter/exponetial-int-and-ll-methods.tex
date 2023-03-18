@@ -404,7 +404,6 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
     \end{equation}
     donde $H_\mf=V_\mf^{\intercal}AV_\mf$ y $e_1$ es el primer vector canónico de $\mathbb{R}^\mf$.
 \end{definition}
-
 Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obtiene el siguiente resultado.
 \begin{theorem}\label{exp-bound}
 	\cite{Saad92} Sea $A\in\mathbb{C}^{N\times N}$ una matriz. El error de aproximación de $\me{A}b$ por el $\mf$-ésimo subespacio
@@ -420,20 +419,14 @@ En general, para la familia de funciones $\varphi_k$ se establece la expansión 
 \varphi_k(\tau A)b=||b||_2\tau^{k} V_\mf \varphi_k(\tau H_\mf)e_1 + ||b||_2\hf_{\mf+1,\mf}
 \sum_{j=k+1}^{\infty}\tau^{j} e_\mf^T\varphi_j(\tau H_\mf)e_1A^{j-k-1}v_{m+1} \label{PHI-EXPANSION}
 \end{equation}
-donde $\tau$ es un número positivo, $A\in\mathbb{R}^{d\times d}$, $b\in\mathbb{R}^d$, $e_\mf$ es el $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$ y $V_\mf,H_\mf,v_{\mf+1},\hf_{\mf+1,\mf}$ son salidas del Algoritmo de Arnoldi \ref{alg:Arnoldi}.\\
-
-Típicamente, una aproximación polinomial del término no lineal $F$ en (\ref{VCF2}) (o $g_n$ en (\ref{VCF})) resulta en un esquema
-exponencial que aproxima la solución de la EDO como una combinación lineal de productos de tipo $\varphi_k(\gamma hA)v_k$, con 
-$v_k\in \mathbb{R}^{d}$, donde la función $\varphi_k$ está definida como
+donde $\tau$ es un número positivo, $A\in\mathbb{R}^{d\times d}$, $b\in\mathbb{R}^d$, $e_\mf$ es el $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$ y $V_\mf,H_\mf,v_{\mf+1},\hf_{\mf+1,\mf}$ son salidas del Algoritmo de Arnoldi \ref{alg:Arnoldi} y $\varphi_j$ está definida como
 \begin{eqnarray}\label{phi-definition}
     \varphi_k(z) & = &\int\limits_{0}^{1}\me{z(1-s)}\frac{s^{k-1}}{(k-1)!}\,ds \nonumber \\
     \varphi_k(z) & = &\sum\limits_{j=0}^{\infty}\frac{z^{j}}{(k+j)!}\label{DEF-PHI}\\
     \varphi_0(z) &=& \me{z} \nonumber\\
     \varphi_{k+1}(z) &=& \frac{\varphi_k(z)-\varphi_k(0)}{z}\,,\,k\geq0. \nonumber
 \end{eqnarray}
-
-Entre la familia de funciones $\varphi_k$ y la exponencial matricial existe la siguiente importante relación.
-
+Entre la familia de funciones $\varphi_j$ y la exponencial matricial existe la siguiente importante relación.
 \begin{theorem}\label{theorem:exp-phi}
     \cite{sidje1998expokit} Sea $c\in\mathbb{C}^{m}$, $H_m\in\mathbb{C}^{m\times m}$ y 
     \begin{equation}
