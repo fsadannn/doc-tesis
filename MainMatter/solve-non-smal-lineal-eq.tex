@@ -26,7 +26,7 @@ En trabajos como~\cite{Saad92,jimenez2012convergence} se utilizan aproximaciones
 
 \section{Aproximaciones Krylov-Padé}\label{section:krylov-pade-approx}
 
- La familia de operadors $\varphi$ tiene un papel fundamental en las aproximaciones Localmente Linealizadas, por esto es necesario poder evaluar estos operadores de forma rápida y precisa. Además, como estos operadores aparecen actuando sobre un vector, entonces se aproxima la acción sobre el vector. La expansión en serie~(\ref{PHI-EXPANSION}) permite relacionar la acción de un operador sobre un vector por un subespacio de Krylov. Truncando la serie~(\ref{PHI-EXPANSION}) diferentes aproximaciones son obtenidas. Típicamente~\cite{niesen2009krylov,sidje1998expokit,tokman2006efficient} el primer término de la serie es tomado y el segundo término es utilizado como medida del error; pero, en este trabajo, similar a~\cite{Saad92} se tomarán los dos primeros términos de la serie (\ref{PHI-EXPANSION})
+ La familia de operadores $\varphi$ tiene un papel fundamental en las aproximaciones Localmente Linealizadas, por esto es necesario poder evaluar estos operadores de forma rápida y precisa. Además, como estos operadores aparecen actuando sobre un vector, entonces se aproxima la acción sobre el vector. La expansión en serie~(\ref{PHI-EXPANSION}) permite relacionar la acción de un operador sobre un vector por un subespacio de Krylov. Truncando la serie~(\ref{PHI-EXPANSION}) diferentes aproximaciones son obtenidas. Típicamente~\cite{niesen2009krylov,sidje1998expokit,tokman2006efficient} el primer término de la serie es tomado y el segundo término es utilizado como medida del error; pero, en este trabajo, similar a~\cite{Saad92} se tomarán los dos primeros términos de la serie (\ref{PHI-EXPANSION})
  \begin{equation}\label{exact-two-terms-km}
     K_\mf(\tau,A,b) = \norme{b}\tau V_\mf\varphi_1(\tau H_\mf)e_1 + \norme{b}\tau^2\hf_{\mf+1,\mf}e^T_\mf\varphi_2(\tau H_\mf)e_1v_{\mf+1}
  \end{equation}
@@ -377,7 +377,7 @@ y
 \begin{equation}
 	\nnnorm{R_m}_2\leq \sqrt{\mf} \mathfrak{L} \tau^{\beta(\eta+1)}\delta^{\eta},  \label{eq:fjbound3}
 \end{equation}
-donde la matriz $R_\mf$ y la constante positiva $L$ están definidas en el Theorem \ref{theorem:krilobapproxequality}. 
+donde la matriz $R_\mf$ y la constante positiva $L$ están definidas en el Teorema \ref{theorem:krilobapproxequality}. 
 
 De la propiedad de invarianza ante escalado de la base ortonormal del subespacio de Krylov se tiene que
 \[ \mathcal{K}_\mf(\tau^\beta A+R_\mf,b) = \mathcal{K}_\mf(A+\widehat{R}_\mf,b), \]
@@ -396,7 +396,7 @@ Teniendo en cuanta $\varphi_1(z) \leq \varphi_0(z)$ se tiene
 	& \enspace + \nnnorm{\tau \varphi_1(\tau A + \tau \widehat{R}_\mf)b-K_{\mf,k}^{\pf,\qf}\left( \tau, A+\widehat{R}_\mf , b \right)}_2. \label{eq:fjbound}
 \end{align}
 
-De la Desigualdad de Increment Finito y la cota~(\ref{eq:fjbound3}) se obtiene
+De la Desigualdad de Incremento Finito y la cota~(\ref{eq:fjbound3}) se obtiene
 \begin{align}
 	\nnnorm{\me{\tau A}b - \me{\tau A + \tau \widehat{R}_\mf}b}_2&\leq \nnnorm{b}_2 \nnnorm{\tau \widehat{R}_\mf}_2\me{\tau\nnnorm{A}_2+\tau\nnnorm{\widehat{R}_\mf}_2} \\ &\leq \nnnorm{b}_2   \sqrt{\mf}\mathfrak{L} \tau^{\beta\eta+1}\delta^\eta\me{\tau(\nnnorm{A}_2+\sqrt{\mf}\mathfrak{L})} \nonumber\label{eq:fjbound1}
 \end{align}
@@ -450,7 +450,7 @@ con $\mathbf{L}=[\mathbf{I}_{d\times d}$ $\mathbf{0}_{d\times l}]$, $\mathbf{r}=
 \end{equation*}%
 donde $\overline{\mathbf{a}}_{i}=\mathbf{a}_{i}(i-1)!$, para todo $i=1,\ldots ,l$.
 
-Como se puede notarm esta combinación lineal de multiples integrales se puede reescribir como el producto de una exponencial matricial por un vector. Para aproximar esta exponencial utilizando las aproximaciones Krylov-Padé construidas en las Secciones \ref{section:krylov-pade-approx} y \ref{section:fj-krylov-pade-approx} se propone el siguiente resultado
+Como se puede notar esta combinación lineal de múltiples integrales se puede reescribir como el producto de una exponencial matricial por un vector. Para aproximar esta exponencial utilizando las aproximaciones Krylov-Padé construidas en las Secciones \ref{section:krylov-pade-approx} y \ref{section:fj-krylov-pade-approx} se propone el siguiente resultado
 
 \begin{theorem} \label{Main theorem}
 	\cite{naranjo2023computing}~Sea $\mathbf{M}$ matriz definida en \ref{sum2_phiXv}, $\mathbf{r}$ un vector $d$-dimensional y $t\geq 0$. Entonces

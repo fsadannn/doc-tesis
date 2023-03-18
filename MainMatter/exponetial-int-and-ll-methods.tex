@@ -114,9 +114,9 @@ La estabilidad y las propiedades dinámicas que la discretización Lineal Local 
 
 Estos nuevos métodos se obtienen de agregar a la aproximación (\ref%
 {ODE-REV-FORM-LLA}) un término adicional $\xi$ de orden superior a 2 
-que resulta de aproximar la segunda integral de la expresión (\ref{VCF}) por algún método de cuadratura o por la solución numérica de una ecuación diferencial auxiliar \cite{delaCruz06}. Usando diferentes tipos de cuadraturas se obtienen los méodos Exponenciales de Propagación 
-Iterativa~\cite{tokman2006efficient}, los méodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
-méodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los méodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}. Por otra parte, usando esquemas Runge Kutta (RK) para resolver la mencionada ecuación auxiliar se obtienen los métodos Runge Kutta Localmente Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}.
+que resulta de aproximar la segunda integral de la expresión (\ref{VCF}) por algún método de cuadratura o por la solución numérica de una ecuación diferencial auxiliar \cite{delaCruz06}. Usando diferentes tipos de cuadraturas se obtienen los métodos Exponenciales de Propagación 
+Iterativa~\cite{tokman2006efficient}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
+métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los méodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}. Por otra parte, usando esquemas Runge Kutta (RK) para resolver la mencionada ecuación auxiliar se obtienen los métodos Runge Kutta Localmente Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}.
 
 Por su relevancia en esta tesis, a continuación se expondrá con mas detalle los métodos Runge Kutta Localmente Linealizados. 
 
@@ -161,7 +161,7 @@ Cuando $\xi$ es la aproximación obtenida mediante un esquema Runge Kutta de ord
 \todo[inline]{mejorar o cambiar siguiente oración}
 A continuación se construirán dos discretizaciones Lineales Locales-Runge Kutta de orden 4 y 4-5 respectivamente.
 
-Si se utiliza la fórmula Runge-Kutta clásica de order 4~\cite{hairer1993solving} para integrar la ecuación auxiliar (\ref{ODE r}), entonces se obtiene la siguiente discretización Lineal Local-Runge Kutta de orden 4~\cite{Jimenez13}:
+Si se utiliza la fórmula Runge-Kutta clásica de orden 4~\cite{hairer1993solving} para integrar la ecuación auxiliar (\ref{ODE r}), entonces se obtiene la siguiente discretización Lineal Local-Runge Kutta de orden 4~\cite{Jimenez13}:
 
 \begin{equation}
     y_{n+1}\,=\,y_n+\phi(t_n,y_n,h_n)+\frac{h_n}{6}(2\kt+2\kt_3+\kt_4)
@@ -182,11 +182,11 @@ donde $s = 7$ es el número de estados,
 \[ \kt_j = f\left( t_n+c_jh_n\, , \, y_n+\phi_j+h_n \sum_{i=1}^{j-1}a_{j,i}\kt_i \right)  
 - f_x(t_n\, , \, y_n)\phi_j - f(t_n\, ,\, y_n),\]
 \[ \phi _j = \phi \left( t_{n},y_{n},c_jh_{n}\right), \]
-y coeficientes Runge-Kutta $a_{j,i}$, $b_j$, $\hat{b}_j$ and $c_j$ definidos en~\cite{hairer1993solving} Tabla 5.2.
+y coeficientes Runge-Kutta $a_{j,i}$, $b_j$, $\hat{b}_j$ y $c_j$ definidos en~\cite{hairer1993solving} Tabla 5.2.
 
 \subsection{Esquemas de Linealización Local}
 
-Como puede notarse de sus respetivas definiciones, las
+Como puede notarse de sus respectivas definiciones, las
 discretizaciones Lineales Locales no pueden ser implementadas directamente por
 estar expresadas en término de integrales que en general no pueden ser
 calculadas analíticamente. Dependiendo de la forma de calcular  numéricamente esas integrales,
@@ -275,9 +275,9 @@ En muchas aplicaciones se utiliza $\me{tA}$ donde $t$ es un escalar, por tanto
     para todo $t$ para $A$ fija. La serie converge uniformemente en cualquier región de t del plano complejo.
 \end{theorem}
 
-En \cite{golub2013matrix} se presenta una revisión de los méodos numéricos
+En \cite{golub2013matrix} se presenta una revisión de los métodos numéricos
 para aproximar
-la exponencial de matrices. Los méodos más utilizados son la aproximación de Padé con escalamiento
+la exponencial de matrices. Los métodos más utilizados son la aproximación de Padé con escalamiento
 y potenciación para matrices pequeñas y densas, y el de los subespacios de Krylov para matices grandes y esparcidas.
 
 
@@ -285,7 +285,7 @@ y potenciación para matrices pequeñas y densas, y el de los subespacios de Kry
 
 \begin{definition}
     \cite{golub2013matrix}~La aproximación racional de Padé $P_{\pf,\qf}(z)$
-    de $\me{z}$ est\'{a} dada por 
+    de $\me{z}$ está dada por 
     \begin{equation*}
     P_{\pf,\qf}(z)=D_{\pf,\qf}(z)^{-1}N_{\pf,\qf}(z),  \label{FORM PADE}
     \end{equation*}%
@@ -299,7 +299,7 @@ y potenciación para matrices pequeñas y densas, y el de los subespacios de Kry
     \]
 \end{definition}
 
-Cuando la norma de $A$ es grande, el costo computacional  y los errores de redondeo aumentan, por lo que
+Cuando la norma de $A$ es grande, el costo computacional y los errores de redondeo aumentan, por lo que
 es necesaria la alternativa de escalamiento y potenciación.
 
 \begin{definition}\cite{golub2013matrix}~
@@ -318,7 +318,7 @@ Resultados sobre el error y la estabilidad de las aproximaciones de Padé se pre
 \begin{theorem}
     \label{Conv. Pade}\cite{jimenez2012convergence} El error
     relativo y absoluto de la aproximación de Padé con escalamiento y
-    potenciación (\ref{P-MA-2}) de $\me{A}$ est\'{a} dado por: 
+    potenciación (\ref{P-MA-2}) de $\me{A}$ está dado por: 
     \[
     \frac{\left\vert e^{A}-F_{k}^{\pf,\qf}(A)\right\vert 
     }{\left\vert e^{A}\right\vert }\leq \epsilon _{p,q}\left\vert 
