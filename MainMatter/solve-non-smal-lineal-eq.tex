@@ -471,7 +471,7 @@ Como se puede notar esta combinación lineal de múltiples integrales se puede r
 para $t\geq 0$. La segunda y tercera afirmación son resultado directo de aplicar el Teorema \ref{theorem:Krylov-bound} y Teorema \ref{theorem:Krylov-fj-bound} respectivamente.
 $\square$
 
-\subsection{Simulaciones numéricas}
+\subsection{Simulaciones numéricas}\label{section:num-sim-kp}
 El objetivo de esta sección es realizar un conjunto de simulaciones numéricas para medir el desempeño de las aproximación propuestas y compararlas con aproximaciones existentes.
 
 La aproximación dada en (\ref{phi_approx}) en términos de la acción de la función phi sobre un vector tiene dos ventajas principales sobre las propuestas \cite{hochbruck1997krylov,sidje1998expokit,jimenez2012convergence}
@@ -494,23 +494,6 @@ Comenzando con un valor factible de $\mf$, se construye el $\mf$-ésimo subespac
 	\fac\cdot\Delta\mf} } \right\rceil,
 \end{equation*}
 donde $\Delta\mf=\log(\varepsilon(\mf)/\gamma) \label{delta_m}$, $\gamma=0.005$ es un factor de seguridad, $\fac_{max}= \maxx{ 1, \frac{\mf}{3} }$, $\fac_{min}= 1 $, $\fac=\frac{1}{\log(2)}$, y el símbolo $\left\lceil \cdot \right\rceil$ denota la función de techo (que devuelve el menor entero mayor o igual que un número real dado). Luego, con $\mf=\mf_{new}$, se repite el procedimiento explicado hasta que se satisface $\varepsilon(\mf)/\gamma< 1$.
-
-Como se ha señalado en varios artículos (ver \cite{jimenez2009rate,jimenez2012convergence, Jimenez14AMC, jimenez2015convergence}), la selección de un valor apropiado del par $(\pf,\qf)$ en la aproximación del Padé es crucial para mejorar la eficiencia computacional de los integradores exponenciales. Para este propósito, la Tabla 1 en \cite{moler2003nineteen} se usa regularmente para configurar automáticamente los valores óptimos de $\pf$, con $\qf=\pf$, en función de la norma de la matriz, la tolerancia especificada y la orden de convergencia del integrador exponencial. La Tabla \ref{table:padep}, presenta un subconjunto de la Tabla 1 en \cite{moler2003nineteen} correspondiente a $\pf \ge 3$.
-
-\begin{table}[htb]
-	\caption{Valores óptimos de $\pf$ pra las aproximaciones  (\ref{phi_approx},\ref{phi_approx_fj}), con $\qf=\pf$, como función de $\lvert\lvert \tau\overline{H} \rvert\rvert_\infty$ y la tolerancia deseada $\mathrm{RTol}$.}
-	\begin{center}
-		\begin{tabular}{cccc}
-			\hline
-			$\lvert\lvert \tau\overline{H} \rvert\rvert_\infty \setminus RTol$ & $10^{-9}$ & $10^{-12}$ & $10^{-15}$ \\
-			\hline
-			$<1$ & 3 & 4 & 4 \\
-			$\geq 1$ & 4 & 5 & 6 \\
-			\hline
-		\end{tabular}
-		\label{table:padep}
-	\end{center}
-\end{table}
 
 \subsubsection{Simulaciones numéricas para Aproximaciones Krylov-Padé}
 La Figura \ref{fig:SumPhi} presenta los diagramas de tiempo-precisión para los métodos de \cite{hochbruck1997krylov}, \cite{sidje1998expokit}, \cite{niesen2012algorithm} y (\ref{phi_approx}), como función de la dimensión de Krylov $\mf$, en el cálculo de (\ref{sum2_phiXv}) para dos valores de $l$. La matriz $\mathbf{A}$ fue tomada como $10000 \times 10000$ \textit{Tridiag} de la galería de funciones de Matlab18a, $\mathbf{a}_1=\mathbf{a}_2=\mathbf{a}_3=\mathbf{1}$, y $t=0.1$. La norma euclidiana se usa para medir el error entre el valor ``exacto'' de $\mathbf{L} e^{t \mathbf{M}}\mathbf{r}$ y sus aproximaciones. Con fines comparativos, el valor ``exacto'' de $e^{t \mathbf{M}}$ y la matriz exponencial $\me{t\overline{\mathbf{H}}}$ en (\ref{phi_approx}) se calculan con la misma función de Matlab \textit{expm} que la utilizada en \cite{sidje1998expokit} y \cite{niesen2012algorithm} para calcular la exponencial de la matriz de Hessenberg. Como principal diferencia con la aproximación (\ref{phi_approx}) y con la de \cite{hochbruck1997krylov}, la precisión de los métodos de \cite{sidje1998expokit} y \cite{niesen2012algorithm} se mejora con una estrategia de cambio de tamaño de paso regulada por estimaciones de los errores de la aproximación. De esta forma, como se observa en la Figura \ref{fig:SumPhi}, para el mismo valor de $\mf$ los métodos de \cite{sidje1998expokit} y \cite{niesen2012algorithm} alcanzan o superan la precisión del método (\ref{phi_approx}) pero a expensas de un mayor costo computacional. Con respecto al método en \cite{hochbruck1997krylov} que calcula exp(M*t) directamente a través del método del subespacio de Krylov, la aproximación en (\ref{phi_approx}) incluye un segundo término con el producto escalar de dos vectores de baja dimensión, pero ambas aproximaciones comparten algoritmos más complejos y lentos: el algoritmo de Arnoldi para los mismos subespacios de Kylov y la evaluación de una exponencial matricial. Dado que la aproximación en (\ref{phi_approx}) también es dos órdenes superior, se espera que la aproximación (\ref{phi_approx}) sea más precisa que la de \cite{hochbruck1997krylov} con un costo computacional similar al que se muestra en Figura \ref{fig:SumPhi}.
