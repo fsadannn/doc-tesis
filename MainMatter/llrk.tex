@@ -1,14 +1,124 @@
-\chapter{Metodo Runge-Kutta de Dormand and Prince Localmente Linealizado para EDOs de
+\chapter{Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDOs de
 dimensiones no pequeñas}\label{chapter:lldp}
+En el Capítulo \ref{chapter:exp-int-and-ll-methods} se presentó la Aproximación Lineal Local de Orden Superior. Esta aproximación consiste en descomponer la solución de la ecuación diferencial original como la suma de las soluciones de dos ecuaciones diferenciales auxiliares, una lineal y la no lineal. En el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se propusieron y utilizaron las aproximaciones Krylov-Padé para resolver la ecuación diferencial lineal auxiliar. En este capítulo se utilizará el método Runge-Kutta de Dormand y Prince para aproximar la solución de la ecuación diferencial no lineal auxiliar. Combinando estas aproximaciones se obtienen Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDOs de dimensiones no pequeñas.
+
+Sin pérdida de generalidad consideremos el PVI autónomo $d$-dimensional
+\begin{equation}\label{syst}
+\frac{dx}{dt}=f(x), \; t\in[t_0,T],\end{equation}
+\begin{equation}\label{systcond}
+x(t_0)=x_0,
+\end{equation}donde $f$ es una función diferenciable en una vecindad
+$\mathfrak{D}$ del conjunto $\{x(t):t\in [t_0,T]\}$ de $\mathbb{R}^{d}$. Se asumen condiciones de Lipschitz y suavidad en la función $f$ para asegurar una solución única de esta ecuación en $\mathfrak{D}$.
 
 \section{Fórmulas embebidas}
 
+Sea $\left( t\right) _{h}=\left\{ t_{n}:n=0,1,\ldots ,N\right\}$ una discretización temporal con un tamaño de paso máximo $h$ definido como una secuencia de tiempos que satisfacen las condiciones $t_{0}<t_{1}<\cdots <t_{N}=T$, donde $h_{n}=t_{n+1}-t_{n}\leq h$ para $n=0,\ldots,N-1$.
 
-\section{Esquemas con tamaño de paso fijo y dimesión de Krylov variable}
+Consideremos las fórmulas de Runge-Kutta localmente linealizadas de Dormand y Prince
+\begin{equation} \label{lldis}
+    z_{n+1}\,=\,z_n+u_s+h_n \sum_{j=1}^{s}b_j \kt_j \,\,\, \text{and} \,\,\, \
+    \widehat{z}_{n+1}\,=\, z_n+u_s+h_n \sum_{j=1}^{s}\widehat{b}_j \kt_j
+\end{equation}
+introducidas en \cite{Jimenez14AMC} para aproximar la solución $x$ de (\ref{syst})-(\ref{systcond}) en $t_{n+1}$, para $n=0,\ldots,N -1$, donde s = 7 es el número de etapas,
+\begin{equation*}
+u_j=L\me{c_j M_n h_n}r,
+\end{equation*}
+\begin{equation*}
+\kt_j = f\left( z_n+u_j+h_n \sum_{i=1}^{j-1}a_{j,i}\kt_i \right) - f( z_n) - f_x(z_n)u_j,
+\end{equation*}
+con $\kt_1 \equiv 0$, siendo $f_x$ la matriz jacobiana de $f$ y $a_{j,i}$, $b_j$, $\widehat{b}_j$ los coeficientes de Runge-Kutta de Dormand y Príncipe definido en la Tabla \ref{ButcherTabla}. Aquí,
+\begin{equation*}
+    M_{n}=\left[
+    \begin{array}{cc}
+        f_{x}(z_{n}) & f(z_{n}) \\
+        0_{1\times d} & 0
+    \end{array}
+    \right] \in \mathbb{R}^{(d+1)\times (d+1)},
+\end{equation*}
+$ L=[I_d \;\; 0_{d\times 1}] $ and $r=[0_{1\times d}\;\; 1]^T$. Las fórmulas embebidas (\ref{lldis}) son instancias particulares de una clase más general de métodos de linealización local de alto orden propuestos en \cite{Jimenez13}.
 
-\subsection{Selección de la dimensión de Krylov}
+\begin{table}[h]
+	\caption{Tabla de coeficientes para las fórmulas embebidas de Dormand y Prince} \label{ButcherTabla}
+	\begin{center}
+		\begin{tabular}{ l@{\vrule height 5pt depth 10pt width 0pt}|lllllll}
+			$0$ & \\
+			$\frac{1}{5}\quad$ & $\frac{1}{5}$ \\
+			$\frac{3}{10}\quad$ & $\frac{3}{40}$ & $\frac{9}{40}$ \\
+			$\frac{4}{5}\quad$ & $\frac{44}{45}$ & $-\frac{56}{15}$ & $\frac{32}{9}$ \\
+			$\frac{8}{9}\quad$ & $\frac{19372}{6561}$ & $-\frac{25360}{2187}$ & $\frac{64448}{6561}$ & $-\frac{212}{729}$ \\
+			$1\quad$ & $\frac{9017}{3168}$ & $-\frac{355}{33}$ & $\frac{46732}{5247}$ & $\frac{49}{176}$
+			& $-\frac{5103}{18656}$ \\
+			$1\quad$ & $\frac{35}{384}$ & $0$ & $\frac{500}{1113}$ & $\frac{125}{192}$
+			& $-\frac{2187}{6784}$ & $\frac{11}{84}$ \\
+			\hline
+			$\widehat{y}$ & $\frac{5179}{57600}$ & $0$ & $\frac{7571}{16695}$ & $\frac{393}{640}$
+			& $-\frac{92097}{339200}$ & $\frac{187}{2100}$ & $\frac{1}{40}$
+			\rule[-0.3cm]{0cm}{0.8cm} \\
+			$y$ & $\frac{35}{384}$ & $0$ & $\frac{500}{1113}$ & $\frac{125}{192}$
+			& $-\frac{2187}{6784}$ & $\frac{11}{84}$ & $0$
+		\end{tabular}
+	\end{center}
+\end{table}
 
-\subsection{Selección del orden de Padé}
+Las aproximaciones Krylov-Padé propuestas en el capítulo anterior serán utilizadas para aproximar los términos $u_j$ que aparecen en (\ref{lldis}). Además, para aproximar eficientemente los cinco términos $u_j$ correspondientes a los cinco únicos $c_j$ distintos de cero que según la Tabla \ref{ButcherTabla} aparecen en las fórmulas (\ref{lldis}), se utilizará combinación conveniente de la invarianza ante escalado de la base ortonormal de los subespacios de Krylov, la propiedad de flujo del operador exponencial y el Teorema 1 en~\cite{sidje1998expokit}. De hecho, con la matriz de Hessenberg superior $H^*_\mf$ resultante del algoritmo \ref{alg:Arnoldi} para $\mathcal{K}_\mf(h_nf_x,f)$, se obtiene la matriz de Hessenberg $H_\mf=H^*_\mf/h_n$ correspondiente a $\mathcal{K}_\mf(f_x,f)$, por lo que la exponencial de la matriz particionada
+\begin{equation}
+    \overline{H} = \left[\begin{array}{cccc}
+    H_\mf & e_1 & 0_{\mf\times 1} & 0_{\mf\times 1}\\
+    0_{1\times\mf} & 0 & 1 & 0\\
+    0_{1\times\mf} & 0 & 0 & 1\\
+    0_{1\times\mf} & 0 & 0 & 0
+    \end{array}\right] \label{hhat}
+\end{equation}
+es calculada obteniéndose
+\begin{equation}
+    \me{\tau\overline{H}} = \left[\begin{array}{cccc}
+    \me{\tau H_m} & \tau\phi_1(\tau H_m)e_1 & \tau^{2}\phi_2(\tau H_m)e_1 &
+    \tau^{3}\phi_3(\tau H_m)e_1 \\
+    & 1 & \tau & \frac{\tau^{2}}{2}\\
+    &  & 1 & \tau \\
+    &   &   & 1 \\
+    \end{array}\right]\;. \label{phi_hhat}
+\end{equation}
+En particular, con $\gamma=\frac{1}{90}$, es calculada la matriz particionada $E_\gamma=\me{\gamma h_n\overline{H}}$, donde $\frac{1}{ 90}$ es el máximo común divisor de los coeficientes de Runge-Kutta $\frac{1}{5},\frac{3}{10},\frac{4}{5},\frac{8}{9} ,1$ de la Tabla \ref{ButcherTabla}. Usando la propiedad de flujo del operador exponencial se obtiene
+
+\begin{align}
+    E_{2/90}& =E_{1/90}E_{1/90} & E_{4/90}& =E_{2/90}E_{2/90}  \notag \\
+    E_{8/90}& =E_{4/90}E_{4/90} & E_{16/90}& =E_{8/90}E_{8/90}  \notag \\
+    E_{32/90}& =E_{16/90}E_{16/90} & E_{80/90}& =E_{32/90}E_{16/90}E_{32/90}
+    \label{flow} \\
+    E_{1/10}& =E_{8/90}E_{1/90} & E_{1/5}& =E_{1/10}E_{1/10}  \notag \\
+    E_{2/5}& =E_{1/5}E_{1/5} & E_{4/5}& =E_{2/5}E_{2/5}  \notag \\
+    E_{3/10}& =E_{1/10}E_{1/5} & E_{1}& =E_{4/5}E_{1/5}\;,  \notag
+\end{align}
+con lo cual las cinco matrices requeridas $E_{c_j}$ son obtenidas. Como la exponencial no puede ser calculada de forma exacta ene caso general se aproximará utilizando Padé como se explica en el Capítulo \ref{chapter:solve-non-smal-lineal-eq} obteniéndose $\widetilde{E}_{c_j}$.
+
+Por lo tanto, utilizando la aproximación Krylov-Padé (\ref{eq:kp_aprox}) y (\ref{flow}) obtenemos las aproximaciones para cada $u_j$
+\begin{eqnarray}
+    \frac{1}{5}h_n\varphi_1\left(\frac{1}{5}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{1}{5}}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{1}{5}}]_{13}\;  v_{\mf+1} \notag \\
+    \frac{3}{10}h_n\varphi_1\left(\frac{3}{10}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{3}{10}}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{3}{10}}]_{13}\;  v_{\mf+1} \notag \\
+    \frac{4}{5}h_n\varphi_1\left(\frac{4}{5}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{4}{5}}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{4}{5}}]_{13}\;  v_{\mf+1} \label{phi_appox} \\
+    \frac{8}{9}h_n\varphi_1\left(\frac{8}{9}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{8}{9}}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{8}{9}}]_{13}\;  v_{\mf+1} \notag \\
+    h_n\varphi_1(h_n f_x)f & \approx &  \beta V_{\mf}\; [\widetilde{E}_1]_{12}\;  + \beta\hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_1]_{13}\;  v_{\mf+1}, \notag
+\end{eqnarray}
+donde $[\widetilde{E}_{c_j}]_{ik}$ denota la submatriz $i,k$ de la matriz particionada $\widetilde{E}_{c_j}$, $V_m$ es la matriz con base ortonormal de $\mathcal{K}_ \mf(f_x,f)$ ya calculado por el Algoritmo \ref{alg:Arnoldi} para $\mathcal{K}_\mf(h_nf_x,f)$, y $\beta=\nnorm{\nnorm{f} }_2$.
+
+Utilizando la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé (\ref{eq:kp_aprox}) para $u_j$ en las fórmulas embebidas (\ref{lldis}), obtenemos la Fórmulas de Runge-Kutta linealizadas localmente
+\begin{equation}  \label{LLDPK scheme}
+    y_{n+1}\,=\,y_n+\widetilde{u}_s+h_n \sum_{j=1}^{s}b_j \widetilde{\kt}_j \,\,\, \text{and} \,\,\, \
+    \widehat{y}_{n+1}\,=\, y_n+\widetilde{u}_s+h_n \sum_{j=1}^{s}\widehat{b}_j \widetilde{\kt}_j,
+\end{equation}
+para integrar PVI de grandes dimensiones, donde
+\begin{equation*}
+    \widetilde{\kt}_j = f\left( y_n+\widetilde{u}_j+h_n \sum_{i=1}^{j-1}a_{j,i}\widetilde{\kt}_i \right) - f( y_n) - f_x(y_n)\widetilde{u}_j.
+\end{equation*}
+y $\widetilde{\kt}_1=0$, son $a_{j,i}$, $b_j$, $\widehat{b}_j$ los coeficientes de Runge-Kutta de  Dormand y Prince definidos en la Tabla \ref{ButcherTabla}.
+
+Es importante destacar que, a diferencia de otros integradores exponenciales de alto orden, las fórmulas embebidas (\ref{LLDPK scheme}) involucran la aproximación de un solo vector de tiempo de función phi. En efecto, mientras que los integradores exponenciales en general requieren de aproximar varios términos de la forma $\tau^k \varphi_k(\tau A_k)b_k$ con más de un valor de $k$, las fórmulas embebidas (\ref{LLDPK scheme}) solo requieren la aproximación de la acción de una sola función phi sobre un único vector $\tau \varphi_1(\tau A_1)b_1$. Como se ha explicado anteriormente, las cinco aproximaciones $\widetilde{u}_j$ a los términos distintos de cero $c_jh_n\varphi_1(c_jh_nf_x)f$ que aparecen en (\ref{LLDPK scheme}) se calculan eficientemente en cada paso de integración por medio de solo una aproximación por un subespacio de Krylov que se construye mediante el algoritmo \ref{alg:Arnoldi} y solo una exponencial matricial mediante el método de Padé.
+
+\section{Esquemas con tamaño de paso fijo y dimensión de Krylov variable}
+
+\subsection{Selección de la dimensión de Krylov y orden del Padé}
+
 
 \subsection{Sketch (renombrar esta sección)}
 

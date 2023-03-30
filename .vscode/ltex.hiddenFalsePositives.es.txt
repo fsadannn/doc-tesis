@@ -1,0 +1,2 @@
+{"rule":"SIGLAS","sentence":"^\\QMétodo Runge-Kutta de Dormand y Prince Localmente Linealizado para EDOs de dimensiones no pequeñas.\\E$"}
+{"rule":"MORFOLOGIK_RULE_ES","sentence":"^\\QControl del Breakdown.\\E$"}

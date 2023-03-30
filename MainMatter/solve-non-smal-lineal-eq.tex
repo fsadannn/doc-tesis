@@ -54,7 +54,7 @@ se obtiene de aplicar el Teorema \ref{theorem:exp-phi}
 
 Se denotará por $E_\tau = \me{\tau \overline{H} }$ y $[E_\tau]_{ij}$ a las particiones de la matriz $E_\tau$. Al aplicar (\ref{phi_hhat_exponential}) en (\ref{exact-two-terms-km}) se obtiene
 \begin{equation*}
-    K_\mf(\tau,A,b) = \norme{b}\tau V_\mf [E_\tau]_{12} + \norme{b}\tau^2\hf_{\mf+1,\mf}e^T_\mf[E_\tau]_{13}v_{\mf+1} \, .
+    K_\mf(\tau,A,b) = \norme{b}V_\mf [E_\tau]_{12} + \norme{b}\hf_{\mf+1,\mf}e^T_\mf[E_\tau]_{13}v_{\mf+1} \, .
  \end{equation*}
 
 La exponencial (\ref{phi_hhat_exponential}) no puede ser calculada de forma exacta en el caso general, por lo que se utilizará los aproximantes de Padé para aproximarla. La exponencial matricial es aproximada por
@@ -63,7 +63,7 @@ La exponencial (\ref{phi_hhat_exponential}) no puede ser calculada de forma exac
 \end{equation*}
 donde $F_k^{\pf,\qf}$~(\ref{P-MA-2}) denota la aproximación de Padé con estrategia escalamiento y potenciación de la función exponencial. Consecuentemente la aproximación (\ref{exact-two-terms-km}) quedaría
 \begin{equation} \label{eq:kp_aprox}
-    K_{\mf,k}^{\pf,\qf}(\tau,A,b) = \norme{b}\tau V_\mf [\widetilde{E}_\tau]_{12} + \norme{b}\tau^2\hf_{\mf+1,\mf}e^T_\mf[\widetilde{E}_\tau]_{13}v_{\mf+1} \, .
+    K_{\mf,k}^{\pf,\qf}(\tau,A,b) = \norme{b}V_\mf [\widetilde{E}_\tau]_{12} + \norme{b}\hf_{\mf+1,\mf}e^T_\mf[\widetilde{E}_\tau]_{13}v_{\mf+1} \, .
  \end{equation}
 
  \subsection{Cotas para aproximaciones Krylov-Padé}
@@ -293,9 +293,6 @@ En lo que resta del documento se asumirá q existe una función $(\eta+1)$ conti
 \end{equation}
 se cumple, donde $f_x(y)$ es la matriz jacobiana del campo vectorial $f$ en el punto $y$, $y,b$ son vectores $d$-dimensionales y $\mathfrak{L}$ es una constante positiva que depende solamente de la norma de las derivadas de $f_x$.
 
-%~(ver~\cite{steihaug1979attempt,schmitt1995matrix,weiner1997rowmap,hochbruck1998exponential,hosseini1999matrix,tranquilli2014rosenbrock}), preferiblemente diferencias finitas. Aunque estas aproximaciones son útiles en la práctica, estudios teóricos y simulaciones muestran que los esquemas resultantes sufren pérdida de precisión y disminución del orden de convergencia (ver~\cite{wanner1996solving,hochbruck1998exponential,tranquilli2014rosenbrock}).
-
-
 Al utilizar el algoritmo de Arnoldi~(\ref{alg:Arnoldi}), la aproximación $K_{\mf,k}^{\pf,\qf}(\tau,A,b)$~(\ref{eq:gen_kp_aprox}) requiere de la evaluación explícita de la matriz jacobiana. Al reemplazar el algoritmo de Arnoldi~(\ref{alg:Arnoldi}) utilizado en~(\ref{eq:gen_kp_aprox}) por el algoritmo de Arnoldi sin matriz~(\ref{alg:iArnoldi}) se obtiene la siguiente aproximación libre de jacobiano.
 
 \begin{definition}\label{def:gen_kp_aprox_fj}
@@ -417,7 +414,7 @@ con lo cual se concluye la demostración. $\Box$\\
 
 \section{Aproximaciones de ecuaciones no autónomas}
 En el marco de los integradores exponenciales para PVI de la forma
-\begin{equation*}\label{syst}
+\begin{equation*}
 	\frac{dx}{dt}=f(x),  \;\;\;\; x(t_0)=x_0 \in \mathbb{R}^{d},   \;\;\;\; t\in[t_0,T],
 \end{equation*}
 hay varios esquemas (ejemplo \cite{tokman2006efficient,delaCruz07,hochbruck2011exponential}) que requieren del cálculo de una combinación lineal de productos de múltiples integrales y vectores de la forma

@@ -1,0 +1,10 @@
+Runge
+Kutta
+Dormand
+Prince
+Linealizado
+Krylov
+Padé
+Lipschitz
+discretización
+linealizadas
