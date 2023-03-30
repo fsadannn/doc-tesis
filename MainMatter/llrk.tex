@@ -424,6 +424,139 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 	\end{center}
 \end{figure}
 
+\subsubsection{Simulaciones (cambiar nombre)}
+Para este segundo conjunto de simulaciones, se consideraran los esquemas numéricos definidos en el Algoritmo \ref{alg:integratorfix} para las fórmulas (\ref{LLDPK scheme}) de orden $4$ y $5$, que llamaremos \emph{LLDP } y \emph{LLDP5}, respectivamente. Además, se considerará, el código \textquoteleft expms\textquoteright~con orden $4$ y $5$ disponible en \cite{jansing2011expode}, que proporciona una implementación de tamaño de paso fijo de orden $4$ y $5$ para el método exponencial de Adams \cite{hochbruck2011exponential}; se denotaran estos códigos exponenciales como \emph{expms4} y \emph{expms5}, respectivamente.
+
+Para preservar el orden de convergencia de las fórmulas (\ref{LLDPK scheme}), se utilizaran los valores $m_{min}=3$ y $m_{min}=4$ en los códigos \emph{LLDP4} y \emph{ LLDP5}, respectivamente, como lo indica el Teorema \ref{theorem:lldp-convergence}. Por el contrario, los códigos \emph{expms4} y \emph{expms5} no restringen los valores de $m_{min}$. Las tolerancias $RTol$ relativa y $ATol$ absoluta para calcular las aproximaciones de Krylov a $u_j$ se establecieron en $10^{-9}$ y $10^{-12}$, respectivamente.
+
+Para cada ecuación de prueba se resume en una tabla los resultados de la integración con los códigos antes mencionados. La precisión de cada código se mide por el error relativo
+\begin{equation}\label{num-exp-lldp-fix-step:ER}
+	RError = \max_{i=1,\ldots,d} \;\ \max_{t_n\in(t)_h}  \;\ \left\lvert\frac{x^{[i]}(t_j)-y^{[i]}(t_j)}{\maxx{x^{[i]}(t_j),\epsilon_{mach}}}\right\rvert
+\end{equation}
+entre la \textquotedblleft solución exacta\textquotedblright~$x$ de la ecuación de prueba y la solución aproximada $y$ de cada código, donde $\epsilon_{mach}$ denota el espaciado en coma flotante del número $1$. Siguiendo \cite{tokman2006efficient}, la \textquotedblleft solución exacta\textquotedblright de las ecuaciones de prueba se estima mediante el código Matlab \textit{ode15s} con tolerancias $RTol=10^{-12}$ y $ATol=10^{-14}$. En cada tabla, la columna \textit{RTime} presenta el tiempo computacional total relativo de cada código con respecto al código \emph{expms4} en la integración de cada ejemplo. Esta relación de tiempo general funciona como un indicador simple para comparar el costo computacional total de cada código. Las tablas también muestran el número de pasos de integración $Steps$, el número de evaluaciones de campos vectoriales \textit{f-Eval}, el número de evaluaciones jacobianas \textit{J-Eval}, el número de aproximaciones del subespacio de Krylov \textit{K -subspace}, la dimensión mínima $\mf_{min}$, la dimensión máxima $\mf_{max}$ y la dimensión total $\mf_{total}$ de los subespacios de Krylov utilizados por cada código en la integración de la prueba ecuaciones con tamaño de paso $h$, donde $m_{total}$ es la suma acumulada de la dimensión de los subespacios de Krylov utilizada en cada paso de integración.
+
+Las Tablas \ref{tab:num-exp-lldp-fix-step:cpna} - \ref{tab:num-exp-lldp-fix-step:brna} presentan los resultados de la integración de las ecuaciones de prueba de los ejemplos \ref{ex:cusp}-\ref{ex:Brus}, que muestran que, con tamaño de paso fijo y dimensión variable de Krylov, los códigos \emph{LLDP4} y \emph{LLDP5} son más precisos que los códigos \emph{expms4} y \emph{expms5}, con un costo computacional similar o menor. Los códigos \emph{LLDP} son más rápidos porque requieren el cálculo de solo un subespacio de Krylov por paso de integración con dimensiones más pequeñas, mientras que los otros códigos calculan más de un subespacio de Krylov con dimensiones más altas. El código \emph{LLDP5} es más rápido que el \emph{LLDP4} porque la fórmula de orden 4 en (\ref{LLDPK scheme}) requiere de una evaluación adicional del campo vectorial $f$ en cada paso de integración. Con tamaño de paso $h = 0.0064$, el código \emph{expms5} produce desbordamiento en la integración de la ecuación de Burges, razón por la cual falta información en la Tabla \ref{tab:num-exp-lldp-fix-step:bgna}. Por la misma razón, falta un valor en la Tabla \ref{tab:num-exp-lldp-fix-step:brna} para el código \emph{expms5} con un tamaño de paso $h = 0.0008$.
+
+Además, las tablas muestran la efectividad de la estrategia propuesta para la selección de la dimensión de Krylov $\mf$ en cada paso de integración, con mínima variación entre los valores de $\mf_{min}$ y $\mf_{max}$, y así, con un valor menor de $\mf_{total}$.
+
+\begin{table}[h]
+	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación CUSP con $M=32$, $d=96$.}
+	\centering
+		\begin{tabular}{lccccccccc}
+			\hline
+			& RTime & RError & Steps & f-Eval & J-Eval & K-subspace & $\mf_{total}$ & $\mf_{min}$ & $\mf_{max}$ \\
+			\hline
+			h = 0.000001 &  &  &  &  &  &  &  &  &  \\
+			expms4 & 1.0000 & 8.4400e-01 & 100 & 204 & 100 & 298 & 1131 & 2 & 6  \\
+			expms5 & 1.1863 & 6.1635e-01 & 100 & 209 & 100 & 397 & 1336 & 2 & 6  \\
+			LLDP4 & 0.1013 & 3.8321e-08 & 100 & 700 & 100 & 100 & 400 & 4 & 4  \\
+			LLDP5 & 0.0863 & 1.0889e-09 & 100 & 600 & 100 & 100 & 400 & 4 & 4  \\
+			\hline
+			h = 0.000005 &  &  &  &  &  &  &  &  &  \\
+			expms4 & 1.0000 & 9.7513e-01 & 20 & 44 & 20 & 58 & 381 & 4 & 11  \\
+			expms5 & 1.0480 & 1.0766e+00 & 20 & 49 & 20 & 77 & 593 & 4 & 20  \\
+			LLDP4 & 0.0354 & 4.5302e-06 & 20 & 140 & 20 & 20 & 130 & 6 & 7  \\
+			LLDP5 & 0.0338 & 2.0199e-07 & 20 & 120 & 20 & 20 & 130 & 6 & 7  \\
+			\hline
+			h = 0.000010 &  &  &  &  &  &  &  &  &  \\
+			expms4 & 1.0000 & 1.7607e+00 & 10 & 24 & 10 & 28 & 378 & 6 & 36  \\
+			expms5 & 1.1111 & 3.5472e+02 & 10 & 29 & 10 & 37 & 586 & 6 & 36  \\
+			LLDP4 & 0.0228 & 4.4774e-05 & 10 & 70 & 10 & 10 & 83 & 7 & 10  \\
+			LLDP5 & 0.0214 & 1.3267e-05 & 10 & 60 & 10 & 10 & 83 & 7 & 10  \\
+			\hline
+		\end{tabular}
+	\label{tab:num-exp-lldp-fix-step:cpna}
+\end{table}
+
+
+
+\begin{table}[h]
+	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Burgers con $M=500$, $d=500$.}
+	\centering
+	\begin{tabular}{lccccccccc}
+		\hline
+		& RTime & RError & Steps & f-Eval & J-Eval & K-subspace & $\mf_{total}$ & $\mf_{min}$ & $\mf_{max}$ \\
+		\hline
+		h = 0.001600 &  &  &  &  &  &  &  &  &  \\
+		expms4 & 1.0000 & 2.0411e-03 & 313 & 630 & 313 & 937 & 5984 & 2 & 11  \\
+		expms5 & 1.3115 & 6.2805e-04 & 313 & 635 & 313 & 1249 & 7744 & 2 & 11  \\
+		LLDP4 & 0.1109 & 3.7647e-06 & 313 & 2191 & 313 & 313 & 2174 & 4 & 8  \\
+		LLDP5 & 0.1081 & 6.8065e-07 & 313 & 1878 & 313 & 313 & 2174 & 4 & 8  \\
+		\hline
+		h = 0.003200 &  &  &  &  &  &  &  &  &  \\
+		expms4 & 1.0000 & 2.0005e-02 & 157 & 318 & 157 & 469 & 5802 & 3 & 46  \\
+		expms5 & 1.2350 & 1.1603e-02 & 157 & 323 & 157 & 625 & 7747 & 3 & 57  \\
+		LLDP4 & 0.0719 & 7.8449e-05 & 157 & 1099 & 157 & 157 & 1425 & 6 & 10  \\
+		LLDP5 & 0.0719 & 4.5654e-05 & 157 & 942 & 157 & 157 & 1425 & 6 & 10  \\
+		\hline
+		h = 0.006400 &  &  &  &  &  &  &  &  &  \\
+		expms4 & 1.0000 & 5.7742e-01 & 79 & 162 & 79 & 235 & 6267 & 6 & 100  \\
+		expms5 & - & - & - & - & - & - &- & - & -\\
+		LLDP4 & 0.0281 & 2.3688e-03 & 79 & 553 & 79 & 79 & 954 & 8 & 14  \\
+		LLDP5 & 0.0278 & 3.6646e-03 & 79 & 474 & 79 & 79 & 964 & 8 & 15  \\
+		\hline
+	\end{tabular}
+	\label{tab:num-exp-lldp-fix-step:bgna}
+\end{table}
+
+
+\begin{table}[h]
+	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Brusselator2D con $M=50$, $d=5000$.}
+	\centering
+	\begin{tabular}{lccccccccc}
+		\hline
+		& RTime & RError & Steps & f-Eval & J-Eval & K-subspace & $\mf_{total}$ & $\mf_{min}$ & $\mf_{max}$ \\
+		\hline
+		h = 0.000313 &  &  &  &  &  &  &  &  &  \\
+		expms4 & 1.0000 & 2.7423e-09 & 320 & 644 & 320 & 958 & 1702 & 1 & 6  \\
+		expms5 & 1.3830 & 2.6788e-09 & 320 & 649 & 320 & 1277 & 2023 & 1 & 6  \\
+		LLDP4 & 0.7161 & 1.9118e-10 & 320 & 2240 & 320 & 320 & 960 & 3 & 3  \\
+		LLDP5 & 0.7158 & 9.6701e-12 & 320 & 1920 & 320 & 320 & 1280 & 4 & 4  \\
+		\hline
+		h = 0.006250 &  &  &  &  &  &  &  &  &  \\
+		expms4 & 1.0000 & 7.7678e-06 & 16 & 36 & 16 & 46 & 231 & 3 & 11  \\
+		expms5 & 1.1151 & 3.5951e-06 & 16 & 41 & 16 & 61 & 283 & 2 & 11  \\
+		LLDP4 & 0.2909 & 1.7453e-08 & 16 & 112 & 16 & 16 & 115 & 6 & 9  \\
+		LLDP5 & 0.2592 & 4.8969e-09 & 16 & 96 & 16 & 16 & 115 & 6 & 9  \\
+		\hline
+		h = 0.012500 &  &  &  &  &  &  &  &  &  \\
+		expms4 & 1.0000 & 5.4570e-05 & 8 & 20 & 8 & 22 & 163 & 4 & 15  \\
+		expms5 & 1.0989 & 3.1705e-05 & 8 & 25 & 8 & 29 & 213 & 4 & 15  \\
+		LLDP4 & 0.1990 & 1.6384e-07 & 8 & 56 & 8 & 8 & 74 & 8 & 11  \\
+		LLDP5 & 0.1783 & 9.7264e-08 & 8 & 48 & 8 & 8 & 74 & 8 & 11  \\
+		\hline
+	\end{tabular}
+	\label{tab:num-exp-lldp-fix-step:br2dna}
+\end{table}
+
+\begin{table}[h]
+	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Brusselator con $M=100$, $d=200$.}
+	\centering
+	\begin{tabular}{lccccccccc}
+		\hline
+		& RTime & RError & Steps & f-Eval & J-Eval & K-subspace & $\mf_{total}$ & $\mf_{min}$ & $\mf_{max}$ \\
+		\hline
+		h = 0.000200 &  &  &  &  &  &  &  &  &  \\
+		expms4 & 1.0000 & 1.8209e-01 & 5000 & 10004 & 5000 & 14998 & 37224 & 1 & 6  \\
+		expms5 & 1.2761 & 2.2454e-01 & 5000 & 10009 & 5000 & 19997 & 42325 & 1 & 6  \\
+		LLDP4 & 0.1876 & 4.2112e-08 & 5000 & 35000 & 5000 & 5000 & 15491 & 3 & 6  \\
+		LLDP5 & 0.1839 & 2.3705e-09 & 5000 & 30000 & 5000 & 5000 & 20004 & 4 & 6  \\
+		\hline
+		h = 0.000400 &  &  &  &  &  &  &  &  &  \\
+		expms4 & 1.0000 & 3.6729e-01 & 2500 & 5004 & 2500 & 7498 & 23266 & 1 & 8  \\
+		expms5 & 1.2349 & 4.4819e-01 & 2500 & 5009 & 2500 & 9997 & 25921 & 1 & 8  \\
+		LLDP4 & 0.1915 & 7.8097e-07 & 2500 & 17500 & 2500 & 2500 & 10068 & 4 & 6  \\
+		LLDP5 & 0.1621 & 9.7577e-08 & 2500 & 15000 & 2500 & 2500 & 10068 & 4 & 6  \\
+		\hline
+		h = 0.000800 &  &  &  &  &  &  &  &  &  \\
+		expms4 & 1.0000 & 7.2534e-01 & 1250 & 2504 & 1250 & 3748 & 15258 & 2 & 8  \\
+		expms5 & - & - & - & - & - & - &- & - & -\\
+		LLDP4 & 0.1873 & 1.5639e-05 & 1250 & 8750 & 1250 & 1250 & 7517 & 6 & 8  \\
+		LLDP5 & 0.1805 & 4.6983e-06 & 1250 & 7500 & 1250 & 1250 & 7517 & 6 & 8  \\
+		\hline
+	\end{tabular}
+	\label{tab:num-exp-lldp-fix-step:brna}
+\end{table}
 
 \section{Esquemas adaptativos con tamaño de paso variable}
 
