@@ -22,11 +22,11 @@
 \RequirePackage[nottoc,notlof,notlot]{tocbibind}
 \RequirePackage{footmisc}
 
-\RequirePackage[pagebackref,linktocpage,breaklinks,colorlinks,%
+\RequirePackage[pagebackref, linktoc=all,breaklinks,colorlinks,%
                 linkcolor=black,anchorcolor=black,citecolor=black,%
                 filecolor=black,menucolor=black,runcolor=black,%
                 urlcolor=black]{hyperref}
-                
+
 % fancyhdr settings from texlive-doc
 \RequirePackage{fancyhdr}
 \fancypagestyle{plain}{%
