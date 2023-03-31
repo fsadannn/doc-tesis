@@ -172,7 +172,7 @@ $\Box$\\ \\
 	\alpha (1+\hf_{\mf+1,\mf}) (1+\varLambda^{p+q+1}) 2^{-k(\pf+\qf)+3}\me{(1+\alpha(\frac{1}{2})^{\pf+\qf-3})(1+\varLambda)} $,
 	con $\alpha=\frac{\pf!\qf!}{(\pf+\qf)!(\pf+\qf+1)!}$ y $\tau \in [0,1]$.
 \end{theorem}
-\textbf{Demostración}. Por desigualdad triangular
+\textbf{Demostración} Por desigualdad triangular
 \begin{eqnarray} \label{importatdeq}
 \left\lvert\left\lvert  \tau \varphi_1(\tau A)b -
 K_{\mf,k}^{\pf,\qf}\left( \tau , A , b \right)\right\rvert\right\rvert_2
@@ -287,7 +287,7 @@ y por tanto
 	\frac{F(u+\delta b)-F(u)}{\delta} =  J(u)b + O(\delta\nnnorm{b}^2).
 \end{equation*}
 
-En lo que resta del documento se asumirá q existe una función $(\eta+1)$ continuamente diferenciable $g: \mathbb{R}^{d}\times \mathbb{R}^{d} \times \mathbb{R}_+ \to \mathbb{R}^{d}$ que aproxima al producto $f_x(y)b$ con orden $\eta$ para la cual la cota
+En lo que resta del documento se asumirá que existe una función $(\eta+1)$ continuamente diferenciable $g: \mathbb{R}^{d}\times \mathbb{R}^{d} \times \mathbb{R}_+ \to \mathbb{R}^{d}$ que aproxima al producto $f_x(y)b$ con orden $\eta$ para la cual la cota
 \begin{equation} \label{eq:g_bound}
 	\nnnorm{g(y,b;\delta)-f_x(y)b} \leq \mathfrak{L}\nnnorm{b}^{\eta+1}\delta^{\eta}
 \end{equation}
@@ -307,7 +307,7 @@ Al utilizar el algoritmo de Arnoldi~(\ref{alg:Arnoldi}), la aproximación $K_{\m
 			0_{1\times\mf} & 0 & 1 & 0\\
 			0_{1\times\mf} & 0 & 0 & 1\\
 			0_{1\times\mf} & 0 & 0 & 0
-		\end{array}\right] \label{hhat},
+		\end{array}\right],
 	\end{equation}
 	$\widehat{H}_\mf=\widehat{H}^*_\mf/\tau^\beta$, $\widehat{\hf}_{\mf+1,\mf}=\widehat{\hf}^*_{\mf+1,\mf}/\tau^\beta$, y $e_i$ el $i$-ésimo vector canónico de $\mathbb{R}^\mf$.
 \end{definition}
@@ -493,7 +493,7 @@ Comenzando con un valor factible de $\mf$, se construye el $\mf$-ésimo subespac
 	\mf_{new} = \left\lceil \mf + \minn{\fac_{max} , \maxx{\fac_{min},
 	\fac\cdot\Delta\mf} } \right\rceil,
 \end{equation*}
-donde $\Delta\mf=\log(\varepsilon(\mf)/\gamma) \label{delta_m}$, $\gamma=0.005$ es un factor de seguridad, $\fac_{max}= \maxx{ 1, \frac{\mf}{3} }$, $\fac_{min}= 1 $, $\fac=\frac{1}{\log(2)}$, y el símbolo $\left\lceil \cdot \right\rceil$ denota la función de techo (que devuelve el menor entero mayor o igual que un número real dado). Luego, con $\mf=\mf_{new}$, se repite el procedimiento explicado hasta que se satisface $\varepsilon(\mf)/\gamma< 1$.
+donde $\Delta\mf=\log(\varepsilon(\mf)/\gamma)$, $\gamma=0.005$ es un factor de seguridad, $\fac_{max}= \maxx{ 1, \frac{\mf}{3} }$, $\fac_{min}= 1 $, $\fac=\frac{1}{\log(2)}$, y el símbolo $\left\lceil \cdot \right\rceil$ denota la función de techo (que devuelve el menor entero mayor o igual que un número real dado). Luego, con $\mf=\mf_{new}$, se repite el procedimiento explicado hasta que se satisface $\varepsilon(\mf)/\gamma< 1$.
 
 \subsubsection{Simulaciones numéricas para Aproximaciones Krylov-Padé}
 La Figura \ref{fig:SumPhi} presenta los diagramas de tiempo-precisión para los métodos de \cite{hochbruck1997krylov}, \cite{sidje1998expokit}, \cite{niesen2012algorithm} y (\ref{phi_approx}), como función de la dimensión de Krylov $\mf$, en el cálculo de (\ref{sum2_phiXv}) para dos valores de $l$. La matriz $\mathbf{A}$ fue tomada como $10000 \times 10000$ \textit{Tridiag} de la galería de funciones de Matlab18a, $\mathbf{a}_1=\mathbf{a}_2=\mathbf{a}_3=\mathbf{1}$, y $t=0.1$. La norma euclidiana se usa para medir el error entre el valor ``exacto'' de $\mathbf{L} e^{t \mathbf{M}}\mathbf{r}$ y sus aproximaciones. Con fines comparativos, el valor ``exacto'' de $e^{t \mathbf{M}}$ y la matriz exponencial $\me{t\overline{\mathbf{H}}}$ en (\ref{phi_approx}) se calculan con la misma función de Matlab \textit{expm} que la utilizada en \cite{sidje1998expokit} y \cite{niesen2012algorithm} para calcular la exponencial de la matriz de Hessenberg. Como principal diferencia con la aproximación (\ref{phi_approx}) y con la de \cite{hochbruck1997krylov}, la precisión de los métodos de \cite{sidje1998expokit} y \cite{niesen2012algorithm} se mejora con una estrategia de cambio de tamaño de paso regulada por estimaciones de los errores de la aproximación. De esta forma, como se observa en la Figura \ref{fig:SumPhi}, para el mismo valor de $\mf$ los métodos de \cite{sidje1998expokit} y \cite{niesen2012algorithm} alcanzan o superan la precisión del método (\ref{phi_approx}) pero a expensas de un mayor costo computacional. Con respecto al método en \cite{hochbruck1997krylov} que calcula exp(M*t) directamente a través del método del subespacio de Krylov, la aproximación en (\ref{phi_approx}) incluye un segundo término con el producto escalar de dos vectores de baja dimensión, pero ambas aproximaciones comparten algoritmos más complejos y lentos: el algoritmo de Arnoldi para los mismos subespacios de Kylov y la evaluación de una exponencial matricial. Dado que la aproximación en (\ref{phi_approx}) también es dos órdenes superior, se espera que la aproximación (\ref{phi_approx}) sea más precisa que la de \cite{hochbruck1997krylov} con un costo computacional similar al que se muestra en Figura \ref{fig:SumPhi}.

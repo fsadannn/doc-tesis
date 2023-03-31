@@ -1,5 +1,4 @@
-\chapter{Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDOs de
-dimensiones no pequeñas}\label{chapter:lldp}
+\chapter{Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDOs de dimensiones no pequeñas}\label{chapter:lldp}
 En el Capítulo \ref{chapter:exp-int-and-ll-methods} se presentó la Aproximación Lineal Local de Orden Superior. Esta aproximación consiste en descomponer la solución de la ecuación diferencial original como la suma de las soluciones de dos ecuaciones diferenciales auxiliares, una lineal y la no lineal. En el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se propusieron y utilizaron las aproximaciones Krylov-Padé para resolver la ecuación diferencial lineal auxiliar. En este capítulo se utilizará el método Runge-Kutta de Dormand y Prince para aproximar la solución de la ecuación diferencial no lineal auxiliar. Combinando estas aproximaciones se obtienen Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDOs de dimensiones no pequeñas.
 
 Sin pérdida de generalidad consideremos el PVI autónomo $d$-dimensional
@@ -288,7 +287,7 @@ En el marco de los integradores exponenciales, los seis modelos que se considera
     Los parámetros en estas ecuaciones se eligieron de tal manera que el \textit{stiffness} proviene tanto de la discretización espacial de los términos difusivos como del pequeño factor $\varepsilon$ que divide el término no lineal del lado derecho en la ecuación para $y$ .
 \end{example}
 
-\begin{example}
+\begin{example}\label{ex:Burger}
      La ecuación de Burger~\cite{tokman2006efficient} emergente en varias áreas de las matemáticas aplicadas, como la mecánica de fluidos, la acústica no lineal, la dinámica de gases y el flujo de tráfico
     \[ u_t+uu_x=\nu u_{xx} \]
     donde $\nu = 3\cdot10^{-4}$, $t\in [0,0\mathord{.}5]$ and $0\leq x\leq 1$, con condición inicial y valores de frontera
@@ -327,7 +326,7 @@ En el marco de los integradores exponenciales, los seis modelos que se considera
     Likewise in \cite{tokman2006efficient}, the diffusive terms was discretized using second-order centered finite-differences on the spatial grid $x_i=\frac{i}{M+1}$ with node spacing $\Delta x = \frac{1}{M+1}$ and $i=1,\ldots,M$ .
 \end{example}
 
-\begin{example}
+\begin{example}\label{ex:GS2D}
     Ecuación 2D de Gray-Scott~\cite{gray1984autocatalytic,tokman2012new} que modela las reacciones autocatalíticas en el reactor de tanque agitado continuo e isotérmico
     \begin{eqnarray*}
         \frac{\partial u}{\partial t} &=& d_u\nabla^{2}u -uv^{2}+a(1-u) \\
@@ -730,7 +729,7 @@ Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \r
 	$f_{old} = f(y_n)$ \\
 	\While{$t_n<T$}{
 		Jacobian reuse control by Algorithm~\ref{alg:jaccontrol} \\
-		Step size control as specified in Section~\ref{hcontrol} \\
+		Step size control as specified in Section~\ref{secc:hcontrol} \\
 		\If{$fail=false$ or $reuse=false$}{
 			Run Algorithm~\ref{alg:Arnoldi} to get matrices $H^*_{m_n}$ and $V_{m_n}$ of $\mathcal{K}_{\mf_n}(h_nJ,f)$ and set $H_{m_n}=H^*_{m_n}/h_n$ \\
 		}
@@ -773,7 +772,7 @@ Los principales resultados del estudio de simulación se resumen en la Figura \r
     \hspace{-0.5in}
 	\includegraphics[scale=0.7]{Graphics/lldp/compare_graph.pdf}
 	\vspace{-0.75in}
-	\caption{ Diagrama log-log comparativo de precisión frente a tiempo para cada uno de los códigos en la integración de las seis ecuaciones de prueba. $\vartriangle$: code \emph{exp4}, $\circ$ : code \emph{ode15sk}, and $\square$: code \emph{LLDP45}}
+	\caption{ Diagrama log-log comparativo de precisión frente a tiempo para cada uno de los códigos en la integración de las seis ecuaciones de prueba. $\vartriangle$: código \emph{exp4}, $\circ$ : código \emph{ode15sk}, y $\square$: código \emph{LLDP45}}
 	\label{num-exp-lldp-var-step:Fig1}
 	\end{center}
 \end{figure}
