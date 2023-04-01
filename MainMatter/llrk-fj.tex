@@ -196,13 +196,13 @@ Se implementó la expresión LLRK libre de Jacobiano (\ref{JFLLRK4}) en un códi
 \subsubsection{Simulaciones preliminares}
 En este primer conjunto de simulaciones, con el código \textit{JF-LLRK}, se evaluará el orden de convergencia del esquema (\ref{JFLLRK4}) en función de la dimensión de Krylov $\mf$, el orden de Padé $\pf$, los órdenes $\eta_1$ y $\eta_2$ de la diferencia finita que aproxima los productos de la matriz jacobiana por el vector, y los parámetros $\beta,\alpha_1,\alpha_2$ de estas dos aproximaciones relacionadas con el paso tamaño $h$. Para estas simulaciones, se utilizará la ecuación de prueba  Brusselator~(\ref{ex:Brus}).
 
-\begin{figure}[t]
+\begin{figure}[htb]
 	\centering
 	\subfigure{\includegraphics[width=0.95\textwidth]{Graphics/lldp-fj/mp_new.png}}
 	\caption{Gráfico Log-log de error ${e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty}$ contra $h_i$ integrando la ecuación de Ejemplo \ref{ex:Brus} con el esquema (\ref{JFLLRK4}), fijados $\eta_1=\eta_2=2$, $\alpha_1=\alpha_2=0.5$, $\beta=1$ y $h_i=2^{-i}$, $i=7,8,9,10,11$, y : Izquierda, $\mf=1,2,3$, $\pf=2$; y Derecha, $\pf=1,2,3$, $\mf=3$.} \label{Fig1}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[htb]
 	\centering
 	\caption{
 		Orden de convergencia $r$ del esquema (\ref{JFLLRK4}) y las estimaciones $\widetilde{r}$ para diferentes valores de $\mf$ y $\pf$, el $90\%$ límite de confianza $\Delta$ de $\widetilde{r}$, y el coeficiente de determinación $R^2$ de la recta ajustada en Figura \ref{Fig1}. Lo valores $\eta_1=\eta_2=2$, $\alpha_1=\alpha_2=0.5$ y $\beta=1$ se mantienen fijos.}
@@ -228,14 +228,14 @@ Los errores $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ del código \
 Análogamente, las Figuras ref{Fig2}, \ref{Fig3} y las Tablas \ref{tab:out}, \ref{tab:in} presentan los resultados de las simulaciones correspondientes al orden de de convergencia del esquema (\ref{JFLLRK4}) en función de los parámetros de sus dos aproximaciones libres de jacobiano. Nuevamente el orden de convergencia de convergencia estimado $\widetilde{r}$ proporcionada en las tablas \ref{tab:in} y \ref{tab:out} está de acuerdo con el orden de convergencia de convergencia del esquema (\ref{JFLLRK4}) establecido por Teorema \ref{kp-fj-llrk-convergencia} para los valores considerados de $\eta_1$, $\eta_2$, $\alpha_1$, $\alpha_2$ y $\beta$.
 
 
-\begin{figure}[h]
+\begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.95\textwidth]{Graphics/lldp-fj/out_new.png}
 	\caption{Gráfico Log-log de error $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ contra $h_i$ integrando la ecuación de Ejemplo \ref{ex:Brus} con el esquema (\ref{JFLLRK4}), fijados $\mf=14$, $\pf=4$, $\eta_1=2$, $\alpha_1=0.5$, $\beta=1$, y: Izquierda, $\eta_2=1$, $\alpha_2=0,0.5,1,1.5$, $h_i=2^{-i}$, $i=7,8,9,10$ y Derecha, $\eta_2=2$, $\alpha_2=0,0.125,0.25,0.5$, $h_i=2^{-i}$, $i=5,6,7,8,9$.}
 	\label{Fig2}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[htb]
 	\centering
 	\caption{
 		Orden de convergencia $r$ del esquema (\ref{JFLLRK4}) y las estimaciones $\widetilde{r}$ para diferentes valores de $\eta_2$ y $\alpha_2$, el $90\%$ límite de confianza $\Delta$ de $\widetilde{r}$, el coeficiente de determinación $R^2$ de la recta ajustada en Figura \ref{Fig2}. Los valores de $\mf=14$, $\pf=4$, $\eta_1=2$, $\alpha_1=0.5$ y $\beta=1$ se mantienen fijos. }
@@ -257,7 +257,7 @@ Análogamente, las Figuras ref{Fig2}, \ref{Fig3} y las Tablas \ref{tab:out}, \re
 \end{table}
 
 
-\begin{figure}[h]
+\begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.95\textwidth]{Graphics/lldp-fj/in_new.png}
 	\caption{Gráfico Log-log de error $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ contra $h_i$ integrando la ecuación de Ejemplo \ref{ex:Brus} con el esquema (\ref{JFLLRK4}), fijados $\mf=14$, $\pf=4$, $\eta_2=2$, $\alpha_2=1$, $h_i=2^{-i}$, $i=5,6,7,8,9$, y: Izquierda, $\alpha_1=0,1,2$ for $\eta_1=1,\beta=1$; Derecha, $\alpha_1=0.5,1,1.5$ for $\eta_1=2,\beta=0$.}
@@ -265,7 +265,7 @@ Análogamente, las Figuras ref{Fig2}, \ref{Fig3} y las Tablas \ref{tab:out}, \re
 \end{figure}
 
 
-\begin{table}[h]
+\begin{table}[htb]
 	\centering
 	\caption{
         Orden de convergencia $r$ del esquema (\ref{JFLLRK4}) y las estimaciones $\widetilde{r}$ para diferentes valores de  $\eta_1$, $\alpha_1$ y $\beta$, el $90\%$ límite de confianza $\Delta$ de $\widetilde{r}$, el coeficiente de determinación $R^2$ de la recta ajustada en Figura \ref{Fig3}. Los valores de $\mf=14$, $\pf=4$, $\eta_2=2$ y$\alpha_2=1$ se mantienen fijos.}
@@ -292,7 +292,7 @@ En este conjunto de simulaciones, se utilizaran tres ecuaciones diferenciales pa
 
 Para cada ecuación de prueba, los resultados de la integración numérica se sintetizan en los diagramas de precisión contra tiempo de la Figura \ref{work-precision diagram}. En estos diagramas, la precisión de los códigos \textit{JF-LLRK4}, \textit{JF-Exp4}, \textit{JF-EPIRK4} y \textit{BDF4} se mide por el error $e_i=\max\limits_ {t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ entre la \textquotedblleft solución exacta\textquotedblright~$x$ de la ecuación de prueba y la solución aproximada $y_n$ de cada código calculado en cinco particiones de tiempo con un tamaño de paso fijo $h_i$, donde la \textquotedblleft solución exacta\textquotedblright ~$x $ se estima nuevamente como en las simulaciones preliminares. La figura \ref{work-precision diagram} muestra que, para estas ecuaciones, el esquema LLRK libre de jacobiano (\ref{JFLLRK4}) exhibe una precisión similar o mayor que los otros tres integradores libres de jacobiano, pero con un costo computacional menor o similar. Esta diferencia en el tiempo computacional se explica por los resultados de las Tablas \ref{tab:br}-\ref{tab:gs2d}.
 
-\begin{figure}[h]
+\begin{figure}[htb]
 	\centering
 	\includegraphics[width=1\textwidth]{Graphics/lldp-fj/Diagram_new.jpg}
 	\caption{Diagramas comparativos de precisión contra tiempo en escala log-log para cada uno de los cuatro códigos en la integración delas cuatro ecuaciones de prueba for the four codes in the integration of the four test equations.} \label{work-precision diagram}
@@ -306,7 +306,7 @@ El código \textit{JF-EPIRK4} requiere de las mismas descomposiciones de Krylov 
 
 Para resolver los sistemas algebraicos no lineales, en cada paso de integración, el código \textit{BDF4} emplea el método clásico de Newton junto con el método General Minimal Residue (GMRES) (función de Matlab \textit{gmres} con tolerancia $RTol=10^{-6}$) y la diferencia finita hacia adelante de primer orden como una aproximación al producto de la matriz jacobiana pro un vector. En la función de Matlab \textit{gmres}, se eliminaron las comprobaciones computacionalmente costosas de las funciones de Matlab \textit{iterchk} y \textit{iterapp}.
 
-\begin{table}[h!]
+\begin{table}[htb]
 	\caption{Desempeño de los códigos en la integración de la ecuación Brusselator con $M=100$, $d=200$.}
 	\centering
 	\begin{adjustbox}{width=0.9\columnwidth,center}
@@ -362,7 +362,7 @@ Para resolver los sistemas algebraicos no lineales, en cada paso de integración
 
 
 
-\begin{table}[h!]
+\begin{table}[htb]
 	\caption{Desempeño de los códigos en la integración de la ecuación Brusselator 2D con $M=40$, $d=3200$.}
 	\centering
 	\begin{adjustbox}{width=0.9\columnwidth,center}
@@ -416,7 +416,7 @@ Para resolver los sistemas algebraicos no lineales, en cada paso de integración
 	\label{tab:br2d}
 \end{table}
 
-\begin{table}[h!]
+\begin{table}[htb]
 	\caption{Desempeño de los códigos en la integración de la ecuación Burger's con $M=400$, $d=400$.}
 	\centering
 	\begin{adjustbox}{width=0.9\columnwidth,center}
@@ -471,7 +471,7 @@ Para resolver los sistemas algebraicos no lineales, en cada paso de integración
 \end{table}
 
 
-\begin{table}[h!]
+\begin{table}[htb]
 	\caption{Desempeño de los códigos en la integración de la ecuación Gray-Scott 2D con $M=20$, $d=800$.}
 	\centering
 	\begin{adjustbox}{width=0.9\columnwidth,center}

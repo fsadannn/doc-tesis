@@ -137,7 +137,7 @@ con $j=1,\ldots,7$, donde $K$ es una constante positiva. Dado que $z_{n+1} = y_n
 
 Claramente, según este resultado, las fórmulas embebidas Runge-Kutta localmente linealizadas (\ref{LLDPK scheme}) preservan la velocidad de convergencia de las fórmulas embebidas clásicas Runge-Kutta de Dormand y Prince si las desigualdades $\mf+1 \ge 5 $ y $\pf+\qf \ge 5$ se cumplen. Además, al igual que las fórmulas embebidas para pequeños PVI y otros integradores de tipo exponencial, las nuevas fórmulas embebidas (\ref{LLDPK scheme}) son capaces de integrar PVI lineales tan precisos como sea necesario independientemente de la dimensionalidad y \textit{stiffness} de las ecuaciones. Sin embargo, dado que, por construcción, las fórmulas (\ref{LLDPK scheme}) usan las fórmulas originales de Runge-Kutta de Dormand y Prince para resolver una ecuación auxiliar no lineal (ver detalles en \cite{Jimenez13, Jimenez14AMC}), las fórmulas (\ref{LLDPK scheme}) no están diseñadas para integrar PVI \textit{stiff} en general. De esta forma, las fórmulas propuestas (\ref{LLDPK scheme}) pretenden aproximar la solución de PVI grandes para los que la principal fuente de \textit{stiffness} surge de la linealización de la ecuación no lineal en consideración. Estos son precisamente la mayoría de los grandes PVI resultantes de la discretización espacial de las EDP que modelan procesos físicos, biofísicos y físico-químicos conocidos.
 \begin{table}[h]
-	\caption{ Valores de los coeficientes $\alpha _{i,j}$ en las fórmulas continuas (\ref{continuousLLRK45}) \newline \label{Table continuous RK}}
+	\caption{ Valores de los coeficientes $\alpha _{i,j}$ en las fórmulas continuas (\ref{continuousLLRK45})\label{Table continuous RK}}
 	\centering
 	\begin{tabular}{ccccc}
 		\hline
@@ -370,7 +370,7 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 \begin{table}[h]
 	\centering
 	\caption{
-        Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\mf$, los $90\%$ límites de confianza $\Delta$ de $\widetilde {r}$, el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig3}.\newline }
+        Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\mf$, los $90\%$ límites de confianza $\Delta$ de $\widetilde {r}$, el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig3}.}
 		\begin{tabular}{ c  c c c c  c  c c c c}
 			\hline
 			& \multicolumn{4}{c}{$\widehat{y}$} & & \multicolumn{4}{c}{$y$} \\
@@ -399,7 +399,7 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 \begin{table}[h]
 	\centering
 	\caption{
-		Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\pf$, los $90\%$ límites de confianza $\Delta$ de $\widetilde {r}$, el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig2}.\newline }
+		Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\pf$, los $90\%$ límites de confianza $\Delta$ de $\widetilde {r}$, el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig2}.}
 		\begin{tabular}{ c  c c c c  c  c c c c}
 			\hline
 			& \multicolumn{4}{c}{$\widehat{y}$} & & \multicolumn{4}{c}{$y$} \\
