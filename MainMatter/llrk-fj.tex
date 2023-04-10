@@ -225,7 +225,7 @@ En este primer conjunto de simulaciones, con el código \textit{JF-LLRK}, se eva
 
 Los errores $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ del código \textit{JF-LLRK} en la integración de la ecuación de Brusselator fueron calculados para diferentes discretizaciones de tiempo $(t)_{h_i}$ con un tamaño de paso fijo $h_i$, donde la \textquotedblleft solución exacta\textquotedblright ~$x$ se estima mediante el código Matlab \textit{ode15s} con tolerancias $RTol= 10^{-12}$ y $ATol=10^{-14}$. La Figura \ref{Fig1}-izquierda muestra cuatro de estos errores para el código \textit{JF-LLRK} con diferentes valores de $\mf$, y fijo $\pf=2$, $\eta_1=\eta_2=2$ , $\alpha_1=\alpha_2=0.5$ y $\beta=1$, así como la recta ajustada a los puntos $(\log_2(h_i),\log_2(e_i))$ con $i=1,. ..,4$. La tabla \ref{tab:mporders}-izquierda presenta el valor de la pendiente $\widetilde{r}$ de la línea recta ajustada para cada valor de $\mf$, lo que proporciona una estimación del orden de convergencia del esquema. La tabla también presenta los $90\%$ límites de confianza de $\widetilde{r}$, el coeficiente de determinación como indicador de la bondad de la línea ajustada, y el orden de convergencia de convergencia esperado $r$ que - de acuerdo con el Teorema \ref {theorem:kp-fj-llrk-convergence} - el esquema (\ref{JFLLRK4}) tiene para los diferentes valores de $\mf$. La figura \ref{Fig1}-derecha y la tabla \ref{tab:mporders}-derecha presentan salidas similares pero para el código \textit{JF-LLRK} con varios valores de $\pf$ y $\mf=3$ fijados $\eta_1=\eta_2=2$, $\alpha_1=\alpha_2=0.5$ y $\beta=1$. Observe que el orden de convergencia de convergencia estimado $\widetilde{r}$ proporcionada en la Tabla \ref{tab:mporders} está de acuerdo con el orden de convergencia del esquema (\ref{JFLLRK4}) establecido por el Teorema \ref{theorem:kp-fj-llrk-convergence} para los valores considerados de $\mf$ y $\pf$.
 
-Análogamente, las Figuras ref{Fig2}, \ref{Fig3} y las Tablas \ref{tab:out}, \ref{tab:in} presentan los resultados de las simulaciones correspondientes al orden de de convergencia del esquema (\ref{JFLLRK4}) en función de los parámetros de sus dos aproximaciones libres de jacobiano. Nuevamente el orden de convergencia de convergencia estimado $\widetilde{r}$ proporcionada en las tablas \ref{tab:in} y \ref{tab:out} está de acuerdo con el orden de convergencia de convergencia del esquema (\ref{JFLLRK4}) establecido por Teorema \ref{kp-fj-llrk-convergencia} para los valores considerados de $\eta_1$, $\eta_2$, $\alpha_1$, $\alpha_2$ y $\beta$.
+Análogamente, las Figuras ref{Fig2}, \ref{Fig3} y las Tablas \ref{tab:out}, \ref{tab:in} presentan los resultados de las simulaciones correspondientes al orden de de convergencia del esquema (\ref{JFLLRK4}) en función de los parámetros de sus dos aproximaciones libres de jacobiano. Nuevamente el orden de convergencia de convergencia estimado $\widetilde{r}$ proporcionada en las tablas \ref{tab:in} y \ref{tab:out} está de acuerdo con el orden de convergencia de convergencia del esquema (\ref{JFLLRK4}) establecido por Teorema \ref{theorem:kp-fj-llrk-convergence} para los valores considerados de $\eta_1$, $\eta_2$, $\alpha_1$, $\alpha_2$ y $\beta$.
 
 
 \begin{figure}[htb]
@@ -518,3 +518,573 @@ Además, las Tablas \ref{tab:br}-\ref{tab:gs2d} muestran la efectividad de la es
 En resumen, las simulaciones han demostrado que, con un costo computacional similar, el nuevo integrador libre de jacobiano presenta una precisión mucho mayor que los otros tres integradores libres de jacobiano; mientras que, con una precisión similar, el primero es mucho más rápido que los segundos.
 
 Para concluir esta sección, recordemos que la selección de $\delta$ y $h$ en esquemas prácticos libres de jacobiano se realiza bajo diferentes criterios que resultan en valores óptimos para $\delta$ y $h$ independientes entre sí \cite{knoll2004jacobian}. Con este conocimiento en mente, la teoría desarrollada hasta este punto y los experimentos numéricos realizados con $\delta$ vinculados a una potencia de $h$ pretenden sentar las bases para diseñar esquemas prácticos Localmente Linealizados de Orden Superior Libres Jacobiano con valores óptimos de $h$ y $\delta$.
+
+\section{Esquemas Dormand y Prince}
+En este capítulo se extenderán los resultados esquemas basados en Krylov-Padé libre de Jacobiano a fórmulas embebidas similar al Capítulo \ref{chapter:lldp}.
+
+Utilizando la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé Libre de Jacobiano~(\ref{eq:gen_kp_aprox_fj}) para $u_j$ en las fórmulas embebidas (\ref{lldis}), obtenemos la Fórmulas de Runge-Kutta localmente linealizadas libres de Jacobiano
+\begin{equation}
+	y_{n+1}\,=\,y_n+\widetilde{u}_s+h_n \sum_{j=1}^{s}b_j \widetilde{\kt}_j \,\,\, \text{and} \,\,\, \
+	\widehat{y}_{n+1}\,=\, y_n+\widetilde{u}_s+h_n \sum_{j=1}^{s}\widehat{b}_j \widetilde{\kt}_j, \label{Jacobian-free LLDPK scheme}
+	\end{equation}
+para integrar PVI de grandes dimensiones, donde
+\begin{equation*}
+	\widetilde{\kt}_j = f\left( y_n+\widetilde{u}_j+h_n \sum_{i=1}^{j-1}a_{j,i}\widetilde{\kt}_i \right) - f( y_n) - g_2(y_n,\widetilde{u}_j;\delta_2),
+\end{equation*}
+y $\widetilde{\kt}_1=0$, son $a_{j,i}$, $b_j$, $\widehat{b}_j$ los coeficientes de Runge-Kutta de  Dormand y Prince definidos en la Tabla \ref{ButcherTabla} y  $g_2(y_n,\widetilde{u}_j;\delta_2)$ es la aproximación de $f_x(y_n)\widetilde{u}_j$ que satisface la cota~(\ref{eq:g_bound2}).
+
+El siguiente teorema trata sobre la velocidad de convergencia de las fórmulas embebidas (\ref{Jacobian-free LLDPK scheme}). Con este propósito, estas fórmulas se reescriben como
+\begin{equation*}
+    y_{n+1}=y_{n}+\digamma (y_{n};h_{n})\text{ \ \ \ \ y \ \ \ \ }\widehat{y}_{n+1}=y_{n}+\widehat{\digamma }(y_{n};h_{n}).
+\end{equation*}
+
+
+\begin{theorem}\label{Teorema Convergencia}
+	Sea $x$ solución de del PVI (\ref{syst}) con campo vectorial $f$ seis veces continuamente diferenciable en el compacto $\mathfrak{K} \subset \mathfrak{D}$. Entonce, la Fórmulas de Runge-Kutta localmente linealizadas libres de Jacobiano (\ref{Jacobian-free LLDPK scheme}) tienen error de truncamiento local
+	\[	\lvert\lvert x(t_{n+1}) - x(t_n) - \digamma(x(t_n);h_n) \rvert\rvert_2 \leq \mathfrak{c}_0h_n^{\min\{5,\mf+1,\pf+\qf \}+1} + \mathfrak{c}_1h_n^{\beta\eta_1+2}\delta_1^{\eta_1} + \mathfrak{c}_2h_n^{\eta_2+2}\delta_2^{\eta_2},
+	\]
+	\[	\lvert\lvert x(t_{n+1}) - x(t_n) - \widehat{\digamma }(x(t_n);h_n) \rvert\rvert_2 \leq \mathfrak{c}_0h_n^{\min\{4,\mf+1,\pf+\qf \}+1} + \mathfrak{c}_1h_n^{\beta\eta_1+2}\delta_1^{\eta_1} + \mathfrak{c}_2h_n^{\eta_2+2}\delta_2^{\eta_2},
+	\]
+	donde $\eta_1$ es el orden de la aproximación $g_1(.;\delta_1)$ en el algoritmo de Arnoldi libre de Jacobiano \ref{alg:iArnoldi} para el $\mf$-ésimo subespacio de Krylov $\widehat{\mathcal{K}}_\mf(h^\beta f_x(x(t_n)),f(x(t_n));\delta_1)$, $\eta_2$ es el orden de la aproximación $g_2(.;\delta_2)$ en (\ref{Jacobian-free LLDPK scheme}), y $\mathfrak{c}_0,\mathfrak{c}_1,\mathfrak{c}_2$ son constantes positivas. Además, con $\delta_1\propto h^{\alpha_1}$, $\delta_2\propto h^{\alpha_2}$, $\alpha_1,\alpha_2 \geq 0$, el error global satisface
+	\[ \lvert\lvert x(t_{n+1}) - y_{n+1} \rvert\rvert_2 \leq M h^{\mathrm{min}\left\{5,\mf+1,\pf+\qf,(\beta+\alpha_1)\eta_1+1,(1+\alpha_2)\eta_2+1 \right\}} \]
+	\[ \lvert\lvert x(t_{n+1}) - \widehat{y}_{n+1} \rvert\rvert_2 \leq M h^{\mathrm{min}\left\{4,\mf+1,\pf+\qf,(\beta+\alpha_1)\eta_1+1,(1+\alpha_2)\eta_2+1 \right\}} \]
+	para todo $t_{n+1},t_n\in(t)_h$ y $h$ suficiente pequeña, donde $M$ es una constante positiva.
+\end{theorem}
+
+\textbf{Demostración}
+Los errores locales y globales para las fórmulas embebidas libres de jacobiano (\ref{Jacobian-free LLDPK scheme}) se derivan directamente del Teorema \ref{theorem:kp-fj-llrk-convergence}, teniendo en cuenta que los errores de truncamiento locales del Las fórmulas embebidas originales de Runge-Kutta de Dormand y Prince son 6 y 5 \cite{hairer1993solving}.
+$\Box$
+
+Similar a como se hizo en el Capítulo \ref{chapter:lldp}, la matriz particionada $E_{h_n/90}=e^{\frac{h_n}{90}\overline{H}}$ es aproximada por la aproximación ($\pf,\qf$)-Padé $P_{h_n/90}$, donde $\frac{1}{ 90}$ es el máximo común divisor de los coeficientes de Runge-Kutta $\frac{1}{5},\frac{3}{10},\frac{4}{5},\frac{8}{9} ,1$ de la Tabla \ref{ButcherTabla}. Utilizando la propiedad de flujo del operador exponencial se obtiene
+
+\begin{align}
+    P_{\frac{2}{90}h_n}& =P_{\frac{1}{90}h_n}P_{\frac{1}{90}h_n} & P_{\frac{4}{90}h_n}& =P_{\frac{2}{90}h_n}P_{\frac{2}{90}h_n}  \notag \\
+    P_{\frac{8}{90}h_n}& =P_{\frac{4}{90}h_n}P_{\frac{4}{90}h_n} & P_{\frac{16}{90}h_n}& =P_{\frac{8}{90}h_n}P_{\frac{8}{90}h_n}  \notag \\
+    P_{\frac{32}{90}h_n}& =P_{\frac{16}{90}h_n}P_{\frac{16}{90}h_n} & P_{\frac{80}{90}h_n}& =P_{\frac{32}{90}h_n}P_{\frac{16}{90}h_n}P_{\frac{32}{90}h_n}
+    \label{flow2} \\
+    P_{\frac{1}{10}h_n}& =P_{\frac{8}{90}h_n}P_{\frac{1}{90}h_n} & P_{\frac{1}{5}h_n}& =P_{\frac{1}{10}h_n}P_{\frac{1}{10}h_n}  \notag \\
+    P_{\frac{2}{5}h_n}& =P_{\frac{1}{5}h_n}P_{\frac{1}{5}h_n} & P_{\frac{4}{5}h_n}& =P_{\frac{2}{5}h_n}P_{\frac{2}{5}h_n}  \notag \\
+    P_{\frac{3}{10}h_n}& =P_{\frac{1}{10}h_n}P_{\frac{1}{5}h_n} & E_{1}& =P_{\frac{4}{5}h_n}P_{\frac{1}{5}h_n}\;,  \notag
+\end{align}
+con lo cual las cinco matrices requeridas $E_{c_j}$ son aproximadas por $P_{c_j h_n}$.
+
+\subsection{Implementación Numérica}
+
+En esta sección, una implementación adaptativa de las fórmulas embebidas de Runge-Kutta localmente linealizadas libres de jacobiano
+(\ref{Jacobian-free LLDPK scheme}). La implementación general del esquema libre de jacobiano de orden variable con tamaño de paso, dimensión de Krylov y orden de Padé variables se esboza en Algorithm \ref{alg:integrator-fj}. Este Algoritmo es una versión adaptada del Algoritmo \ref{alg:integrator}. A continuación se detallan las particularidades de esta implementación libre de jacobiano.
+
+{\SetAlgoNoLine
+	\begin{algorithm}[htb]
+		\caption{Variable-order Jacobian-free scheme with variable step size, Krylov dimension and Padé order}
+		\label{alg:integrator-fj}
+		\KwIn{time
+			interval $[t_0, T]$, initial value $y_0$, absolute and relative tolerances $Atol$ and $Rtol$, maximum and minimum Krylov subspaces dimension $\mf_{max}$ and $\mf_{min}$, maximum step sizes $h_{max}$}
+		\KwOut{$\{(t_0,y_0),\ldots,(t_n,y_n)\}$}
+		$n=0$, $fail=false$, $\mf_0=\mf_{min}$, $h_{min}=16 \cdot \epsilon(t_0)$ \\
+		Compute the initial step size $h_0$ by formula (\ref{hcero-fj}) \\
+		\While{$t_n<T$}{
+			Compute $\delta_1$ and $\delta_2$ with (\ref{deltavalue}), and set $g_1$ and $g_2$ according to (\ref{g1}) and (\ref{g2}) \label{set delta}\\
+			\If{$fail=false$}{
+				Run Algorithm~\ref{alg:iArnoldi} to get matrices $\widehat{H}^*_{m_n}$ and $\widehat{V}_{m_n}$ of $\widehat{\mathcal{K}}_\mf(h_n^\beta f_x(y),f(y);\delta_1)$, and set $\widehat{H}_{m_n}=\widehat{H}^*_{m_n}/h_n^\beta$ \\
+			}
+			Computation of $\{\widetilde{u}_1,\dots,\widetilde{u}_s\}$ by Algorithm~\ref{alg:errcontrol}\\
+			Evaluation of the embedded formulas (\ref{Jacobian-free LLDPK scheme}) \\
+			Estimation of the embedded formulas error $\varepsilon_y$ by formula (\ref{epsilon_y-fj}) \\
+			Estimation of the new Krylov dimension $\mf_{new}$ by formula (\ref{calcmnew-fj}) \\
+			Estimation of the new step size $h_{new}$ by formula (\ref{hnewcalc-fj}) \\
+			\eIf{$\varepsilon_y< RTol$}{
+				\If{$t_n+h_n+h_{new}>T$}{
+					$h_{new}=T-(t_n+h_n)$ \\
+				}
+				$t_{n+1}=t_n+h_n$, $n=n+1$, $h_n=h_{new}$, $\mf_n = \mf_{new}$, $fail=false$ \\
+			}
+			{
+				\eIf{$h_{new}>h_{min}$}
+				{
+					$h_n=h_{new}$, $\mf_n = \mf_{new}$, $fail = true$
+				}
+				{$t_{n+1}=t_n+h_n$, $n=n+1$, $h_n=h_{new}$, $\mf_n = \mf_{new}$, $fail=false$}
+			}
+			$h_{min}=16 \cdot \epsilon(t_n)$
+		}
+		\nonl $\epsilon(t_n)$ denotes the spacing of the floating point number $t_n$
+\end{algorithm}}
+
+
+\subsubsection{Aproximación Krylov-Padé libre de Jacobiano para $\{ u_1,\ldots, u_s \}$ con dimensión de Krylov y orden de Padé variables}
+
+El cálculo adaptativo de los términos $\widetilde{u}_j$ en (\ref{Jacobian-free LLDPK scheme}) mediante la aproximación de Krylov-Padé libre jacobiano (\ref{eq:gen_kp_aprox_fj}) se esboza en Algoritmo \ref{alg:errcontrol-fj}. A continuación se describen los procedimientos para seleccionar la dimensión Krylov y el orden Padé. Con este fin, se supone que, en un paso de integración $t_n$ con un tamaño de paso $h_n$, el algoritmo de Arnoldi libre jacobiano \ref{alg:iArnoldi} se ha ejecutado con la dimensión de Krylov $\mf_n$. La aproximación de Padé es estimada como \ref{sec:pade-order}.
+
+{\SetAlgoNoLine
+	\begin{algorithm}[htb]
+		\caption{Computation of $\{u_1,\dots,u_s\}$ via adaptive Jacobian-free Krylov-Padé approximations}
+		\label{alg:errcontrol-fj}
+		\KwIn{$\{c_1,\dots,c_s\}$, $h_n$, $y_n$, $f$, $\mf_n$, $\widehat{V}_{\mf_n}$, $\widehat{H}_{\mf_n}$,
+			$\widehat{v}_{\mf_{n}+1}$,  $\widehat{\hf}_{\mf_{n}+1,\mf_n}$, $\widehat{H}^*_{m_{n}}$, $\delta_1$, $breakdown$}
+		\KwOut{$\{\widetilde{u}_1,\dots,\widetilde{u}_s\}$, $h_n$, $\mf_n$, $\widehat{V}_{\mf_n}$,   $\widehat{H}_{\mf_n}$,
+			$\widehat{v}_{\mf_{n}+1}$,  $\widehat{\hf}_{\mf_{n}+1,\mf_n}$, $\widehat{H}^*_{m_{n}}$, $\varepsilon_{K}$}
+		$work=true$\\
+		\While{work}{\If{$ h_n \lvert\lvert \overline{H} \rvert\rvert_\infty > 600$}{$h_n=\maxx{h_{min},600/ \lvert\lvert \overline{H} \rvert\rvert_\infty}$}
+			Select the Padé order $\pf$ according to Table  \ref{table:padep} \\
+			Estimate the relative error $\varepsilon_{K}$ by formula~(\ref{errrel-fj}) \\
+			\eIf{$\varepsilon_{K}/\gamma_{K}< 1$}{
+				$work=false$
+			}{
+				\eIf{$breakdown$ = $true$ \textbf{or} $\mf_n=\mf_{max}$}{
+					$h_{new}=\maxx{h_{min},0.9\cdot h_{n}}$\\
+					$h_{n}=h_{new}$\\
+					\If{$h_n = h_{min}$}{work = false}
+				}{
+					Estimate a new Krylov dimension $\mf_{new}$ by formula
+					(\ref{calcmnew-fj}) \\
+					Run Algorithm~\ref{alg:iArnoldiexpand} to get  matrices $\widehat{H}^*_{m_{new}}$ and $\widehat{V}_{m_{new}}$ of $\widehat{\mathcal{K}}_\mf(h_n^\beta f_x(y_n),f(y_n);\delta_1)$ and set $\widehat{H}_{m_{new}}=\widehat{H}^*_{m_{new}}/h_n^{\beta}$\\
+					Set $\mf_n=\mf_{new}$ and update all the variables depending of $\mf_n$,
+				}
+			}
+		}
+		Compute $\widetilde{u}_j$ by the formula (\ref{eq:adapt_gen_kp_aprox}), for $j=1,\dots,s$\\
+\end{algorithm}}
+
+\begin{algorithm} [htb]
+	\caption{Arnoldi algorithm to expand an orthonormal basis $\{v_1,\ldots,v_{\mf} \}$ of the $\mf$-th Krylov subspace $\widehat{\mathcal{K}}_\mf(\tau f_x(y),b;\delta_1)$ to an orthonormal basis $\{v_1,\ldots,v_{\mf},\ldots,v_{\mf_{new}} \}$ of the $\mf_{new}$-th Krylov subspace $\widehat{\mathcal{K}}_{\mf_{new}}(\tau f_x(y),b;\delta_1)$}
+	\label{alg:iArnoldiexpand}
+	\KwIn{function $g_1: \mathbb{R}^{d}\times \mathbb{R}^{d}\times \mathbb{R}_+ \to \mathbb{R}^{d}$ defined as in (\ref{eq:g_bound}), $y,b \in \mathbb{R}^{d}$, $\tau,\delta_1>0$, $\widehat{V}_{\mf}\in \mathbb{R}^{d\times \mf}$, $\widehat{H}^*_{\mf}\in\mathbb{R}^{\mf\times \mf}$, $\widehat{v}_{\mf+1}\in \mathbb{R}^{d}$, $\widehat{\hf}_{\mf+1,\mf} \ge 0$, and the new Krylov subspace dimension $\mf_{new}$}
+	\KwOut{$\widehat{V}_{\mf_{new}}=[\widehat{v}_1\,\cdots \,\widehat{v}_{\mf_{new}}]\in \mathbb{R}^{d\times \mf_{new}}$, upper Hessenberg matrix $\widehat{H}^*_{\mf_{new}}=(\widehat{\hf}^*_{ij})\in \mathbb{R}^{{\mf_{new}} \times {\mf_{new}}} $, $\widehat{v}_{\mf_{new}+1}$,  $\widehat{\hf}_{\mf_{new}+1}$, $\mf_{new}$, $\mf_{cut}$, $breakdown$}
+	Lines 3-16 in the Algorithm \ref{alg:iArnoldi}, but replacing the line 2 by \textbf{for} $j=\mf+1,\ldots,\mf_{new}$ \textbf{do}
+\end{algorithm}
+
+Similar al Capítulo \ref{chapter:lldp}, la dimensión del subespacio de Krylov $\mathfrak{m}_{new}$ que se utilizará en el próximo paso de integración se calcula mediante la fórmula
+\begin{equation}\label{calcmnew-fj}
+	\mathfrak{m}_{new}= \maxx{\mf_{min}, \minn{\mf , \mf_{max} }},
+	\end{equation}
+	where $\mf_{min}$ and $\mf_{max}$ are the prescribed minimum and maximum permissible values for the Krylov dimension,
+\begin{equation}
+	\mf = \left\{ 
+\begin{array}{cc}
+\left\lfloor \mf_{n} + \maxx{\fac_{1,max} , \minn{\fac_{1,min},
+		\fac_1\cdot\Delta\mf} } \right\rfloor & if \;  \varepsilon_{K}/\gamma_{K}< 1\\ 
+\left\lceil \mf_{n} + \minn{\fac_{2,max} , \maxx{\fac_{2,min},
+		\fac_2\cdot\Delta\mf} } \right\rceil  & otherwise%
+\end{array}%
+\right. \label{m_unica}
+\end{equation} 
+siendo $\mf_{n}$ la dimensión de Krylov  en el paso actual.
+\begin{equation} \label{errrel-fj}
+	\varepsilon_{K} = \min \{\epsilon _{3},\epsilon _{4}\}, 
+	\end{equation}
+	\begin{equation*}
+	\epsilon_{r} = \left(\frac{1}{d}\sum\limits_{i=1}^{d} \left(\frac{\nnorm{\nnorm{f(y_n)}}_2
+		\widehat{\hf}_{\mf+1,\mf} e_{\mf}^T
+		[P_{h_n}]_{1r} \rho_r^{[i]}}{ATol+ RTol\cdotp
+		\rvert y_{n}^{[i]}\rvert}\right)^{2}\right)^{1/2}
+\end{equation*}
+el error relativo de la aproximación
+\begin{eqnarray}
+	&\widehat{K}_{\mathfrak{m},k}^{\mathfrak{p},\mathfrak{q}}\left(
+	c_{j}h_{n},f_{x}(y_{n}),f(y_{n});\eta _{1},\delta _{1},\beta \right) &
+	\label{eq:adapt_gen_kp_aprox} \\
+	&=& \hspace{-2.5cm}\nnorm{\nnorm{f(y_n)}}_2 \cdot\left\{
+	\begin{array}{cc}
+	\widehat{V}_{\mathfrak{m}}\;[P_{c_{j}h_n}]_{12}+
+	\widehat{\mathfrak{h}}_{\mathfrak{m}+1,\mathfrak{m}}e_{\mathfrak{m}%
+	}^{T}\;[P_{c_{j}h_n}]_{13}\rho _{3} & \text{if }\epsilon _{4}\leq \epsilon _{3}
+	\\
+	\widehat{V}_{\mathfrak{m}}\;[P_{c_{j}h_n}]_{12}+
+	\widehat{\mathfrak{h}}_{\mathfrak{m}+1,\mathfrak{m}}e_{\mathfrak{m}%
+	}^{T}\;[P_{c_{j}h_n}]_{14}\rho _{4} & \text{otherwise}%
+	\end{array}%
+	\right. ,  \notag
+\end{eqnarray}
+a $u_j$, $\gamma_{K}=0.001$ un factor de seguridad,
+$\Delta\mf=\log(\varepsilon_{K}/\gamma_{K})$,
+$\fac_{1,max}= -\frac{\mf_n}{4}$, $\fac_{1,min}= \frac{\mf_n}{3}$, $\fac_1=\frac{1} {\log(2)}$, $\fac_{2,max}= \maxx{ 1,\frac{\mf_{n}}{3} }$, $\fac_{2,min}= 1 $ y $\fac_2=\frac{1}{\log(2)}$, $\rho_3 =\hat{v}_{m+1}$, y $\rho_4 = g_1(y_n,\hat{v}_ {m+1};\delta_1)$. En (\ref{m_unica}), el símbolo $\left\lfloor \cdot \right\rfloor$ denota la función de suelo (que devuelve el mayor entero menor o igual que un número real dado), y $\left\lceil \cdot \right\rceil$ denota la función de techo (que devuelve el menor entero mayor o igual que un número real dado). En (\ref{errrel-fj}), $ATol$ y $RTol$ son las tolerancias absolutas y relativas para integrar el PVI, $P_{h_n}$ es la matriz calculada en (\ref{flow2}), y $\widehat {\hf}_{\mf+1,\mf}$ y $\widehat{v}_{\mf+1}$ son salidas del algoritmo de Arnoldi libre de jacobiano \ref{alg:iArnoldi}. Para preservar el ordern de convergencia establecido en el Teorema \ref{Teorema Convergencia} para las fórmulas integradas (\ref{Jacobian-free LLDPK scheme}), se establece $\mf_{min}=4$.
+
+Anteriormente, para la dimensión del subespacio de Krylov $\mathfrak{m}_{new}$ que se utlizará en el próximo paso de integración, se utilizó la expresión (\ref{calcmnew}), pero con $\varepsilon_{K} = \epsilon _{4}$ en lugar de (\ref{errrel-fj}) y con la aproximación
+$\widehat{K}_{\mathfrak{m},k}^{\mathfrak{p},\mathfrak{q}}\left(
+c_{j}h_{n},f_{x}(y_{n}),f(y_{n});\eta _{1},\delta _{1},\beta \right)
+$ definido en (\ref{eq:gen_kp_aprox}) en lugar de (\ref{eq:adapt_gen_kp_aprox}). Las nuevas expresiones (\ref{errrel}) y (\ref{eq:adapt_gen_kp_aprox}) surgen para tener en cuenta el caso de convergencia oscilatoria de la serie de expansión \cite{sidje1998expokit}
+\begin{equation*}
+	\tau\varphi_1(\tau A)b=||b||_2\tau \widehat{V}_\mf \varphi_1( \tau \widehat{H}_\mf)e_1 + ||b||_2 \widehat{\hf}_{\mf+1,\mf}
+	\sum_{j=2}^{\infty}\tau^{j} e_\mf^T\varphi_j(\tau \widehat{H}_\mf)e_1A^{j-2}\widehat{v}_{m+1},
+\end{equation*}
+lo cual provoca oscilaciones en la precisión del conjunto de aproximaciones resultantes de sucesivos truncamientos de esta serie y en los correspondientes términos de error. Obsérvese que la aproximación proporcionada por (\ref{eq:adapt_gen_kp_aprox}) es la de menor error entre las de segundo o tercer término de la serie anterior, con $\tau = c_jh_n$, $A=f_x(y_n)$ y $b=f(y_n)$.
+
+\subsubsection{Aproximaciones libres jacobiano de orden variable para el productos del Jacobiano por vector}
+Para completar la implementación de las fórmulas de Runge-Kutta localmente linealizadas libres de jacobiano (\ref{Jacobian-free LLDPK scheme}), las aproximaciones $g_1$ y $g_2$ a los productos del Jacobiano por vector son requeridas en el algoritmo \ref{alg:iArnoldi} y la expresión (\ref{Jacobian-free LLDPK scheme}) deben especificarse.
+
+Por lo general, los productos de ese tipo se aproximan con diferencias finitas. A simple vista, considerando el resultado de convergencia del Teorema \ref{Teorema Convergencia} y buscando el mínimo costo computacional, tales productos podrían ser aproximados con las diferencias finitas hacia delante
+\begin{equation}
+	g_1(y_n,\tau \widehat{v}_j;\delta_1)=\frac{f(y_n+\delta_1 \tau \widehat{v}_j)-f(y_n)}{\delta_1}  \;\;\; \text{and} \;\;\; g_2(y_n,\widetilde{u}_j;\delta_2)=\frac{f(y_n+\delta_2  \widetilde{u}_j)-f(y_n)}{\delta_2} \label{FDO1}
+ \end{equation}
+tomando
+\begin{equation}\label{deltaconstraint}
+	\delta_1 = h_n^{\alpha_1}, \;\;\;  \delta_2 = h_n^{\alpha_2} \;\;\; \text{and} \;\;\; \tau=h_n^{\beta},
+\end{equation}
+con $\alpha_1=\alpha_2=3$ y $\beta=1$. De esta forma, las fórmulas embebidas libres de jacobiano (\ref{Jacobian-free LLDPK scheme}) conservan el orden $5$ y $4$ de las fórmulas originales de Dormand y Price con un coste computacional mínimo.
+
+Sin embargo, como se señaló en varios artículos (ver, por ejemplo, \cite{chan1984nonlinearly,knoll2004jacobian}), la precisión de la diferencia finita $(f(y+\delta v)-f(y))/ \delta$ a $f_x(y)v$ depende en gran medida de la selección del llamado parámetro de perturbación $\delta$. Si $\delta$ es demasiado grande, el producto $f_x(y)v$ está mal aproximado, mientras que si es demasiado pequeño, el resultado de la diferencia finita está contaminado por errores de redondeo de punto flotante. En la práctica, los valores de $\delta$ inferiores a cierto valor alrededor de la raíz cuadrada del épsilon de la máquina  $\epsilon_{mach}$ no mejoran la precisión de la diferencia finita \cite{knoll2004jacobian}.
+Sin embargo, una estimación efectiva del valor de $\delta$ viene dada por la expresión \cite{knoll2004jacobian}
+\[ \delta = \frac{\sqrt{(1+||y||_2)\epsilon_{mach}}}{||v||_2}. \]
+Por lo tanto, para obtener una precisión adecuada para las aproximaciones $g_1$ y $g_2$ en (\ref{FDO1}), es necesario establecer
+\begin{equation} \label{deltavalue}
+	\delta_1 \tau = \sqrt{(1+||y_n||_2)\epsilon_{mach}}
+	\;\;\; \text{and} \;\;\; \delta_2 = \frac{\sqrt{(1+||y_n||_2)\epsilon_{mach}}}{\epsilon_{mach}+||u_j||_2},
+\end{equation}
+con $\beta=0$ para obtener $\tau=h^{\beta}=1$.
+
+Claramente, cuando en un paso de integración con tamaño de paso $h_n$ y valores de $\delta_1$ y $\delta_2$ en (\ref{FDO1}) establecidos como en (\ref{deltavalue}), los valores de los parámetros $ \alpha_1$ y $\alpha_2$ en (\ref{deltaconstraint}) podrían ser inferiores a 4 y 3, respectivamente. En esta situación, la condición de orden establecida en el teorema \ref{Teorema Convergencia} no se cumple y las fórmulas embebidas libres de jacobiano (\ref{Jacobian-free LLDPK scheme}) pierden el orden de convergencia. Para corregir esto, las diferencias finitas hacia adelante (\ref{FDO1}) de orden $\eta_1=\eta_2=1$ se reemplazan por la diferencia finita central
+\begin{equation*}
+	g_1(y_n,\tau \widehat{v}_j;\delta_1)=\frac{f(y_n+\delta_1 \widehat{v}_j)-f(y_n-\delta_1 \widehat{v}_j)}{2\delta_1}  \;\;\; \text{and} \;\;\; g_2(y_n,\widetilde{u}_j;\delta_2)=\frac{f(y_n+\delta_2  \widetilde{u}_j)-f(y_n-\delta_2 \widetilde{u}_j)}{2\delta_2}
+\end{equation*}
+de orden $\eta_1=\eta_2=2$, que requieren de una evaluación adicional del campo vectorial $f$.
+
+Observe que, mientras que la diferencia finita central $g_2$ en (\ref{Jacobian-free LLDPK scheme}) se evalúa cinco veces en cada paso de integración, la diferencia finita central $g_1$ dentro del algoritmo \ref{alg:iArnoldi} es evaluado tantas veces como dimensiones tenga el subespacio de Krylov. Para reducir este costo computacional, cuando el valor de $\alpha_1=ln(\delta_1)/ln(h_n)$ es igual o mayor que 4, se reemplaza la diferencia finita central dentro del Algoritmo \ref{alg:iArnoldi} por la diferencia finita hacia delante. Análogamente, cuando el valor de $\alpha_2=ln(\delta_2)/ln(h_n)$ es igual o mayor que 3, la diferencia finita central en (\ref{Jacobian-free LLDPK scheme}) podría ser reemplazada por el diferencia finita hacia adelante. Sin embargo, esto se hace sólo en el caso de que dicha aproximación a $g_2$ no reduzca el orden de convergencia de las fórmulas (\ref{Jacobian-free LLDPK scheme}) correspondientes a la aproximación $g_1$. Es decir, a partir de los errores globales de (\ref{Jacobian-free LLDPK scheme}) en el Teorema \ref{Teorema Convergencia}, solo cuando $(\alpha_2+1)\eta_2 \ge \alpha_1\eta_1$, con $\eta_2=1$.
+
+En resumen, en el paso \ref{set delta}, el algoritmo \ref{alg:integrator} calcula $\delta_1$ y $\delta_2$ de acuerdo con (\ref{deltavalue}) y establece de forma adaptativa la diferencia finita central o hacia adelante para $g_1$ y $g_2$ dependiendo del valor de $\alpha_1$ y $\alpha_2$. Eso es,
+\begin{equation} \label{g1}
+	g_{1}(y_{n},\tau \widehat{v}_{j};\delta _{1}) : \left\{ 
+	\begin{array}{cc}
+	\frac{f(y_{n}+\delta _{1}\widehat{v}_{j})-f(y_{n}-\delta _{1}\widehat{v}_{j})%
+	}{2\delta _{1}} & \text{if }\alpha _{1}<4 \\ 
+	\frac{f(y_{n}+\delta _{1}\widehat{v}_{j})-f(y_{n})}{\delta _{1}} & otherwise%
+	\end{array}%
+	\text{ }\right.
+\end{equation}
+y
+\begin{equation}  \label{g2}
+	g_{2}(y_{n},\widetilde{u}_{j};\delta _{2}) : \left\{
+	\begin{array}{cc}
+	\frac{f(y_{n}+\delta _{2}\widetilde{u}_{j})-f(y_{n}-\delta _{2}\widetilde{u}%
+		_{j})}{2\delta _{2}} & \text{if }\alpha _{2}<3 \;\;\text{and}\;\; \alpha_2+1 < \alpha_1\eta_1 \\
+	\frac{f(y_{n}+\delta _{2}\widetilde{u}_{j})-f(y_{n})}{\delta _{2}} &
+	otherwise%
+	\end{array}%
+	\text{ }\right. ,
+\end{equation}
+donde
+\begin{equation} \label{alpha_formulas}
+    \alpha_1=ln(\delta_1)/ln(h_n) \;\;\;\;\;\; \text{and} \;\;\;\;\;\; \alpha_2=ln(\delta_2)/ln(h_n).
+\end{equation}
+Claramente, de acuerdo con el Teorema \ref{Teorema Convergencia}, este procedimiento produce la implementación de orden variable de las fórmulas linealizadas localmente libres de Jacobiano de Dormand y Prince descritas en el Algoritmo \ref{alg:integrator}.
+
+\subsection{Estimación del tamaño de paso}\label{Sec:AdaptiveLLscheme}
+Se denotará $h_{max}$ y $h_{min}$ como los tamaños de paso máximos y mínimos permisibles. La estimación de los tamaños de paso se calcula mediante las mismas expresiones utilizadas para las fórmulas originales de Dormand y Prince en el código de Matlab \textit{ode45} \cite{shampine1997matlab} y para las fórmulas embebidas en \cite{Jimenez14AMC}. Para el tamaño de paso inicial $h_0$, tenemos la estimación
+\begin{equation}
+    h_0 = \minn{ h_{max}, \maxx{ h_{min} ,\Delta} }, \label{hcero-fj}
+\end{equation}
+donde
+\begin{equation*}
+    \Delta = \begin{cases}
+        \frac{1}{r_h} & \text{if} \; h_{max}\cdot r_h>1\\
+        h_{max} & \text{en otro casos}
+        \end{cases}
+\end{equation*}
+con $\rho = 1\mathord{.}25 \left( \frac{\varepsilon_y}{RTol} \right)^{\textcolor{red}{1/r_n}}$, siendo
+\begin{equation*}
+     r_h = \frac{1\mathord{.}25}{RTol^{1/5}}\max_{i=1\ldots d}\left\{\frac{ \left\lvert f^{[i]}(t_0,y_0) \right\rvert }
+    {\maxx{\left\lvert y^{[i]}_0 \right\rvert ,\frac{ATol}{RTol}}}\right\}.
+\end{equation*}
+
+Todos los demás tamaños de paso nuevos $h_{new}$ se estiman mediante la expresión
+\begin{equation}
+    h_{new} = \minn{h_{max},\maxx{h_{min},\Delta}}, \label{hnewcalc-fj}
+\end{equation}
+donde
+\begin{equation*}
+    \Delta = \begin{cases}
+        h_n/\rho & \text{if } \varepsilon_y\leq RTol \text{ y } \rho>0\mathord{.}2\\
+        5\cdot h_n & \text{if } \varepsilon_y\leq RTol \text{ y } \rho\leq 0\mathord{.}2\\
+        \maxx{0\mathord{.}1,1/\rho}\cdot h_n & \text{if } \varepsilon_y > RTol \text{ y } fail=false\\
+        0\mathord{.}5\cdot h_n & \text{if } \varepsilon_y > RTol \text{ y } fail=true
+        \end{cases},
+\end{equation*}
+con  $\rho = 1\mathord{.}25 \left( \frac{\varepsilon_y}{RTol} \right)^{1/r_n}$, siendo
+\begin{equation}\label{epsilon_y-fj}
+	\varepsilon_y =  \max_{i=1\ldots d}\left\{ \frac{\left\lvert y^{[i]}_{n+1}-\hat{y}^{[i]}_{n+1} \right\rvert}
+	{\maxx{\left\lvert y^{[i]}_{n+1}  \right\rvert,\left\lvert y^{[i]}_{n}\right\rvert,\frac{ATol}{RTol}}} \right\}
+\end{equation}
+la medida de error relativo entre las fórmulas embebidas libres de jacobiano $y$ y $\hat y$ definidas en (\ref{Jacobian-free LLDPK scheme}), y $fail$ indica que se rechazó un tamaño de paso anterior en $t_n$ . Para ser coherente con el paso \ref{set delta} del algoritmo \ref{alg:integrator} descrito al final de la subsección anterior, en la expresión para $\rho$ dentro de (\ref{hnewcalc-fj}),
+\[r_n=\lceil\mathrm{min}\left\{5,\mf_{n}+1,2\pf_{n},(\beta+\alpha_1)\eta_1+1,(1+\alpha_2)\ eta_2+1 \right\}\rceil\]
+denota el orden de la fórmula $y$ en (\ref{Jacobian-free LLDPK scheme}) en el paso de integración $n$, donde $\mf_{n}$ y $\pf_{n}$ son la dimensión de Krylov estimada y Padé ordenan en ese paso, $\eta_1$ y $\eta_2$ el orden de las aproximaciones (\ref{g1}) y (\ref{g2}) en el mismo paso, y
+$\alpha_1$ y $\alpha_2$ son las definidas en (\ref{alpha_formulas}).
+
+\section{Simulaciones Numéricas}
+Con el propósito de estudiar el desempeño del esquema adaptativo descrito en el Algoritmo \ref{alg:integrator-fj} para las embebidas libres de jacobiano (\ref{Jacobian-free LLDPK scheme}), se construyó el código Matlab \emph{LLDP1}. Este código \emph{LLDP1} es una copia exacta del código Matlab18a \emph{ode45} \cite{shampine1997matlab} con la excepción de las líneas de programa correspondientes a las fórmulas originales de Dormand y Prince y su error relativo, que fueron reemplazadas por las líneas 4 a 12 del algoritmo \ref{alg:integrator-fj} que implementan la evaluación de las fórmulas libres de jacobiano (\ref{Jacobian-free LLDPK scheme}). Recordemos que el código de Matlab \emph{ode45} implementa la estrategia de tamaño de paso variable descrita en la Sección \ref{Sec:AdaptiveLLscheme}, pero con $r_n=5$ fijado en la expresión para $\rho$ dentro de (\ref{hnewcalc-fj}) para todos los pasos de integración. Similar al Capítulo \ref{chapter:lldp}, $m_{min}=4$ se estableció en el código \emph{LLDP1}.
+
+Los resultados del código \emph{LLDP1} en la integración de una serie de ecuaciones de prueba se compararán con los obtenidos por los códigos adaptativos \emph{ode15sk}, \emph{exp4jf} y \emph{LLDP2}. El código \emph{ode15sk} es una implementación de tamaño de paso casi constante de las fórmulas diferenciales hacia atrás (BDF) hasta el orden 5 y métodos de subespacios de Krylov para resolver sistemas lineales de ecuaciones algebraicas. Para comparar con una implementación eficiente de estas fórmulas, el código \emph{ode15sk} es una copia exacta del código Matlab18a \emph{ode15s} \cite{shampine1997matlab} con la excepción de las líneas de programa correspondientes a los métodos directos (función Matlab \emph{mldivide}) para resolver sistemas lineales de ecuaciones algebraicas y la factorización LU, que fueron reemplazadas por el método de residuos mínimos generales libre de jacobiano (GMRES) (es decir, la función de Matlab \emph{gmres} con tolerancia $RTol$, primero diferencia finita hacia adelante de orden que aproxima al producto del jacobiano por un vector, y el parámetro de perturbación $\delta$ calculado como en \cite{knoll2004jacobian}). En la función de Matlab \emph{gmres} se eliminaron las comprobaciones computacionalmente costosas de las funciones de Matlab \emph{iterchk} y \emph{iterapp}. Por otro lado, el código \emph{exp4jf} es una versión libre de jacobiano del código adaptativo \emph{exp4} tomado de \cite{jansing2011expode} que implementa el integrador exponencial de orden 4 de \cite{hochbruck1998exponential} con tamaño de paso y dimensión de Krylov variables. 
+En cada paso de integración, al igual que para el esquema (5.8) de \cite{hochbruck1998exponential}, el código \textit{exp4jf} realiza tres descomposiciones subespaciales de Krylov y, al menos, tres (6,6)-Padé aproximaciones a la función phi $\varphi_1$ de las matrices de Hessenberg resultantes del algoritmo de Arnoldi sin matriz \ref{alg:iArnoldi}. \textit{exp4jf} usa la diferencia finita directa de primer orden como una aproximación a la matriz jacobiana por vector en el algoritmo \ref{alg:iArnoldi}, que reduce a tres la tasa de convergencia del esquema (5.8) de \cite{hochbruck1998exponential} (ver Teorema 5.1 en \cite{hochbruck1998exponential}). 
+El parámetro de perturbación $\delta$ para la diferencia finita también se calcula como en \cite{knoll2004jacobian}. Para estimar la dimensión de Krylov $\mf$, el código \textit{exp4jf} usa la estrategia adaptativa de \cite{hochbruck1998exponential} y ninguna restricción al valor mínimo de $\mf$. Por otro lado, el código \emph{LLDP2} es idéntico al código \emph{LLDP1} con la excepción del paso \ref{set delta} en Algorithm \ref{alg:integrator} en el que la aproximación $g_1$ siempre se calcula con la diferencia finita directa.
+
+Se utilizarán las ecuaciones de prueba de la Sección \ref{section:test-eq}.
+
+A continuación, para cada ecuación de prueba, se compara el desempeño de los cuatro códigos con tres niveles de tolerancia: crudo, con $ Atol = 10^{-6}$ y $Rtol = 10^{-3}$; medio, con $Atol = 10^{-9}$ y $Rtol = 10^{-6}$; y refinado, con $ Atol = 10^{-12}$ y $Rtol = 10^{-9}$. El tamaño de paso máximo se estableció, como de costumbre, como $h_{max}=0\mathord{.}1\cdot(T-t_0)$.
+
+The main results of the simulation study are summarized in Figure \ref{lldpfj:Fig1}. This figure shows the precision diagram (CPU time vs. relative error) for each code in the integration of the six test equations.
+
+Para explicar estos resultados, para cada ecuación de prueba, los detalles de ejecución de cada código se presentan en una tabla, es decir, en las Tablas \ref{tab:cuspburg}-\ref{tab:brussdnd}. El error relativo de cada código se mide por la expresión
+\begin{equation*}
+	RError = \max_{i=1,\ldots,d} \;\ \max_{t_n\in(t)_h}  \;\ \left\lvert\frac{x^{[i]}(t_j)-y^{[i]}(t_j)}{\maxx{x^{[i]}(t_j),\epsilon_{mach}}}\right\rvert,
+\end{equation*}
+mientras que el tiempo computacional relativo \textit{RTime} de cada código se calcula con respecto al tiempo computacional del código \emph{ode15sk}. En la expresión anterior para el error, la \textquotedblleft solución exacta\textquotedblright \;$x$ de las ecuaciones de prueba se estima mediante el código Matlab \emph{LLDP45} del Capítulo \ref{chapter:lldp} con tolerancias $RTol=10^{-12}$ y $ATol=10^{-14}$. Además, cada tabla presenta el número de pasos \textit{A-Steps} aceptados y \textit{R-Steps} rechazados, así como el número de evaluaciones del campo vectorial \textit{f-Eval}. La dimensión mínima $\mf_ {min}$, máxima $\mf_ {max}$ y total $\mf_{total}$ de los subespacios de Krylov requeridos por los códigos \emph{LLDP1}, \emph{exp4jf} y \emph{ También se dan LLDP2} para integrar las ecuaciones de prueba en todo el intervalo de integración. Para el código \emph{ode15sk}, $\mf_{min}$, $\mf_{max}$ y $\mf_{total}$ representan el número mínimo, máximo y total de iteraciones realizadas por el método GMRES sobre el intervalo de integración completo. Además, \textit{ME} denota el número de matrices exponenciales, \textit{K-subspace} el número de aproximaciones del subespacio de Krylov, \textit{LS} el número de sistemas lineales resueltos por el método GMRES, y $d$ el número de ecuaciones en cada ejemplo.
+
+Las tablas \ref{tab:cuspburg}-\ref{tab:brussdnd} muestran que, para las tolerancias consideradas, el error de los códigos \emph{LLDP1} y \emph{LLDP2} es menor o mucho menor que el de los códigos \emph{ode15sk} y \emph{exp4jf}. Por otra parte, salvo en el caso de la ecuación de Brusselator, los códigos \emph{LLDP1} y \emph{LLDP2} construyen subespacios de Krylov de menor dimensión $\mf_{total}$ que los necesarios para los códigos \emph{ode15sk } y \emph{exp4jf} con tolerancias suaves y refinadas, lo que explica los diferentes tiempos computacionales de estos códigos. Este es un resultado esperado ya que el algoritmo de Arnoldi es la mayor fuente de complejidad computacional en los integradores mencionados. Para la tolerancia bruta, excepto para el caso de la ecuación de Brusselator, el costo computacional de los códigos \emph{LLDP1} y \emph{LLDP2} es ligeramente menor o mayor que el de los códigos \emph{ode15sk} y \emph{ exp4jf}. En este caso, la diferencia en el costo computacional parece estar correlacionada con la proporción de disparidad en el número de aproximaciones del subespacio Krylov \textit{K-subspace} realizadas por estos códigos. De hecho, para la tolerancia cruda, los códigos \emph{LLDP1} y \emph{LLDP2} son más rápidos que \emph{ode15sk} solo cuando la proporción de \textit{K-subspace} entre estos códigos es inferior a $0.6$.
+
+Además, las tablas \ref{tab:cuspburg}-\ref{tab:brussdnd} muestran que la precisión del código \emph{LLDP1} es similar o ligeramente superior a la del código \emph{LLDP2} pero con mayor precisión computacional. costo. Este es también otro resultado esperado ya que el código \emph{LLDP1} cambia adaptativamente la diferencia finita dentro del Algoritmo de Arnoldi sin jacobiano \ref{alg:iArnoldi} para aumentar el orden de convergencia de las fórmulas embebidas, mientras que el código \emph{ LLDP2} siempre usa la diferencia finita de orden más bajo. Las tablas \ref{tab:R_LLDP1} y \ref{tab:R_LLDP2} presentan los valores mínimo y máximo de $\alpha _{1}$ y $\alpha _{2}$ correspondientes a los esquemas \emph{LLDP1} y \emph{LLDP2} al integrar las seis ecuaciones de prueba. Eso es,
+\[\alpha _{1}^{\min }=\underset{n}{\min }\left\{ \ln (\delta
+_{1})/ln(h_{n})\right\}, \;\;\;\; \alpha _{1}^{\max }=\underset{n}{\max }\left\{
+\ln (\delta _{1})/ln(h_{n})\right\}\] 
+y
+\[\alpha _{2}^{\min }=\underset{n}{\min }\left\{ \ln (\delta _{2})/ln(h_{n})\right\}, \;\;\;\; \alpha _{2}^{\max }=\underset{n}{\max }\left\{ \ln (\delta _{2})/ln(h_{n})\right\} \]
+con $\delta_{1}$ y $\delta_{2}$ definidos en (\ref{deltavalue}). Las tablas \ref{tab:R_LLDP1} y \ref{tab:R_LLDP2} también presentan el rango de fluctuaciones en el orden de convergencia $r$ de la fórmula $y_{n+1}$ entre los valores mínimo y máximo
+\[r^{min}=\left\lfloor\mathrm{min}\left\{5,\mf_{min}+1,2\pf_{min},(\beta+\alpha^{min}_1)\eta^{min}_1+1,(1+\alpha^{min}_2)\eta_2+1 \right\} \right\rfloor\]
+y
+\[r^{max}=\left\lfloor\mathrm{min}\left\{5,\mf_{min}+1,2\pf_{min},(\beta+\alpha^{max}_1)\eta^{max}_1+1,(1+\alpha^{max}_2)\eta_2+1 \right\} \right\rfloor\]
+con $\mf_{min}=4$, $\pf_{min}=3$, $\beta=0$, $\eta_2=2$. Para el código \emph{LLDP1}, si $\alpha^{min}_1 < 4$, $\eta^{min}_1=2$, de lo contrario $\eta^{min}_1=1$. Del mismo modo, si $\alpha^{max}_1 < 4$, $\eta^{max}_1=2$, de lo contrario $\eta^{max}_1=1$. Para el código \emph{LLDP2}, $\eta^{min}_1=\eta^{max}_1=1$ siempre. Nuevamente, el símbolo $\left\lfloor \cdot \right\rfloor$ en las expresiones anteriores denota la función floor.
+
+Observe que, solo para una de las seis ecuaciones de prueba, el integrador \emph{LLDP1} conserva el orden de convergencia de las fórmulas originales de Dormand y Prince durante todo el proceso de integración y, solo para la misma ecuación, las aproximaciones en diferencias finitas son intercambiados dentro del algoritmo de Arnoldi sin jacobiano \ref{alg:iArnoldi}. Para otras cuatro ecuaciones de prueba, el integrador \emph{LLDP1} alcanza el orden de $5$ en algunos pasos de integración, mientras que para el resto de la ecuación nunca archiva ese orden. Por otro lado, dado que la tasa de convergencia de la aproximación $g_1$ dentro del Algoritmo \ref{alg:iArnoldi} para el integrador \emph{LLDP1} es siempre mayor que la de la aproximación utilizada por el integrador \emph{LLDP2} , la tasa de convergencia del primero siempre es mayor que la del segundo integrador. Esto justifica los menores errores del código \emph{LLDP1} reportados en las Tablas \ref{tab:cuspburg} - \ref{tab:brussdnd}. Sin embargo, analizando los resultados generales para las ecuaciones de prueba consideradas, podemos afirmar que el código \emph{LLDP2} es tan efectivo como el código \emph{LLDP1}.
+
+\begin{figure}
+	\begin{center}
+		\hspace{-0.75in}
+		\includegraphics[scale=0.7]{Graphics/lldp-fj/compare_graph.pdf}
+		\vspace{-0.95in}
+		\caption{ Comparative precision diagrams on the log-log scale (CPU time vs. relative error) for each one of codes in the integrations of the six test equations. $\vartriangle$: code \emph{JF-ode15sk1}, $\circ$ : code \emph{JF-ode15sk2}, and $\square$: code \emph{JF-LLDP45}}
+		\label{lldpfj:Fig1}
+	\end{center}
+\end{figure}
+
+\begin{table}
+	\caption{Performance of the codes \emph{ODE15sk}, \emph{LLDP1}, \emph{LLDP2} and \emph{Exp4} in the integration of the CUSP and Burgers equations.}
+	\label{tab:cuspburg}
+	\begin{adjustbox}{width=0.95\columnwidth,center}
+		\begin{tabular}{ccccccccccc}
+			\hline
+			&  & \multicolumn{4}{c}{CUSP $M=500$, $d=1500$} &  & \multicolumn{4}{c}{Burgers $M=500$, $d=500$} \\
+			\cline{3-6}\cline{8-11} & Tol & \emph{ode15sk} & \emph{LLDP1} & \emph{LLDP2} & \emph{exp4jf} &  & \emph{ode15sk} & \emph{LLDP1} & \emph{LLDP2} & \emph{exp4jf} \\
+			\hline
+			& crude & 1.0000 & 1.6084 & 1.0350 & 1.3776 &  & 1.0000 & 0.5475 & 0.3986 & 1.3144 \\
+			RTime & mild & 1.0000 & 0.6442 & 0.4093 & 1.6814 &  & 1.0000 & 0.8583 & 0.5459 & 2.9958 \\
+			& refine & 1.0000 & 0.5288 & 0.3385 & 2.7640 &  & 1.0000 & 0.9860 & 0.6277 & 5.3592 \\
+			\hline
+			& crude & 6.89e-01 & 2.62e-05 & 2.62e-05 & 4.40e-03 &  & 2.06e-02 & 1.72e-03 & 1.70e-03 & 6.30e-03 \\
+			RError & mild & 6.88e-01 & 2.49e-06 & 2.49e-06 & 6.64e-04 &  & 1.62e-05 & 1.48e-06 & 1.47e-06 & 1.14e-05 \\
+			& refine & 3.32e-01 & 1.28e-08 & 1.81e-08 & 1.65e-07 &  & 4.51e-08 & 4.71e-10 & 6.10e-10 & 1.17e-08 \\
+			\hline
+			& crude & 24 & 15 & 15 & 11 &  & 244 & 72 & 72 & 80 \\
+			A-Steps & mild & 71 & 16 & 16 & 35 &  & 811 & 269 & 269 & 446 \\
+			& refine & 188 & 46 & 46 & 178 &  & 2592 & 1068 & 1068 & 2478 \\
+			\hline
+			& crude & 0 & 0 & 0 & 1 &  & 10 & 3 & 3 & 1 \\
+			R-Steps & mild & 3 & 0 & 0 & 0 &  & 10 & 0 & 0 & 1 \\
+			& refine & 5 & 1 & 1 & 0 &  & 11 & 0 & 0 & 1 \\
+			\hline
+			& crude & 180 & 391 & 241 & 128 &  & 2932 & 2189 & 1541 & 1430 \\
+			$f$-Eval & mild & 552 & 477 & 287 & 475 &  & 6760 & 8637 & 5158 & 7624 \\
+			& refine & 1797 & 1429 & 858 & 2566 &  & 23179 & 34243 & 20326 & 42188 \\
+			\hline
+			& crude & 24 & 15 & 15 & 36 &  & 254 & 75 & 75 & 243 \\
+			K-subspace & mild & 74 & 16 & 16 & 105 &  & 821 & 269 & 269 & 1341 \\
+			& refine & 193 & 47 & 47 & 534 &  & 2603 & 1068 & 1068 & 7437 \\
+			\hline
+			& crude & 36 & 0 & 0 & 0 &  & 492 & 0 & 0 & 0 \\
+			LS & mild & 99 & 0 & 0 & 0 &  & 942 & 0 & 0 & 0 \\
+			& refine & 281 & 0 & 0 & 0 &  & 2794 & 0 & 0 & 0 \\
+			\hline
+			& crude & 0 & 15 & 15 & 68 &  & 0 & 146 & 146 & 913 \\
+			ME & mild & 0 & 26 & 26 & 292 &  & 0 & 538 & 538 & 4931 \\
+			& refine & 0 & 81 & 83 & 1623 &  & 0 & 2135 & 2135 & 27297 \\
+			\hline
+			& crude & 83 & 60 & 60 & 64 &  & 1703 & 617 & 618 & 1010 \\
+			$\mf_{total}$ & mild & 282 & 84 & 84 & 299 &  & 4064 & 1660 & 1660 & 5378 \\
+			& refine & 1044 & 262 & 262 & 1675 &  & 14498 & 6442 & 6442 & 29785 \\
+			\hline
+			& crude & 1 & 4 & 4 & 2 &  & 2 & 4 & 4 & 2 \\
+			$\mf_{min}$ & mild & 2 & 4 & 4 & 2 &  & 2 & 4 & 4 & 2 \\
+			& refine & 2 & 4 & 4 & 1 &  & 2 & 4 & 4 & 2 \\
+			\hline
+			& crude & 3 & 4 & 4 & 4 &  & 12 & 31 & 31 & 20 \\
+			$\mf_{max}$ & mild & 4 & 6 & 6 & 6 &  & 7 & 12 & 12 & 8 \\
+			& refine & 5 & 8 & 8 & 6 &  & 11 & 8 & 8 & 8 \\
+			\hline
+			& crude & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			$\mathfrak{p}_{min}$ & mild & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			& refine & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			\hline
+			& crude & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			$\mathfrak{p}_{max}$ & mild & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			& refine & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			\hline
+		\end{tabular}
+	\end{adjustbox}
+\end{table}
+
+\begin{table}
+	\caption{Performance of the codes \emph{ODE15sk}, \emph{LLDP1}, \emph{LLDP2} and \emph{Exp4} in the integration of the Brusselator2D and GrayScott2D equations.}
+	\label{tab:bruss2DGrayScott}
+	\begin{adjustbox}{width=0.95\columnwidth,center}
+		\begin{tabular}{ccccccccccc}
+			\hline
+			&  & \multicolumn{4}{c}{Brusselator2D $M=50$, $d=5000$} &  & \multicolumn{4}{c}{GrayScott2D $M=70$, $d=5000$} \\
+			\cline{3-6}\cline{8-11} & Tol & \emph{ode15sk} & \emph{LLDP1} & \emph{LLDP2} & \emph{exp4jf} &  & \emph{ode15sk} & \emph{LLDP1} & \emph{LLDP2} & \emph{exp4jf} \\
+			\hline
+			& crude & 1.0000 & 1.1690 & 0.9272 & 0.3404 &  & 1.0000 & 0.9495 & 0.6856 & 0.5341 \\
+			RTime & mild & 1.0000 & 0.4831 & 0.3717 & 0.3943 &  & 1.0000 & 0.6382 & 0.4613 & 0.7660 \\
+			& refine & 1.0000 & 0.0968 & 0.0694 & 0.1913 &  & 1.0000 & 0.1509 & 0.1062 & 0.2434 \\
+			\hline
+			& crude & 4.17e-04 & 7.16e-06 & 7.16e-06 & 3.79e-04 &  & 7.46e-02 & 2.55e-02 & 2.57e-02 & 2.70e-01 \\
+			RError & mild & 1.73e-06 & 2.69e-08 & 2.64e-08 & 1.20e-06 &  & 2.17e-04 & 4.41e-04 & 4.41e-04 & 2.06e-03 \\
+			& refine & 3.74e-09 & 1.65e-09 & 1.40e-09 & 1.02e-09 &  & 1.05e-06 & 1.60e-07 & 6.29e-07 & 1.79e-06 \\
+			\hline
+			& crude & 20 & 13 & 13 & 3 &  & 51 & 16 & 16 & 11 \\
+			A-Steps & mild & 59 & 14 & 14 & 7 &  & 133 & 32 & 34 & 20 \\
+			& refine & 141 & 23 & 23 & 35 &  & 353 & 104 & 107 & 76 \\
+			\hline
+			& crude & 0 & 0 & 0 & 0 &  & 0 & 0 & 0 & 0 \\
+			R-Steps & mild & 0 & 0 & 0 & 0 &  & 0 & 0 & 0 & 0 \\
+			& refine & 0 & 0 & 0 & 1 &  & 3 & 0 & 0 & 2 \\
+			\hline
+			& crude & 166 & 295 & 212 & 44 &  & 470 & 661 & 409 & 193 \\
+			$f$-Eval & mild & 505 & 387 & 261 & 152 &  & 1319 & 1337 & 811 & 737 \\
+			& refine & 4362 & 712 & 442 & 694 &  & 12428 & 3527 & 2121 & 2543 \\
+			\hline
+			& crude & 20 & 13 & 13 & 9 &  & 51 & 16 & 16 & 33 \\
+			K-subspace & mild & 59 & 14 & 14 & 21 &  & 133 & 32 & 34 & 60 \\
+			& refine & 141 & 23 & 23 & 108 &  & 356 & 104 & 107 & 234 \\
+			\hline
+			& crude & 26 & 0 & 0 & 0 &  & 63 & 0 & 0 & 0 \\
+			LS & mild & 71 & 0 & 0 & 0 &  & 160 & 0 & 0 & 0 \\
+			& refine & 281 & 0 & 0 & 0 &  & 694 & 0 & 0 & 0 \\
+			\hline
+			& crude & 0 & 14 & 14 & 24 &  & 0 & 29 & 30 & 94 \\
+			ME & mild & 0 & 25 & 25 & 95 &  & 0 & 64 & 66 & 391 \\
+			& refine & 0 & 42 & 42 & 456 &  & 0 & 203 & 210 & 1438 \\
+			\hline
+			& crude & 93 & 54 & 54 & 28 &  & 292 & 203 & 202 & 137 \\
+			$\mf_{total}$ & mild & 303 & 81 & 81 & 116 &  & 865 & 348 & 370 & 636 \\
+			& refine & 1752 & 147 & 146 & 506 &  & 5138 & 728 & 733 & 2135 \\
+			\hline
+			& crude & 2 & 4 & 4 & 1 &  & 2 & 4 & 4 & 1 \\
+			$\mf_{min}$ & mild & 2 & 4 & 4 & 2 &  & 2 & 4 & 4 & 2 \\
+			& refine & 2 & 4 & 4 & 2 &  & 2 & 4 & 4 & 3 \\
+			\hline
+			& crude & 6 & 6 & 6 & 8 &  & 13 & 20 & 19 & 15 \\
+			$\mf_{max}$ & mild & 7 & 8 & 8 & 11 &  & 15 & 15 & 15 & 20 \\
+			& refine & 10 & 8 & 7 & 8 &  & 16 & 8 & 7 & 20 \\
+			\hline
+			& crude & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			$\mathfrak{p}_{min}$ & mild & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			& refine & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			\hline
+			& crude & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			$\mathfrak{p}_{max}$ & mild & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			& refine & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			\hline
+		\end{tabular}
+	\end{adjustbox}
+\end{table}
+
+\begin{table}
+	\caption{Performance of the codes \emph{ODE15sk}, \emph{LLDP1}, \emph{LLDP2} and \emph{Exp4} in the integration of the Brusselator and DND equations.}
+	\label{tab:brussdnd}
+	\begin{adjustbox}{width=0.95\columnwidth,center}
+		\begin{tabular}{ccccccccccc}
+			\hline
+			&  & \multicolumn{4}{c}{Brusselator $M=500$, $d=1000$} &  & \multicolumn{4}{c}{DND $M=500$, $d=500$} \\
+			\cline{3-6}\cline{8-11} & Tol & \emph{ode15sk} & \emph{LLDP1} & \emph{LLDP2} & \emph{exp4jf} &  & \emph{ode15sk} & \emph{LLDP1} & \emph{LLDP2} & \emph{exp4jf} \\
+			\hline
+			& crude & 1.0000 & 7.4488 & 4.7279 & 2.4839 &  & 1.0000 & 1.2543 & 0.8419 & 1.5636 \\
+			RTime & mild & 1.0000 & 6.5767 & 4.1338 & 2.3521 &  & 1.0000 & 0.7711 & 0.5240 & 1.9486 \\
+			& refine & 1.0000 & 6.3426 & 3.9840 & 4.2940 &  & 1.0000 & 0.2582 & 0.1764 & 1.4330 \\
+			\hline
+			& crude & 8.83e-04 & 5.42e-04 & 3.38e-04 & 1.65e-03 &  & 1.58e-03 & 8.36e-04 & 8.36e-04 & 8.89e-03 \\
+			RError & mild & 1.99e-05 & 6.83e-07 & 8.23e-07 & 2.86e-06 &  & 2.14e-06 & 8.24e-07 & 9.19e-07 & 3.17e-06 \\
+			& refine & 2.06e-07 & 1.12e-09 & 1.12e-09 & 9.37e-10 &  & 4.55e-09 & 8.98e-10 & 8.91e-10 & 3.82e-09 \\
+			\hline
+			& crude & 31 & 367 & 368 & 54 &  & 51 & 94 & 94 & 10 \\
+			A-Steps & mild & 85 & 821 & 821 & 104 &  & 167 & 97 & 97 & 47 \\
+			& refine & 219 & 2577 & 2578 & 315 &  & 453 & 201 & 203 & 253 \\
+			\hline
+			& crude & 0 & 0 & 1 & 0 &  & 0 & 1 & 1 & 1 \\
+			R-Steps & mild & 0 & 0 & 0 & 0 &  & 0 & 2 & 2 & 3 \\
+			& refine & 0 & 0 & 0 & 0 &  & 0 & 1 & 1 & 3 \\
+			\hline
+			& crude & 1059 & 15487 & 8886 & 1394 &  & 999 & 3119 & 1844 & 411 \\
+			$f$-Eval & mild & 2320 & 31025 & 17973 & 2900 &  & 2235 & 3885 & 2238 & 1370 \\
+			& refine & 6755 & 87521 & 51503 & 15214 &  & 10175 & 7131 & 4212 & 5490 \\
+			\hline
+			& crude & 31 & 367 & 369 & 162 &  & 51 & 95 & 95 & 33 \\
+			K-subspace & mild & 85 & 821 & 821 & 312 &  & 167 & 99 & 99 & 150 \\
+			& refine & 219 & 2577 & 2578 & 945 &  & 453 & 202 & 204 & 768 \\
+			\hline
+			& crude & 50 & 0 & 0 & 0 &  & 78 & 0 & 0 & 0 \\
+			LS & mild & 114 & 0 & 0 & 0 &  & 194 & 0 & 0 & 0 \\
+			& refine & 306 & 0 & 0 & 0 &  & 530 & 0 & 0 & 0 \\
+			\hline
+			& crude & 0 & 693 & 709 & 568 &  & 0 & 189 & 188 & 187 \\
+			ME & mild & 0 & 1620 & 1617 & 1338 &  & 0 & 198 & 196 & 806 \\
+			& refine & 0 & 5152 & 5154 & 7303 &  & 0 & 402 & 405 & 3586 \\
+			\hline
+			& crude & 927 & 4114 & 4127 & 1123 &  & 791 & 617 & 617 & 320 \\
+			$\mf_{total}$ & mild & 2006 & 7324 & 7324 & 2379 &  & 1678 & 972 & 971 & 1093 \\
+			& refine & 5432 & 17992 & 17990 & 13638 &  & 4814 & 1552 & 1567 & 4183 \\
+			\hline
+			& crude & 5 & 4 & 4 & 6 &  & 3 & 5 & 5 & 2 \\
+			$\mf_{min}$ & mild & 4 & 4 & 4 & 2 &  & 3 & 7 & 7 & 2 \\
+			& refine & 3 & 4 & 4 & 2 &  & 3 & 6 & 6 & 2 \\
+			\hline
+			& crude & 20 & 14 & 15 & 27 &  & 16 & 11 & 11 & 27 \\
+			$\mf_{max}$ & mild & 20 & 11 & 11 & 27 &  & 15 & 15 & 15 & 20 \\
+			& refine & 20 & 8 & 8 & 20 &  & 14 & 8 & 8 & 15 \\
+			\hline
+			& crude & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			$\mathfrak{p}_{min}$ & mild & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			& refine & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			\hline
+			& crude & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			$\mathfrak{p}_{max}$ & mild & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			& refine & 0 & 3 & 3 & 0 &  & 0 & 3 & 3 & 0 \\
+			\hline
+		\end{tabular}
+	\end{adjustbox}
+\end{table}
+
+\begin{table}
+	\caption{Minimum and maximum values of $\alpha _{1}$ and $\alpha _{2}$ corresponding to the values of these parameters in the scheme \emph{LLDP1} when integrating the six test equations. $r^{min}-r^{max}$ is the range of fluctuations in the convergence rate $r$ of the integrator \emph{LLDP1} during the integration process. Symbols $+$ and $*$ indicate, respectively, interchanges of finite difference formulas inside Algorithm \ref{alg:iArnoldi} or in expression (\ref{Jacobian-free LLDPK scheme}) during the integration process.}
+	\label{tab:R_LLDP1}
+	\begin{adjustbox}{width=0.95\columnwidth,center}
+		\begin{tabular}{lccccccccccc}
+			& \multicolumn{3}{c}{$\alpha^{min}_{1}-\alpha^{max}_{1}$} &  & \multicolumn{3}{c}{$\alpha^{min}_{2}-\alpha^{max}_{2}$} &  & \multicolumn{3}{c}{$r^{min}-r^{max}$} \\
+			\cline{2-4}\cline{6-8}\cline{10-12} Example & Crude & Mild & Refine &  & Crude & Mild & Refine &  & Crude & Mild & Refine \\
+			\hline
+			CUSP & \multicolumn{1}{l}{0.9-1.4} & \multicolumn{1}{l}{0.8-1.4} & \multicolumn{1}{l}{0.8-1.3} &  & \multicolumn{1}{l}{0.6-1.5} & \multicolumn{1}{l}{0.5-1.5} & \multicolumn{1}{l}{0.4-1.3} &  & \multicolumn{1}{l}{2-3} & \multicolumn{1}{l}{2-3} & \multicolumn{1}{l}{2-3} \\
+			Burgers & \multicolumn{1}{l}{3.1-5.6$^+$} & \multicolumn{1}{l}{2.2-4.1$^+$} & \multicolumn{1}{l}{2.0-3.1} &  & \multicolumn{1}{l}{2.7-5.8*} & \multicolumn{1}{l}{1.7-3.9*} & \multicolumn{1}{l}{1.4-2.7} &  & \multicolumn{1}{l}{5-5} & \multicolumn{1}{l}{5-5} & \multicolumn{1}{l}{5-5} \\
+			Brusselator2D & \multicolumn{1}{l}{1.6-3.4} & \multicolumn{1}{l}{1.4-3.4} & \multicolumn{1}{l}{1.3-3.2} &  & \multicolumn{1}{l}{1.2-3.4*} & \multicolumn{1}{l}{0.9-3.4*} & \multicolumn{1}{l}{0.7-3.2*} &  & \multicolumn{1}{l}{4-5} & \multicolumn{1}{l}{3-5} & \multicolumn{1}{l}{3-5} \\
+			GrayScott2D & \multicolumn{1}{l}{1.4-3.5} & \multicolumn{1}{l}{1.2-3.0} & \multicolumn{1}{l}{1.1-2.4} &  & \multicolumn{1}{l}{0.9-3.7*} & \multicolumn{1}{l}{0.7-2.8} & \multicolumn{1}{l}{0.6-2.2} &  & \multicolumn{1}{l}{3-5} & \multicolumn{1}{l}{3-5} & \multicolumn{1}{l}{3-5} \\
+			Brusselator & \multicolumn{1}{l}{1.7-2.8} & \multicolumn{1}{l}{1.5-2.4} & \multicolumn{1}{l}{1.3-2.1} &  & \multicolumn{1}{l}{1.2-2.5} & \multicolumn{1}{l}{0.9-2.0} & \multicolumn{1}{l}{0.7-1.5} &  & \multicolumn{1}{l}{4-5} & \multicolumn{1}{l}{4-5} & \multicolumn{1}{l}{3-5} \\
+			DND & \multicolumn{1}{l}{2.1-2.5} & \multicolumn{1}{l}{1.9-2.5} & \multicolumn{1}{l}{1.6-2.3} &  & \multicolumn{1}{l}{1.6-2.1} & \multicolumn{1}{l}{1.4-2.1} & \multicolumn{1}{l}{1.1-1.7} &  & \multicolumn{1}{l}{5-5} & \multicolumn{1}{l}{4-5} & \multicolumn{1}{l}{4-5} \\
+			\hline
+		\end{tabular}
+	\end{adjustbox}
+\end{table}
+
+.
+
+
+\begin{table}
+	\caption{Minimum and maximum values of $\alpha _{1}$ and $\alpha _{2}$ corresponding to the values of these parameters in the scheme \emph{LLDP2} when integrating the six test equations. $r^{min}-r^{max}$ is the range of fluctuations in the convergence rate $r$ of the integrator \emph{LLDP2} during the integration process. Symbol $*$ indicates interchanges of finite difference formulas in expression (\ref{Jacobian-free LLDPK scheme}) during the integration process.}
+	\label{tab:R_LLDP2}
+	\begin{adjustbox}{width=0.95\columnwidth,center}
+		\begin{tabular}{lccccccccccc}
+			& \multicolumn{3}{c}{$\alpha^{min}_{1}-\alpha^{max}_{1}$} &  & \multicolumn{3}{c}{$\alpha^{min}_{2}-\alpha^{max}_{2}$} &  & \multicolumn{3}{c}{$r^{min}-r^{max}$} \\
+			\cline{2-4}\cline{6-8}\cline{10-12} Example & Crude & Mild & Refine &  & Crude & Mild & Refine &  & Crude & Mild & Refine \\
+			\hline
+			CUSP & \multicolumn{1}{l}{0.9-1.4} & \multicolumn{1}{l}{0.8-1.4} & \multicolumn{1}{l}{0.8-1.3} &  & \multicolumn{1}{l}{0.6-1.5} & \multicolumn{1}{l}{0.5-1.5} & \multicolumn{1}{l}{0.4-1.3} &  & \multicolumn{1}{l}{1-2} & \multicolumn{1}{l}{1-2} & \multicolumn{1}{l}{1-2} \\
+			Burgers & \multicolumn{1}{l}{3.1-5.6} & \multicolumn{1}{l}{2.2-4.1} & \multicolumn{1}{l}{2.0-3.1} &  & \multicolumn{1}{l}{2.7-5.8*} & \multicolumn{1}{l}{1.7-3.9*} & \multicolumn{1}{l}{1.4-2.7} &  & \multicolumn{1}{l}{4-5} & \multicolumn{1}{l}{3-5} & \multicolumn{1}{l}{3-4} \\
+			Brusselator2D & \multicolumn{1}{l}{1.6-3.4} & \multicolumn{1}{l}{1.4-3.4} & \multicolumn{1}{l}{1.3-3.2} &  & \multicolumn{1}{l}{1.2-3.4*} & \multicolumn{1}{l}{0.9-3.4*} & \multicolumn{1}{l}{0.7-3.2*} &  & \multicolumn{1}{l}{2-4} & \multicolumn{1}{l}{2-4} & \multicolumn{1}{l}{2-4} \\
+			GrayScott2D & \multicolumn{1}{l}{1.4-3.5} & \multicolumn{1}{l}{1.2-3.0} & \multicolumn{1}{l}{1.1-2.4} &  & \multicolumn{1}{l}{0.9-3.7*} & \multicolumn{1}{l}{0.7-2.8} & \multicolumn{1}{l}{0.6-2.1} &  & \multicolumn{1}{l}{2-4} & \multicolumn{1}{l}{2-3} & \multicolumn{1}{l}{2-3} \\
+			Brusselator & \multicolumn{1}{l}{1.7-2.8} & \multicolumn{1}{l}{1.5-2.4} & \multicolumn{1}{l}{1.3-2.1} &  & \multicolumn{1}{l}{1.2-2.5} & \multicolumn{1}{l}{0.9-2.0} & \multicolumn{1}{l}{0.7-1.5} &  & \multicolumn{1}{l}{2-3} & \multicolumn{1}{l}{2-3} & \multicolumn{1}{l}{2-3} \\
+			DND & \multicolumn{1}{l}{2.1-2.5} & \multicolumn{1}{l}{1.9-2.5} & \multicolumn{1}{l}{1.6-2.3} &  & \multicolumn{1}{l}{1.6-2.1} & \multicolumn{1}{l}{1.5-2.1} & \multicolumn{1}{l}{1.1-1.7} &  & \multicolumn{1}{l}{3-3} & \multicolumn{1}{l}{2-3} & \multicolumn{1}{l}{2-3} \\
+			\hline
+		\end{tabular}
+	\end{adjustbox}
+\end{table}
