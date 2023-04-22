@@ -18,4 +18,5 @@ latexmkrc
 *.fdb_latexmk
 *.fls
 *.py
-
+*.zip
+Thesis.synctex(busy)
