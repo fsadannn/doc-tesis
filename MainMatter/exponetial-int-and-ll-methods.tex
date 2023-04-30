@@ -15,7 +15,7 @@ Consideremos, ademas, una partición $(t)_{h}={t_{n}:n=0,1,\ldots,N}$ del
 intervalo $[t_{0},T]$ tal que $t_{0}<t_{1}<\ldots<t_{N}=T$, y $%
 h_{n}=t_{n+1}-t_{n}\leq h$; para $n=0,\ldots,N-1$.
 
-\section{Integradores exponenciales}
+\section{Integradores exponenciales} \label{Sec:IE}
 
 En general, se denomina integradores exponenciales a la familia
 de esquemas numéricos para EDOs que requieren del cálculo de algún término exponencial. Inicialmente, los integradores de este tipo comenzaron a desarrollarse en los años 60 del siglo pasado~\cite{Berland07} con el propósito de resolver sistemas de ecuaciones semilineales de la forma
@@ -27,32 +27,32 @@ matriz cuadrada y $F$ una función no lineal de $x(t)\in\mathbb{R}^d$ y $t\geq t
 
 Los integradores exponenciales tanto para ecuaciones semilineales como para ecuaciones generales provienen de la aproximación de la integral
 que resulta de aplicar la fórmula de variación de la constante a estas ecuaciones~(\ref{ODE Lines Method}). Al aplicar la fórmula de variación
-de la constante a la ecuación (\ref{ODE Lines Method}) se obtiene
+de la constante la solución de la ecuación (\ref{ODE Lines Method}) se escribe como
 \begin{equation}
 x(t_n+h)=\me{Ah}\left(x(t_n) +\int\limits_{0}^{h} \me{-As}F(x(t_n+s)) \,ds\right)\,. \label{VCF2}
 \end{equation}
-Los integradores exponenciales derivados de esta aproximación son, por ejemplo, los conocidos métodos de Lawson, Lawson Generalizados, Exponential Time
+Los integradores exponenciales obtenidos de aproximar ésta expresión son, por ejemplo, los conocidos métodos de Lawson, Lawson Generalizados, Exponential Time
 Differencing and the Exponential Runge-Kutta (ver \cite{Berland07} para una revisión). 
 
 Por otra parte, después de la linealización local de la ecuación (\ref{ODE-SYST}) en $t_{n}$,  la fórmula de variación
-de la constante queda
+de la constante lleva a 
 \begin{eqnarray}
 x(t_{n}+h) &= & x(t_{n})+\int\limits_{0}^{h}e^{A	_{n}(h-s)}(f(t_n,x(t_{n}))+sf_t(t_n,x(t_{n})))ds \nonumber \\
  & & +\int\limits_{0}^{h}e^{A
 	_{n}(h-s)}g_{n}(t_{n}+s,x(t_{n}+s))ds, \label{VCF}
 \end{eqnarray}
 donde $A_{n}$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$ y $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))+f_t(s,u)(s-t_n)$. 
-Ejemplos de integradores exponenciales derivados de esta aproximación son el método clásico de Pope~\cite{pope1963exponential} de orden 2, los métodos Runge Kutta Localmente 
+Ejemplos de integradores exponenciales obtenidos de aproximar ésta expresión son el método clásico de Pope~\cite{pope1963exponential} de orden 2, los métodos Runge Kutta Localmente 
 Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}, los métodos Exponenciales de Propagación 
 Iterativa~\cite{tokman2013comparative}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
 métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los métodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}, todos de orden superior a 2.
 
-Los integradores exponenciales también son aplicados a otras áreas además de las ecuaciones diferenciales. Dichos integradores fueron introducidos primeramente en la solución de Ecuaciones Diferenciales Estocásticas~\cite{ozaki19852,ozaki1985statistical}, problemas de filtrado continuo-discreto~\cite{ozaki1993local} y estimación de procesos de difusión~\cite{ozaki19852,ozaki1985statistical,ozaki1994local}. Luego fueron extendidos para la integración de Ecuaciones diferenciales aleatorias%~\cite{carbonell2005local} 
-y con retardo~\cite{jimenez2006local} y también para Ecuaciones Diferenciales
-Parciales Estocásticas semilineales~\cite{jentzen2009overcoming,kloeden2011exponential}.
+En otro contexto, los integradores exponenciales también fueron tempranamente introducidos como aproximación de soluciones de otras clases de ecuaciones. Por ejemplo, para aproximar las ecuaciones diferenciales estocásticas~\cite{ozaki19852,ozaki1985statistical} y sus asociados problemas de filtrado continuo-discreto~\cite{ozaki1993local} y estimación de procesos de difusión~\cite{ozaki19852,ozaki1985statistical,ozaki1994local}. Luego fueron extendidos para la integración de ecuaciones diferenciales aleatorias~\cite{carbonell2005local}, con retardo~\cite{jimenez2006local} y para las parciales estocásticas semilineales~\cite{jentzen2009overcoming,kloeden2011exponential}.
 
-En general los integradores exponenciales representan una alternativa a los métodos implícitos para resolver ecuaciones diferenciales \textit{stiff} o altamente oscilatorias. Teniendo en cuenta que una parte significativa de la estabilidad y las propiedades dinámicas del sistema debe estar contenida en la linealización dela ecuación tratada. Estos integradores por lo general son explícitos y están formados por una solución tan exacta como se requiera de la aproximación lineal y una aproximación numérica de la parte no lineal. Por lo tanto, construir un integrador exponencial requiere de dos tareas básicas: (\textbf{I}) calcular una aproximación para integrales de la forma 
-genérica $\int_{0}^{h} \me{-As}F(x(t_n+s)) \,ds$, y (\textbf{II}) evaluar productos de funciones exponenciales matriciales con vectores.
+En general, los integradores exponenciales tienen en cuenta que una parte significativa de la estabilidad y las propiedades dinámicas de las ecuaciones diferenciales está contenida en la linealización de la ecuación tratada y se constituyen como una alternativa importante a los métodos implícitos para resolver ecuaciones diferenciales  \textit{stiff} o altamente oscilatorias.  
+
+%Estos integradores por lo general son explícitos y están formados por una solución tan exacta como se requiera de una ecuación lineal y una aproximación numérica del residuo no lineal. Por lo tanto, construir un integrador exponencial requiere de dos tareas básicas: (\textbf{I}) calcular la solución de  ODE lineales aproximando productos de funciones exponenciales matriciales con vectores, y (\textbf{II}) calcular una aproximación para integrales de la forma 
+%genérica $\int_{0}^{h} \me{-As}F(x(t_n+s)) \,ds$.
 
 
 \section{Método de Linealización Local}\label{section:ll-methods}
@@ -158,15 +158,16 @@ Cuando $\xi$ es la aproximación obtenida mediante un esquema Runge Kutta de ord
 	\end{equation*}
 	para todo $t\in[t_{0},T]$, donde $y_{n_{t}}$ es la discretización Lineal Local-Runge Kutta de orden $\gamma$, y $n_{t}=\maxx{n:t_{n}\leq t}$.
 \end{definition}
-\todo[inline]{mejorar o cambiar siguiente oración}
-A continuación se construirán dos discretizaciones Lineales Locales-Runge Kutta de orden 4 y 4-5 respectivamente.
 
-Si se utiliza la fórmula Runge-Kutta clásica de orden 4~\cite{hairer1993solving} para integrar la ecuación auxiliar (\ref{ODE r}), entonces se obtiene la siguiente discretización Lineal Local-Runge Kutta de orden 4~\cite{Jimenez13}:
+Como ejemplos importantes se tienen las siguientes discretizaciones Lineales Locales-Runge Kutta de orden 4 y 4-5.
+
+Utilizando la fórmula Runge-Kutta clásica de orden 4~\cite{hairer1993solving} para integrar la ecuación auxiliar (\ref{ODE r}), se obtiene la discretización Lineal Local-Runge Kutta de orden 4~\cite{Jimenez13}:
 
 \begin{equation}
     y_{n+1}\,=\,y_n+\phi(t_n,y_n,h_n)+\frac{h_n}{6}(2\kt+2\kt_3+\kt_4)
     \label{LL-scheme-4}
-    \end{equation}
+\end{equation}
+con
     \[ \kt_j = f\left( t_n+c_jh_n\, , \, y_n+\phi(t_n,y_n,c_jh_n)+c_jh_n\kt_{j-1} \right)
 - f_x(t_n\, , \, y_n)\phi(t_n,y_n,c_jh_n) - f(t_n\, ,\, y_n) ,\]
 donde $\kt_1=0$ y $c = \left[ 0 \; \frac{1}{2} \; \frac{1}{2} \; 1  \right]$.
@@ -182,7 +183,32 @@ donde $s = 7$ es el número de estados,
 \[ \kt_j = f\left( t_n+c_jh_n\, , \, y_n+\phi_j+h_n \sum_{i=1}^{j-1}a_{j,i}\kt_i \right)  
 - f_x(t_n\, , \, y_n)\phi_j - f(t_n\, ,\, y_n),\]
 \[ \phi _j = \phi \left( t_{n},y_{n},c_jh_{n}\right), \]
-y coeficientes Runge-Kutta $a_{j,i}$, $b_j$, $\hat{b}_j$ y $c_j$ definidos en~\cite{hairer1993solving} Tabla 5.2.
+y coeficientes Runge-Kutta $a_{j,i}$, $b_j$, $\hat{b}_j$ y $c_j$ definidos en Tabla \ref{ButcherTabla}.
+
+
+\begin{table}[h]
+	\caption{Tabla de coeficientes para las fórmulas embebidas de Dormand y Prince~\cite{hairer1993solving}} \label{ButcherTabla}
+	\begin{center}
+		\begin{tabular}{ l@{\vrule height 5pt depth 10pt width 0pt}|lllllll}
+			$0$ & \\
+			$\frac{1}{5}\quad$ & $\frac{1}{5}$ \\
+			$\frac{3}{10}\quad$ & $\frac{3}{40}$ & $\frac{9}{40}$ \\
+			$\frac{4}{5}\quad$ & $\frac{44}{45}$ & $-\frac{56}{15}$ & $\frac{32}{9}$ \\
+			$\frac{8}{9}\quad$ & $\frac{19372}{6561}$ & $-\frac{25360}{2187}$ & $\frac{64448}{6561}$ & $-\frac{212}{729}$ \\
+			$1\quad$ & $\frac{9017}{3168}$ & $-\frac{355}{33}$ & $\frac{46732}{5247}$ & $\frac{49}{176}$
+			& $-\frac{5103}{18656}$ \\
+			$1\quad$ & $\frac{35}{384}$ & $0$ & $\frac{500}{1113}$ & $\frac{125}{192}$
+			& $-\frac{2187}{6784}$ & $\frac{11}{84}$ \\
+			\hline
+			$\widehat{y}$ & $\frac{5179}{57600}$ & $0$ & $\frac{7571}{16695}$ & $\frac{393}{640}$
+			& $-\frac{92097}{339200}$ & $\frac{187}{2100}$ & $\frac{1}{40}$
+			\rule[-0.3cm]{0cm}{0.8cm} \\
+			$y$ & $\frac{35}{384}$ & $0$ & $\frac{500}{1113}$ & $\frac{125}{192}$
+			& $-\frac{2187}{6784}$ & $\frac{11}{84}$ & $0$
+		\end{tabular}
+	\end{center}
+\end{table}
+
 
 \subsection{Esquemas de Linealización Local}
 
@@ -344,7 +370,7 @@ Resultados sobre el error y la estabilidad de las aproximaciones de Padé se pre
 \subsection{Aproximación de Krylov}
 
 Los estudios muestran que la aproximación de Padé con escalamiento y potenciación
-es efectiva para calcular exponenciales de matrices relativamente peque\~nas y densas; pero no as\'i para matrices de dimensiones moderadas o grandes.
+es efectiva para calcular exponenciales de matrices relativamente peque\~nas y densas; pero no as\'i para matrices de dimensiones moderadas o grandes \cite{moler2003nineteen}.
 
 Es conocido del \'Algebra Lineal Numérica que para problemas de
 grandes dimensiones los métodos iterativos son preferidos por sobre los métodos directos.
@@ -356,8 +382,7 @@ propios~\cite{golub2013matrix}.
 
 Es importante destacar que en la mayor\'ia de los integradores exponenciales
  no se necesita el c\'alculo de la matriz $\me{A}$ completa, sino
-el producto $\me{A}b$ donde $b$ es un vector determinado. Por ejemplo, la solución del problema de valor inicial homogéneo $\dot{x}(t)=Ax(t),\;x(0)=x_0$, es $x(t)=\me{At}x_0$ en forma de producto exponencial de matriz y vector. Esta es la razón por la que
-los métodos de los subespacios de Krylov han sido ampliamente utilizados para evaluar productos de esta forma.
+el producto $\me{A}b$ donde $b$ es un vector determinado. Por ejemplo, la solución del problema de valor inicial homogéneo $\dot{x}(t)=Ax(t),\;x(0)=x_0$, es $x(t)=\me{At}x_0$ en forma de producto exponencial de matriz y vector. 
 
 \begin{definition}
         \cite{Saad92} Para $\mf\geq 1$, el $\mf$-ésimo subespacio de Krylov de la matriz $A\in\mathbb{C}^{N\times N}$
@@ -414,18 +439,29 @@ Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obt
 	\end{equation*}
 	donde $\sigma(A)$ es el radio espectral de $A$.
 \end{theorem}
-En general, para la familia de funciones $\varphi_k$ se establece la expansión en serie \cite{Saad92,sidje1998expokit}
-\begin{equation}
-\varphi_k(\tau A)b=||b||_2\tau^{k} V_\mf \varphi_k(\tau H_\mf)e_1 + ||b||_2\hf_{\mf+1,\mf}
-\sum_{j=k+1}^{\infty}\tau^{j} e_\mf^T\varphi_j(\tau H_\mf)e_1A^{j-k-1}v_{m+1} \label{PHI-EXPANSION}
-\end{equation}
-donde $\tau$ es un número positivo, $A\in\mathbb{R}^{d\times d}$, $b\in\mathbb{R}^d$, $e_\mf$ es el $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$ y $V_\mf,H_\mf,v_{\mf+1},\hf_{\mf+1,\mf}$ son salidas del Algoritmo de Arnoldi \ref{alg:Arnoldi} y $\varphi_j$ está definida como
+
+\section{Productos de funciones phi por vectores}
+
+Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{ODE Lines Method}) o (\ref{VCF2}). De ésta manera, típicamante, se obtienen expresiones recursivas que involucran integrales de la forma 
+\begin{equation*}
+\phi _{k}(z,h)=\int_{0}^{h}e^{z(h-s)}s^{k-1}ds,\text{ \ \ \ \ \ \ \ }%
+k=1,2,\ldots ,
+\end{equation*}%
+or, equivalentemente, su versión escalada 
+\begin{equation*}
+\varphi _{k}(z)=\int_{0}^{1}e^{z(1-\theta )}\frac{\theta ^{k-1}}{(k-1)!}%
+d\theta ,\text{ \ \ \ \ \ \ \ }k=1,2,\ldots ,
+\end{equation*}%
+- llamada funcion phi - que resulta de la relación trivial $\phi _{k}(z,h)=(k-1)!h^{k}\varphi
+_{k}(hz)$, donde $\phi _{0}(z,h)=\varphi _{0}(hz)=e^{hz}$. 
+
+Otras definiones comunes de las funciones phi como operador son \cite{Saad92}
 \begin{eqnarray}\label{phi-definition}
-    \varphi_k(z) & = &\int\limits_{0}^{1}\me{z(1-s)}\frac{s^{k-1}}{(k-1)!}\,ds \nonumber \\
-    \varphi_k(z) & = &\sum\limits_{j=0}^{\infty}\frac{z^{j}}{(k+j)!}\label{DEF-PHI}\\
-    \varphi_0(z) &=& \me{z} \nonumber\\
-    \varphi_{k+1}(z) &=& \frac{\varphi_k(z)-\varphi_k(0)}{z}\,,\,k\geq0. \nonumber
+\varphi_{k+1}(z) &=& \frac{\varphi_k(z)-\varphi_k(0)}{z}, \label{DEF-PHI}\\
+\varphi_k(z) & = &\sum\limits_{j=0}^{\infty}\frac{z^{j}}{(k+j)!}, \nonumber 
 \end{eqnarray}
+for all $k=1,2,\ldots$.
+
 Entre la familia de funciones $\varphi_j$ y la exponencial matricial existe la siguiente importante relación.
 \begin{theorem}\label{theorem:exp-phi}
     \cite{sidje1998expokit} Sea $c\in\mathbb{C}^{m}$, $H_m\in\mathbb{C}^{m\times m}$ y 
@@ -449,3 +485,10 @@ Entre la familia de funciones $\varphi_j$ y la exponencial matricial existe la s
     \end{array}\right]  \;.
     \end{equation}
 \end{theorem} 
+
+En general, para el producto de funciones $\varphi_k$ por vector se establece la expansión en serie \cite{Saad92,sidje1998expokit}
+\begin{equation} \label{PHI-EXPANSION}
+\varphi_k(\tau A)b=||b||_2\tau^{k} V_\mf \varphi_k(\tau H_\mf)e_1 + ||b||_2\hf_{\mf+1,\mf}
+\sum_{j=k+1}^{\infty}\tau^{j} e_\mf^T\varphi_j(\tau H_\mf)e_1A^{j-k-1}v_{m+1} 
+\end{equation}
+donde $\tau$ es un número positivo, $A\in\mathbb{R}^{d\times d}$, $b\in\mathbb{R}^d$, $e_\mf$ es el $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$ y $V_\mf,H_\mf,v_{\mf+1},\hf_{\mf+1,\mf}$ son salidas del Algoritmo de Arnoldi \ref{alg:Arnoldi}.

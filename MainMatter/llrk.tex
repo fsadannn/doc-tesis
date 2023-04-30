@@ -36,29 +36,6 @@ con $\kt_1 \equiv 0$, siendo $f_x$ la matriz jacobiana de $f$ y $a_{j,i}$, $b_j$
 \end{equation*}
 $ L=[I_d \;\; 0_{d\times 1}] $ and $r=[0_{1\times d}\;\; 1]^T$. Las fórmulas embebidas (\ref{lldis}) son instancias particulares de una clase más general de métodos de linealización local de alto orden propuestos en \cite{Jimenez13}.
 
-\begin{table}[h]
-	\caption{Tabla de coeficientes para las fórmulas embebidas de Dormand y Prince} \label{ButcherTabla}
-	\begin{center}
-		\begin{tabular}{ l@{\vrule height 5pt depth 10pt width 0pt}|lllllll}
-			$0$ & \\
-			$\frac{1}{5}\quad$ & $\frac{1}{5}$ \\
-			$\frac{3}{10}\quad$ & $\frac{3}{40}$ & $\frac{9}{40}$ \\
-			$\frac{4}{5}\quad$ & $\frac{44}{45}$ & $-\frac{56}{15}$ & $\frac{32}{9}$ \\
-			$\frac{8}{9}\quad$ & $\frac{19372}{6561}$ & $-\frac{25360}{2187}$ & $\frac{64448}{6561}$ & $-\frac{212}{729}$ \\
-			$1\quad$ & $\frac{9017}{3168}$ & $-\frac{355}{33}$ & $\frac{46732}{5247}$ & $\frac{49}{176}$
-			& $-\frac{5103}{18656}$ \\
-			$1\quad$ & $\frac{35}{384}$ & $0$ & $\frac{500}{1113}$ & $\frac{125}{192}$
-			& $-\frac{2187}{6784}$ & $\frac{11}{84}$ \\
-			\hline
-			$\widehat{y}$ & $\frac{5179}{57600}$ & $0$ & $\frac{7571}{16695}$ & $\frac{393}{640}$
-			& $-\frac{92097}{339200}$ & $\frac{187}{2100}$ & $\frac{1}{40}$
-			\rule[-0.3cm]{0cm}{0.8cm} \\
-			$y$ & $\frac{35}{384}$ & $0$ & $\frac{500}{1113}$ & $\frac{125}{192}$
-			& $-\frac{2187}{6784}$ & $\frac{11}{84}$ & $0$
-		\end{tabular}
-	\end{center}
-\end{table}
-
 Las aproximaciones Krylov-Padé propuestas en el capítulo anterior serán utilizadas para aproximar los términos $u_j$ que aparecen en (\ref{lldis}). Además, para aproximar eficientemente los cinco términos $u_j$ correspondientes a los cinco únicos $c_j$ distintos de cero que según la Tabla \ref{ButcherTabla} aparecen en las fórmulas (\ref{lldis}), se utilizará combinación conveniente de la invarianza ante escalado de la base ortonormal de los subespacios de Krylov, la propiedad de flujo del operador exponencial y el Teorema 1 en~\cite{sidje1998expokit}. De hecho, con la matriz de Hessenberg superior $H^*_\mf$ resultante del algoritmo \ref{alg:Arnoldi} para $\mathcal{K}_\mf(h_nf_x,f)$, se obtiene la matriz de Hessenberg $H_\mf=H^*_\mf/h_n$ correspondiente a $\mathcal{K}_\mf(f_x,f)$, por lo que la exponencial de la matriz particionada
 \begin{equation}
     \overline{H} = \left[\begin{array}{cccc}
@@ -710,7 +687,7 @@ Mediante una combinación adecuada de los procedimientos de las Secciones \ref{s
 	Compute $\widetilde{u}_j$ by the formula (\ref{eq:kp_aprox})\\
 \end{algorithm}}
 
-\subsection{Sketch (renombrar esta sección)}
+\subsection{Esbozo de los algoritmos}
 
 Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \ref{secc:hcontrol} para la estimación y control del tamaño de paso $h_n$, el criterio de la Sección \ref{secc:jaccontrol} para la reutilización de el jacobiano, y la aproximación adaptativa de Krylov-Padé a $u_j$ descrita en la Sección \ref{secc:krylov-Pade}, Algorithm \ref{alg:integrator} presenta el esquema de la estrategia adaptativa para las fórmulas incrustadas (\ref{LLDPK scheme}) con tamaño de paso variable y dimensión Krylov. Observó que, para tamaños de paso no fallidos, el Algoritmo \ref{alg:Arnoldi} se llama solo una vez por paso de integración. Cuando se rechaza un tamaño de paso $h_n$, se llama al algoritmo \ref{alg:Arnoldi} solo cuando la matriz jacobiana no se ha actualizado en $y_n$, es decir, cuando $J \neq f_x(y_n)$.
 
