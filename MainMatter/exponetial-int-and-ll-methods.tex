@@ -9,7 +9,7 @@ En general, se considerarán los problemas de valor inicial definidos por las ec
  \begin{equation*}
  x(t_0)=x_0,
  \end{equation*}
- donde $x_0\in \mathfrak{D}$ es un valor inicial dado, $f: [t_0,T] \times \mathfrak{D}\longrightarrow \mathbb{R}^{d}$ es una función diferenciable y $\mathfrak{D}\subset\mathbb{R}^{d}$ un conjunto abierto. Se asumen condiciones de suavidad y condición de Lipschit en $f$ para asegurar la unicidad de la solución en $\mathfrak{D}$.
+ donde $x_0\in \mathfrak{D}$ es un valor inicial dado, $f: [t_0,T] \times \mathfrak{D}\longrightarrow \mathbb{R}^{d}$ es una función diferenciable y $\mathfrak{D}\subset\mathbb{R}^{d}$ un conjunto abierto. Se asumen condiciones de suavidad y condición de Lipschitz en $f$ para asegurar la unicidad de la solución en $\mathfrak{D}$.
 
 Consideremos, ademas, una partición $(t)_{h}={t_{n}:n=0,1,\ldots,N}$ del
 intervalo $[t_{0},T]$ tal que $t_{0}<t_{1}<\ldots<t_{N}=T$, y $%
@@ -32,7 +32,7 @@ de la constante la solución de la ecuación (\ref{ODE Lines Method}) se escribe
 x(t_n+h)=\me{Ah}\left(x(t_n) +\int\limits_{0}^{h} \me{-As}F(x(t_n+s)) \,ds\right)\,. \label{VCF2}
 \end{equation}
 Los integradores exponenciales obtenidos de aproximar ésta expresión son, por ejemplo, los conocidos métodos de Lawson, Lawson Generalizados, Exponential Time
-Differencing and the Exponential Runge-Kutta (ver \cite{Berland07} para una revisión). 
+Differencing y Exponential Runge-Kutta (ver \cite{Berland07} para una revisión). 
 
 Por otra parte, después de la linealización local de la ecuación (\ref{ODE-SYST}) en $t_{n}$,  la fórmula de variación
 de la constante lleva a 
@@ -42,7 +42,7 @@ x(t_{n}+h) &= & x(t_{n})+\int\limits_{0}^{h}e^{A	_{n}(h-s)}(f(t_n,x(t_{n}))+sf_t
 	_{n}(h-s)}g_{n}(t_{n}+s,x(t_{n}+s))ds, \label{VCF}
 \end{eqnarray}
 donde $A_{n}$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$ y $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))+f_t(s,u)(s-t_n)$. 
-Ejemplos de integradores exponenciales obtenidos de aproximar ésta expresión son el método clásico de Pope~\cite{pope1963exponential} de orden 2, los métodos Runge Kutta Localmente 
+Ejemplos de integradores exponenciales obtenidos de aproximar ésta expresión son el método clásico de Pope~\cite{pope1963exponential} de orden 2, los métodos Runge-Kutta Localmente 
 Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}, los métodos Exponenciales de Propagación 
 Iterativa~\cite{tokman2013comparative}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
 métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los métodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}, todos de orden superior a 2.
@@ -116,9 +116,9 @@ Estos nuevos métodos se obtienen de agregar a la aproximación (\ref%
 {ODE-REV-FORM-LLA}) un término adicional $\xi$ de orden superior a 2 
 que resulta de aproximar la segunda integral de la expresión (\ref{VCF}) por algún método de cuadratura o por la solución numérica de una ecuación diferencial auxiliar \cite{delaCruz06}. Usando diferentes tipos de cuadraturas se obtienen los métodos Exponenciales de Propagación 
 Iterativa~\cite{tokman2006efficient}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
-métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los méodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}. Por otra parte, usando esquemas Runge Kutta (RK) para resolver la mencionada ecuación auxiliar se obtienen los métodos Runge Kutta Localmente Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}.
+métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los métodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}. Por otra parte, usando esquemas Runge Kutta (RK) para resolver la mencionada ecuación auxiliar se obtienen los métodos Runge-Kutta Localmente Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}.
 
-Por su relevancia en esta tesis, a continuación se expondrá con mas detalle los métodos Runge Kutta Localmente Linealizados. 
+Por su relevancia en esta tesis, a continuación se expondrá con mas detalle los métodos Runge-Kutta Localmente Linealizados. 
 
 Dada una partición $(t)_{h}$, una aproximación Lineal Local de orden $%
 \gamma$ de la solución de (\ref{ODE-SYST}) se define por la expresión 
@@ -139,29 +139,29 @@ q(t_n,y_n,s,\varsigma)&=&f(s,y_n+\phi(t_n,y_n,s-t_n)+\varsigma)-f_x(t_n,y_n)\phi
 \end{eqnarray*}
 con $s\in [t_{n},t_{n+1})$ y $\varsigma \in \mathbb{R}^d $. 
 
-Cuando $\xi$ es la aproximación obtenida mediante un esquema Runge Kutta de orden $\gamma$ se llega a las definiciones siguientes.
+Cuando $\xi$ es la aproximación obtenida mediante un esquema Runge-Kutta de orden $\gamma$ se llega a las definiciones siguientes.
 \begin{definition}
-	\label{definition HLLD} \cite{Jimenez13} Dada una partición $(t)_{h}$, la discretización Lineal Local-Runge Kutta 
+	\label{definition HLLD} \cite{Jimenez13} Dada una partición $(t)_{h}$, la discretización Lineal Local Runge-Kutta 
     de orden $\gamma >2$ se define por la expresión recursiva:
 	\begin{equation*}
 	y_{n+1}=y_{n}+\phi \left( t_{n},y_{n},h_{n}\right) +h_{n}\sum_{j=1}^{s}b_{j}\kt_{j}
 	%\label{LLRK_Discretizat}
 	\end{equation*}%
-	con $y_{0}=x_{0}$, donde las constantes $b_{j}$ y las funciones $k_{j}$ están definidas por el método Runge Kutta de $s$ estados aplicado a la ecuación~(\ref{ODE r}).
+	con $y_{0}=x_{0}$, donde las constantes $b_{j}$ y las funciones $k_{j}$ están definidas por el método Runge-Kutta de $s$ estados aplicado a la ecuación~(\ref{ODE r}).
 \end{definition}
 
 \begin{definition}
-	\label{definition HOLLA} \cite{Jimenez13} Dada una partición $(t)_{h}$, la aproximación Lineal Local-Runge Kutta de orden $\gamma$ se define por 
+	\label{definition HOLLA} \cite{Jimenez13} Dada una partición $(t)_{h}$, la aproximación Lineal Local Runge-Kutta de orden $\gamma$ se define por 
 	\begin{equation*}
 	y(t)=y_{n_{t}}+\phi(t_{n_{t}},y_{n_{t}},t-t_{n_{t}})+(t-t_{n_{t}})%
 	\sum_{j=1}^{s}b_{j}\kt_{j}(t_{n_{t}},y_{n_{t}},t-t_{n_{t}}) %\label{LLRK_Approx}
 	\end{equation*}
-	para todo $t\in[t_{0},T]$, donde $y_{n_{t}}$ es la discretización Lineal Local-Runge Kutta de orden $\gamma$, y $n_{t}=\maxx{n:t_{n}\leq t}$.
+	para todo $t\in[t_{0},T]$, donde $y_{n_{t}}$ es la discretización Lineal Local Runge-Kutta de orden $\gamma$, y $n_{t}=\maxx{n:t_{n}\leq t}$.
 \end{definition}
 
-Como ejemplos importantes se tienen las siguientes discretizaciones Lineales Locales-Runge Kutta de orden 4 y 4-5.
+Como ejemplos importantes se tienen las siguientes discretizaciones Lineales Locales-Runge-Kutta de orden 4 y 4-5.
 
-Utilizando la fórmula Runge-Kutta clásica de orden 4~\cite{hairer1993solving} para integrar la ecuación auxiliar (\ref{ODE r}), se obtiene la discretización Lineal Local-Runge Kutta de orden 4~\cite{Jimenez13}:
+Utilizando la fórmula Runge-Kutta clásica de orden 4~\cite{hairer1993solving} para integrar la ecuación auxiliar (\ref{ODE r}), se obtiene la discretización Lineal Local Runge-Kutta de orden 4~\cite{Jimenez13}:
 
 \begin{equation}
     y_{n+1}\,=\,y_n+\phi(t_n,y_n,h_n)+\frac{h_n}{6}(2\kt+2\kt_3+\kt_4)
@@ -172,7 +172,7 @@ con
 - f_x(t_n\, , \, y_n)\phi(t_n,y_n,c_jh_n) - f(t_n\, ,\, y_n) ,\]
 donde $\kt_1=0$ y $c = \left[ 0 \; \frac{1}{2} \; \frac{1}{2} \; 1  \right]$.
 
-Si se utilizan las fórmulas embebidas Runge-Kutta de Dormand y Prince para integrar la ecuación auxiliar (\ref{ODE r}), entonces se obtiene la siguiente discretización Lineal Local-Runge Kutta de orden 5-4~\cite{Jimenez14AMC}:
+Si se utilizan las fórmulas embebidas Runge-Kutta de Dormand y Prince para integrar la ecuación auxiliar (\ref{ODE r}), entonces se obtiene la siguiente discretización Lineal Local Runge-Kutta de orden 5-4~\cite{Jimenez14AMC}:
 
 \begin{equation}
 y_{n+1}\,=\,y_n+\phi_s+h_n \sum_{j=1}^{s}b_j \kt_j \quad \text{y} \quad
@@ -370,18 +370,18 @@ Resultados sobre el error y la estabilidad de las aproximaciones de Padé se pre
 \subsection{Aproximación de Krylov}
 
 Los estudios muestran que la aproximación de Padé con escalamiento y potenciación
-es efectiva para calcular exponenciales de matrices relativamente peque\~nas y densas; pero no as\'i para matrices de dimensiones moderadas o grandes \cite{moler2003nineteen}.
+es efectiva para calcular exponenciales de matrices relativamente pequeñas y densas; pero no así para matrices de dimensiones moderadas o grandes \cite{moler2003nineteen}.
 
-Es conocido del \'Algebra Lineal Numérica que para problemas de
+Es conocido del Álgebra Lineal Numérica que para problemas de
 grandes dimensiones los métodos iterativos son preferidos por sobre los métodos directos.
 En particular,
 los métodos iterativos de los subespacios de Krylov han cobrado auge en la resolución de
-problemas de \'Algebra Lineal que involucran el producto de una función matricial y un vector,
-tales como la resolución de grandes sistemas lineales y en el c\'alculo de valores
+problemas del Álgebra Lineal que involucran el producto de una función matricial y un vector,
+tales como la resolución de grandes sistemas lineales y en el cálculo de valores
 propios~\cite{golub2013matrix}.
 
-Es importante destacar que en la mayor\'ia de los integradores exponenciales
- no se necesita el c\'alculo de la matriz $\me{A}$ completa, sino
+Es importante destacar que en la mayoría de los integradores exponenciales
+ no se necesita el cálculo de la matriz $\me{A}$ completa, sino
 el producto $\me{A}b$ donde $b$ es un vector determinado. Por ejemplo, la solución del problema de valor inicial homogéneo $\dot{x}(t)=Ax(t),\;x(0)=x_0$, es $x(t)=\me{At}x_0$ en forma de producto exponencial de matriz y vector. 
 
 \begin{definition}
@@ -442,7 +442,7 @@ Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obt
 
 \section{Producto de funciones phi por vectores} 
 
-Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{ODE Lines Method}) o (\ref{VCF2}). De ésta manera, típicamante, se obtienen expresiones recursivas que involucran integrales de la forma 
+Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{ODE Lines Method}) o (\ref{VCF2}). De ésta manera, típicamente, se obtienen expresiones recursivas que involucran integrales de la forma 
 \begin{equation*}
 \phi _{k}(z,h)=\int_{0}^{h}e^{z(h-s)}s^{k-1}ds,\text{ \ \ \ \ \ \ \ }%
 k=1,2,\ldots ,
@@ -455,12 +455,12 @@ d\theta ,\text{ \ \ \ \ \ \ \ }k=1,2,\ldots ,
 - llamada funcion phi - que resulta de la relación trivial $\phi _{k}(z,h)=(k-1)!h^{k}\varphi
 _{k}(hz)$, donde $\phi _{0}(z,h)=\varphi _{0}(hz)=e^{hz}$. 
 
-Otras definiones comunes de las funciones phi como operador son \cite{Saad92}
+Otras definiciones comunes de las funciones phi como operador son \cite{Saad92}
 \begin{eqnarray}\label{phi-definition}
 \varphi_{k+1}(z) &=& \frac{\varphi_k(z)-\varphi_k(0)}{z}, \label{DEF-PHI}\\
 \varphi_k(z) & = &\sum\limits_{j=0}^{\infty}\frac{z^{j}}{(k+j)!}, \nonumber 
 \end{eqnarray}
-for all $k=1,2,\ldots$.
+para todo $k=1,2,\ldots$.
 
 Entre la familia de funciones $\varphi_j$ y la exponencial matricial existe la siguiente importante relación.
 \begin{theorem}\label{theorem:exp-phi}
