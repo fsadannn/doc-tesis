@@ -1,8 +1,6 @@
 \chapter{Solución de ecuaciones lineales de dimensiones no pequeñas}\label{chapter:solve-non-smal-lineal-eq}
 
-En el capítulo anterior, se presentó la discretización Lineal Local~(\ref{definition LLS}) de EDO, así como su implementación basada en aproximantes de Padé~(\ref{LL-scheme}) para pequeños PVI. Sin embargo, para PVI de medianas y grandes dimensiones, la aproximación de Padé~(\ref{section:pade-approx}) no es computacionalmente eficiente y necesita ser reemplazada por otra aproximación basada en subespacios de Krylov o alguna técnica proyectiva similar. El objetivo de este capítulo es aplicar aproximaciones basadas en subespacios de Krylov a la solución de PVI lineales de medianas y grandes dimensiones. Los resultados de este capítulo están basados en \cite{naranjo2023computing,naranjo2023RT,naranjo2021locally,naranjo2023jacobian}.
-
-Nótese que, para la ecuación lineal
+En el capítulo anterior, se presentó la discretización Lineal Local~(\ref{definition LLS}) de EDO, así como su implementación basada en aproximantes de Padé~(\ref{LL-scheme}) para pequeños PVI. Sin embargo, para PVI de medianas y grandes dimensiones, la aproximación de Padé~(\ref{section:pade-approx}) no es computacionalmente eficiente y necesita ser reemplazada por otra aproximación basada en subespacios de Krylov o alguna técnica proyectiva similar. Nótese que, para la ecuación lineal
 \begin{equation*}
 	\frac{dx(t)}{dt}=Ax(t)\;,\;\; x(t_0)=x_0,\;\;\; A\in\mathbb{R}^{d\times d}\;,
 \end{equation*}
@@ -23,7 +21,7 @@ donde $\varphi_1$ está definida en (\ref{phi-definition}) y
 	\end{array}
 	\right]\;.
 \end{equation*}
-Cada una de estas formas de la solución puede ser aproximaciones utilizando subespacios Krylov. En los trabajos~\cite{Saad92,jimenez2012convergence} se utilizan aproximaciones de Krylov para las soluciones de las forma~(\ref{eqaux:lineal-solution-ex},\ref{eqaux:lineal-solution-xex}). Dichas aproximaciones son de orden $\mf$, donde $\mf$ es la dimensión del subespacio utilizado. En cambio para la solución de la forma~(\ref{eqaux:lineal-solution-xphix}) se han utilizado aproximaciones de orden  $\mf+1$~\cite{sidje1998expokit,niesen2012algorithm}. En este capítulo se introducirán aproximaciones Krylov-Padé para $\varphi_1$ de un orden mayor, así como una variante que no evalúa la matriz Jacobiana. También se derivarán cotas para las aproximaciones propuestas y se propondrá una estrategia para la selección de la dimensión de los subespacios de Krylov.
+Cada una de estas formas de la solución puede ser aproximaciones utilizando subespacios Krylov. En los trabajos~\cite{Saad92,jimenez2012convergence} se utilizan aproximaciones de Krylov para las soluciones de las forma~(\ref{eqaux:lineal-solution-ex},\ref{eqaux:lineal-solution-xex}). Dichas aproximaciones son de orden $\mf$, donde $\mf$ es la dimensión del subespacio utilizado. En cambio para la solución de la forma~(\ref{eqaux:lineal-solution-xphix}) se han utilizado aproximaciones de orden  $\mf+1$~\cite{sidje1998expokit,niesen2012algorithm}. En este capítulo se introducirán aproximaciones Krylov-Padé para $\varphi_1$ de un orden mayor, así como una variante que no evalúa la matriz Jacobiana. También se derivarán cotas para las aproximaciones propuestas y se propondrá una estrategia para la selección de la dimensión de los subespacios de Krylov. Los resultados de este capítulo están basados en \cite{naranjo2023computing,naranjo2023RT,naranjo2021locally,naranjo2023jacobian}.
 
 \section{Aproximaciones Krylov-Padé a la acción del operador phi}\label{section:krylov-pade-approx}
 
@@ -555,7 +553,6 @@ Los códigos de Matlab \textit{JF1-Phi} y \textit{JF2-Phi} implementan la aproxi
 donde $\delta= \frac{\sqrt{(1+||x||_2)\epsilon_{mach}}}{\epsilon_{mach}+||u||_2}$ como se sugiere en~\cite{knoll2004jacobian}, siendo $\epsilon_{mach}$ el épsilon de la máquina. El código de Matlab \textit{Phi} implementa la aproximación Krylov-Padé (\ref{phi_approx}) con la matriz exacta.
 
 En el ejemplo, la matriz y los vectores en (\ref{sum2_phiXv}) se definen como $A=f_x(x(0))$, $a_1=a_2=f(x(0))$, $a_3=2a_1 $ y $a_4=6a_1$ de acuerdo con el número de términos $l$ en cada ejemplo. La norma euclidiana se usa para medir el error entre el valor ``exacto'' de $L e^{h M}r$ en (\ref{sum2_phiXv}) y sus aproximaciones. Para fines comparativos, el valor ``exacto'' de $e^{h M}$ y la matriz exponencial $\me{\tau\overline{H}}$ en los códigos \textit{JF1-Phi}, \textit{JF2-Phi} y \textit{Phi} se calculan con la misma función de Matlab \textit{expm}. La fila superior de la Figura \ref{fig:SumPhiBrusselator} presenta, para cada ejemplo, las gráficas logarítmicas de tolerancia relativa (\textit{rtol}) contra error (\textit{error}) en el cálculo de (\ref{sum2_phiXv}) mediante las aproximaciones \textit{JF1-Phi}, \textit{JF2-Phi} y \textit{Phi} con tolerancias relativas y absolutas $rtol=10^{-j}$ y $atol=0.1 rtol$, con $j=1,\ldots,6$. La fila inferior de esta figura presenta las gráficas de la dimensión de Krylov $\mf$ contra $log(rtol)$ correspondientes a las aproximaciones en la fila superior de las figuras. Los valores de $\mf$ son determinados automáticamente por cada código para cada una de las tolerancias especificadas $rtol$ y $atol$, tal y como se explicó anteriormente.
-
 
 \begin{figure}[htb]
 	\includegraphics[scale=0.57]{Graphics/kpfj-brusselator-em.jpg}

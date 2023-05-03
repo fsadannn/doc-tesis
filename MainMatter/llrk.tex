@@ -1,6 +1,6 @@
 \chapter{Método Runge-Kutta de Dormand y Prince Localmente Linealizado}\label{chapter:lldp}
 
-En el Capítulo \ref{chapter:exp-int-and-ll-methods} se presentó la Aproximación Lineal Local de Orden Superior para EDO. Como se explicó en ese capítulo, a esa clase de métodos pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución u de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r=x-u$ proporcionada por un integrador numérico de alto orden. En el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se propusieron y utilizaron las aproximaciones Krylov-Padé para resolver la ecuación diferencial lineal de dimensiones no pequeñas. En éste capítulo se utilizará las fórmulas  Runge-Kutta embebidas de Dormand y Prince para aproximar la solución de la ecuación diferencial no lineal del residuo. Combinando estas aproximaciones se obtendrá el Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDOs de dimensiones no pequeñas. Utilizando las nuevas fórmulas, se construyen también estrategias adaptativas para implementar esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Los resultados de este capiítulo están basados en \cite{naranjo2021locally}.
+En el Capítulo \ref{chapter:exp-int-and-ll-methods} se presentó la Aproximación Lineal Local de Orden Superior para EDO. Como se explicó en ese capítulo, a esa clase de métodos pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución $u$ de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r=x-u$ proporcionada por un integrador numérico de alto orden. En el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se propusieron y utilizaron las aproximaciones Krylov-Padé para resolver la ecuación diferencial lineal de dimensiones no pequeñas. En éste capítulo se utilizará las fórmulas  Runge-Kutta embebidas de Dormand y Prince para aproximar la solución de la ecuación diferencial no lineal del residuo. Combinando estas aproximaciones se obtendrá el Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDOs de dimensiones no pequeñas. Utilizando las nuevas fórmulas, se construyen también estrategias adaptativas para implementar esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Los resultados de este capiítulo están basados en \cite{naranjo2021locally}.
 
 Sin pérdida de generalidad consideremos el PVI autónomo $d$-dimensional
 \begin{equation}\label{syst}
@@ -325,8 +325,8 @@ En el marco de los integradores exponenciales, los seis modelos que se considera
     \[ \frac{\partial u}{\partial t} = \frac{\partial}{\partial x}\left[ u\frac{\partial u}{\partial x} \right] + u(1-u), \]
     donde $t\in[0, 0\mathord{.}1]$ y $-23 < x < 50$, con condiciones de frontera $u(-23,t) = 1$, $u(50,t)=0$ y condiciones iniciales
     \[ u(x,0)=\begin{cases}
-    1 & \text{if }x\leq 0\\
-    \me{-0\mathord{.}8284x} & \text{if}x>0
+    1 & \text{si } x\leq 0\\
+    \me{-0\mathord{.}8284x} & \text{si } x>0
     \end{cases}. \]
     La discretización se realizó sobre una malla de $M$ puntos internos $x_i=\frac{50*i}{M+1}-23\left(1-\frac{i}{M+1}\right)$ con $i=1,\ldots,M$.
 \end{example}
@@ -548,7 +548,7 @@ Se denotará $h_{max}$ y $h_{min}$ como los tamaños de paso máximos y mínimos
 donde
 \begin{equation*}
     \Delta = \begin{cases}
-        \frac{1}{r_h} & \text{if} \; h_{max}\cdot r_h>1\\
+        \frac{1}{r_h} & \text{si} \; h_{max}\cdot r_h>1\\
         h_{max} & \text{en otro casos}
         \end{cases}
 \end{equation*}
@@ -565,10 +565,10 @@ Todos los demás tamaños de paso nuevos $h_{new}$ se estiman mediante la expres
 donde
 \begin{equation*}
     \Delta = \begin{cases}
-        h_n/\rho & \text{if } \varepsilon_y\leq RTol \text{ y } \rho>0\mathord{.}2\\
-        5\cdot h_n & \text{if } \varepsilon_y\leq RTol \text{ y } \rho\leq 0\mathord{.}2\\
-        \maxx{0\mathord{.}1,1/\rho}\cdot h_n & \text{if } \varepsilon_y > RTol \text{ y } fail=false\\
-        0\mathord{.}5\cdot h_n & \text{if } \varepsilon_y > RTol \text{ y } fail=true
+        h_n/\rho & \text{si } \varepsilon_y\leq RTol \text{ y } \rho>0\mathord{.}2\\
+        5\cdot h_n & \text{si } \varepsilon_y\leq RTol \text{ y } \rho\leq 0\mathord{.}2\\
+        \maxx{0\mathord{.}1,1/\rho}\cdot h_n & \text{si } \varepsilon_y > RTol \text{ y } fail=false\\
+        0\mathord{.}5\cdot h_n & \text{si } \varepsilon_y > RTol \text{ y } fail=true
         \end{cases},
 \end{equation*}
 siendo
@@ -751,7 +751,7 @@ Los principales resultados del estudio de simulación se resumen en la Figura \r
     \hspace{-0.5in}
 	\includegraphics[scale=0.7]{Graphics/lldp/compare_graph.pdf}
 	\vspace{-0.75in}
-	\caption{ Diagrama log-log comparativo de precisión frente a tiempo para cada uno de los códigos en la integración de las seis ecuaciones de prueba. $\vartriangle$: código \emph{exp4}, $\circ$ : código \emph{ode15sk}, y $\square$: código \emph{LLDP45}}
+	\caption{ Diagrama log-log comparativo de precisión contra tiempo para cada uno de los códigos en la integración de las seis ecuaciones de prueba. $\vartriangle$: código \emph{exp4}, $\circ$ : código \emph{ode15sk}, y $\square$: código \emph{LLDP45}}
 	\label{num-exp-lldp-var-step:Fig1}
 	\end{center}
 \end{figure}
@@ -767,67 +767,67 @@ Para explicar estos resultados, para cada ecuación de prueba, los detalles de e
 		\hline
 		& & \multicolumn{3}{c}{CUSP $M=500$, $d=1500$ } & & \multicolumn{3}{c}{Burgers $M=500$, $d=500$ }\\
 		\cline{3-5} \cline{7-9}
-		& Tolerance & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} & & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} \\
+		& Tolerancia & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} & & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} \\
 		\hline
-		& crude & 17.5564 & 1.0000 & 0.8982 & & 9.7279 & 1.0000 & 0.5713 \\
-		RTime  & mild & 64.1667 & 1.0000 & 0.6003 & & 12.9087 & 1.0000 & 0.4600 \\
-		& refine & 235.2210 & 1.0000 & 0.6489 & & 30.4093 & 1.0000 & 0.5799 \\
+		& crudo & 17.5564 & 1.0000 & 0.8982 & & 9.7279 & 1.0000 & 0.5713 \\
+		RTime  & medio & 64.1667 & 1.0000 & 0.6003 & & 12.9087 & 1.0000 & 0.4600 \\
+		& refinado & 235.2210 & 1.0000 & 0.6489 & & 30.4093 & 1.0000 & 0.5799 \\
 		\hline
-		& crude & 6.21e-02 & 6.89e-01 & 4.14e-04 & & 4.27e-04 & 2.14e-02 & 1.74e-03 \\
-		RError  & mild & 2.35e-03 & 6.88e-01 & 3.97e-06 & & 4.98e-07 & 1.62e-05 & 1.67e-06 \\
-		& refine & 1.94e-04 & 3.32e-01 & 4.64e-08 & & 6.10e-10 & 4.49e-08 & 9.49e-10  \\
+		& crudo & 6.21e-02 & 6.89e-01 & 4.14e-04 & & 4.27e-04 & 2.14e-02 & 1.74e-03 \\
+		RError  & medio & 2.35e-03 & 6.88e-01 & 3.97e-06 & & 4.98e-07 & 1.62e-05 & 1.67e-06 \\
+		& refinado & 1.94e-04 & 3.32e-01 & 4.64e-08 & & 6.10e-10 & 4.49e-08 & 9.49e-10  \\
 		\hline
-		& crude & 96 & 23 & 15 & & 175 & 245 & 77 \\
-		A-Steps  & mild & 910 & 71 & 19 & &  963 & 809 & 291 \\
-		& refine & 9094 & 188 & 61  & & 5379 & 2593 & 1167 \\
+		& crudo & 96 & 23 & 15 & & 175 & 245 & 77 \\
+		A-Steps  & medio & 910 & 71 & 19 & &  963 & 809 & 291 \\
+		& refinado & 9094 & 188 & 61  & & 5379 & 2593 & 1167 \\
 		\hline
-		& crude & 1 & 0 & 0  & & 2 & 11 & 11 \\
-		R-Steps  & mild & 0 & 3 & 1  & & 1 & 10 & 2 \\
-		& refine & 2 & 5 & 1  & & 1 & 11 & 0 \\
+		& crudo & 1 & 0 & 0  & & 2 & 11 & 11 \\
+		R-Steps  & medio & 0 & 3 & 1  & & 1 & 10 & 2 \\
+		& refinado & 2 & 5 & 1  & & 1 & 11 & 0 \\
 		\hline
-		& crude & 385 & 38 & 91  & & 708 & 520 & 529 \\
-		$f$-Eval  & mild & 3642 & 101 & 121  & & 3857 & 1578 & 1759 \\
-		& refine & 36376 & 249 & 373  & & 21521 & 3021 & 7003 \\
+		& crudo & 385 & 38 & 91  & & 708 & 520 & 529 \\
+		$f$-Eval  & medio & 3642 & 101 & 121  & & 3857 & 1578 & 1759 \\
+		& refinado & 36376 & 249 & 373  & & 21521 & 3021 & 7003 \\
 		\hline
-		& crude & 95 & 1 & 4 &  & 175 & 2 & 72 \\
-		$J$-Eval  & mild & 910 & 1 & 7 & &  963 & 1 & 123 \\
-		& refine & 9090 & 1 & 18 & &  5379 & 1 & 145 \\
+		& crudo & 95 & 1 & 4 &  & 175 & 2 & 72 \\
+		$J$-Eval  & medio & 910 & 1 & 7 & &  963 & 1 & 123 \\
+		& refinado & 9090 & 1 & 18 & &  5379 & 1 & 145 \\
 		\hline
-		& crude & 291 & 0 & 15  & & 531 & 0 & 88 \\
-		K-subspace  & mild & 2730 & 0 & 20  & & 2892 & 0 & 293 \\
-		& refine & 27288 & 0 & 62  & & 16140 & 0 & 1167 \\
+		& crudo & 291 & 0 & 15  & & 531 & 0 & 88 \\
+		K-subspace  & medio & 2730 & 0 & 20  & & 2892 & 0 & 293 \\
+		& refinado & 27288 & 0 & 62  & & 16140 & 0 & 1167 \\
 		\hline
-		& crude & 0 & 36 & 0 &  & 0 & 518 & 0 \\
-		GMRES  & mild & 0 & 99 & 0 &  & 0 & 1576 & 0 \\
-		& refine & 0 & 247 & 0 & &  0 & 3019 & 0 \\
+		& crudo & 0 & 36 & 0 &  & 0 & 518 & 0 \\
+		GMRES  & medio & 0 & 99 & 0 &  & 0 & 1576 & 0 \\
+		& refinado & 0 & 247 & 0 & &  0 & 3019 & 0 \\
 		\hline
-		& crude & 293 & 0 & 15  & & 1422 & 0 & 165 \\
-		ME  & mild & 2800 & 0 & 31 &  & 7724 & 0 & 491 \\
-		& refine & 27971 & 0 & 90  & & 43067 & 0 & 1352 \\
+		& crudo & 293 & 0 & 15  & & 1422 & 0 & 165 \\
+		ME  & medio & 2800 & 0 & 31 &  & 7724 & 0 & 491 \\
+		& refinado & 27971 & 0 & 90  & & 43067 & 0 & 1352 \\
 		\hline
-		& crude & 0 & 7 & 0  & & 0 & 44 & 0 \\
-		ILU(0)  & mild & 0 & 16 & 0  & & 0 & 68 & 0 \\
-		& refine & 0 & 28 & 0  & & 0 & 106 & 0  \\
+		& crudo & 0 & 7 & 0  & & 0 & 44 & 0 \\
+		ILU(0)  & medio & 0 & 16 & 0  & & 0 & 68 & 0 \\
+		& refinado & 0 & 28 & 0  & & 0 & 106 & 0  \\
 		\hline
-		& crude & 580 & 36 & 60  & & 2136 & 518 & 606 \\
-		$\mf_{total}$  & mild & 5530 & 105 & 100 &  & 11588 & 1576 & 1529 \\
-		& refine & 55258 & 360 & 286  & & 64597 & 3019 & 4945 \\
+		& crudo & 580 & 36 & 60  & & 2136 & 518 & 606 \\
+		$\mf_{total}$  & medio & 5530 & 105 & 100 &  & 11588 & 1576 & 1529 \\
+		& refinado & 55258 & 360 & 286  & & 64597 & 3019 & 4945 \\
 		\hline
-		& crude & 2 & 1 & 4  & & 2 & 1 & 4 \\
-		$\mf_{min}$  & mild & 2 & 1 & 4  & & 2 & 1 & 4 \\
-		& refine & 2 & 1 & 4 & &  2 & 1 & 4 \\
+		& crudo & 2 & 1 & 4  & & 2 & 1 & 4 \\
+		$\mf_{min}$  & medio & 2 & 1 & 4  & & 2 & 1 & 4 \\
+		& refinado & 2 & 1 & 4 & &  2 & 1 & 4 \\
 		\hline
-		& crude & 3 & 1 & 4 & &  11 & 1 & 26 \\
-		$\mf_{max}$  & mild & 3 & 2 & 8  & & 8 & 1 & 10  \\
-		& refine & 4 & 2 & 8  & & 8 & 1 & 8 \\
+		& crudo & 3 & 1 & 4 & &  11 & 1 & 26 \\
+		$\mf_{max}$  & medio & 3 & 2 & 8  & & 8 & 1 & 10  \\
+		& refinado & 4 & 2 & 8  & & 8 & 1 & 8 \\
 		\hline
-		& crude & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		$\pf_{min}$  & mild & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		& refine & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		& crudo & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		$\pf_{min}$  & medio & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		& refinado & 0 & 0 & 3  & & 0 & 0 & 3 \\
 		\hline
-		& crude & 0 & 0 & 3 &  & 0 & 0 & 3 \\
-		$\pf_{max}$  & mild & 0 & 0 & 3  & & 0 & 0 & 3  \\
-		& refine & 0 & 0 & 3 &  & 0 & 0 & 3 \\
+		& crudo & 0 & 0 & 3 &  & 0 & 0 & 3 \\
+		$\pf_{max}$  & medio & 0 & 0 & 3  & & 0 & 0 & 3  \\
+		& refinado & 0 & 0 & 3 &  & 0 & 0 & 3 \\
 		\hline
 	\end{tabular}
 	\end{adjustbox}
@@ -842,67 +842,67 @@ Para explicar estos resultados, para cada ecuación de prueba, los detalles de e
 		\hline
 		& & \multicolumn{3}{c}{Brusselator2D $M=50$, $d=5000$ } & & \multicolumn{3}{c}{GrayScott2D $M=50$, $d=5000$ }\\
 		\cline{3-5} \cline{7-9}
-		& Tolerance & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} & & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} \\
+		& Tolerancia & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} & & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} \\
 		\hline
-		& crude & 4.1312 & 1.0000 & 1.1369 &  & 4.5759 & 1.0000 & 0.9329 \\
-		RTime  & mild & 1.8186 & 1.0000 & 0.3325 &  & 13.1155 & 1.0000 & 0.4019 \\
-		& refine & 2.6035 & 1.0000 & 0.2055  & & 35.2552 & 1.0000 & 0.2771 \\
+		& crudo & 4.1312 & 1.0000 & 1.1369 &  & 4.5759 & 1.0000 & 0.9329 \\
+		RTime  & medio & 1.8186 & 1.0000 & 0.3325 &  & 13.1155 & 1.0000 & 0.4019 \\
+		& refinado & 2.6035 & 1.0000 & 0.2055  & & 35.2552 & 1.0000 & 0.2771 \\
 		\hline
-		& crude & 1.11e-05 & 4.18e-04 & 6.80e-05 & &  2.58e-02 & 6.75e-02 & 3.61e-02 \\
-		RError  & mild & 1.26e-08 & 1.73e-06 & 4.44e-08 & &  3.76e-05 & 2.11e-04 & 2.39e-04 \\
-		& refine & 1.91e-11 & 3.74e-09 & 2.12e-10 & &  1.11e-06 & 2.24e-06 & 2.89e-07 \\
+		& crudo & 1.11e-05 & 4.18e-04 & 6.80e-05 & &  2.58e-02 & 6.75e-02 & 3.61e-02 \\
+		RError  & medio & 1.26e-08 & 1.73e-06 & 4.44e-08 & &  3.76e-05 & 2.11e-04 & 2.39e-04 \\
+		& refinado & 1.91e-11 & 3.74e-09 & 2.12e-10 & &  1.11e-06 & 2.24e-06 & 2.89e-07 \\
 		\hline
-		& crude & 10 & 20 & 13 &  & 57 & 51 & 28 \\
-		A-Step  & mild & 18 & 59 & 14 & &  596 & 133 & 38 \\
-		& refine & 98 & 141 & 22 & &  6000 & 353 & 91 \\
+		& crudo & 10 & 20 & 13 &  & 57 & 51 & 28 \\
+		A-Step  & medio & 18 & 59 & 14 & &  596 & 133 & 38 \\
+		& refinado & 98 & 141 & 22 & &  6000 & 353 & 91 \\
 		\hline
-		& crude & 0 & 0 & 0  & & 3 & 0 & 0 \\
-		R-Steps  & mild & 1 & 0 & 0  & & 4 & 0 & 0 \\
-		& refine & 1 & 0 & 0  & & 3 & 3 & 0 \\
+		& crudo & 0 & 0 & 0  & & 3 & 0 & 0 \\
+		R-Steps  & medio & 1 & 0 & 0  & & 4 & 0 & 0 \\
+		& refinado & 1 & 0 & 0  & & 3 & 3 & 0 \\
 		\hline
-		& crude & 42 & 28 & 79  & & 239 & 65 & 175 \\
-		$f$-Eval  & mild & 77 & 73 & 85  & & 2398 & 157 & 235 \\
-		& refine & 397 & 194 & 133  & & 24011 & 453 & 547 \\
+		& crudo & 42 & 28 & 79  & & 239 & 65 & 175 \\
+		$f$-Eval  & medio & 77 & 73 & 85  & & 2398 & 157 & 235 \\
+		& refinado & 397 & 194 & 133  & & 24011 & 453 & 547 \\
 		\hline
-		& crude & 10 & 1 & 12 & &  57 & 1 & 26 \\
-		$J$-Eval  & mild & 18 & 1 & 13  & & 596 & 1 & 26 \\
-		& refine & 98 & 1 & 19 & &  6000 & 1 & 34 \\
+		& crudo & 10 & 1 & 12 & &  57 & 1 & 26 \\
+		$J$-Eval  & medio & 18 & 1 & 13  & & 596 & 1 & 26 \\
+		& refinado & 98 & 1 & 19 & &  6000 & 1 & 34 \\
 		\hline
-		& crude & 30 & 0 & 13 &  & 180 & 0 & 28 \\
-		K-subspace  & mild & 57 & 0 & 14 &  & 1800 & 0 & 38 \\
-		& refine & 297 & 0 & 22  & & 18003 & 0 & 91 \\
+		& crudo & 30 & 0 & 13 &  & 180 & 0 & 28 \\
+		K-subspace  & medio & 57 & 0 & 14 &  & 1800 & 0 & 38 \\
+		& refinado & 297 & 0 & 22  & & 18003 & 0 & 91 \\
 		\hline
-		& crude & 0 & 26 & 0  & & 0 & 63 & 0 \\
-		GMRES  & mild & 0 & 71 & 0 & & 0 & 155 & 0 \\
-		& refine & 0 & 192 & 0 & & 0 & 451 & 0 \\
+		& crudo & 0 & 26 & 0  & & 0 & 63 & 0 \\
+		GMRES  & medio & 0 & 71 & 0 & & 0 & 155 & 0 \\
+		& refinado & 0 & 192 & 0 & & 0 & 451 & 0 \\
 		\hline
-		& crude & 48 & 0 & 13 & &  301 & 0 & 53 \\
-		ME  & mild & 186 & 0 & 20  & & 2406 & 0 & 70 \\
-		& refine & 850 & 0 & 39  & & 24022 & 0 & 177 \\
+		& crudo & 48 & 0 & 13 & &  301 & 0 & 53 \\
+		ME  & medio & 186 & 0 & 20  & & 2406 & 0 & 70 \\
+		& refinado & 850 & 0 & 39  & & 24022 & 0 & 177 \\
 		\hline
-		& crude & 0 & 6 & 0 & &  0 & 12 & 0 \\
-		ILU(0)  & mild & 0 & 12 & 0  & & 0 & 22 & 0 \\
-		& refine & 0 & 24 & 0 &  & 0 & 56 & 0 \\
+		& crudo & 0 & 6 & 0 & &  0 & 12 & 0 \\
+		ILU(0)  & medio & 0 & 12 & 0  & & 0 & 22 & 0 \\
+		& refinado & 0 & 24 & 0 &  & 0 & 56 & 0 \\
 		\hline
-		& crude & 83 & 44 & 52  & & 501 & 150 & 226 \\
-		$\mf_{total}$  & mild & 275 & 160 & 71  & & 4208 & 479 & 317 \\
-		& refine & 1263 & 512 & 139 &  & 42033 & 1540 & 576 \\
+		& crudo & 83 & 44 & 52  & & 501 & 150 & 226 \\
+		$\mf_{total}$  & medio & 275 & 160 & 71  & & 4208 & 479 & 317 \\
+		& refinado & 1263 & 512 & 139 &  & 42033 & 1540 & 576 \\
 		\hline
-		& crude & 2 & 1 & 4  & & 2 & 1 & 4 \\
-		$\mf_{min}$  & mild & 3 & 1 & 4  & & 2 & 1 & 4 \\
-		& refine & 3 & 1 & 4  & & 2 & 1 & 4 \\
+		& crudo & 2 & 1 & 4  & & 2 & 1 & 4 \\
+		$\mf_{min}$  & medio & 3 & 1 & 4  & & 2 & 1 & 4 \\
+		& refinado & 3 & 1 & 4  & & 2 & 1 & 4 \\
 		\hline
-		& crude & 8 & 2 & 4  & & 6 & 4 & 16 \\
-		$\mf_{max}$  & mild & 8 & 3 & 8  & & 11 & 5 & 15 \\
-		& refine & 8 & 4 & 7  & & 8 & 6 & 8 \\
+		& crudo & 8 & 2 & 4  & & 6 & 4 & 16 \\
+		$\mf_{max}$  & medio & 8 & 3 & 8  & & 11 & 5 & 15 \\
+		& refinado & 8 & 4 & 7  & & 8 & 6 & 8 \\
 		\hline
-		& crude & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		$\pf_{min}$  & mild & 0 & 0 & 3 &  & 0 & 0 & 3 \\
-		& refine & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		& crudo & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		$\pf_{min}$  & medio & 0 & 0 & 3 &  & 0 & 0 & 3 \\
+		& refinado & 0 & 0 & 3  & & 0 & 0 & 3 \\
 		\hline
-		& crude & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		$\pf_{max}$  & mild & 0 & 0 & 3 &  & 0 & 0 & 3  \\
-		& refine & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		& crudo & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		$\pf_{max}$  & medio & 0 & 0 & 3 &  & 0 & 0 & 3  \\
+		& refinado & 0 & 0 & 3  & & 0 & 0 & 3 \\
 		\hline
 	\end{tabular}
 \end{adjustbox}
@@ -918,67 +918,67 @@ Para explicar estos resultados, para cada ecuación de prueba, los detalles de e
 		\hline
 		& & \multicolumn{3}{c}{Brusselator $M=500$, $d=1000$ } & & \multicolumn{3}{c}{DND $M=500$, $d=500$}\\
 		\cline{3-5} \cline{7-9}
-		& Tolerance & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} & & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} \\
+		& Tolerancia & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} & & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} \\
 		\hline
-		& crude & 2.3013 & 1.0000 & 0.7131  & & 7.6714 & 1.0000 & 3.4038 \\
-		RTime  & mild & 84.1038 & 1.0000 & 0.6988  & & 5.9656 & 1.0000 & 2.3140  \\
-		& refine & 942.6567 & 1.0000 & 1.9127  & & 35.0007 & 1.0000 & 1.4193 \\
+		& crudo & 2.3013 & 1.0000 & 0.7131  & & 7.6714 & 1.0000 & 3.4038 \\
+		RTime  & medio & 84.1038 & 1.0000 & 0.6988  & & 5.9656 & 1.0000 & 2.3140  \\
+		& refinado & 942.6567 & 1.0000 & 1.9127  & & 35.0007 & 1.0000 & 1.4193 \\
 		\hline
-		& crude & 1.33e-01 & 4.67e-03 & 1.42e-03  & & 8.17e-01 & 1.49e-01 & 1.71e-01 \\
-		RError  & mild & 7.68e-05 & 1.46e-04 & 3.91e-05  & & 7.11e-03 & 3.98e-03 & 4.63e-05 \\
-		& refine & 8.73e-07 & 2.72e-08 & 7.66e-08  & & 3.57e-05 & 2.79e-05 & 5.81e-07 \\
+		& crudo & 1.33e-01 & 4.67e-03 & 1.42e-03  & & 8.17e-01 & 1.49e-01 & 1.71e-01 \\
+		RError  & medio & 7.68e-05 & 1.46e-04 & 3.91e-05  & & 7.11e-03 & 3.98e-03 & 4.63e-05 \\
+		& refinado & 8.73e-07 & 2.72e-08 & 7.66e-08  & & 3.57e-05 & 2.79e-05 & 5.81e-07 \\
 		\hline
-		& crude & 5896 & 6151 & 5421 &  & 3546 & 4580 & 19170 \\
-		A-Steps  & mild & 253547 & 6995 & 9336  & & 21641 & 7260 & 19192 \\
-		& refine & 2585918 & 9847 & 34346  & & 209088 & 14628 & 28798 \\
+		& crudo & 5896 & 6151 & 5421 &  & 3546 & 4580 & 19170 \\
+		A-Steps  & medio & 253547 & 6995 & 9336  & & 21641 & 7260 & 19192 \\
+		& refinado & 2585918 & 9847 & 34346  & & 209088 & 14628 & 28798 \\
 		\hline
-		& crude & 40 & 5623 & 180  & & 4 & 1166 & 3176 \\
-		R-Steps  & mild & 5 & 4827 & 0  & & 4 & 619 & 2708 \\
-		& refine & 4 & 4629 & 0  & & 2 & 145 & 105 \\
+		& crudo & 40 & 5623 & 180  & & 4 & 1166 & 3176 \\
+		R-Steps  & medio & 5 & 4827 & 0  & & 4 & 619 & 2708 \\
+		& refinado & 4 & 4629 & 0  & & 2 & 145 & 105 \\
 		\hline
-		& crude & 23714 & 19746 & 33607  & & 14198 & 13048 & 134077 \\
-		$f$-Eval  & mild & 1014205 & 20842 & 56017  & & 86578 & 20159 & 131401 \\
-		& refine & 10343686 & 24450 & 206077  & & 836360 & 32775 & 173419 \\
+		& crudo & 23714 & 19746 & 33607  & & 14198 & 13048 & 134077 \\
+		$f$-Eval  & medio & 1014205 & 20842 & 56017  & & 86578 & 20159 & 131401 \\
+		& refinado & 10343686 & 24450 & 206077  & & 836360 & 32775 & 173419 \\
 		\hline
-		& crude & 5898 & 1865 & 4002 &  & 3546 & 581 & 17037 \\
-		$J$-Eval  & mild & 253547 & 1894 & 131 & &  21641 & 294 & 15864  \\
-		& refine & 2585918 & 2123 & 135  & & 209088 & 9 & 2047 \\
+		& crudo & 5898 & 1865 & 4002 &  & 3546 & 581 & 17037 \\
+		$J$-Eval  & medio & 253547 & 1894 & 131 & &  21641 & 294 & 15864  \\
+		& refinado & 2585918 & 2123 & 135  & & 209088 & 9 & 2047 \\
 		\hline
-		& crude & 17808 & 0 & 6601  & & 10644 & 0 & 22346 \\
-		K-subspace  & mild & 760656 & 0 & 9336  & & 64935 & 0 & 21900 \\
-		& refine & 7757766 & 0 & 34346  & &  627270 & 0 & 28903 \\
+		& crudo & 17808 & 0 & 6601  & & 10644 & 0 & 22346 \\
+		K-subspace  & medio & 760656 & 0 & 9336  & & 64935 & 0 & 21900 \\
+		& refinado & 7757766 & 0 & 34346  & &  627270 & 0 & 28903 \\
 		\hline
-		& crude & 0 & 19744 & 0  & & 0 & 13046 & 0 \\
-		GMRES  & mild & 0 & 20840 & 0  & & 0 & 20157 & 0 \\
-		& refine & 0 & 24448 & 0  & & 0 & 32773 & 0 \\
+		& crudo & 0 & 19744 & 0  & & 0 & 13046 & 0 \\
+		GMRES  & medio & 0 & 20840 & 0  & & 0 & 20157 & 0 \\
+		& refinado & 0 & 24448 & 0  & & 0 & 32773 & 0 \\
 		\hline
-		& crude & 17990 & 0 & 5601  & & 47516 & 0 & 22364 \\
-		ME  & mild & 760690 & 0 & 9336  & & 85071 & 0 & 25659 \\
-		& refine & 7757796 & 0 & 34346  & & 790370 & 0 & 32463 \\
+		& crudo & 17990 & 0 & 5601  & & 47516 & 0 & 22364 \\
+		ME  & medio & 760690 & 0 & 9336  & & 85071 & 0 & 25659 \\
+		& refinado & 7757796 & 0 & 34346  & & 790370 & 0 & 32463 \\
 		\hline
-		& crude & 0 & 7603 & 0  & & 0 & 2163 & 0 \\
-		ILU(0)  & mild & 0 & 6573 & 0  & & 0 & 1632 & 0 \\
-		& refine & 0 & 6732 & 0 & &  0 & 709 & 0 \\
+		& crudo & 0 & 7603 & 0  & & 0 & 2163 & 0 \\
+		ILU(0)  & medio & 0 & 6573 & 0  & & 0 & 1632 & 0 \\
+		& refinado & 0 & 6732 & 0 & &  0 & 709 & 0 \\
 		\hline
-		& crude & 35807 & 22779 & 22750  & & 81634 & 13046 & 95055 \\
-		$\mf_{total}$  & mild & 1521373 & 41927 & 37344  & & 150087 & 20157 & 100908 \\
-		& refine & 15515593 & 64496 & 137384 &  & 1417707 & 32773 & 121723 \\
+		& crudo & 35807 & 22779 & 22750  & & 81634 & 13046 & 95055 \\
+		$\mf_{total}$  & medio & 1521373 & 41927 & 37344  & & 150087 & 20157 & 100908 \\
+		& refinado & 15515593 & 64496 & 137384 &  & 1417707 & 32773 & 121723 \\
 		\hline
-		& crude & 2 & 1 & 4  & & 2 & 1 & 4 \\
-		$\mf_{min}$  & mild & 2 & 1 & 4 &  & 2 & 1 & 4  \\
-		& refine & 2 & 1 & 4  & & 2 & 1 & 4 \\
+		& crudo & 2 & 1 & 4  & & 2 & 1 & 4 \\
+		$\mf_{min}$  & medio & 2 & 1 & 4 &  & 2 & 1 & 4  \\
+		& refinado & 2 & 1 & 4  & & 2 & 1 & 4 \\
 		\hline
-		& crude & 20 & 2 & 6  & & 36 & 1 & 14  \\
-		$\mf_{max}$  & mild & 15 & 3 & 4  & & 36 & 1 & 12  \\
-		& refine & 36 & 3 & 4  & & 36 & 1 & 11 \\
+		& crudo & 20 & 2 & 6  & & 36 & 1 & 14  \\
+		$\mf_{max}$  & medio & 15 & 3 & 4  & & 36 & 1 & 12  \\
+		& refinado & 36 & 3 & 4  & & 36 & 1 & 11 \\
 		\hline
-		& crude & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		$\pf_{min}$  & mild & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		& refine & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		& crudo & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		$\pf_{min}$  & medio & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		& refinado & 0 & 0 & 3  & & 0 & 0 & 3 \\
 		\hline
-		& crude & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		$\pf_{max}$  & mild & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		& refine & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		& crudo & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		$\pf_{max}$  & medio & 0 & 0 & 3  & & 0 & 0 & 3 \\
+		& refinado & 0 & 0 & 3  & & 0 & 0 & 3 \\
 		\hline
 	\end{tabular}
 \end{adjustbox}
