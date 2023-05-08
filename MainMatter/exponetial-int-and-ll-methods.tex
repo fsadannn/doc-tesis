@@ -23,28 +23,24 @@ de esquemas numéricos para EDOs que requieren del cálculo de algún término e
 \frac{dx(t)}{dt} = Ax(t) + F(x(t))  \;\;  \label{ODE Lines Method}
 \end{equation}
 que resultan de la discretización espacial de una ecuación diferencial en derivadas parciales, donde $A$ es una
-matriz cuadrada y $F$ una función no lineal de $x(t)\in\mathbb{R}^d$ y $t\geq t_0 \in \mathbb{R}$. Más recientemente, en los años 90, esta clase de integradores fue extendida a EDOs de la forma general (\ref{ODE-SYST}).
+matriz cuadrada y $F$ una función no lineal de $x(t)\in\mathbb{R}^d$ y $t\geq t_0 \in \mathbb{R}$. Más recientemente, a finales de los años 90, esta clase de integradores fue extendida a EDOs de la forma general (\ref{ODE-SYST}).
 
 Los integradores exponenciales tanto para ecuaciones semilineales como para ecuaciones generales provienen de la aproximación de la integral
-que resulta de aplicar la fórmula de variación de la constante a estas ecuaciones~(\ref{ODE Lines Method}). Al aplicar la fórmula de variación
-de la constante la solución de la ecuación (\ref{ODE Lines Method}) se escribe como
+que resulta de aplicar la fórmula de variación de constantes a estas ecuaciones~\cite{jimenez2020}. Al aplicar dicha fórmula la solución de la ecuación (\ref{ODE Lines Method}) se escribe como
 \begin{equation}
 x(t_n+h)=\me{Ah}\left(x(t_n) +\int\limits_{0}^{h} \me{-As}F(x(t_n+s)) \,ds\right)\,. \label{VCF2}
 \end{equation}
 Los integradores exponenciales obtenidos de aproximar ésta expresión son, por ejemplo, los conocidos métodos de Lawson, Lawson Generalizados, Exponential Time
-Differencing y Exponential Runge-Kutta (ver \cite{Berland07} para una revisión). 
-
-Por otra parte, después de la linealización local de la ecuación (\ref{ODE-SYST}) en $t_{n}$,  la fórmula de variación
-de la constante lleva a 
+Differencing y Exponential Runge-Kutta (ver \cite{Berland07} para una revisión). Por otra parte, después de la linealización local de la ecuación (\ref{ODE-SYST}) en $t_{n}$,  la fórmula de variación de constantes lleva a
 \begin{eqnarray}
 x(t_{n}+h) &= & x(t_{n})+\int\limits_{0}^{h}e^{A	_{n}(h-s)}(f(t_n,x(t_{n}))+sf_t(t_n,x(t_{n})))ds \nonumber \\
  & & +\int\limits_{0}^{h}e^{A
 	_{n}(h-s)}g_{n}(t_{n}+s,x(t_{n}+s))ds, \label{VCF}
 \end{eqnarray}
-donde $A_{n}$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$ y $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))+f_t(s,u)(s-t_n)$. 
+donde $A_{n}$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$ y $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))-f_t(t_n,x(t_{n}))(s-t_n)-f(t_n,x(t_n))$. 
 Ejemplos de integradores exponenciales obtenidos de aproximar ésta expresión son el método clásico de Pope~\cite{pope1963exponential} de orden 2, los métodos Runge-Kutta Localmente 
 Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}, los métodos Exponenciales de Propagación 
-Iterativa~\cite{tokman2013comparative}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
+Iterativa~\cite{tokman2006efficient, tokman2012new}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
 métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los métodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}, todos de orden superior a 2.
 
 En otro contexto, los integradores exponenciales también fueron tempranamente introducidos como aproximación de soluciones de otras clases de ecuaciones. Por ejemplo, para aproximar las ecuaciones diferenciales estocásticas~\cite{ozaki19852,ozaki1985statistical} y sus asociados problemas de filtrado continuo-discreto~\cite{ozaki1993local} y estimación de procesos de difusión~\cite{ozaki19852,ozaki1985statistical,ozaki1994local}. Luego fueron extendidos para la integración de ecuaciones diferenciales aleatorias~\cite{carbonell2005local}, con retardo~\cite{jimenez2006local} y para las parciales estocásticas semilineales~\cite{jentzen2009overcoming,kloeden2011exponential}.
@@ -70,7 +66,7 @@ solución de la ecuación
 y(t_{n})& = & y_{n}  \nonumber
 \end{eqnarray}
 para todo $t\in[t_{n},t_{n+1}]$ es una aproximación de la solución
-de (\ref{ODE-SYST}) con condición inicial \mbox{$x(t_{n})=y_{n}$}. Mediante la fórmula de variación de la constante obtenemos 
+de (\ref{ODE-SYST}) con condición inicial \mbox{$x(t_{n})=y_{n}$}. Mediante la fórmula de variación de constantes obtenemos 
 \begin{equation}
 y(t)=y_{n}+\phi(t_{n},y_{n},t-t_{n})  \label{ODE-SYST-FORM-LL}
 \end{equation}
@@ -156,7 +152,7 @@ Cuando $\xi$ es la aproximación obtenida mediante un esquema Runge-Kutta de ord
 	para todo $t\in[t_{0},T]$, donde $y_{n_{t}}$ es la discretización Lineal Local Runge-Kutta de orden $\gamma$, y $n_{t}=\maxx{n:t_{n}\leq t}$.
 \end{definition}
 
-Como ejemplos importantes se tienen las siguientes discretizaciones Lineales Locales-Runge-Kutta de orden 4 y 4-5.
+Como ejemplos importantes se tienen las siguientes discretizaciones Lineales Locales Runge-Kutta de orden 4 y 4-5.
 
 Utilizando la fórmula Runge-Kutta clásica de orden 4~\cite{hairer1993solving} para integrar la ecuación auxiliar (\ref{ODE r}), se obtiene la discretización Lineal Local Runge-Kutta de orden 4~\cite{Jimenez13}:
 
@@ -396,7 +392,7 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
     \caption{Algoritmo de Arnoldi para construir una base ortonormal $\{ v_1,\ldots,v_\mf \}$ del $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(A,b)=\mathrm{span} \{ b,Ab,\ldots, A^{\mf-1}b \}$}
     \label{alg:Arnoldi}
     \KwIn{Matriz $A\in \mathbb{R}^{d\times d}$, vector $b\in \mathbb{R}^{d}$ y constante $\tau$}
-    \KwOut{$V_\mf=\left[ v_1 \, \cdots \, v_\mf \right]\in\mathbb{R}^{d\times\mf}$, matriz de Hessenberg $H_\mf^*=V_\mf^{\intercal} A V_\mf $, $v_{\mf}\in\mathbb{R}^d$, $\hf_{\mf+1,\mf}$,$\mf_{cut}$ , $breakdown$ }
+    \KwOut{$V_\mf=\left[ v_1 \, \cdots \, v_\mf \right]\in\mathbb{R}^{d\times\mf}$, matriz de Hessenberg $H_\mf^*=V_\mf^{\intercal} A V_\mf $, $v_{\mf}\in\mathbb{R}^d$, $\hf_{\mf+1,\mf}$, $\mf_{cut}$, $breakdown$ }
 
     $breakdown=false$\\
     $v_1=b/\lVert b \rVert_2$\\
@@ -439,7 +435,7 @@ Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obt
 
 \section{Producto de funciones phi por vectores}
 
-Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{ODE Lines Method}) o (\ref{VCF2}). De ésta manera, típicamente, se obtienen expresiones recursivas que involucran integrales de la forma
+Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{VCF2}) o (\ref{VCF}). De ésta manera, típicamente, se obtienen expresiones recursivas que involucran integrales de la forma
 \begin{equation*}
 \phi _{k}(z,h)=\int_{0}^{h}e^{z(h-s)}s^{k-1}ds,\text{ \ \ \ \ \ \ \ }%
 k=1,2,\ldots ,
