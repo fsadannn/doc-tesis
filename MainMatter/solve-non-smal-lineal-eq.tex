@@ -102,7 +102,7 @@ donde $r_\mf(z) = \varphi_{2}(z)-p_{2,\mf-1}(z)$, y $p_{2,\mf-1}$ es un polinomi
 \begin{equation*}
 p_{2,\mf-1}(z)\equiv \frac{p_{1,\mf}(z)-1}{z},
 \end{equation*}
-donde $p_{1,\mf}$ es la expansión de Taylor de $\phi_1$ hasta el orden  $\mf$
+donde $p_{1,\mf}$ es la expansión de Taylor de $\varphi_1$ hasta el orden  $\mf$
 definida por
 \[ p_{1,\mf}(z)= \frac{p_{0,\mf+1}(z)-1}{z}, \]
 donde $p_{0,\mf+1}(z)$  es la expansión de Taylor de $\me{z}$ hasta el orden $\mf+1$ dada por
@@ -120,7 +120,7 @@ de esto se obtiene
 \begin{equation}
 \nnorm{\nnorm{r_\mf(\tau A)v_1}}_2\leq \frac{\rho^{\mf}\me{\rho}}{(\mf+2)!}\;\;\;\;\; y \;\;\;\;\; \nnorm{\nnorm{r_\mf(\tau H_\mf)v_1}}_2\leq \frac{\widehat{\rho}^{\mf}\me{\widehat{\rho}}}{(\mf+2)!}, \label{polinom}
 \end{equation}
-donde $\rho=\nnorm{\nnorm{\tau A}}_2 $ y  $\widehat{\rho}=\nnorm{\nnorm{\tau H_\mf}}_2$. Ya que $\nnorm{\nnorm{H_\mf}}\leq\nnorm{\nnorm{A}}$, de (\ref{eq:smeq}) y (\ref{polinom}) se obtiene
+donde $\rho=\nnorm{\nnorm{\tau A}}_2 $ y  $\widehat{\rho}=\nnorm{\nnorm{\tau H_\mf}}_2$. Ya que $\nnorm{\nnorm{H_\mf}}_2\leq\nnorm{\nnorm{A}}_2$, de (\ref{eq:smeq}) y (\ref{polinom}) se obtiene
 \begin{equation*}
 \nnorm{\nnorm{\tau As_\mf(\tau A)}}_2  \leq \frac{2 \nnorm{\nnorm{b}}_2\rho^{\mf+1}\me{\rho}}{(\mf+2)!}.
 \end{equation*}
@@ -183,11 +183,11 @@ donde
 \begin{equation*}
 K_{\mf}\left(\tau,A , b \right)=\nnorm{\nnorm{b}}_2 \tau V_{\mf}\varphi_1\left( \tau H_{\mf} \right) e_1 + \nnorm{\nnorm{b}}_2 \tau^{2}\hf_{\mf+1,\mf}e_\mf^T\varphi_2\left(\tau H_\mf\right) e_1 v_{\mf+1}
 \end{equation*}
-es la aproximación de Krylov de $\tau \varphi_1(\tau A)b$ definida en~(\ref{eq:kp_aprox}), y
+es la aproximación de Krylov de $\tau \varphi_1(\tau A)b$ definida en~(\ref{exact-two-terms-km}), y
 \begin{equation*}
 K_{\mf,k}^{\pf,\qf}\left(\tau, A , b \right)=\nnorm{\nnorm{b}}_2 V_{\mf}\;[\widetilde{E}_{\tau}]_{12} + \nnorm{\nnorm{b}}_2 \hf_{\mf+1,\mf}e_\mf^T\;[\widetilde{E}_{\tau}]_{13} v_{\mf+1}
 \end{equation*}
-la aproximación Krylov-Padé de $\tau \varphi_1(\tau A)b$ definida en~(\ref{eq:gen_kp_aprox}).
+la aproximación Krylov-Padé de $\tau \varphi_1(\tau A)b$ definida en~(\ref{eq:kp_aprox}).
 
 De (\ref{phi_hhat_exponential}) se tiene que
 $\tau^j \varphi_j\left( \tau H_{\mf} \right) e_1 = L \me{\tau \overline{H}} r_j$
@@ -349,7 +349,7 @@ Al utilizar el algoritmo de Arnoldi~(\ref{alg:Arnoldi}), la aproximación $K_{\m
 
 Utilizando  (\ref{eq:g_bound}) se tiene
 \[ \nnnorm{\varepsilon_j}_2=\nnnorm{g(y,\tau\widehat{v}_j,\delta)-\tau f_x(y)\widehat{v}_j}_2 \leq  \mathfrak{L} \tau^{\eta+1}\delta^{\eta}\;\;\;\text{para}\;j=1,\dots,\mf, \]
-donde $L$ es una constante positiva. Entonces, 
+donde $\mathfrak{L}$ es una constante positiva. Entonces, 
 \begin{eqnarray*}
 	\nnnorm{R_\mf}_2 & = & \nnnorm{\varepsilon^\mf V_\mf^T}_2\leq\nnnorm{\varepsilon^\mf}_2\leq \nnnorm{\varepsilon^\mf}_F \\
 	& \leq & \left( \nnnorm{\varepsilon_1}_2^2 + \cdots + \nnnorm{\varepsilon_\mf}_2^2 \right)^{1/2} \\
@@ -367,13 +367,13 @@ con lo que concluye la demostración. $\blacksquare$\\
 	\end{equation}
 	con $\tau,\delta \in [0,1]$, donde $\mathfrak{c}_0$ y $\mathfrak{c}_1$ son constantes positivas que dependen de $\mf,\pf,\qf,k$, $\nnnorm{A}_2$, $\nnnorm{b}_2$ y $\mathfrak{L}$, siendo $\mathfrak{L}$ la constante~(\ref{eq:g_bound}) correspondiente a la aproximación $g(.;\delta)$ en el algoritmo de Arnoldi sin matriz~\ref{alg:iArnoldi}.
 \end{theorem}
-\textbf{Demostración} Del \ref{theorem:krilobapproxequality}, se tiene
+\textbf{Demostración} Del Teorema \ref{theorem:krilobapproxequality}, se tiene
 \[ \widehat{\mathcal{K}}_\mf(\tau^\beta A,b;\delta)=\mathcal{K}_\mf(\tau^\beta A+R_\mf,b) \]
 y
 \begin{equation}
 	\nnnorm{R_m}_2\leq \sqrt{\mf} \mathfrak{L} \tau^{\beta(\eta+1)}\delta^{\eta},  \label{eq:fjbound3}
 \end{equation}
-donde la matriz $R_\mf$ y la constante positiva $L$ están definidas en el Teorema \ref{theorem:krilobapproxequality}. 
+donde la matriz $R_\mf$ y la constante positiva $\mathfrak{L}$ están definidas en el Teorema \ref{theorem:krilobapproxequality}. 
 
 De la propiedad de invarianza ante escalado de la base ortonormal del subespacio de Krylov se tiene que
 \[ \mathcal{K}_\mf(\tau^\beta A+R_\mf,b) = \mathcal{K}_\mf(A+\widehat{R}_\mf,b), \]
@@ -396,12 +396,12 @@ De la Desigualdad de Incremento Finito y la cota~(\ref{eq:fjbound3}) se obtiene
 \begin{align}
 	\nnnorm{\me{\tau A}b - \me{\tau A + \tau \widehat{R}_\mf}b}_2&\leq \nnnorm{b}_2 \nnnorm{\tau \widehat{R}_\mf}_2\me{\tau\nnnorm{A}_2+\tau\nnnorm{\widehat{R}_\mf}_2} \\ &\leq \nnnorm{b}_2   \sqrt{\mf}\mathfrak{L} \tau^{\beta\eta+1}\delta^\eta\me{\tau(\nnnorm{A}_2+\sqrt{\mf}\mathfrak{L})} \nonumber\label{eq:fjbound1}
 \end{align}
-y, del Teorema 3.1 en \cite{naranjo2021locally}, 
+y, del Teorema \ref{theorem:Krylov-bound}, 
 \vspace{-0.25cm}
 \begin{equation}
 	\nnnorm{\tau \varphi_1(\tau A+\widehat{R}_\mf)b-K_{\mf,k}^{\pf,\qf}\left( \tau, A+\widehat{R}_\mf , b \right)}_2  \leq \nnnorm{b}_2C_{\mf,\kt}^{\pf,\qf}(\nnnorm{A}_2+\sqrt{\mf}\mathfrak{L})\tau^{\min\{\mf+2,\pf+\qf+1\}}, \label{eq:fjbound2}
 \end{equation}
-donde $C_{\mf,\kt}^{\pf,\qf}$ está definido en el Teorema 3.1 in \cite{naranjo2021locally}.
+donde $C_{\mf,\kt}^{\pf,\qf}$ está definido en el Teorema \ref{theorem:Krylov-bound}.
 
 Utilizando las desigualdades (\ref{eq:fjbound})-(\ref{eq:fjbound2})
 \vspace{-0.25cm}
@@ -493,7 +493,7 @@ El objetivo de esta sección es realizar un conjunto de simulaciones numéricas 
 
 
 \subsubsection{Simulaciones numéricas para Aproximaciones Krylov-Padé}
-La Figura \ref{fig:SumPhi} presenta los diagramas de tiempo-precisión para los métodos de \cite{hochbruck1997krylov}, \cite{sidje1998expokit}, \cite{niesen2012algorithm} y (\ref{phi_approx}), como función de la dimensión de Krylov $\mf$, en el cálculo de (\ref{sum2_phiXv}) para dos valores de $l$. La matriz $\mathbf{A}$ fue tomada como $10000 \times 10000$ \textit{Tridiag} de la galería de funciones de Matlab18a, $\mathbf{a}_1=\mathbf{a}_2=\mathbf{a}_3=\mathbf{1}$, y $t=0.1$. La norma euclidiana se usa para medir el error entre el valor ``exacto'' de $\mathbf{L} e^{t \mathbf{M}}\mathbf{r}$ y sus aproximaciones. Con fines comparativos, el valor ``exacto'' de $e^{t \mathbf{M}}$ y la matriz exponencial $\me{t\overline{\mathbf{H}}}$ en (\ref{phi_approx}) se calculan con la misma función de Matlab \textit{expm} que la utilizada en \cite{sidje1998expokit} y \cite{niesen2012algorithm} para calcular la exponencial de la matriz de Hessenberg. Como principal diferencia con la aproximación (\ref{phi_approx}) y la propuesta en~\cite{hochbruck1997krylov}, la precisión de los métodos de \cite{sidje1998expokit} y \cite{niesen2012algorithm} se mejora con una estrategia de cambio de tamaño de paso regulada por estimaciones de los errores de la aproximación. De esta forma, como se observa en la Figura \ref{fig:SumPhi}, para el mismo valor de $\mf$ los métodos de \cite{sidje1998expokit} y \cite{niesen2012algorithm} alcanzan o superan la precisión del método (\ref{phi_approx}) pero a expensas de un mayor costo computacional. Con respecto al método en \cite{hochbruck1997krylov} que calcula $e^{t \mathbf{M}}$ directamente a través del método del subespacio de Krylov, la aproximación en (\ref{phi_approx}) incluye un segundo término con el producto escalar de dos vectores de baja dimensión, pero ambas aproximaciones comparten los  algoritmos más complejos y costosos: el algoritmo de Arnoldi para los mismos subespacios de Krylov y el del cálculo de la exponencial de la  matriz de Hessenberg. Dado que la aproximación en (\ref{phi_approx}) también es dos órdenes superior, se espera que la aproximación (\ref{phi_approx}) sea más precisa que la de \cite{hochbruck1997krylov} con un costo computacional similar, tal y como se muestra en la Figura \ref{fig:SumPhi}.
+La Figura \ref{fig:SumPhi} presenta los diagramas de tiempo-precisión para los métodos de \cite{hochbruck1997krylov}, \cite{sidje1998expokit}, \cite{niesen2012algorithm} y (\ref{phi_approx}), como función de la dimensión de Krylov $\mf$, en el cálculo de (\ref{sum2_phiXv}) para dos valores de $l$. La matriz $\mathbf{A}$ fue tomada como $10000 \times 10000$ \textit{Tridiag} de la galería de funciones de Matlab18a, $\mathbf{a}_1=\mathbf{a}_2=\mathbf{a}_3=\mathbf{1}$, y $t=0.1$. La norma euclidiana se utiliza para medir el error entre el valor ``exacto'' de $\mathbf{L} e^{t \mathbf{M}}\mathbf{r}$ y sus aproximaciones. Con fines comparativos, el valor ``exacto'' de $e^{t \mathbf{M}}$ y la matriz exponencial $\me{t\overline{\mathbf{H}}}$ en (\ref{phi_approx}) se calculan con la misma función de Matlab \textit{expm} que la utilizada en \cite{sidje1998expokit} y \cite{niesen2012algorithm} para calcular la exponencial de la matriz de Hessenberg. Como principal diferencia con la aproximación (\ref{phi_approx}) y la propuesta en~\cite{hochbruck1997krylov}, la precisión de los métodos de \cite{sidje1998expokit} y \cite{niesen2012algorithm} se mejora con una estrategia de cambio de tamaño de paso regulada por estimaciones de los errores de la aproximación. De esta forma, como se observa en la Figura \ref{fig:SumPhi}, para el mismo valor de $\mf$ los métodos de \cite{sidje1998expokit} y \cite{niesen2012algorithm} alcanzan o superan la precisión del método (\ref{phi_approx}) pero a expensas de un mayor costo computacional. Con respecto al método en \cite{hochbruck1997krylov} que calcula $e^{t \mathbf{M}}$ directamente a través del método del subespacio de Krylov, la aproximación en (\ref{phi_approx}) incluye un segundo término con el producto escalar de dos vectores de baja dimensión, pero ambas aproximaciones comparten los  algoritmos más complejos y costosos: el algoritmo de Arnoldi para los mismos subespacios de Krylov y el del cálculo de la exponencial de la  matriz de Hessenberg. Dado que la aproximación en (\ref{phi_approx}) también es dos órdenes superior, se espera que la aproximación (\ref{phi_approx}) sea más precisa que la de \cite{hochbruck1997krylov} con un costo computacional similar, tal y como se muestra en la Figura \ref{fig:SumPhi}.
 
 \begin{figure}[ht]
 	% \centering
