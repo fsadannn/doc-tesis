@@ -1,6 +1,6 @@
 \chapter{Método Runge-Kutta de Dormand y Prince Localmente Linealizado}\label{chapter:lldp}
 
-En el Capítulo \ref{chapter:exp-int-and-ll-methods} se presentó la Aproximación Lineal Local de Orden Superior para EDO. Como se explicó en ese capítulo, a esa clase de métodos pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución $u$ de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r=x-u$ proporcionada por un integrador numérico de alto orden. En el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se propusieron y utilizaron las aproximaciones Krylov-Padé para resolver la ecuación diferencial lineal de dimensiones no pequeñas. En éste capítulo se utilizará las fórmulas  Runge-Kutta embebidas de Dormand y Prince para aproximar la solución de la ecuación diferencial no lineal del residuo. Combinando estas aproximaciones se obtendrá el Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDOs de dimensiones no pequeñas. Utilizando las nuevas fórmulas, se construyen también estrategias adaptativas para implementar esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Los resultados de este capiítulo están basados en \cite{naranjo2021locally}.
+En el Capítulo \ref{chapter:exp-int-and-ll-methods} se presentó la Aproximación Lineal Local de Orden Superior para EDO. Como se explicó en ese capítulo, a esa clase de métodos pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución $u$ de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r=x-u$ proporcionada por un integrador numérico de alto orden. En el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se propusieron y utilizaron las aproximaciones Krylov-Padé para resolver la ecuación diferencial lineal de dimensiones no pequeñas. En éste capítulo se utilizará las fórmulas  Runge-Kutta embebidas de Dormand y Prince para aproximar la solución de la ecuación diferencial no lineal del residuo. Combinando estas aproximaciones se obtendrá el Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDOs de dimensiones no pequeñas. Utilizando las nuevas fórmulas, se construyen también estrategias adaptativas para implementar esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Los resultados de este capítulo están basados en \cite{naranjo2021locally}.
 
 Sin pérdida de generalidad consideremos el PVI autónomo $d$-dimensional
 \begin{equation}\label{syst}
@@ -66,7 +66,7 @@ En particular, con $\gamma=\frac{1}{90}$, se calculada la matriz particionada $E
     E_{2/5}& =E_{1/5}E_{1/5} & E_{4/5}& =E_{2/5}E_{2/5}  \notag \\
     E_{3/10}& =E_{1/10}E_{1/5} & E_{1}& =E_{4/5}E_{1/5}\;,  \notag
 \end{align}
-con lo cual las cinco matrices requeridas $E_{c_j}$ son obtenidas. Como, en general, la exponencial de una matriz no puede ser calculada de forma exacta, $E_{1/90}=e^{\frac{h_n}{90}\overline{H}}$ es aproximada por 
+con lo cual las cinco matrices requeridas $E_{c_j}$ son obtenidas. Como, en general, la exponencial de una matriz no puede ser calculada de forma exacta, $E_{1/90}=e^{\frac{h_n}{90}\overline{H}}$ es aproximada por
 \[\widetilde{E}_{h_n/90} = F_k^{\pf,\qf}\left(\frac{h_n}{90}\overline{H}\right), \]
 donde $F_k^{\pf,\qf}(A)=(P_{\pf,\qf}(2^{-k}A))^{2^k}$ denota a la aproximación de Padé de $e^A$ con escalamiento y potenciación tal y como se explica en el Capítulo \ref{chapter:exp-int-and-ll-methods}
 
@@ -115,7 +115,7 @@ El siguiente teorema trata sobre la velocidad de convergencia de las fórmulas e
 con $j=1,\ldots,7$, donde $K$ es una constante positiva. Dado que $z_{n+1} = y_n + u_7$ es la solución exacta de la EDO lineal $dz/dt=f(y_n)+f_x(y_n)(z-y_n)$ resultante de la linealización local de la ecuación~(\ref{syst}) en $t_n$ con la condición inicial $z(t_n)=y_n$ y los errores de truncamiento local de las fórmulas embebidas de Runge-Kutta de Dormand y Prince son 6 y 5, los errores de truncamiento local y global del Las fórmulas de Runge-Kutta localmente linealizadas (\ref{LLDPK scheme}) se derivan directamente del Teorema 15 en~\cite{Jimenez13} y (\ref{proof:ErrorLinearODE}). $\Box$\\
 
 Claramente, según este resultado, las fórmulas embebidas Runge-Kutta localmente linealizadas (\ref{LLDPK scheme}) preservan la velocidad de convergencia de las fórmulas embebidas clásicas Runge-Kutta de Dormand y Prince si las desigualdades $\mf+1 \ge 5 $ y $\pf+\qf \ge 5$ se cumplen. Además, al igual que las fórmulas embebidas para pequeños PVI y otros integradores de tipo exponencial, las nuevas fórmulas embebidas (\ref{LLDPK scheme}) son capaces de integrar PVI lineales tan precisos como sea necesario independientemente de la dimensionalidad y \textit{stiffness} de las ecuaciones. Sin embargo, dado que, por construcción, las fórmulas (\ref{LLDPK scheme}) usan las fórmulas originales de Runge-Kutta de Dormand y Prince para resolver una ecuación auxiliar no lineal (ver detalles en \cite{Jimenez13, Jimenez14AMC}), las fórmulas (\ref{LLDPK scheme}) no están diseñadas para integrar PVI \textit{stiff} en general. De esta forma, las fórmulas propuestas (\ref{LLDPK scheme}) pretenden aproximar la solución de PVI grandes para los que la principal fuente de \textit{stiffness} surge de la linealización de la ecuación no lineal en consideración. Estos son precisamente la mayoría de los grandes PVI resultantes de la discretización espacial de las EDP que modelan procesos físicos, biofísicos y físico-químicos conocidos.
-\begin{table}[h]
+\begin{table}[htb]
 	\caption{ Valores de los coeficientes $\alpha _{i,j}$ en las fórmulas continuas (\ref{continuousLLRK45})\label{Table continuous RK}}
 	\centering
 	\begin{tabular}{ccccc}
@@ -192,7 +192,7 @@ $\fac_{max}= -\frac{\mf_n}{4}$, $\fac_{min}= \frac{\mf_n}{3}$, $\fac=\frac{1}{\l
             \fac\cdot\Delta\mf} } \right\rceil,
 \end{equation*}
 donde $\fac_{max}= \maxx{ 1,\frac{\mf_{n}}{3} }$, $\fac_{min}= 1 $, $\fac=\frac{1}{\log (2)}$, y $\left\lceil \cdot \right\rceil$ denota la función techo(que devuelve el menor entero mayor o igual que un número real dado). Los vectores ortonormales extra $\{v_{\mf+1},\ldots,v_{\mf_{new}} \}$ correspondientes al $\mf_{new}$-ésimo subespacio de Krylov $\mathcal{K}_{\mf_{new}}(f_x,f)$ son calculados a través del Algoritmo \ref{alg:Arnoldiexpand}.
-\begin{algorithm}[h!]
+\begin{algorithm}[!htb]
 	\caption{Algoritmo de Arnoldi para expandir la base ortonormal $\{v_1,\ldots,v_{\mf} \}$ del $\mf$-ésimo subespacio de Krylov $\mathcal{K}_{\mf}(A,b)=span\{b,Ab,\ldots,A^{\mf}b\}$ a la base ortonormal $\{v_1,\ldots,v_{\mf},\ldots,v_{\mf_{new}} \}$ del $\mf_{new}$-ésimo subespacio de Krylov ${\mathcal{K}_{\mf_{new}}(A,b)=span\{b,Ab,\ldots,A^{\mf_{new}}b\}}$}
     \label{alg:Arnoldiexpand}
 	\KwIn{$A\in \mathbb{R}^{d\times d}$, $b\in \mathbb{R}^{d}$, $V_{\mf}\in \mathbb{R}^{d\times \mf}$, $H^*_{\mf}\in\mathbb{R}^{\mf\times \mf}$, $v_{\mf+1}\in \mathbb{R}^{d}$, $\hf_{\mf+1,\mf} \ge 0$, y la nueva dimensión $\mf_{new}$ del subespacio de Krylov}
@@ -339,7 +339,7 @@ En la Sección \ref{section:lldp-fix-step}, se introdujeron las nuevas fórmulas
 En este primer conjunto de simulaciones, se evaluará el orden de convergencia de las fórmulas $y_n$ y $\widehat{y}_n$ definidas en (\ref{LLDPK scheme}) en función de la dimensión de Krylov $\mf$ y el orden de Padé $\pf$. Con ese propósito, los errores $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ y $\widehat{e}_i=\max_{t_n\in(t )_{h_i}}\nnnorm{\widehat{y}_n-x(t_n)}_\infty$ en la integración del Ejemplo \ref{ex:Brus} con $M=100$ ($d=200$ ) se calcularon para cinco discretizaciones de tiempo diferentes $(t)_{h_i}$ con un tamaño de paso fijo $h_i$, donde la \textquotedblleft solución exacta\textquotedblright $x$ se estima mediante el código Matlab \textit{ode15s} con tolerancias $RTol=10^{ -12}$ y $ATol=10^{-14}$. La Figura \ref{fig:num-exp-lldp-fix-step:Fig3} muestra estos cinco errores para las fórmulas (\ref{LLDPK scheme}) con varios valores de m y $\pf=6$ fijos, así como la línea recta ajustada a los puntos $(\log_2( h_i),\log_2(e_i))$ y $(\log_2(h_i),\log_2(\widehat{e}_i))$ con $i=1,...,5$. La Tabla \ref{tab:num-exp-lldp-fix-step:morders} presenta el valor de la pendiente $\widetilde{r}$ de la recta ajustada para cada valor de $\mf$, lo que proporciona una estimación del orden de convergencia $r$ de cada esquema. La tabla también presenta los límites de confianza de $90\%$ de $\widetilde{r}$, el coeficiente de determinación como indicador de la bondad de la línea ajustada y el orden de convergencia esperado que, de acuerdo con el Teorema \ref{theorem:lldp-convergence}, las fórmulas (\ref{LLDPK scheme}) tienen para el $\mf$ dado. La Figura \ref{fig:num-exp-lldp-fix-step:Fig2} y la Tabla \ref{tab:num-exp-lldp-fix-step:porders} presentan salidas similares pero para las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ fijo y varios valores de $\pf$. Se puede observar que el orden de convergencia estimado $\widetilde{r}$ proporcionada en las Tablas \ref{tab:num-exp-lldp-fix-step:morders} y \ref{tab:num-exp-lldp-fix-step:porders} está de acuerdo con el orden de convergencia de las fórmulas (\ref{LLDPK scheme}) indicados por el Teorema \ref{theorem:lldp-convergence} para los valores considerados de $\mf$ y $\pf$. Además, la Figura \ref{fig:num-exp-lldp-fix-step:Fig4} muestra los errores $e_i$ y $\widehat{e}_i$ de las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ y $\pf=6$ fijos calculado para el tamaño de cinco pasos $h_i$ y la línea recta ajustada. En este caso, el orden de convergencia estimado $\widetilde{r}$ para las fórmulas $y_n$ y $\widehat{y}_n$ son $5.01 \pm 0.47$ y $3.93 \pm 0.19$ , respectivamente, lo cual concuerda con el índice global errores de discretización 5 y 4 dados en el Teorema \ref{theorem:lldp-convergence} para estas fórmulas.
 
 
-\begin{figure}[h]
+\begin{figure}[htb]
 	\begin{center}
 		\includegraphics[scale=0.45]{Graphics/lldp/m-plots.jpg}
 		\caption{Gráficos Log-log de los errores $\widehat{e}_i=\max_{t_n\in(t)_{h_i}}\nnnorm{\widehat{y}_n-x(t_n)}_\infty$ y $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ contra $h_i$ en al integración del ejemplo \ref{ex:Brus} con las fórmulas (\ref{LLDPK scheme}), $\pf=6$, $\mf=1,2,3,4,5$ y $h_i=2^{-i}$, $i=10,11,12,13,14,15,16$.}
@@ -347,7 +347,7 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 	\end{center}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[htb]
 	\centering
 	\caption{
         Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\mf$, los $90\%$ límites de confianza $\Delta$ de $\widetilde {r}$, el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig3}.}
@@ -367,7 +367,7 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 	\label{tab:num-exp-lldp-fix-step:morders}
 \end{table}
 
-\begin{figure}[h]
+\begin{figure}[htb]
 	\begin{center}
 		\includegraphics[scale=0.45]{Graphics/lldp/p-plots.jpg}
 		\caption{Gráficos Log-log de los errores $\widehat{e}_i=\max_{t_n\in(t)_{h_i}}\nnnorm{\widehat{y}_n-x(t_n)}_\infty$ y $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ contra $h_i$ en al integración del ejemplo \ref{ex:Brus} con las fórmulas (\ref{LLDPK scheme}), $\pf=1,2,3,4$, $\mf=11$ y $h_i=2^{-i}$, $i=10,11,12,13,14,15,16$.}
@@ -376,7 +376,7 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 \end{figure}
 
 
-\begin{table}[h]
+\begin{table}[htb]
 	\centering
 	\caption{
 		Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\pf$, los $90\%$ límites de confianza $\Delta$ de $\widetilde {r}$, el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig2}.}
@@ -395,7 +395,7 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 	\label{tab:num-exp-lldp-fix-step:porders}
 \end{table}
 
-\begin{figure}[h]
+\begin{figure}[htb]
 	\begin{center}
 		\includegraphics[scale=0.45]{Graphics/lldp/LLDP-plots.jpg}
 		\caption{ Gráficos Log-log de los errores $\widehat{e}_i=\max_{t_n\in(t)_{h_i}}\nnnorm{\widehat{y}_n-x(t_n)}_\infty$ y $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ contra $h_i$ en al integración del ejemplo \ref{ex:Brus} con las fórmulas (\ref{LLDPK scheme}), $\pf=6$, $\mf=11$ y $h_i=2^{-i}$, $i=10,11,12,13,14,15$.}
@@ -418,7 +418,7 @@ Las Tablas \ref{tab:num-exp-lldp-fix-step:cpna} - \ref{tab:num-exp-lldp-fix-step
 
 Además, las tablas muestran la efectividad de la estrategia propuesta para la selección de la dimensión de Krylov $\mf$ en cada paso de integración, con mínima variación entre los valores de $\mf_{min}$ y $\mf_{max}$, y así, con un valor menor de $\mf_{total}$.
 
-\begin{table}[h]
+\begin{table}[htb]
 	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación CUSP con $M=32$, $d=96$.}
 	\centering
 		\begin{tabular}{lccccccccc}
@@ -449,7 +449,7 @@ Además, las tablas muestran la efectividad de la estrategia propuesta para la s
 
 
 
-\begin{table}[h]
+\begin{table}[htb]
 	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Burgers con $M=500$, $d=500$.}
 	\centering
 	\begin{tabular}{lccccccccc}
@@ -479,7 +479,7 @@ Además, las tablas muestran la efectividad de la estrategia propuesta para la s
 \end{table}
 
 
-\begin{table}[h]
+\begin{table}[htb]
 	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Brusselator2D con $M=50$, $d=5000$.}
 	\centering
 	\begin{tabular}{lccccccccc}
@@ -508,7 +508,7 @@ Además, las tablas muestran la efectividad de la estrategia propuesta para la s
 	\label{tab:num-exp-lldp-fix-step:br2dna}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[htb]
 	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Brusselator con $M=100$, $d=200$.}
 	\centering
 	\begin{tabular}{lccccccccc}
@@ -581,7 +581,7 @@ la medida del error relativo entre las fórmulas integradas $y$ y $\hat{y}$ defi
 \subsection{Control del tamaño de paso}\label{secc:hcontrol}
 Como en \cite{Jimenez14AMC}, para obtener una tolerancia deseada y evitar el desbordamiento en el cálculo de la matriz exponencial $e^{\frac{1}{90}h_n\overline{H}}$ a través de la aproximación $(\pf,\pf)$-Padé con escalamiento y potenciación, el valor de $\left\Vert \frac{1}{90}h_n\overline{H} \right\Vert_\infty$ debe ser controlado. Debido a los errores de redondeo, si $\left\Vert \frac{1}{90}h_n\overline{H} \right\Vert_\infty \ge 600$, la aproximación de Padé a $e^{\frac{1 }{90}h_n\overline{H}}$ carece de precisión. Dado que $H_\mf$ in (\ref{hhat}) es la matriz superior de Hessenberg correspondiente a $\mathcal{K}_\mf(f_x,f)$, el Lema \ref{H-bound} implica que $|| \overline{H} ||_\infty \leq 1 + || f_x ||_\infty$. Por lo tanto, si $h_n + \left\lVert h_nf_x \right\rVert_\infty \leq 54000$, entonces la aproximación $(\pf,\pf)$-Padé de $e^{\frac{1}{90}h_n \overline{H}}$ conserva la precisión establecida en la Tabla \ref{table:padep} para el valor dado de $\pf$. Así, en la práctica, si $h_n + \left\lVert h_nf_x \right\rVert_\infty \ge 54000$, el valor de $h_n$ se restablece como $h_n=\frac{54000}{1+\left\lVert f_x \right\rVert_\infty}$.
 
-Aqui hay que tener en cuenta que en el caso de que se modifique el valor del tamaño de paso $h_{n}$, la evaluación de $f$ y $f_x$ en $y_n$ realizada para calcular $\overline{H}$ es reutilizada. Por lo tanto, este reemplazo de tamaño de paso no se considera como un paso fallido ``típico" .
+Aquí hay que tener en cuenta que en el caso de que se modifique el valor del tamaño de paso $h_{n}$, la evaluación de $f$ y $f_x$ en $y_n$ realizada para calcular $\overline{H}$ es reutilizada. Por lo tanto, este reemplazo de tamaño de paso no se considera como un paso fallido ``típico" .
 
 \subsection{Reutilización de la matriz Jacobiana}\label{secc:jaccontrol}
 Ciertamente, para grandes PVI almacenar y evaluar la matriz Jacobiana $f_x$ de $f$ en cada paso de integración es una tarea computacionalmente exigente. Por lo general, la matriz Jacobiana de grandes sistemas resultantes de la discretización espacial de las EDP tiene una estructura esparcida. En esta situación, en la práctica es posible almacenar y reutilizar esas matrices. Para determinar cuándo el Jacobiano evaluado en un paso de integración se puede reutilizar en pasos de integración consecutivos, una medida de disimilitud entre el Jacobiano $J=f_x(y_n)$ en el paso de integración actual $n$ con el Jacobiano $J_{old}= f_x(y_{i})$ en un paso de integración anterior $i<n$ es necesario. Una de tales medidas de disimilitud se puede definir en términos de
@@ -620,7 +620,7 @@ es pequeño. Sustituyendo~(\ref{backapprox})-(\ref{aproxaprox}) en (\ref{jerror}
 Con esta medida relativa de disimilitud, el Jacobiano se evalúa en el punto $y_n$ solo si $\gamma_J \cdot \varepsilon_J \geq 1$, donde $\gamma_J=\frac{1}{8}$ es un factor de seguridad. Este procedimiento para la reutilización de la matriz Jacobiana se resume en las líneas 3 a 12 del Algoritmo \ref{alg:jaccontrol} y se utiliza siempre que el tamaño de paso $h_n$ en el paso de integración $n$ no haya sido rechazado previamente. De lo contrario, el Jacobiano siempre se actualiza como se indica en las líneas 15 a 20 del mismo Algoritmo.
 
 {\SetAlgoNoLine
-\begin{algorithm}[h]
+\begin{algorithm}[htb]
 	\caption{Control de Reutilización del Jacobiano}
 	\label{alg:jaccontrol}
 	\KwIn{$n$,$y_n$,$fail,J,J_{old},f_{old},freshJ$}
@@ -660,7 +660,7 @@ En el caso de que $\varepsilon_{K}/\gamma_K< 1$, se acepta la aproximación de K
 Mediante una combinación adecuada de los procedimientos de las Secciones \ref{sec:selkrydim} y \ref{sec:brcontrol} para la estimación de una dimensión Krylov adecuada $\mf$, y el criterio de la Sección \ref{sec:pade-order} para la estimación de un orden de Padé adecuado $\pf$, el Algoritmo \ref{alg:errcontrol} presenta el esquema adaptativo de la aproximación de Krylov-Padé para $u_j$ en cada paso de integración.
 
 {\SetAlgoNoLine
-\begin{algorithm}[h!]
+\begin{algorithm}[!htb]
 	\caption{Cálculo de $u_j$ mediante la aproximación adaptativa Krylov-Padé}
 	\label{alg:errcontrol}
 	\KwIn{$c_j$, $h_n$, $J$, $f$, $\mf_n$, $V_{\mf_n}$, $H_{\mf_n}$,
@@ -696,7 +696,7 @@ Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \r
 
 
 {\SetAlgoNoLine
-\begin{algorithm}[h]
+\begin{algorithm}[htb]
 	\caption{Esquema con tamaño de paso y dimensión de Krylov variables}
 	\label{alg:integrator}
 	\KwIn{intervalo de tiempo $[t_0, T]$, valor inicial $y_0$, tolerancia absoluta y relativa $Atol$ y $Rtol$, dimensión máxima y mínima de los subespacios de Krylov $\mf_{max}$ y $\mf_{min}$, tamaño de paso máximo $h_{max}$}
@@ -758,7 +758,7 @@ Los principales resultados del estudio de simulación se resumen en la Figura \r
 
 Para explicar estos resultados, para cada ecuación de prueba, los detalles de ejecución de cada código se presentan en una tabla. El error relativo \textit{RError} de cada código se mide nuevamente por la expresión (\ref{num-exp-lldp-fix-step:ER}) y el tiempo computacional relativo \textit{RTime} de cada código se calcula con respecto al tiempo computacional del código \emph{ode15sk}. Además, las tablas presentan el número de pasos \textit{A-Steps} aceptados y \textit{R-Steps} rechazados, así como el número de evaluaciones del campo vectorial \textit{f-Eval} y Jacobiano \textit{J-Evaluación}. La dimensión mínima $\mf_ {min}$, máxima $\mf_ {max}$ y total $\mf_{total}$ de los subespacios de Krylov requeridos por los códigos \emph{LLDP45} y \emph{exp4} para integrar las ecuaciones de prueba sobre todo el intervalo de integración  también se dan, así como el orden de Padé mínimo $\pf_{min}$ y máximo $\pf_{max}$ requerido por el código \emph{LLDP45}. Para el código \emph{ode15sk}, $\mf_{min}$, $\mf_{max}$ y $\mf_{total}$ representan el número mínimo, máximo y total de iteraciones realizadas por el método GMRES sobre el intervalo de integración completo. Además, \textit{ME} denota el número de matrices exponenciales, \textit{ILU(0)} el número de factorizaciones LU incompletas, \textit{K-subspace} el número de aproximaciones del subespacio de Krylov, y \textit{GMRES} el número de sistemas lineales resueltos por el método GMRES.
 
-\begin{table}[h]
+\begin{table}[htb]
 	\caption{Desempeño de los códigos \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones  CUSP y Burgers.}
 	\label{tab:num-exp-lldp-var-step:cuspburg}
 	%\centering
@@ -834,7 +834,7 @@ Para explicar estos resultados, para cada ecuación de prueba, los detalles de e
 \end{table}
 
 
-\begin{table}[h]
+\begin{table}[htb]
 	%\centering
 	\caption{Desempeño de los códigos \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones Brusselator2D y GrayScott2D .}	\label{tab:num-exp-lldp-var-step:bruss2dgray2d}
 	\begin{adjustbox}{width=0.8\columnwidth,center}
@@ -910,7 +910,7 @@ Para explicar estos resultados, para cada ecuación de prueba, los detalles de e
 
 
 
-\begin{table}[h]
+\begin{table}[htb]
 	%\centering
 	\caption{Desempeño de los códigos \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones Brusselator y DND.}
 	\begin{adjustbox}{width=0.8\columnwidth,center}

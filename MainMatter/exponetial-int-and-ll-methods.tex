@@ -440,20 +440,20 @@ Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obt
 	donde $\sigma(A)$ es el radio espectral de $A$.
 \end{theorem}
 
-\section{Producto de funciones phi por vectores} 
+\section{Producto de funciones phi por vectores}
 
-Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{ODE Lines Method}) o (\ref{VCF2}). De ésta manera, típicamente, se obtienen expresiones recursivas que involucran integrales de la forma 
+Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{ODE Lines Method}) o (\ref{VCF2}). De ésta manera, típicamente, se obtienen expresiones recursivas que involucran integrales de la forma
 \begin{equation*}
 \phi _{k}(z,h)=\int_{0}^{h}e^{z(h-s)}s^{k-1}ds,\text{ \ \ \ \ \ \ \ }%
 k=1,2,\ldots ,
 \end{equation*}%
-or, equivalentemente, su versión escalada 
+or, equivalentemente, su versión escalada
 \begin{equation*}
 \varphi _{k}(z)=\int_{0}^{1}e^{z(1-\theta )}\frac{\theta ^{k-1}}{(k-1)!}%
 d\theta ,\text{ \ \ \ \ \ \ \ }k=1,2,\ldots ,
 \end{equation*}%
-- llamada funcion phi - que resulta de la relación trivial $\phi _{k}(z,h)=(k-1)!h^{k}\varphi
-_{k}(hz)$, donde $\phi _{0}(z,h)=\varphi _{0}(hz)=e^{hz}$. 
+- llamada función phi - que resulta de la relación trivial $\phi _{k}(z,h)=(k-1)!h^{k}\varphi
+_{k}(hz)$, donde $\phi _{0}(z,h)=\varphi _{0}(hz)=e^{hz}$.
 
 Otras definiciones comunes de las funciones phi como operador son \cite{Saad92}
 \begin{eqnarray}\label{phi-definition}
@@ -484,11 +484,11 @@ Entre la familia de funciones $\varphi_j$ y la exponencial matricial existe la s
     0 &   &   &        & 1
     \end{array}\right]  \;.
     \end{equation}
-\end{theorem} 
+\end{theorem}
 
 En general, para el producto de funciones $\varphi_k$ por vector se establece la expansión en serie \cite{Saad92,sidje1998expokit}
 \begin{equation} \label{PHI-EXPANSION}
 \varphi_k(\tau A)b=||b||_2\tau^{k} V_\mf \varphi_k(\tau H_\mf)e_1 + ||b||_2\hf_{\mf+1,\mf}
-\sum_{j=k+1}^{\infty}\tau^{j} e_\mf^T\varphi_j(\tau H_\mf)e_1A^{j-k-1}v_{m+1} 
+\sum_{j=k+1}^{\infty}\tau^{j} e_\mf^T\varphi_j(\tau H_\mf)e_1A^{j-k-1}v_{m+1}
 \end{equation}
 donde $\tau$ es un número positivo, $A\in\mathbb{R}^{d\times d}$, $b\in\mathbb{R}^d$, $e_\mf$ es el $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$ y $V_\mf,H_\mf,v_{\mf+1},\hf_{\mf+1,\mf}$ son salidas del Algoritmo de Arnoldi \ref{alg:Arnoldi}.

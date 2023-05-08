@@ -3,13 +3,11 @@
 
 Como se mencionó en la introducción, los integradores utilizados con el método de las líneas para resolver EDP requieren típicamente de la resolución de grandes sistemas de ecuaciones algebraicas o del cálculo  de la acción de funciones phi sobre vectores que involucran el producto de matrices Jacobianas por vectores. Si embargo, en muchas situaciones prácticas, debido a los insuficientes recursos computacionales disponibles o al uso de discretizaciones espaciales complejas, no es viable evaluar y almacenar la matriz Jacobiana de la ODE u obtener su expresión analítica exacta. Rutinariamente, en esos casos, los mencionados producto de matrices Jacobianas por vectores son remplazados directamente sin ningún tipo de análisis adicional por alguna aproximación, preferiblemente, por diferencias finitas \cite{steihaug1979attempt,schmitt1995matrix,weiner1997rowmap,hochbruck1998exponential,hosseini1999matrix,tranquilli2014rosenbrock}. Aunque éste procedimiento es útil en la práctica, los estudios teóricos y de simulación han demostrado que los esquemas libres de Jacobianos resultantes pueden sufrir una pérdida considerable de precisión y orden de convergencia \cite{wanner1996solving,hochbruck1998exponential,tranquilli2014rosenbrock}.
 
-Como alternativa, en éste capítulo se introduce la clase general de métodos de Linealizacíon Local de Orden Superior (LLOS) libres de Jacobiano. Los integradores de ésta nueva clase se obtienen de reemplazar la acción de la función phi sobre vectores en la expresión general de los métodos LLOS del Capitulo \ref{chapter:exp-int-and-ll-methods} por una aproximación libre de Jacobiano. Sobre la base de la velocidad de convergencia de las mencionadas aproximaciones se obtiene un resultado general de convergencia de los nuevos integradores, resultando en una condición de orden simple que preserva el orden de los métodos HOLL ordinarios. Como caso particular, y utilizando las aproximaciones de Krylov-Padé libre de Jacobiano de la Sección \ref{section:fj-krylov-pade-approx}, se introduce la subclase particular de esquemas Runge-Kutta Localmente Linealizados Libres de Jacobiano y se utilizan las formulas Runge-Kutta embebidas de Dormand y Prince Localmente Linealizadas para implementar un esquema adaptativo de orden variable y libre de Jacobiano. Los resultados de este capítulos están basados en \cite{naranjo2022RT,naranjo2023jacobian}.
-
-%En el Capítulo \ref{chapter:exp-int-and-ll-methods} se presentó la aproximación Lineal Local de Orden Superior. Por construcción, la discretización Lineal Local~(\ref{definition LLS}), contiene productos de la matriz Jacobiana por un vector  $f_x(y)b$. Al aproximar dichos productos se construirá la aproximación Lineal Local de Orden Superior. Por tanto el objetivo de este capítulo es construir la familia de métodos de Linealización Local de Orden Superior Libre de Jacobiano, estimar las condiciones de orden esta familia. Procediendo similar al Capítulo \ref{chapter:lldp} se utilizará la aproximación Krylov-Padé libre de Jacobiano presentada en la Sección \ref{section:fj-krylov-pade-approx} para aproximar la nueva ecuación diferencial lineal auxiliar.
+Como alternativa, en éste capítulo se introduce la clase general de métodos de Linealización Local de Orden Superior (LLOS) libres de Jacobiano. Los integradores de ésta nueva clase se obtienen de reemplazar la acción de la función phi sobre vectores en la expresión general de los métodos LLOS del Capitulo \ref{chapter:exp-int-and-ll-methods} por una aproximación libre de Jacobiano. Sobre la base de la velocidad de convergencia de las mencionadas aproximaciones se obtiene un resultado general de convergencia de los nuevos integradores, resultando en una condición de orden simple que preserva el orden de los métodos LLOS ordinarios. Como caso particular, y utilizando las aproximaciones de Krylov-Padé libre de Jacobiano de la Sección \ref{section:fj-krylov-pade-approx}, se introduce la subclase particular de esquemas Runge-Kutta Localmente Linealizados Libres de Jacobiano y se utilizan las formulas Runge-Kutta embebidas de Dormand y Prince Localmente Linealizadas para implementar un esquema adaptativo de orden variable y libre de Jacobiano. Los resultados de este capítulos están basados en \cite{naranjo2022RT,naranjo2023jacobian}.
 
 \section{Discretización y esquemas numéricos}
 
-Sin perdida de generalidad, similar a Sección \ref{section:fj-krylov-pade-approx}, se asumirá que existe una función $(\eta+1)$ continuamente diferenciable $g: \mathbb{R}^{d}\times \mathbb{R}^{d} \times \mathbb{R}_+ \to \mathbb{R}^{d}$ que aproxima al producto $f_x(y)b$ con orden $\eta$ para la cual la cota
+Sin pérdida de generalidad, similar a Sección \ref{section:fj-krylov-pade-approx}, se asumirá que existe una función $(\eta+1)$ continuamente diferenciable $g: \mathbb{R}^{d}\times \mathbb{R}^{d} \times \mathbb{R}_+ \to \mathbb{R}^{d}$ que aproxima al producto $f_x(y)b$ con orden $\eta$ para la cual la cota
 \begin{equation} \label{eq:g_bound2}
 	\nnnorm{g(y,b;\delta)-f_x(y)b} \leq \mathfrak{L}\nnnorm{b}^{\eta+1}\delta^{\eta}
 \end{equation}
@@ -293,7 +291,7 @@ Análogamente, las Figuras \ref{Fig2}, \ref{Fig3} y las Tablas \ref{tab:out}, \r
 
 \subsubsection{Simulaciones comparativas}\label{sc:comparison}
 
-En este conjunto de simulaciones, se utilizaran los PVI resultantes de la discretización espacial de cuatro EDP empleadas con frecuencia en la literatura. Estas ecuaciones son: Brusselator 2D (Ejemplo \ref{ex:Brus}), Brusselator 2D (Ejemplo \ref{ex:Brus2D}), Burger's (Ejemplo \ref{ex:Burger}) y Gray-Scott 2D~(Ejemplo \ref{ex:GS2D}).
+En este conjunto de simulaciones, se utilizaran los PVI resultantes de la discretización espacial de cuatro EDP empleadas con frecuencia en la literatura. Estas ecuaciones son: Brusselator 2D (Ejemplo \ref{ex:Brus}), Brusselator 2D (Ejemplo \ref{ex:Brus2D}), Burger's (Ejemplo \ref{ex:Burgers}) y Gray-Scott 2D~(Ejemplo \ref{ex:GS2D}).
 
 Para cada ecuación de prueba, los resultados de la integración numérica se sintetizan en los diagramas de tiempo-precisión de la Figura \ref{work-precision diagram}. En estos diagramas, la precisión de los códigos \textit{JF-LLRK4}, \textit{JF-Exp4}, \textit{JF-EPIRK4} y \textit{BDF4} se mide por el error $e_i=\max\limits_ {t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ entre la \textquotedblleft solución exacta\textquotedblright~$x$ de la ecuación de prueba y la solución aproximada $y_n$ de cada código calculado en cinco particiones de tiempo con un tamaño de paso fijo $h_i$, donde la \textquotedblleft solución exacta\textquotedblright ~$x $ se estima nuevamente como en las simulaciones preliminares. La Figura \ref{work-precision diagram} muestra que, para estas ecuaciones, el esquema LLRK libre de Jacobiano (\ref{JFLLRK4}) exhibe una precisión similar o mayor que los otros tres integradores libres de Jacobiano, pero con un costo computacional menor o similar. Esta diferencia en el tiempo computacional se explica por los resultados de las Tablas \ref{tab:br}-\ref{tab:gs2d}.
 
@@ -597,7 +595,7 @@ En esta sección, se propone una implementación adaptativa de las fórmulas emb
 		$n=0$, $fail=false$, $\mf_0=\mf_{min}$, $h_{min}=16 \cdot \epsilon(t_0)$ \\
 		Calcular tamaño de paso inicial $h_0$ mediante fórmula (\ref{hcero-fj}) \\
 		\While{$t_n<T$}{
-			Calcular $\delta_1$ y $\delta_2$ mediante (\ref{deltavalue}), y etablever valores $g_1$ y $g_2$ según (\ref{g1}) y (\ref{g2}) \label{set delta}\\
+			Calcular $\delta_1$ y $\delta_2$ mediante (\ref{deltavalue}), y establecer valores $g_1$ y $g_2$ según (\ref{g1}) y (\ref{g2}) \label{set delta}\\
 			\If{$fail=false$}{
 				Ejecutar Algoritmo~\ref{alg:iArnoldi} para obtener matrices $\widehat{H}^*_{m_n}$ y $\widehat{V}_{m_n}$ of $\widehat{\mathcal{K}}_\mf(h_n^\beta f_x(y),f(y);\delta_1)$, y establecer valor $\widehat{H}_{m_n}=\widehat{H}^*_{m_n}/h_n^\beta$ \\
 			}
@@ -673,18 +671,18 @@ Similar al Capítulo \ref{chapter:lldp}, la dimensión del subespacio de Krylov 
 	\end{equation}
 donde $\mf_{min}$ y $\mf_{max}$ son los valores mínimo y máximo prescritos para la dimensión de Krylov,
 \begin{equation}
-	\mf = \left\{ 
+	\mf = \left\{
 \begin{array}{cc}
 \left\lfloor \mf_{n} + \maxx{\fac_{1,max} , \minn{\fac_{1,min},
-		\fac_1\cdot\Delta\mf} } \right\rfloor & si \;  \varepsilon_{K}/\gamma_{K}< 1\\ 
+		\fac_1\cdot\Delta\mf} } \right\rfloor & si \;  \varepsilon_{K}/\gamma_{K}< 1\\
 \left\lceil \mf_{n} + \minn{\fac_{2,max} , \maxx{\fac_{2,min},
 		\fac_2\cdot\Delta\mf} } \right\rceil  & \text{por el contrario}
-\end{array}%
+\end{array}
 \right. \label{m_unica}
-\end{equation} 
+\end{equation}
 siendo $\mf_{n}$ la dimensión de Krylov  en el paso actual.
 \begin{equation} \label{errrel-fj}
-	\varepsilon_{K} = \min \{\epsilon _{3},\epsilon _{4}\}, 
+	\varepsilon_{K} = \min \{\epsilon _{3},\epsilon _{4}\},
 	\end{equation}
 	\begin{equation*}
 	\epsilon_{r} = \left(\frac{1}{d}\sum\limits_{i=1}^{d} \left(\frac{\nnorm{\nnorm{f(y_n)}}_2
@@ -706,7 +704,7 @@ el error relativo de la aproximación
 	\widehat{V}_{\mathfrak{m}}\;[P_{c_{j}h_n}]_{12}+
 	\widehat{\mathfrak{h}}_{\mathfrak{m}+1,\mathfrak{m}}e_{\mathfrak{m}%
 	}^{T}\;[P_{c_{j}h_n}]_{14}\rho _{4} & \text{por el contrario}%
-	\end{array}%
+	\end{array}
 	\right. ,  \notag
 \end{eqnarray}
 a $u_j$, $\gamma_{K}=0.001$ un factor de seguridad,
@@ -758,12 +756,12 @@ Observe que, mientras que la diferencia finita central $g_2$ en (\ref{Jacobian-f
 
 En resumen, en el paso \ref{set delta}, el Algoritmo \ref{alg:integrator} calcula $\delta_1$ y $\delta_2$ de acuerdo con (\ref{deltavalue}) y establece de forma adaptativa la diferencia finita central o hacia adelante para $g_1$ y $g_2$ dependiendo del valor de $\alpha_1$ y $\alpha_2$. Es decir,
 \begin{equation} \label{g1}
-	g_{1}(y_{n},\tau \widehat{v}_{j};\delta _{1}) : \left\{ 
+	g_{1}(y_{n},\tau \widehat{v}_{j};\delta _{1}) : \left\{
 	\begin{array}{cc}
 	\frac{f(y_{n}+\delta _{1}\widehat{v}_{j})-f(y_{n}-\delta _{1}\widehat{v}_{j})%
-	}{2\delta _{1}} & \text{si }\alpha _{1}<4 \\ 
+	}{2\delta _{1}} & \text{si }\alpha _{1}<4 \\
 	\frac{f(y_{n}+\delta _{1}\widehat{v}_{j})-f(y_{n})}{\delta _{1}} & \text{por el contrario}%
-	\end{array}%
+	\end{array}
 	\text{ }\right.
 \end{equation}
 y
@@ -829,8 +827,8 @@ $\alpha_1$ y $\alpha_2$ son las definidas en (\ref{alpha_formulas}).
 \subsection{Experimentos numéricos}
 Con el propósito de estudiar el desempeño del esquema adaptativo descrito en el Algoritmo \ref{alg:integrator-fj} para las fórmulas embebidas libres de Jacobiano (\ref{Jacobian-free LLDPK scheme}), se construyó el código Matlab \emph{LLDP1}. Este código \emph{LLDP1} es una copia exacta del código Matlab18a \emph{ode45} \cite{shampine1997matlab} con la excepción de las líneas de programa correspondientes a las fórmulas originales de Dormand y Prince y su error relativo, que fueron reemplazadas por las líneas 4 a 12 del algoritmo \ref{alg:integrator-fj} que implementan la evaluación de las fórmulas libres de Jacobiano (\ref{Jacobian-free LLDPK scheme}). Recordemos que el código de Matlab \emph{ode45} implementa la estrategia de tamaño de paso variable descrita en la Sección \ref{Sec:AdaptiveLLscheme}, pero con $r_n=5$ fijado en la expresión para $\rho$ dentro de (\ref{hnewcalc-fj}) para todos los pasos de integración. Similar al Capítulo \ref{chapter:lldp}, $m_{min}=4$ se estableció en el código \emph{LLDP1}.
 
-Los resultados del código \emph{LLDP1} en la integración de ecuaciones de prueba se compararán con los obtenidos por los códigos adaptativos \emph{ode15sk}, \emph{exp4jf} y \emph{LLDP2}. El código \emph{ode15sk} es una implementación de tamaño de paso casi constante de las fórmulas diferenciales hacia atrás (BDF) hasta el orden 5 y métodos de subespacios de Krylov para resolver sistemas lineales de ecuaciones algebraicas. Para comparar con una implementación eficiente de estas fórmulas, el código \emph{ode15sk} es una copia exacta del código Matlab18a \emph{ode15s} \cite{shampine1997matlab} con la excepción de las líneas de programa correspondientes a los métodos directos (función Matlab \emph{mldivide}) para resolver sistemas lineales de ecuaciones algebraicas y la factorización LU, que fueron reemplazadas por el método de residuos mínimos generales libre de Jacobiano (GMRES) (es decir, la función de Matlab \emph{gmres} con tolerancia $RTol$, la diferencia finita  hacia adelante de orden 1 que aproxima al producto del Jacobiano por  vector, y el parámetro de perturbación $\delta$ calculado como en \cite{knoll2004jacobian}). En la función de Matlab \emph{gmres} se eliminaron las comprobaciones computacionalmente costosas de las funciones de Matlab \emph{iterchk} y \emph{iterapp}. Por otro lado, el código \emph{exp4jf} es una versión libre de Jacobiano del código adaptativo \emph{exp4} tomado de \cite{jansing2011expode} que implementa el integrador exponencial de orden 4 de \cite{hochbruck1998exponential} con tamaño de paso y dimensión de Krylov variables. 
-En cada paso de integración, al igual que para el esquema (5.8) de \cite{hochbruck1998exponential}, el código \textit{exp4jf} realiza tres descomposiciones de Krylov y, al menos, tres aproximaciones (6,6)-Padé a la función phi $\varphi_1$ de las matrices de Hessenberg resultantes del algoritmo de Arnoldi libre de Jacobiano \ref{alg:iArnoldi}. \textit{exp4jf} utiliza la diferencia finita hacia delante de orden 1 como aproximación al producto de la matriz Jacobiana por vector en el Algoritmo \ref{alg:iArnoldi}, lo cual reduce en un orden la velocidad de convergencia del esquema (5.8) de \cite{hochbruck1998exponential} (ver Teorema 5.1 en \cite{hochbruck1998exponential}). 
+Los resultados del código \emph{LLDP1} en la integración de ecuaciones de prueba se compararán con los obtenidos por los códigos adaptativos \emph{ode15sk}, \emph{exp4jf} y \emph{LLDP2}. El código \emph{ode15sk} es una implementación de tamaño de paso casi constante de las fórmulas diferenciales hacia atrás (BDF) hasta el orden 5 y métodos de subespacios de Krylov para resolver sistemas lineales de ecuaciones algebraicas. Para comparar con una implementación eficiente de estas fórmulas, el código \emph{ode15sk} es una copia exacta del código Matlab18a \emph{ode15s} \cite{shampine1997matlab} con la excepción de las líneas de programa correspondientes a los métodos directos (función Matlab \emph{mldivide}) para resolver sistemas lineales de ecuaciones algebraicas y la factorización LU, que fueron reemplazadas por el método de residuos mínimos generales libre de Jacobiano (GMRES) (es decir, la función de Matlab \emph{gmres} con tolerancia $RTol$, la diferencia finita  hacia adelante de orden 1 que aproxima al producto del Jacobiano por  vector, y el parámetro de perturbación $\delta$ calculado como en \cite{knoll2004jacobian}). En la función de Matlab \emph{gmres} se eliminaron las comprobaciones computacionalmente costosas de las funciones de Matlab \emph{iterchk} y \emph{iterapp}. Por otro lado, el código \emph{exp4jf} es una versión libre de Jacobiano del código adaptativo \emph{exp4} tomado de \cite{jansing2011expode} que implementa el integrador exponencial de orden 4 de \cite{hochbruck1998exponential} con tamaño de paso y dimensión de Krylov variables.
+En cada paso de integración, al igual que para el esquema (5.8) de \cite{hochbruck1998exponential}, el código \textit{exp4jf} realiza tres descomposiciones de Krylov y, al menos, tres aproximaciones (6,6)-Padé a la función phi $\varphi_1$ de las matrices de Hessenberg resultantes del algoritmo de Arnoldi libre de Jacobiano \ref{alg:iArnoldi}. \textit{exp4jf} utiliza la diferencia finita hacia delante de orden 1 como aproximación al producto de la matriz Jacobiana por vector en el Algoritmo \ref{alg:iArnoldi}, lo cual reduce en un orden la velocidad de convergencia del esquema (5.8) de \cite{hochbruck1998exponential} (ver Teorema 5.1 en \cite{hochbruck1998exponential}).
 El parámetro de perturbación $\delta$ para la diferencia finita también se calcula como en \cite{knoll2004jacobian}. Para estimar la dimensión de Krylov $\mf$, el código \textit{exp4jf} utiliza la estrategia adaptativa de \cite{hochbruck1998exponential} y ninguna restricción al valor mínimo de $\mf$. Por otro lado, el código \emph{LLDP2} es idéntico al código \emph{LLDP1} con la excepción del paso \ref{set delta} en Algoritmo \ref{alg:integrator} en el que la aproximación $g_1$ siempre se calcula con la diferencia finita hacia delante de orden 1.
 
 A continuación, para cada ecuación de prueba de la Sección \ref{section:test-eq}, se compara el desempeño de los cuatro códigos con tres niveles de tolerancia: crudo, con $ Atol = 10^{-6}$ y $Rtol = 10^{-3}$; medio, con $Atol = 10^{-9}$ y $Rtol = 10^{-6}$; y refinado, con $ Atol = 10^{-12}$ y $Rtol = 10^{-9}$. El tamaño de paso máximo se estableció, como de costumbre, como $h_{max}=0\mathord{.}1\cdot(T-t_0)$.
@@ -848,7 +846,7 @@ Las Tablas \ref{tab:cuspburg}-\ref{tab:brussdnd} muestran que, para las toleranc
 Además, las Tablas \ref{tab:cuspburg}-\ref{tab:brussdnd} muestran que la precisión del código \emph{LLDP1} es similar o ligeramente superior a la del código \emph{LLDP2} pero con mayor costo computacional. Este es también otro resultado esperado ya que el código \emph{LLDP1} cambia adaptativamente la diferencia finita dentro del Algoritmo de Arnoldi sin Jacobiano \ref{alg:iArnoldi} para aumentar el orden de convergencia de las fórmulas embebidas, mientras que el código \emph{ LLDP2} siempre usa la diferencia finita de orden más bajo. Las Tablas \ref{tab:R_LLDP1} y \ref{tab:R_LLDP2} presentan los valores mínimo y máximo de $\alpha _{1}$ y $\alpha _{2}$ correspondientes a los esquemas \emph{LLDP1} y \emph{LLDP2} al integrar las seis ecuaciones de prueba. Más precisamente,
 \[\alpha _{1}^{\min }=\underset{n}{\min }\left\{ \ln (\delta
 _{1})/ln(h_{n})\right\}, \;\;\;\; \alpha _{1}^{\max }=\underset{n}{\max }\left\{
-\ln (\delta _{1})/ln(h_{n})\right\}\] 
+\ln (\delta _{1})/ln(h_{n})\right\}\]
 y
 \[\alpha _{2}^{\min }=\underset{n}{\min }\left\{ \ln (\delta _{2})/ln(h_{n})\right\}, \;\;\;\; \alpha _{2}^{\max }=\underset{n}{\max }\left\{ \ln (\delta _{2})/ln(h_{n})\right\} \]
 con $\delta_{1}$ y $\delta_{2}$ definidos en (\ref{deltavalue}). Las Tablas \ref{tab:R_LLDP1} y \ref{tab:R_LLDP2} también presentan el rango de fluctuaciones en el orden de convergencia $r$ de la fórmula $y_{n+1}$ entre los valores mínimo y máximo

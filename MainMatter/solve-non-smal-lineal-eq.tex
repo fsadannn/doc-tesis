@@ -40,7 +40,7 @@ Al aplicar conjuntamente el algoritmo de Arnoldi (\ref{alg:Arnoldi}), la propied
     0_{1\times\mf} & 0 & 0 & 0
     \end{array}\right] \label{hhat_hessenberg_matrix}
     \end{equation*}
-para obtener la identidad  
+para obtener la identidad
 \begin{equation}
     \me{\tau\overline{H}} = \left[\begin{array}{cccc}
     \me{\tau H_m} & \tau\varphi_1(\tau H_m)e_1 & \tau^{2}\varphi_2(\tau H_m)e_1 &
@@ -155,7 +155,7 @@ $\Box$\\ \\
 
 
 \begin{theorem}\cite{naranjo2021locally}\label{theorem:Krylov-bound}
-	Sea 
+	Sea
 	\begin{equation} \label{eq:gen_kp_aprox}
 	K_{\mf,k}^{\pf,\qf}\left(\tau, A , b \right)=\nnorm{\nnorm{b}}_2 V_{\mf}\;[\widetilde{E}_{\tau}]_{12} + \nnorm{\nnorm{b}}_2 \hf_{\mf+1,\mf}e_\mf^T\;[\widetilde{E}_{\tau}]_{13} v_{\mf+1}
 	\end{equation}
@@ -295,11 +295,11 @@ se cumple, donde $f_x(y)$ es la matriz Jacobiana del campo vectorial $f$ en el p
 Al utilizar el algoritmo de Arnoldi~(\ref{alg:Arnoldi}), la aproximación $K_{\mf,k}^{\pf,\qf}(\tau,A,b)$ definida en~(\ref{eq:kp_aprox}) requiere de la evaluación explícita de la matriz Jacobiana. Al reemplazar el algoritmo de Arnoldi~(\ref{alg:Arnoldi}) utilizado en~(\ref{eq:gen_kp_aprox}) por el algoritmo de Arnoldi libre de Jacobiano~(\ref{alg:iArnoldi}) se obtiene la siguiente aproximación libre de Jacobiano.
 
 \begin{definition}\label{def:gen_kp_aprox_fj}
-	\cite{naranjo2023jacobian}~Sean las matrices $\widehat{V}_{\mf}\in\mathbb{R}^{d\times \mf}$ y $\widehat{H}^*_{\mf}\in\mathbb{R}^{{\mf} \times {\mf}}$, el vector $\widehat{v}_{\mf+1}\in\mathbb{R}^d$, y el número  $ \widehat{\hf}^*_{\mf+1,\mf}$ salidas del algoritmo de Arnoldi libre de Jacobiano~(\ref{alg:iArnoldi}) para el $\mf$-ésimo subespacio de Krylov $\widehat{\mathcal{K}}_\mf(\tau^\beta f_x(y),b;\delta)$, donde $f_x$ es la matriz Jacobiana del campo vectorial $f$, $b,y\in\mathbb{R}^d$ vectores, $\tau,\delta>0$ y $\beta \ge 0$. Sea $\eta$ el orden de la aproximación $g(.;\delta)$ en el algoritmo~\ref{alg:iArnoldi}. Con $A=f_x(y)$, la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé libre de Jacobiano de $\tau \varphi_1(\tau A)b$ se define como 
+	\cite{naranjo2023jacobian}~Sean las matrices $\widehat{V}_{\mf}\in\mathbb{R}^{d\times \mf}$ y $\widehat{H}^*_{\mf}\in\mathbb{R}^{{\mf} \times {\mf}}$, el vector $\widehat{v}_{\mf+1}\in\mathbb{R}^d$, y el número  $ \widehat{\hf}^*_{\mf+1,\mf}$ salidas del algoritmo de Arnoldi libre de Jacobiano~(\ref{alg:iArnoldi}) para el $\mf$-ésimo subespacio de Krylov $\widehat{\mathcal{K}}_\mf(\tau^\beta f_x(y),b;\delta)$, donde $f_x$ es la matriz Jacobiana del campo vectorial $f$, $b,y\in\mathbb{R}^d$ vectores, $\tau,\delta>0$ y $\beta \ge 0$. Sea $\eta$ el orden de la aproximación $g(.;\delta)$ en el algoritmo~\ref{alg:iArnoldi}. Con $A=f_x(y)$, la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé libre de Jacobiano de $\tau \varphi_1(\tau A)b$ se define como
 	\begin{equation} \label{eq:gen_kp_aprox_fj}
 		\widehat{K}_{\mf,k}^{\pf,\qf}\left(\tau, A , b ; \eta, \delta, \beta \right)=\nnorm{\nnorm{b}}_2 \widehat{V}_{\mf}\;[\widetilde{P}_{\tau}]_{12} + \nnorm{\nnorm{b}}_2 \widehat{\hf}_{\mf+1,\mf}e_\mf^T\;[\widetilde{P}_{\tau}]_{13} \widehat{v}_{\mf+1},
 	\end{equation}
-	donde $\widetilde{P}_{\tau}$ denota la aproximación $(\pf,\qf)$-Padé con escalamiento y potenciación $k$ para la exponencial matricial $\me{\tau\overline{H}}$, 
+	donde $\widetilde{P}_{\tau}$ denota la aproximación $(\pf,\qf)$-Padé con escalamiento y potenciación $k$ para la exponencial matricial $\me{\tau\overline{H}}$,
 	\begin{equation}
 		\overline{H} = \left[\begin{array}{cccc}
 			\widehat{H}_\mf & e_1 & 0_{\mf\times 1} & 0_{\mf\times 1}\\
