@@ -292,7 +292,7 @@ En lo que resta del documento se asumirá que existe una función $(\eta+1)$ con
 \end{equation}
 se cumple, donde $f_x(y)$ es la matriz Jacobiana del campo vectorial $f$ en el punto $y$; $y,b$ son vectores $d$-dimensionales y $\mathfrak{L}$ es una constante positiva que depende solamente de la norma de las derivadas de $f_x$.
 
-Al utilizar el Algoritmo de Arnoldi~(\ref{alg:Arnoldi}), la aproximación $K_{\mf,k}^{\pf,\qf}(\tau,A,b)$ definida en~(\ref{eq:kp_aprox}) requiere de la evaluación explícita de la matriz Jacobiana. Al reemplazar el Algoritmo de Arnoldi~\ref{alg:Arnoldi} utilizado en~(\ref{eq:gen_kp_aprox}) por el Algoritmo de Arnoldi libre de Jacobiano~\ref{alg:iArnoldi} se obtiene la siguiente aproximación libre de Jacobiano.
+Al utilizar el Algoritmo de Arnoldi~\ref{alg:Arnoldi}, la aproximación $K_{\mf,k}^{\pf,\qf}(\tau,A,b)$ definida en~(\ref{eq:kp_aprox}) requiere de la evaluación explícita de la matriz Jacobiana. Al reemplazar el Algoritmo de Arnoldi~\ref{alg:Arnoldi} utilizado en~(\ref{eq:gen_kp_aprox}) por el Algoritmo de Arnoldi libre de Jacobiano~\ref{alg:iArnoldi} se obtiene la siguiente aproximación libre de Jacobiano.
 
 \begin{definition}\label{def:gen_kp_aprox_fj}
 	\cite{naranjo2023jacobian}~Sean las matrices $\widehat{V}_{\mf}\in\mathbb{R}^{d\times \mf}$ y $\widehat{H}^*_{\mf}\in\mathbb{R}^{{\mf} \times {\mf}}$, el vector $\widehat{v}_{\mf+1}\in\mathbb{R}^d$, y el número  $ \widehat{\hf}^*_{\mf+1,\mf}$ salidas del Algoritmo de Arnoldi libre de Jacobiano~\ref{alg:iArnoldi} para el $\mf$-ésimo subespacio de Krylov $\widehat{\mathcal{K}}_\mf(\tau^\beta f_x(y),b;\delta)$, donde $f_x$ es la matriz Jacobiana del campo vectorial $f$, $b,y\in\mathbb{R}^d$ vectores, $\tau,\delta>0$ y $\beta \ge 0$. Sea $\eta$ el orden de la aproximación $g(.;\delta)$ en el Algoritmo~\ref{alg:iArnoldi}. Con $A=f_x(y)$, la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé libre de Jacobiano de $\tau \varphi_1(\tau A)b$ se define como
@@ -411,7 +411,7 @@ Utilizando las desigualdades (\ref{eq:fjbound})-(\ref{eq:fjbound2})
 \end{multline*}
 con lo cual se concluye la demostración. $\Box$\\
 
-\section{Aproximaciones a la solución de ecuaciones no autónomas}
+\section{Aproximaciones a la solución de ecuaciones no autónomas}\label{section:approx-non-auto}
 En el marco de los integradores exponenciales para PVI de la forma
 \begin{equation*}
 	\frac{dx}{dt}=f(x),  \;\;\;\; x(t_0)=x_0 \in \mathbb{R}^{d},   \;\;\;\; t\in[t_0,T],
@@ -477,15 +477,69 @@ en términos de la acción de la exponencial matricial sobre un vector. Primero,
 \end{equation*}
 donde $ATol$ y $RTol$ son las tolerancias absoluta y relativa deseadas y $\mathbf{\rho} = \mathbf{M} \mathbf{v}_{\mf+1}$. 
 
-Este error relativo está basado en lo que Y. Saad llamó ``\textit{error a posteriori}''~\cite{Saad92}. Esta estimación del error se basa en tomar como medida del error el siguiente término donde fue truncada la serie (\ref{PHI-EXPANSION}). Como se ha mencionado anteriormente, cuando los dos primeros términos de (\ref{PHI-EXPANSION}) se utilizan para aproximar $\tau\varphi_1(\tau \mathbf{M})\mathbf{Mr}$, el tercer término $\left\lvert\left\lvert \mathbf{Mr} \right\rvert\right\rvert_2 \hf_{\mf+1,\mf} \tau^{3} e_\mf^{T}\varphi_3( \tau H_\mf)e_1 \mathbf{M} v_{\mf+1} $ de (\ref{PHI-EXPANSION}) puede tomarse como una medida práctica del error. Por tanto, reemplazando $\tau^3\varphi_3( \tau H_\mf)e_1$ por $[\widetilde{E}_{\tau}]_{14}$, la expresión $\left\lvert \left\lvert \mathbf{Mr} \right\rvert\right\rvert_2 \left\lvert\left\lvert \hf_{\mf+1,\mf} e_\mf^{T}[\widetilde{E}_{\tau}]_{14} \mathbf{M} v_{\mf+1} \right\rvert\right\rvert_2$ puede tomarse como el error de la aproximación (\ref{eq:kp_aprox}) a $\tau\varphi_1(\tau \mathbf{M})\mathbf{Mr}$. Es importante notar que este error es válido tanto para la aproximación dada en (\ref{phi_approx}) como para (\ref{phi_approx_fj}).
+Este error relativo está basado en lo que Y. Saad llamó ``\textit{error a posteriori}''~\cite{Saad92}. Esta estimación del error se basa en tomar como medida del error el siguiente término donde fue truncada la serie (\ref{PHI-EXPANSION}). Como se ha mencionado anteriormente, cuando los dos primeros términos de (\ref{PHI-EXPANSION}) se utilizan para aproximar $\tau\varphi_1(\tau \mathbf{M})\mathbf{Mr}$, el tercer término $\left\lvert\left\lvert \mathbf{Mr} \right\rvert\right\rvert_2 \hf_{\mf+1,\mf} \tau^{3} e_\mf^{T}\varphi_3( \tau H_\mf)e_1 \mathbf{M} v_{\mf+1} $ de (\ref{PHI-EXPANSION}) puede tomarse como una medida práctica del error. Por tanto, reemplazando $\tau^3\varphi_3( \tau H_\mf)e_1$ por $[\widetilde{E}_{\tau}]_{14}$, la expresión $\left\lvert \left\lvert \mathbf{Mr} \right\rvert\right\rvert_2 \left\lvert\left\lvert \hf_{\mf+1,\mf} e_\mf^{T}[\widetilde{E}_{\tau}]_{14} \mathbf{M} v_{\mf+1} \right\rvert\right\rvert_2$ puede tomarse como el error de la aproximación (\ref{eq:kp_aprox}) a $\tau\varphi_1(\tau \mathbf{M})\mathbf{Mr}$.
 
-\begin{sloppypar}
-	Comenzando con un valor factible de $\mf$, se construye el $\mf$-ésimo subespacio de Krylov $\mathcal{K}_{\mf}(\mathbf{M},\mathbf{Mr})$ y el error relativo $\varepsilon(\mf)$ es calculado. En el caso de que $\varepsilon(\mf)/\gamma \geq 1$, se estima un nuevo valor para la dimensión de Krylov mediante la expresión
-\end{sloppypar}
+El error para la aproximación libre de Jacobiano será similar, pero es necesario tener en cuenta sus particularidades. El producto libre de jacobiano de la matriz particionada $\mathbf{M}$ por el vector particionado $u=[u_1,\cdots , u_{l+1}]$ está dado por
+
+\begin{eqnarray*}
+	\mathbf{M}u & = & \left[ 
+	\begin{array}{ccccc}
+		A & \overline{a}_{l} & \overline{a}_{l-1} & \cdots  & \overline{a}_{1} \\ 
+		0 & 0 & 1 & \cdots  & 0 \\ 
+		0 & 0 & 0 & \ddots  & 0 \\ 
+		\vdots  & \vdots  & \vdots  & \ddots  & 1 \\ 
+		0 & 0 & 0 & \cdots  & 0%
+	\end{array}%
+	\right] \left[ 
+	\begin{array}{c}
+		u_{1} \\ 
+		u_{2} \\ 
+		\vdots  \\ 
+		\vdots  \\ 
+		u_{l+1}
+	\end{array}%
+	\right]  \\
+	& = & 	\left[ 
+	\begin{array}{c}
+		Au_{1}+\overline{a}_{l}u_{2}+\cdots +\overline{a}_{1}u_{l+1} \\ 
+		u_{3} \\ 
+		\vdots  \\ 
+		u_{l+1} \\ 
+		0
+	\end{array}
+	\right] \\
+	& \approx &  	\left[ 
+	\begin{array}{c}
+		g(x,u_1;\delta)+\overline{a}_{l}u_{2}+\cdots +\overline{a}_{1}u_{l+1} \\ 
+		u_{3} \\ 
+		\vdots  \\ 
+		u_{l+1} \\ 
+		0
+	\end{array}
+	\right] \\
+	& = &
+	\widehat{g}(x,u;\delta)\;\;,
+\end{eqnarray*}
+donde $u_1\in\mathbb{R}^{d}$, $u_2,\ldots,u_{l+1}\in\mathbb{R}$, $A=f_x(x)$, $a_l\in \mathbb{R}^d$, $f_x(x)u_1\approx g(x,u_1;\delta)$. El Teorema \ref{theorem:krilobapproxequality} establece un nexo entre el subespacio de Krylov que utiliza el Jacobiano y el que no. Por tanto,reemplazando la línea 3  en el Algoritmo \ref{alg:iArnoldi}  por $\widehat{q}_j=\widehat{g}(y,\tau \widehat{v}_j;\delta)$, teniendo en cuenta el teorema antes mencionado, $\widehat{R}_\mf v_{\mf+1}=0$ y $M\widehat{v}_{\mf+1}\approx \widehat{g}(x,\widehat{v}_{\mf+1};\delta)$, el tercer término de la expansión (\ref{PHI-EXPANSION}) para la aproximación libre de Jacobiano es
 \begin{equation*}
+||b||_2 \hf_{\mf+1,\mf}\tau^3 e_\mf^T\varphi_3(\tau H_\mf)e_1(M+\widehat{R}_\mf)\widehat{v}_{m+1} \approx ||b||_2 \hf_{\mf+1,\mf} e_\mf^T[\widetilde{P}_{\tau}]_{14} \widehat{g}(x,\hat{v}_{m+1};\delta).
+\end{equation*}
+Por lo que el error relativo para la aproximación libre de Jacobiano es
+\begin{equation*}
+	\widehat{\varepsilon}(\mf) = \left(\frac{1}{d}\sum\limits_{i=1}^{d} \left(\frac{
+		\hf_{\mf+1,\mf} \mathbf{e}_{\mf}^T
+		[\widetilde{\mathbf{P}}_\tau]_{14} \rho^{[i]} \nnorm{\nnorm{\widehat{g}(x,r;\delta)}}_2}{ATol+ RTol\cdotp
+		\rvert \mathbf{r}^{[i]}\rvert}\right)^{2}\right)^{1/2},
+\end{equation*}
+donde $ATol$ y $RTol$ son las tolerancias absoluta y relativa deseadas y $\mathbf{\rho} = \widehat{g}(x,\mathbf{v}_{\mf+1};\delta)$. 
+
+
+ Es importante notar que la estrategia enunciada a continuación es válida para ambos errores $\varepsilon(\mf)$ y $\widehat{\varepsilon}(\mf)$.	Comenzando con un valor factible de $\mf$, se construye el $\mf$-ésimo subespacio de Krylov $\mathcal{K}_{\mf}(\mathbf{M},\mathbf{Mr})$ y el error relativo $\varepsilon(\mf)$ es calculado. En el caso de que $\varepsilon(\mf)/\gamma \geq 1$, se estima un nuevo valor para la dimensión de Krylov mediante la expresión
+
+\begin{equation} \label{eq:m-new}
 \mf_{new} = \left\lceil \mf + \minn{\fac_{max} , \maxx{\fac_{min},
 		\fac\cdot\Delta\mf} } \right\rceil,
-\end{equation*}
+\end{equation}
 donde $\Delta\mf=\log(\varepsilon(\mf)/\gamma)$, $\gamma=0.005$ es un factor de seguridad, $\fac_{max}= \maxx{ 1, \frac{\mf}{3} }$, $\fac_{min}= 1 $, $\fac=\frac{1}{\log(2)}$, y el símbolo $\left\lceil \cdot \right\rceil$ denota la función de techo (que devuelve el menor entero mayor o igual que un número real dado). Luego, con $\mf=\mf_{new}$, se repite el procedimiento explicado hasta que se satisface $\varepsilon(\mf)/\gamma< 1$.
 
 \subsection{Experimentos numéricos}\label{section:num-sim-kp}
