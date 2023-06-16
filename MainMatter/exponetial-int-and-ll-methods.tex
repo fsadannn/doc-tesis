@@ -30,15 +30,15 @@ que resulta de aplicar la fórmula de variación de constantes a estas ecuacione
 \begin{equation}
 x(t_n+h)=\me{Ah}\left(x(t_n) +\int\limits_{0}^{h} \me{-As}F(x(t_n+s)) \,ds\right)\,. \label{VCF2}
 \end{equation}
-Los integradores exponenciales obtenidos de aproximar ésta expresión son, por ejemplo, los conocidos métodos de Lawson, Lawson Generalizados, Exponential Time
+Los integradores exponenciales obtenidos de aproximar esta expresión son, por ejemplo, los conocidos métodos de Lawson, Lawson Generalizados, Exponential Time
 Differencing y Exponential Runge-Kutta (ver \cite{Berland07} para una revisión). Por otra parte, después de la linealización local de la ecuación (\ref{ODE-SYST}) en $t_{n}$,  la fórmula de variación de constantes lleva a
 \begin{eqnarray}
 x(t_{n}+h) &= & x(t_{n})+\int\limits_{0}^{h}e^{A	_{n}(h-s)}(f(t_n,x(t_{n}))+sf_t(t_n,x(t_{n})))ds \nonumber \\
  & & +\int\limits_{0}^{h}e^{A
 	_{n}(h-s)}g_{n}(t_{n}+s,x(t_{n}+s))ds, \label{VCF}
 \end{eqnarray}
-donde $A_{n}$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$ y $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))-f_t(t_n,x(t_{n}))(s-t_n)-f(t_n,x(t_n))$. 
-Ejemplos de integradores exponenciales obtenidos de aproximar ésta expresión son el método clásico de Pope~\cite{pope1963exponential} de orden 2, los métodos Runge-Kutta Localmente 
+donde $A_{n}$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$, $f_t$ es la derivada respecto a $t$ y $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))-f_t(t_n,x(t_{n}))(s-t_n)-f(t_n,x(t_n))$. 
+Ejemplos de integradores exponenciales obtenidos de aproximar esta expresión son el método clásico de Pope~\cite{pope1963exponential} de orden 2, los métodos Runge-Kutta Localmente 
 Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}, los métodos Exponenciales de Propagación 
 Iterativa~\cite{tokman2006efficient, tokman2012new}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
 métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los métodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}, todos de orden superior a 2.
@@ -157,7 +157,7 @@ Como ejemplos importantes se tienen las siguientes discretizaciones Lineales Loc
 Utilizando la fórmula Runge-Kutta clásica de orden 4~\cite{hairer1993solving} para integrar la ecuación auxiliar (\ref{ODE r}), se obtiene la discretización Lineal Local Runge-Kutta de orden 4~\cite{Jimenez13}:
 
 \begin{equation}
-    y_{n+1}\,=\,y_n+\phi(t_n,y_n,h_n)+\frac{h_n}{6}(2\kt+2\kt_3+\kt_4)
+    y_{n+1}\,=\,y_n+\phi(t_n,y_n,h_n)+\frac{h_n}{6}(2\kt_2+2\kt_3+\kt_4)
     \label{LL-scheme-4}
 \end{equation}
 con
@@ -169,7 +169,7 @@ Si se utilizan las fórmulas embebidas Runge-Kutta de Dormand y Prince para inte
 
 \begin{equation}
 y_{n+1}\,=\,y_n+\phi_s+h_n \sum_{j=1}^{s}b_j \kt_j \quad \text{y} \quad
-\widehat{y}_{n+1}\,=\, y_n+\phi_s+h_n \sum_{j=1}^{s}b_j \kt_j
+\widehat{y}_{n+1}\,=\, y_n+\phi_s+h_n \sum_{j=1}^{s}\widehat{b}_j \kt_j
 \label{LLDP-scheme-dp}
 \end{equation}
 donde $s = 7$ es el número de estados,
@@ -310,11 +310,11 @@ y potenciación para matrices pequeñas y densas, y el de los subespacios de Kry
     \end{equation*}%
     donde 
     \[
-    N_{\pf,\qf}(z)=\sum\limits_{k=0}^p\frac{(p+q-k)!p!}{(p+q)!k!(p-k)!}z^k
+    N_{\pf,\qf}(z)=\sum\limits_{k=0}^{\pf}\frac{(\pf+\qf-k)!\pf!}{(\pf+\qf)!k!(\pf-k)!}z^k
     \]%
     y 
     \[
-    D_{\pf,\qf}(z)=\sum\limits_{k=0}^q\frac{(p+q-k)!q!}{(p+q)!k!(q-k)!}(-z)^k
+    D_{\pf,\qf}(z)=\sum\limits_{k=0}^\qf\frac{(\pf+\qf-k)!\qf!}{(\pf+\qf)!k!(\qf-k)!}(-z)^k
     \]
 \end{definition}
 
@@ -435,12 +435,12 @@ Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obt
 
 \section{Producto de funciones phi por vectores}
 
-Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{VCF2}) o (\ref{VCF}). De ésta manera, típicamente, se obtienen expresiones recursivas que involucran integrales de la forma
+Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{VCF2}) o (\ref{VCF}). De esta manera, típicamente, se obtienen expresiones recursivas que involucran integrales de la forma
 \begin{equation*}
 \phi _{k}(z,h)=\int_{0}^{h}e^{z(h-s)}s^{k-1}ds,\text{ \ \ \ \ \ \ \ }%
 k=1,2,\ldots ,
 \end{equation*}%
-or, equivalentemente, su versión escalada
+o, equivalentemente, su versión escalada
 \begin{equation*}
 \varphi _{k}(z)=\int_{0}^{1}e^{z(1-\theta )}\frac{\theta ^{k-1}}{(k-1)!}%
 d\theta ,\text{ \ \ \ \ \ \ \ }k=1,2,\ldots ,

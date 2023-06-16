@@ -21,7 +21,7 @@ donde $\varphi_1$ está definida en (\ref{phi-definition}) y
 	\end{array}
 	\right]\;.
 \end{equation*}
-Cada una de estas formas de la solución puede ser aproximaciones utilizando subespacios Krylov. En los trabajos~\cite{Saad92,jimenez2012convergence} se utilizan aproximaciones de Krylov para las soluciones de las forma~(\ref{eqaux:lineal-solution-ex},\ref{eqaux:lineal-solution-xex}). Dichas aproximaciones son de orden $\mf$, donde $\mf$ es la dimensión del subespacio utilizado. En cambio para la solución de la forma~(\ref{eqaux:lineal-solution-xphix}) se han utilizado aproximaciones de orden  $\mf+1$~\cite{sidje1998expokit,niesen2012algorithm}. En este capítulo se introducirán aproximaciones Krylov-Padé de un orden mayor para la acción de $\varphi_1$, así como una variante que no evalúa la matriz Jacobiana. También se derivarán cotas para las aproximaciones propuestas y se propondrá una estrategia para la selección de la dimensión de los subespacios de Krylov. Los resultados de este capítulo están basados en \cite{naranjo2023computing,naranjo2023RT,naranjo2021locally,naranjo2023jacobian}.
+Cada una de estas formas de la solución puede ser aproximadas utilizando subespacios Krylov. En los trabajos~\cite{Saad92,jimenez2012convergence} se utilizan aproximaciones de Krylov para las soluciones de las forma~(\ref{eqaux:lineal-solution-ex},\ref{eqaux:lineal-solution-xex}). Dichas aproximaciones son de orden $\mf$, donde $\mf$ es la dimensión del subespacio utilizado. En cambio para la solución de la forma~(\ref{eqaux:lineal-solution-xphix}) se han utilizado aproximaciones de orden  $\mf+1$~\cite{sidje1998expokit,niesen2012algorithm}. En este capítulo se introducirán aproximaciones Krylov-Padé de un orden mayor para la acción de $\varphi_1$, así como una variante que no evalúa la matriz Jacobiana. También se derivarán cotas para las aproximaciones propuestas y se propondrá una estrategia para la selección de la dimensión de los subespacios de Krylov. Los resultados de este capítulo están basados en \cite{naranjo2023computing,naranjo2023RT,naranjo2021locally,naranjo2023jacobian}.
 
 \section{Aproximaciones Krylov-Padé a la acción del operador phi}\label{section:krylov-pade-approx}
 
@@ -31,7 +31,7 @@ Como se explicó en el Capítulo anterior, la acción del operador $\varphi_1$ d
  \end{equation}
 para aproximar $\tau\varphi_1(\tau A)b$ y el tercer término como medida del error.
 
-Al aplicar conjuntamente el Algoritmo de Arnoldi \ref{alg:Arnoldi}, la propiedad de invarianza ante escalado de la base ortonormal del subespacio de Krylov y el Teorema \ref{theorem:exp-phi} podemos evaluar la acción de las $\varphi_j$ en (\ref{exact-two-terms-km}) calculado una exponencial matricial. En efecto, con la matriz de Hessenberg $H^*_\mf$ resultante de aplicar el Algoritmo \ref{alg:Arnoldi} para $\mathcal{K}_\mf(\tau A,b)$ se obtiene la matriz de Hessenberg $H_\mf=H^*_\mf/\tau$ correspondiente a $\mathcal{K}_\mf(A,b)$ y, de ésta forma, se puede calcular la exponencial de la matriz particionada
+Al aplicar conjuntamente el Algoritmo de Arnoldi \ref{alg:Arnoldi}, la propiedad de invarianza ante escalado de la base ortonormal del subespacio de Krylov y el Teorema \ref{theorem:exp-phi} podemos evaluar la acción de las $\varphi_j$ en (\ref{exact-two-terms-km}) calculando una exponencial matricial. En efecto, con la matriz de Hessenberg $H^*_\mf$ resultante de aplicar el Algoritmo \ref{alg:Arnoldi} para $\mathcal{K}_\mf(\tau A,b)$ se obtiene la matriz de Hessenberg $H_\mf=H^*_\mf/\tau$ correspondiente a $\mathcal{K}_\mf(A,b)$ y, de ésta forma, se puede calcular la exponencial de la matriz particionada
 \begin{equation}
     \overline{H} = \left[\begin{array}{cccc}
     H_\mf & e_1 & 0_{\mf\times 1} & 0_{\mf\times 1}\\
@@ -60,14 +60,14 @@ Al aplicar (\ref{phi_hhat_exponential}) en (\ref{exact-two-terms-km}) se obtiene
 \begin{equation*}
     \widetilde{E}_{\tau} = F_k^{\pf,\qf}\left(\tau\overline{H}\right),
 \end{equation*}
-donde $F_k^{\pf,\qf}$ denota la aproximación de Padé-($\pf,\qf$) con escalamiento y potenciación $k$ definida en~(\ref{P-MA-2}). Con ésta nueva aproximación, se obtiene la expresión 
+donde $F_k^{\pf,\qf}$ denota la aproximación de Padé-($\pf,\qf$) con escalamiento y potenciación $k$ definida en~(\ref{P-MA-2}). Con esta nueva aproximación, se obtiene la expresión 
 \begin{equation} \label{eq:kp_aprox}
     K_{\mf,k}^{\pf,\qf}(\tau,A,b) = \norme{b}V_\mf [\widetilde{E}_\tau]_{12} + \norme{b}\hf_{\mf+1,\mf}e^T_\mf[\widetilde{E}_\tau]_{13}v_{\mf+1}
  \end{equation}
  que define a la aproximación de Krylov-Padé para $\tau\varphi_1(\tau A)b$.
 
  \subsection{Cotas para las aproximaciones}
- En está sección se enunciará un teorema para acotar el error de la aproximación (\ref{eq:kp_aprox}) en función de $\tau$, la dimensión del subespacio de Krylov $\mf$ y los órdenes de Padé $\pf$ y $\qf$. Para poder enunciar dicho teorema dos lemas adicionales son necesarios. El primer lema extiende para $\tau \varphi_1(\tau A)b$ los resultados del Teorema 4.7 en~\cite{Saad92} para aproximaciones de $\varphi_0(A)b$ mediante subespacios de Krylov. El segundo lema ofrece una cota para la matriz $\overline{H}$.
+ En esta sección se enunciará un teorema para acotar el error de la aproximación (\ref{eq:kp_aprox}) en función de $\tau$, la dimensión del subespacio de Krylov $\mf$ y los órdenes de Padé $\pf$ y $\qf$. Para poder enunciar dicho teorema dos lemas adicionales son necesarios. El primer lema extiende para $\tau \varphi_1(\tau A)b$ los resultados del Teorema 4.7 en~\cite{Saad92} para aproximaciones de $\varphi_0(A)b$ mediante subespacios de Krylov. El segundo lema ofrece una cota para la matriz $\overline{H}$.
 
  \begin{lemma}\cite{naranjo2021locally}\label{lemma:CORRECTED-ERROR}
 	Sea $A\in\mathbb{C}^{d\times d}$ una matriz, $b\in\mathbb{C}^{d}$ un vector, $\tau$ un número positivo, y \[{K_{\mf}\left(\tau,A , b \right) = \tau ||b||_2 V_\mf \varphi_1(\tau H_\mf)e_1}+\tau^2 ||b||_2 \hf_{\mf+1,\mf}e_\mf^T\varphi_2\left(\tau H_\mf\right) e_1 v_{\mf+1} \] la aproximación a $\tau \varphi_1(\tau A)b$ tomando los dos primeros términos de la serie (\ref{PHI-EXPANSION}). Entonces,
@@ -274,7 +274,7 @@ para aproximar el producto del Jacobiano por un vector \begin{equation*}
 		b_1\frac{\partial F_2(u_1,u_2)}{\partial u_1} + b_2\frac{\partial F_2(u_1,u_2)}{\partial u_2}\\
 	\end{array}\right],
 \end{equation*}
-donde $J(u)$ es la matriz Jacobiana de la función vectorial suave 2-dimensional $F(u_1,u_2)$, y $b=[b_1,b_2]$ es un vector 2-dimensional. Aproximando $F(u+\delta b)$ con la expansión en seria de Taylor de primer orden $u$, se tiene
+donde $J(u)$ es la matriz Jacobiana de la función vectorial suave 2-dimensional $F(u_1,u_2)$, y $b=[b_1,b_2]$ es un vector 2-dimensional. Aproximando $F(u+\delta b)$ con la expansión en serie de Taylor de primer orden en $u$, se tiene
 \begin{equation*}
 	\frac{F(u+\delta b)-F(u)}{\delta} =  \left(\begin{array}{c}
 		\frac{F_1(u_1,u_2) + \delta b_1 \frac{\partial F_1}{\partial u_1} + \delta b_2 \frac{\partial F_1}{\partial u_2} -F_1(u_1,u_2)}{\delta}\\
@@ -336,7 +336,7 @@ Al utilizar el Algoritmo de Arnoldi~\ref{alg:Arnoldi}, la aproximación $K_{\mf,
 }
 
  \subsection{Cotas para las aproximaciones}
-  En está sección se enunciará un teorema para acotar el error de la aproximación~(\ref{eq:gen_kp_aprox_fj}) en función de $\tau$, la dimensión del subespacio de Krylov $\mf$, los órdenes de Padé $\pf$ y $\qf$, el orden $\eta$ de la aproximación $g(.,\delta)$. Para poder enunciar dicho teorema se necesita otro teorema que establece una relación entre el subespacio generado por el Algoritmo de Arnoldi~\ref{alg:Arnoldi} y el subespacio generado por el Algoritmo de Arnoldi libre de Jacobiano~\ref{alg:iArnoldi}.
+  En esta sección se enunciará un teorema para acotar el error de la aproximación~(\ref{eq:gen_kp_aprox_fj}) en función de $\tau$, la dimensión del subespacio de Krylov $\mf$, los órdenes de Padé $\pf$ y $\qf$, el orden $\eta$ de la aproximación $g(.,\delta)$. Para poder enunciar dicho teorema se necesita otro teorema que establece una relación entre el subespacio generado por el Algoritmo de Arnoldi~\ref{alg:Arnoldi} y el subespacio generado por el Algoritmo de Arnoldi libre de Jacobiano~\ref{alg:iArnoldi}.
 
 \begin{theorem} \label{theorem:krilobapproxequality} \cite{naranjo2023jacobian}~Sea $f_x$ la matriz Jacobiana del campo vectorial $f$; $b$,$y$ vectores de la misma dimensión y $\tau>0$. Entonces, los $\mf$-ésimos subespacios de Krylov $\mathcal{K}_\mf$ y $\widehat{\mathcal{K}}_\mf$ generados por los Algoritmos \ref{alg:Arnoldi} y \ref{alg:iArnoldi} respectivamente, satisfacen 
 	\[ \widehat{\mathcal{K}}_\mf(\tau f_x(y),b;\delta) = \mathcal{K}_\mf(\tau f_x(y)+R_\mf,b), \]
@@ -345,7 +345,7 @@ Al utilizar el Algoritmo de Arnoldi~\ref{alg:Arnoldi}, la aproximación $K_{\mf,
 	\[ \nnnorm{R_\mf}_2\leq \sqrt{\mf}\mathfrak{L} \tau^{\eta+1}\delta^{\eta}, \]
 	donde $\eta$ es el orden de la aproximación $g(.;\delta)$ en el Algoritmo \ref{alg:iArnoldi}, y $\mathfrak{L}$ es la constante positiva de (\ref{eq:g_bound}) correspondiente a $g(.;\delta)$.
 \end{theorem}
-\textbf{Demostración}. La primera afirmación es un resultado directo del Teorema 3.2 in \cite{brown1987local}.
+\textbf{Demostración}. La primera afirmación es un resultado directo del Teorema 3.2 en \cite{brown1987local}.
 
 Utilizando  (\ref{eq:g_bound}) se tiene
 \[ \nnnorm{\varepsilon_j}_2=\nnnorm{g(y,\tau\widehat{v}_j,\delta)-\tau f_x(y)\widehat{v}_j}_2 \leq  \mathfrak{L} \tau^{\eta+1}\delta^{\eta}\;\;\;\text{para}\;j=1,\dots,\mf, \]
@@ -359,7 +359,7 @@ con lo que concluye la demostración. $\blacksquare$\\
 
 \begin{theorem}\label{theorem:Krylov-fj-bound}
 \cite{naranjo2023jacobian}~Tomando $A=f_x(y)$, sea $\widehat{K}_{\mf,k}^{\pf,\qf}\left(\tau, A , b ; \eta, \delta, \beta \right)$ la aproximación \\
-	$(\mf , \pf ,\qf , k)$-Krylov-Padé libre de Jacobiano (\ref{eq:gen_kp_aprox_fj}) of $\tau \varphi_1(\tau A)b$. Entonces,
+	$(\mf , \pf ,\qf , k)$-Krylov-Padé libre de Jacobiano (\ref{eq:gen_kp_aprox_fj}) de $\tau \varphi_1(\tau A)b$. Entonces,
 	\begin{equation}
 		\left\lvert\left\lvert  \tau \varphi_1(\tau A)b -
 		\widehat{K}_{\mf,k}^{\pf,\qf}\left( \tau, A , b ; \eta, \delta, \beta \right)\right\rvert\right\rvert_2%\nonumber\\
@@ -383,7 +383,7 @@ donde $\widehat{R}_\mf = R_\mf/\tau^\beta$. De esta forma, $\widehat{\mathcal{K}
 \end{equation}
 donde $K_{\mf,k}^{\pf,\qf}\left( \tau, A+\widehat{R}_\mf , b \right)$ denota la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé (\ref{eq:gen_kp_aprox}) de $\tau \varphi_1(\tau (A+\widehat{R}_\mf))b$. 
 
-Teniendo en cuanta $\varphi_1(z) \leq \varphi_0(z)$ se tiene
+Teniendo en cuenta $\varphi_1(z) \leq \varphi_0(z)$ se tiene
 \begin{align}
 	\nnnorm{\tau \varphi_1(\tau A)b -\widehat{K}_{\mf,k}^{\pf,\qf}\left( \tau, A , b; \eta, \delta, \beta \right)}_2 & = \nnnorm{\tau \varphi_1(\tau A)b -K_{\mf,k}^{\pf,\qf}\left( \tau, A+\widehat{R}_\mf , b \right)}_2 \nonumber \\
 	& \leq \nnnorm{\tau \varphi_1(\tau A)b - \tau \varphi_1(\tau A + \tau \widehat{R}_\mf)b}_2 \nonumber \\
@@ -467,7 +467,7 @@ Como se muestra en (\ref{sum2_phiXv}), la mencionada combinación lineal de múl
 para $t\geq 0$. La segunda y tercera afirmación son resultado directo de aplicar el Teorema \ref{theorem:Krylov-bound} y Teorema \ref{theorem:Krylov-fj-bound} respectivamente.
 $\square$
 
-La aproximación a la solución de la EDO lineal (\ref{ODELinNoAut}) dada en (\ref{phi_approx}) en términos de la acción de la función phi sobre un vector tiene dos ventajas principales sobre las propuestas \cite{hochbruck1997krylov,sidje1998expokit,jimenez2012convergence}
+La aproximación a la solución de la EDO lineal (\ref{ODELinNoAut}) dada en (\ref{phi_approx}) en términos de la acción de la función phi sobre un vector tiene dos ventajas principales sobre las propuestas en \cite{hochbruck1997krylov,sidje1998expokit,jimenez2012convergence}
 en términos de la acción de la exponencial matricial sobre un vector. Primero, la aproximación (\ref{phi_approx}) es, con respecto a la dimensión de Krylov $\mf$ como exponente de $t$, dos órdenes mayor que las otras existentes (véase el enunciado del Teorema \ref{theorem:Krylov-and-Krylov-fj-bounds} respecto a los enunciados en los Teoremas 4.3 en \cite{Saad92} y 5 en \cite{hochbruck1997krylov}, y el Lema 4.2 en \cite{jimenez2012convergence}) mientras que se realiza un número similar de operaciones matemáticas. Este es un resultado notable en el marco de los integradores exponenciales para ecuaciones diferenciales ya que implica un mayor orden de convergencia y eficiencia computacional \cite{naranjo2021locally}. En segundo lugar, mientras que en \cite{hochbruck1997krylov,sidje1998expokit,jimenez2012convergence} no hay instrucciones para determinar la dimensión de Krylov $\mf$ adecuada, $\mf$ en (\ref{phi_approx}) se puede estimar efectivamente como en \cite{naranjo2021locally,naranjo2023jacobian} en términos del error relativo
 \begin{equation*}
 \varepsilon(\mf) = \left(\frac{1}{d}\sum\limits_{i=1}^{d} \left(\frac{
@@ -613,7 +613,7 @@ En el ejemplo, la matriz y los vectores en (\ref{sum2_phiXv}) se definen como $A
 
 \begin{figure}[htb]
 	\includegraphics[scale=0.57]{Graphics/kpfj-brusselator-em.jpg}
-	\caption{Superior: Gráficos Log-log de tolerancia relativa (\textit{rtol}) contra error (\textit{error}) en el cálculo de $\phi _{1}(f_x,h)a_{1}+\phi _{2}(f_x,h)a_{3}+\phi _{3}(f_x,h)a_{3}$ para la ecuación de ejemplo \ref{ej:ej1-hpfj} mediante las aproximaciones \textit{JF1-Phi}, \textit{JF2-Phi} y \textit{Phi} con $rtol=10^{-j}$ y $j=1,\ldots,6$. De izquierda a derecha, con $h=0.01,0.001,0.0001$. Inferior: Gráficos de tolerancia relativa (\textit{rtol}) contra dimensión de Krylov $\mf$ correspondiente a las aproximaciones de la figura superior.}
+	\caption{Superior: Gráficos Log-log de tolerancia relativa (\textit{rtol}) contra error (\textit{error}) en el cálculo de $\phi _{1}(f_x,h)a_{1}+\phi _{2}(f_x,h)a_{3}+\phi _{3}(f_x,h)a_{3}$ para la ecuación de ejemplo \ref{ej:ej1-hpfj} mediante las aproximaciones \textit{JF1-Phi}, \textit{JF2-Phi} y \textit{Phi} con $rtol=10^{-j}$ y $j=1,\ldots,6$. De izquierda a derecha, con $h$=0.01,0.001,0.0001. Inferior: Gráficos de tolerancia relativa (\textit{rtol}) contra dimensión de Krylov $\mf$ correspondiente a las aproximaciones de la figura superior.}
 	\label{fig:SumPhiBrusselator}
 \end{figure}
 
