@@ -2,14 +2,14 @@
 
 En este capítulo se presenta una revisión de la clase general de  integradores numéricos de tipo exponencial y de los Métodos de Linealización Local en particular, así como resultados básicos sobre el cálculo de la exponencial matricial.
 
-En general, se considerarán los problemas de valor inicial definidos por las ecuaciones diferenciales no autónomas
+En general, se considerarán los problemas de valor inicial definidos por los sistemas de ecuaciones diferenciales no autónomas de la forma
  \begin{equation}
  \frac{dx}{dt}=f(t,x), \;\; \label{ODE-SYST}
  \end{equation}
  \begin{equation*}
  x(t_0)=x_0,
  \end{equation*}
- donde $x_0\in \mathfrak{D}$ es un valor inicial dado, $f: [t_0,T] \times \mathfrak{D}\longrightarrow \mathbb{R}^{d}$ es una función diferenciable y $\mathfrak{D}\subset\mathbb{R}^{d}$ un conjunto abierto. Se asumen condiciones de suavidad y condición de Lipschitz en $f$ para asegurar la unicidad de la solución en $\mathfrak{D}$.
+ donde $x_0\in \mathfrak{D}$ es un vector columna inicial dado, $f: [t_0,T] \times \mathfrak{D}\longrightarrow \mathbb{R}^{d}$ es una función vectorial diferenciable, $\mathfrak{D}\subset\mathbb{R}^{d}$ un conjunto abierto, con $d\geq 1$ y $t_0<T \in \mathbb{R}$. Se asumen condiciones de suavidad y condición de Lipschitz en $f$ para asegurar la unicidad de la solución en $\mathfrak{D}$. Denotaremos por $f_x$ la matriz Jacobiana de $f$ respecto a $x$ y por $f_t$ la derivada parcial de $f$ con respecto a $t$.
 
 Consideremos, ademas, una partición $(t)_{h}={t_{n}:n=0,1,\ldots,N}$ del
 intervalo $[t_{0},T]$ tal que $t_{0}<t_{1}<\ldots<t_{N}=T$, y $%
@@ -37,13 +37,13 @@ x(t_{n}+h) &= & x(t_{n})+\int\limits_{0}^{h}e^{A	_{n}(h-s)}(f(t_n,x(t_{n}))+sf_t
  & & +\int\limits_{0}^{h}e^{A
 	_{n}(h-s)}g_{n}(t_{n}+s,x(t_{n}+s))ds, \label{VCF}
 \end{eqnarray}
-donde $A_{n}$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$, $f_t$ es la derivada respecto a $t$ y $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))-f_t(t_n,x(t_{n}))(s-t_n)-f(t_n,x(t_n))$. 
+donde $A_{n}=f_x(t_n,x(t_{n}))$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$,  $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))-f_t(t_n,x(t_{n}))(s-t_n)-f(t_n,x(t_n))$ y $f_t$ es la derivada parcial de $f$ respecto a $t$. 
 Ejemplos de integradores exponenciales obtenidos de aproximar esta expresión son el método clásico de Pope~\cite{pope1963exponential} de orden 2, los métodos Runge-Kutta Localmente 
 Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}, los métodos Exponenciales de Propagación 
 Iterativa~\cite{tokman2006efficient, tokman2012new}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
 métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los métodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}, todos de orden superior a 2.
 
-En otro contexto, los integradores exponenciales también fueron tempranamente introducidos como aproximación de soluciones de otras clases de ecuaciones. Por ejemplo, para aproximar las ecuaciones diferenciales estocásticas~\cite{ozaki19852,ozaki1985statistical} y sus asociados problemas de filtrado continuo-discreto~\cite{ozaki1993local} y estimación de procesos de difusión~\cite{ozaki19852,ozaki1985statistical,ozaki1994local}. Luego fueron extendidos para la integración de ecuaciones diferenciales aleatorias~\cite{carbonell2005local}, con retardo~\cite{jimenez2006local} y para las parciales estocásticas semilineales~\cite{jentzen2009overcoming,kloeden2011exponential}.
+En el contexto de las ecuaciones diferenciales de dimensiones pequeñas los integradores exponenciales también fueron tempranamente introducidos como aproximación a las soluciones de dichas ecuaciones. Por ejemplo, para aproximar las ecuaciones diferenciales estocásticas~\cite{ozaki19852,ozaki1985statistical} y sus asociados problemas de filtrado continuo-discreto~\cite{ozaki1993local} y estimación de procesos de difusión~\cite{ozaki19852,ozaki1985statistical,ozaki1994local}. Luego fueron extendidos para la integración de ecuaciones diferenciales aleatorias~\cite{carbonell2005local}, con retardo~\cite{jimenez2006local} y para las parciales estocásticas semilineales~\cite{jentzen2009overcoming,kloeden2011exponential}.
 
 En general, los integradores exponenciales tienen en cuenta que una parte significativa de la estabilidad y las propiedades dinámicas de las ecuaciones diferenciales está contenida en la linealización de la ecuación tratada y se constituyen como una alternativa importante a los métodos implícitos para resolver ecuaciones diferenciales  \textit{stiff} o altamente oscilatorias.  
 
@@ -62,29 +62,28 @@ de primer orden de $f$ en una vecindad de $(t_n,y_{n})$, donde \mbox{$
 	A_{n}=f_{x}(t_n,y_{n})$} y $a_{n}(t)=f(t_n,y_{n})-A_{n}y_{n}+f_t(t_n,y_n)(t-t_n)$, entonces la
 solución de la ecuación 
 \begin{eqnarray}
-\frac{dy}{dt} & = & A_{n}y_n+a_{n}(t) \label{ODE-SYST-LINEAL-1} \\
+\frac{dy}{dt} & = & A_{n}y+a_{n}(t) \label{ODE-SYST-LINEAL-1} \\
 y(t_{n})& = & y_{n}  \nonumber
 \end{eqnarray}
 para todo $t\in[t_{n},t_{n+1}]$ es una aproximación de la solución
 de (\ref{ODE-SYST}) con condición inicial \mbox{$x(t_{n})=y_{n}$}. Mediante la fórmula de variación de constantes obtenemos 
-\begin{equation}
-y(t)=y_{n}+\phi(t_{n},y_{n},t-t_{n})  \label{ODE-SYST-FORM-LL}
-\end{equation}
-donde 
 \begin{equation*}
-\phi(t_{n},y_{n};t-t_{n})=\int\limits^{t-t_{n}}_{0} e^{{A_{n}(t-t_{n}-u)}}
-(A_{n}y_{n}+a_{n}(t_{n}+u))\,du.  %\label{REV-PHI-DEF-2}
+y(t)=y_{n}+\phi(t_{n},y_{n};t-t_{n})  %\label{ODE-SYST-FORM-LL}
 \end{equation*}
-
+donde 
+\begin{equation}
+\phi(t_{n},y_{n};t-t_{n})=\int\limits^{t-t_{n}}_{0} e^{{A_{n}(t-t_{n}-u)}}
+(A_{n}y_{n}+a_{n}(t_{n}+u))\,du.  \label{REV-PHI-DEF-2}
+\end{equation}
 Aplicando recursivamente la expresión anterior obtenemos la siguiente
 definición.
 
 \begin{definition}
 	\label{definition LLD} Dada una partición $(t)_{h}$, la discretización Lineal Local de la solución de (\ref{ODE-SYST}) está dada por la expresión recursiva
 	\begin{equation}
-	y_{n+1}=y_{n}+\phi \left( t_{n},y_{n},h_{n}\right) ,  \label{ODE-LLA-4}
+	y_{n+1}=y_{n}+\phi \left( t_{n},y_{n};h_{n}\right) ,  \label{ODE-LLA-4}
 	\end{equation}%
-	con $y_{0}=x_{0}$ y $n=0,1,\ldots,N-1$.
+	con $y_{0}=x_{0}$, $n=0,1,\ldots,N-1$ y $\phi$ definida en (\ref{REV-PHI-DEF-2}).
 \end{definition}
 
 Para todo $t\in[t_{0},T]$ se define la siguiente aproximación.
@@ -92,41 +91,40 @@ Para todo $t\in[t_{0},T]$ se define la siguiente aproximación.
 	\label{definition LLA} Dada una partición $(t)_{h}$, la aproximación
 	Lineal Local de la solución de (\ref{ODE-SYST}) está dada por 
 	\begin{equation}
-	y(t)=y_{n_{t}}+\phi(t_{n_{t}},y_{n_{t}},t-t_{n_{t}})
+	y(t)=y_{n_{t}}+\phi(t_{n_{t}},y_{n_{t}};t-t_{n_{t}})
 	\label{ODE-REV-FORM-LLA}
 	\end{equation}
 	para todo $t\in[t_{0},T]$, donde $y_{0}=x_{0}$, $y_{n_{t}}$ es la discretización Lineal Local (\ref{ODE-LLA-4}) y ${n_{t}=\maxx{n:t_{n}\leq t}}$.
 \end{definition}
 %Otros  integradores que provienen de esta aproximación son~\cite{Jimenez02AMC,Jimenez05AMC}.
 
- La convergencia, la estabilidad lineal y varias propiedades dinámicas de  la discretización Lineal Local (\ref{ODE-LLA-4}) se pueden encontrar en \cite{Jimenez02AMC}.
-
+ La convergencia, la estabilidad lineal y varias propiedades dinámicas de  la discretización Lineal Local (\ref{ODE-LLA-4}) se pueden encontrar en \cite{Jimenez02AMC}. 
+ 
+ Obsérvese que $\phi(t_{n},x(t_n);h_n)$ en la discretización Lineal Local (\ref{ODE-LLA-4}) representa la primera integral de la expresión (\ref{VCF}). De esta forma la segunda integral de la expresión (\ref{VCF}) representa el residuo de dicha aproximación a la solución de la ecuación diferencial (\ref{ODE-SYST}).
 \subsection{Aproximación Lineal Local de Orden Superior}
 
 La estabilidad y las propiedades dinámicas que la discretización Lineal Local (\ref{ODE-LLA-4}) posee son de vital importancia para la integración de EDOs, no obstante su bajo orden de convergencia constituye una limitante en algunas circunstancias. Para solucionar esa dificultad se construyen los métodos de Linealización Local de Orden Superior los cuales retienen las propiedades mencionadas, pero con orden de convergencia mayor. 
 
-Estos nuevos métodos se obtienen de agregar a la aproximación (\ref%
-{ODE-REV-FORM-LLA}) un término adicional $\xi$ de orden superior a 2 
-que resulta de aproximar la segunda integral de la expresión (\ref{VCF}) por algún método de cuadratura o por la solución numérica de una ecuación diferencial auxiliar \cite{delaCruz06}. Usando diferentes tipos de cuadraturas se obtienen los métodos Exponenciales de Propagación 
+Estos métodos de Linealización Local de Orden Superior se obtienen de agregar a la aproximación Lineal Local (\ref{ODE-REV-FORM-LLA}) un término adicional $r$ que resulta de aproximar, con un orden superior a 2, la segunda integral de la expresión (\ref{VCF}) por algún método de cuadratura o por la solución numérica de la representación diferencial de la segunda integral en (\ref{VCF}) \cite{delaCruz06}. Usando diferentes tipos de cuadraturas para aproximar  (\ref{VCF}) se obtienen los métodos Exponenciales de Propagación 
 Iterativa~\cite{tokman2006efficient}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
-métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los métodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}. Por otra parte, usando esquemas Runge Kutta (RK) para resolver la mencionada ecuación auxiliar se obtienen los métodos Runge-Kutta Localmente Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}.
+métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los métodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}. Por otra parte, usando esquemas Runge Kutta (RK) para resolver la mencionada ecuación diferencial se obtienen los métodos Runge-Kutta Localmente Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}.
 
 Por su relevancia en esta tesis, a continuación se expondrá con mas detalle los métodos Runge-Kutta Localmente Linealizados. 
 
 Dada una partición $(t)_{h}$, una aproximación Lineal Local de orden $%
 \gamma$ de la solución de (\ref{ODE-SYST}) se define por la expresión 
 \begin{equation}
-y(t)=y_{n_{t}}+\phi(t_{n_{t}},y_{n_{t}},t-t_{n_{t}})+\xi(t,t_{n_{t}},y_{n_{t}}),
+y(t)=y_{n_{t}}+\phi(t_{n_{t}},y_{n_{t}};t-t_{n_{t}})+r(t,t_{n_{t}},y_{n_{t}}),
 \label{ODE-REV-HOLL}
 \end{equation}
-donde $\xi(t,t_{n_{t}},y_{n_{t}})$ es la solución numérica de orden $\gamma >2$ de la ecuación auxiliar
+donde ${n_{t}=\maxx{n:t_{n}\leq t}}$, $r(t,t_{n_{t}},y_{n_{t}})$ es la solución numérica de orden $\gamma >2$ de la ecuación auxiliar
 \begin{eqnarray}
-\frac{du}{dt} & = & q(t_{n},y_{n},t,u(t))  \label{ODE r} \\
-u(t_{n}) & = & 0 \nonumber
+\frac{dr}{dt} & = & q(t_{n},y_{n},t,r(t))  \label{ODE r} \\
+r(t_{n}) & = & 0 \nonumber
 \end{eqnarray}
 para todo $t\in [t_{n},t_{n+1})$, con campo vectorial 
 \begin{eqnarray*}
-q(t_n,y_n,s,\varsigma)&=&f(s,y_n+\phi(t_n,y_n,s-t_n)+\varsigma)-f_x(t_n,y_n)\phi(t_n,y_n,s-t_n)-f(t_n,y_n)%\\
+q(t_n,y_n,s,\varsigma)&=&f(s,y_n+\phi(t_n,y_n;s-t_n)+\varsigma)-f_x(t_n,y_n)\phi(t_n,y_n;s-t_n)-f(t_n,y_n)%\\
 % & &-f_t(t_n,y_n)(s-t_n) -f(t_n,y_n) ,
 %\label{AUX-ODE}
 \end{eqnarray*}
@@ -137,7 +135,7 @@ Cuando $\xi$ es la aproximación obtenida mediante un esquema Runge-Kutta de ord
 	\label{definition HLLD} \cite{Jimenez13} Dada una partición $(t)_{h}$, la discretización Lineal Local Runge-Kutta 
     de orden $\gamma >2$ se define por la expresión recursiva:
 	\begin{equation*}
-	y_{n+1}=y_{n}+\phi \left( t_{n},y_{n},h_{n}\right) +h_{n}\sum_{j=1}^{s}b_{j}\kt_{j}
+	y_{n+1}=y_{n}+\phi \left( t_{n},y_{n};h_{n}\right) +h_{n}\sum_{j=1}^{s}b_{j}\kt_{j}
 	%\label{LLRK_Discretizat}
 	\end{equation*}%
 	con $y_{0}=x_{0}$, donde las constantes $b_{j}$ y las funciones $k_{j}$ están definidas por el método Runge-Kutta de $s$ estados aplicado a la ecuación~(\ref{ODE r}).
@@ -146,7 +144,7 @@ Cuando $\xi$ es la aproximación obtenida mediante un esquema Runge-Kutta de ord
 \begin{definition}
 	\label{definition HOLLA} \cite{Jimenez13} Dada una partición $(t)_{h}$, la aproximación Lineal Local Runge-Kutta de orden $\gamma$ se define por 
 	\begin{equation*}
-	y(t)=y_{n_{t}}+\phi(t_{n_{t}},y_{n_{t}},t-t_{n_{t}})+(t-t_{n_{t}})%
+	y(t)=y_{n_{t}}+\phi(t_{n_{t}},y_{n_{t}};t-t_{n_{t}})+(t-t_{n_{t}})%
 	\sum_{j=1}^{s}b_{j}\kt_{j}(t_{n_{t}},y_{n_{t}},t-t_{n_{t}}) %\label{LLRK_Approx}
 	\end{equation*}
 	para todo $t\in[t_{0},T]$, donde $y_{n_{t}}$ es la discretización Lineal Local Runge-Kutta de orden $\gamma$, y $n_{t}=\maxx{n:t_{n}\leq t}$.
@@ -157,30 +155,29 @@ Como ejemplos importantes se tienen las siguientes discretizaciones Lineales Loc
 Utilizando la fórmula Runge-Kutta clásica de orden 4~\cite{hairer1993solving} para integrar la ecuación auxiliar (\ref{ODE r}), se obtiene la discretización Lineal Local Runge-Kutta de orden 4~\cite{Jimenez13}:
 
 \begin{equation}
-    y_{n+1}\,=\,y_n+\phi(t_n,y_n,h_n)+\frac{h_n}{6}(2\kt_2+2\kt_3+\kt_4)
+    y_{n+1}\,=\,y_n+\phi(t_n,y_n;h_n)+\frac{h_n}{6}(2\kt_2+2\kt_3+\kt_4)
     \label{LL-scheme-4}
 \end{equation}
 con
-    \[ \kt_j = f\left( t_n+c_jh_n\, , \, y_n+\phi(t_n,y_n,c_jh_n)+c_jh_n\kt_{j-1} \right)
-- f_x(t_n\, , \, y_n)\phi(t_n,y_n,c_jh_n) - f(t_n\, ,\, y_n) ,\]
+    \[ \kt_j = f\left( t_n+c_jh_n\, , \, y_n+\phi(t_n,y_n;c_jh_n)+c_jh_n\kt_{j-1} \right)
+- f_x(t_n\, , \, y_n)\phi(t_n,y_n;c_jh_n) - f(t_n\, ,\, y_n) ,\]
 donde $\kt_1=0$ y $c = \left[ 0 \; \frac{1}{2} \; \frac{1}{2} \; 1  \right]$.
 
-Si se utilizan las fórmulas embebidas Runge-Kutta de Dormand y Prince para integrar la ecuación auxiliar (\ref{ODE r}), entonces se obtiene la siguiente discretización Lineal Local Runge-Kutta de orden 5-4~\cite{Jimenez14AMC}:
-
+Si se utilizan las fórmulas embebidas Runge-Kutta de Dormand y Prince para integrar la ecuación auxiliar (\ref{ODE r}), entonces se obtiene la discretización embebida Lineal Local Runge-Kutta~\cite{Jimenez14AMC}
 \begin{equation}
 y_{n+1}\,=\,y_n+\phi_s+h_n \sum_{j=1}^{s}b_j \kt_j \quad \text{y} \quad
 \widehat{y}_{n+1}\,=\, y_n+\phi_s+h_n \sum_{j=1}^{s}\widehat{b}_j \kt_j
 \label{LLDP-scheme-dp}
 \end{equation}
-donde $s = 7$ es el número de estados,
+de orden 5 y 4, donde $s = 7$ es el número de estados,
 \[ \kt_j = f\left( t_n+c_jh_n\, , \, y_n+\phi_j+h_n \sum_{i=1}^{j-1}a_{j,i}\kt_i \right)  
 - f_x(t_n\, , \, y_n)\phi_j - f(t_n\, ,\, y_n),\]
-\[ \phi _j = \phi \left( t_{n},y_{n},c_jh_{n}\right), \]
+\[ \phi _j = \phi \left( t_{n},y_{n};c_jh_{n}\right), \]
 y coeficientes Runge-Kutta $a_{j,i}$, $b_j$, $\hat{b}_j$ y $c_j$ definidos en Tabla \ref{ButcherTabla}.
 
 
 \begin{table}[h]
-	\caption{Tabla de coeficientes para las fórmulas embebidas de Dormand y Prince~\cite{hairer1993solving}} \label{ButcherTabla}
+	\caption{Butcher tableau para los coeficientes de las fórmulas Runge-Kutta embebidas de Dormand y Prince~\cite{hairer1993solving}} \label{ButcherTabla}
 	\begin{center}
 		\begin{tabular}{ l@{\vrule height 5pt depth 10pt width 0pt}|lllllll}
 			$0$ & \\
@@ -202,12 +199,15 @@ y coeficientes Runge-Kutta $a_{j,i}$, $b_j$, $\hat{b}_j$ y $c_j$ definidos en Ta
 	\end{center}
 \end{table}
 
+En síntesis, a la clase de métodos de Linealización Local de Orden Superior pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original (\ref{ODE-SYST}) en dos partes: la solución $y$ de la ecuación linealizada localmente 
+(\ref{ODE-SYST-LINEAL-1}) más una solución aproximada a la representación diferencial (\ref{ODE r}) del residuo $r = x-y$ proporcionada por un integrador numérico de orden alto.
+
 
 \subsection{Esquemas de Linealización Local}
 
-Como puede notarse de sus respectivas definiciones, las
+Como puede notarse de las Definiciones \ref{definition LLD},\ref{definition HLLD} , las
 discretizaciones Lineales Locales no pueden ser implementadas directamente por
-estar expresadas en término de integrales que en general no pueden ser
+estar expresadas en término de integrales o ecuaciones diferenciales que en general no pueden ser
 calculadas analíticamente. Dependiendo de la forma de calcular  numéricamente esas integrales,
  diferentes esquemas numéricos pueden ser obtenidos \cite{Jimenez05AMC,Jimenez13}.
  Más precisamente tenemos la siguiente definición.
@@ -226,9 +226,9 @@ calculadas analíticamente. Dependiendo de la forma de calcular  numéricamente 
 \end{definition}
 
 Por ejemplo, cuando la fórmula de Padé con escalamiento y potenciación para exponenciales matriciales \cite{moler2003nineteen} es utilizada para
-aproximar $\phi$ en la ecuación~(\ref{ODE-SYST-FORM-LL}) se obtiene el siguiente esquema LL de orden $2$ \cite{Jimenez02AMC}:
+aproximar $\phi$ en la discretización Lineal Local~(\ref{ODE-LLA-4}) se obtiene el siguiente esquema LL de orden $2$ \cite{Jimenez02AMC}:
 \begin{equation} 
-\widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\phi}\left( t_{n},\widetilde{y}_{n},h_{n}\right) \label{LL-scheme}
+\widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\phi}\left( t_{n},\widetilde{y}_{n};h_{n}\right) \label{LL-scheme}
 \end{equation} 
 donde $\widetilde{\phi }\left( t_{n},\widetilde{y}
 _{n},h_{n}\right) =L\,(P_{\pf,\qf}(2^{-k_{n}}\widetilde{M}_{n}h_{n}))^{2^{k_{n}}}\,r$, 
@@ -411,6 +411,7 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
             $v_{j+1}=w_j/\hf_{j+1,i}$
         }
     }
+\nonl $\epsilon_{mach}$ denota el espaciamiento del numero en punto flotante 1 y $\langle . , .\rangle$ denota producto escalar
 \end{algorithm}
 
 
@@ -418,24 +419,24 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
     \cite{Saad92} Sea $V_\mf$ una base ortonormal de $\mathcal{K}_\mf(A,b)$ y sea $f$ una función matricial definida
     en el espectro de $A$. La aproximación de $f(A)b$ por el  $\mf$-ésimo subespacio de Krylov se define
     \begin{equation}
-        f(A)b\approx ||b||_2 V_\mf f(H_\mf)e_1, \label{MFUNC-APROX}
+        f(A)b\approx ||b||_2 V_\mf f(H^*_\mf)e_1, \label{MFUNC-APROX}
     \end{equation}
-    donde $H_\mf=V_\mf^{\intercal}AV_\mf$ y $e_1$ es el primer vector canónico de $\mathbb{R}^\mf$.
+    donde $H_\mf^*=V_\mf^{\intercal}AV_\mf$ y $e_1$ es el primer vector canónico de $\mathbb{R}^\mf$.
 \end{definition}
 Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obtiene el siguiente resultado.
 \begin{theorem}\label{exp-bound}
 	\cite{Saad92} Sea $A\in\mathbb{C}^{N\times N}$ una matriz. El error de aproximación de $\me{A}b$ por el $\mf$-ésimo subespacio
 	de Krylov es
 	\begin{equation*}
-	\left\lvert\left\lvert \me{A}b - \lvert\lvert b \rvert\rvert_2 V_\mf\me{H_\mf}e_1 \right\rvert\right\rvert_2 
+	\left\lvert\left\lvert \me{A}b - \lvert\lvert b \rvert\rvert_2 V_\mf\me{H^*_\mf}e_1 \right\rvert\right\rvert_2 
 	\leq \frac{2\vert\lvert b \rvert\rvert_2 \left( \sigma(A) \right)^{\mf}\me{\sigma(A)}}{\mf!},
 	\end{equation*}
 	donde $\sigma(A)$ es el radio espectral de $A$.
 \end{theorem}
 
-\section{Producto de funciones phi por vectores}
+\section{Producto de funciones phi por vectores}\label{section:phi-times-vector}
 
-Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{VCF2}) o (\ref{VCF}). De esta manera, típicamente, se obtienen expresiones recursivas que involucran integrales de la forma
+Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{VCF2}) o (\ref{VCF}). Al utilizar polinomios en $s$ para aproximar las funciones $F$ y $g$ en (\ref{VCF2}) o (\ref{VCF}), típicamente, se obtienen expresiones recursivas que involucran integrales de la forma
 \begin{equation*}
 \phi _{k}(z,h)=\int_{0}^{h}e^{z(h-s)}s^{k-1}ds,\text{ \ \ \ \ \ \ \ }%
 k=1,2,\ldots ,
@@ -445,8 +446,16 @@ o, equivalentemente, su versión escalada
 \varphi _{k}(z)=\int_{0}^{1}e^{z(1-\theta )}\frac{\theta ^{k-1}}{(k-1)!}%
 d\theta ,\text{ \ \ \ \ \ \ \ }k=1,2,\ldots ,
 \end{equation*}%
-- llamada función phi - que resulta de la relación trivial $\phi _{k}(z,h)=(k-1)!h^{k}\varphi
-_{k}(hz)$, donde $\phi _{0}(z,h)=\varphi _{0}(hz)=e^{hz}$.
+- llamada función phi - que resulta de la relación trivial 
+\begin{equation}
+	\phi _{k}(z,h)=(k-1)!h^{k}\varphi_{k}(hz) \label{phi-vphi-relation}
+\end{equation} 
+donde $\phi _{0}(z,h)=\varphi _{0}(hz)=e^{hz}$. Por ejemplo, utilizando la relación (\ref{phi-vphi-relation}) la discretización lineal local (\ref{ODE-LLA-4})
+puede reescribirse como
+\begin{equation}
+		y_{n+1}=y_{n}+h_n\varphi_1(h_nf_x(t_n,y_n))f(t_n,y_n) + h_n^2\varphi_2(h_nf_x(t_n,y_n))f_t(t_n,y_n)  \, . 
+\end{equation}
+
 
 Otras definiciones comunes de las funciones phi como operador son \cite{Saad92}
 \begin{eqnarray}\label{phi-definition}
@@ -455,16 +464,23 @@ Otras definiciones comunes de las funciones phi como operador son \cite{Saad92}
 \end{eqnarray}
 para todo $k=1,2,\ldots$.
 
-Entre la familia de funciones $\varphi_j$ y la exponencial matricial existe la siguiente importante relación.
+En general, para el producto de funciones $\varphi_k$ por vector se establece la expansión en serie \cite{Saad92,sidje1998expokit}
+\begin{equation} \label{PHI-EXPANSION}
+	\varphi_k(\tau A)b=||b||_2\tau^{k} V_\mf \varphi_k(\tau H_\mf)e_1 + ||b||_2\hf_{\mf+1,\mf}
+	\sum_{j=k+1}^{\infty}\tau^{j} e_\mf^T\varphi_j(\tau H_\mf)e_1A^{j-k-1}v_{m+1}
+\end{equation}
+donde $\tau$ es un número positivo, $A\in\mathbb{R}^{d\times d}$, $b\in\mathbb{R}^d$, $e_\mf$ es el $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$ y $V_\mf,H_\mf,v_{\mf+1},\hf_{\mf+1,\mf}$ son salidas del Algoritmo de Arnoldi \ref{alg:Arnoldi}.
+
+Para calcular simultáneamente varias funciones $\varphi$ como las que aparecen en (\ref{PHI-EXPANSION}) la siguiente importante relación entre la familia de funciones $\varphi_j$ y la exponencial matricial es ampliamente utilizada.
 \begin{theorem}\label{theorem:exp-phi}
-    \cite{sidje1998expokit} Sea $c\in\mathbb{C}^{m}$, $H_m\in\mathbb{C}^{m\times m}$ y 
+    \cite{sidje1998expokit} Sea $c\in\mathbb{C}^{m}$ un vector columna, $H_m\in\mathbb{C}^{m\times m}$ una matriz cuadrada y 
     \begin{equation}
     \overline{H}_{m+p} = \left[\begin{array}{ccccc}
-    H_m & c & 0 & \cdots & 0 \\
+    H_m & c & 0_{m \times 1} & \cdots & 0_{m \times 1} \\
           & 0 & 1 & \ddots & \vdots \\
           &   & 0 & \ddots & 0 \\
           &   &   & \ddots & 1 \\
-       0  &   &   &        & 0
+       0_{1\times m}  &   &   &        & 0
     \end{array}\right]\in \mathbb{C}^{(m+p)\times(m+p)}
     \end{equation}
     entonces
@@ -478,10 +494,3 @@ Entre la familia de funciones $\varphi_j$ y la exponencial matricial existe la s
     \end{array}\right]  \;.
     \end{equation}
 \end{theorem}
-
-En general, para el producto de funciones $\varphi_k$ por vector se establece la expansión en serie \cite{Saad92,sidje1998expokit}
-\begin{equation} \label{PHI-EXPANSION}
-\varphi_k(\tau A)b=||b||_2\tau^{k} V_\mf \varphi_k(\tau H_\mf)e_1 + ||b||_2\hf_{\mf+1,\mf}
-\sum_{j=k+1}^{\infty}\tau^{j} e_\mf^T\varphi_j(\tau H_\mf)e_1A^{j-k-1}v_{m+1}
-\end{equation}
-donde $\tau$ es un número positivo, $A\in\mathbb{R}^{d\times d}$, $b\in\mathbb{R}^d$, $e_\mf$ es el $\mf$-ésimo vector canónico de $\mathbb{R}^\mf$ y $V_\mf,H_\mf,v_{\mf+1},\hf_{\mf+1,\mf}$ son salidas del Algoritmo de Arnoldi \ref{alg:Arnoldi}.
