@@ -22,10 +22,10 @@ de esquemas numéricos para EDOs que requieren del cálculo de algún término e
 \begin{equation}
 \frac{dx(t)}{dt} = Ax(t) + F(x(t))  \;\;  \label{ODE Lines Method}
 \end{equation}
-que resultan de la discretización espacial de una ecuación diferencial en derivadas parciales, donde $A$ es una
-matriz cuadrada y $F$ una función no lineal de $x(t)\in\mathbb{R}^d$ y $t\geq t_0 \in \mathbb{R}$. Más recientemente, a finales de los años 90, esta clase de integradores fue extendida a EDOs de la forma general (\ref{ODE-SYST}).
+que resultan de la discretización de una ecuación diferencial en derivadas parciales \textcolor{red}{al utilizar el método de líneas}, donde $A$ es una
+matriz cuadrada \textcolor{red}{,} $F$ una función \textcolor{red}{vectorial} no lineal de $x(t)\in\mathbb{R}^d$ \textcolor{red}{y} $t\geq t_0 \in \mathbb{R}$. \textcolor{red}{Típicamante, la matriz $A$ en (\ref{ODE Lines Method}) resulta mal condicionada, lo que establece un determinado nivel de rigidez (stiffness en inglés) para ese sistema de ecuaciones \cite{schiesser2012}. La rigidez del sistema (\ref{ODE Lines Method}) se incrementa con la disminución de la distancia entre los puntos de la discretización del método de líneas o con el aumento del número ecuaciones, lo que dificulta su integración con esquemas numéricos explícitos tradicionales \cite{schiesser2012}.} Más recientemente, a finales de los años 90, la clase de integradores exponenciales fue extendida a EDOs \textcolor{red}{rígidas (stiff en ingles)} de la forma general (\ref{ODE-SYST}).
 
-Los integradores exponenciales tanto para ecuaciones semilineales como para ecuaciones generales provienen de la aproximación de la integral
+Los integradores exponenciales tanto para ecuaciones semilineales \textcolor{red}{(\ref{ODE Lines Method})} como para ecuaciones generales \textcolor{red}{(\ref{ODE-SYST}) se derivan de aproximar} la integral
 que resulta de aplicar la fórmula de variación de constantes a estas ecuaciones~\cite{jimenez2020}. Al aplicar dicha fórmula la solución de la ecuación (\ref{ODE Lines Method}) se escribe como
 \begin{equation}
 x(t_n+h)=\me{Ah}\left(x(t_n) +\int\limits_{0}^{h} \me{-As}F(x(t_n+s)) \,ds\right)\,. \label{VCF2}
@@ -450,7 +450,7 @@ d\theta ,\text{ \ \ \ \ \ \ \ }k=1,2,\ldots ,
 \begin{equation}
 	\phi _{k}(z,h)=(k-1)!h^{k}\varphi_{k}(hz) \label{phi-vphi-relation}
 \end{equation} 
-donde $\phi _{0}(z,h)=\varphi _{0}(hz)=e^{hz}$. Por ejemplo, utilizando la relación (\ref{phi-vphi-relation}) la discretización lineal local (\ref{ODE-LLA-4})
+donde $\phi _{0}(z,h)=\varphi _{0}(hz)=e^{hz}$. Por ejemplo, utilizando la relación (\ref{phi-vphi-relation}), la discretización Lineal Local (\ref{ODE-LLA-4})
 puede reescribirse como
 \begin{equation}
 		y_{n+1}=y_{n}+h_n\varphi_1(h_nf_x(t_n,y_n))f(t_n,y_n) + h_n^2\varphi_2(h_nf_x(t_n,y_n))f_t(t_n,y_n)  \, . 
