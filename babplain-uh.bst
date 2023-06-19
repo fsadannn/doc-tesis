@@ -373,7 +373,7 @@ FUNCTION {format.names}
     { namesleft #0 > }
     { nameptr #1 >
       {
-        s nameptr "{ff{\btxfnamespacelong } }{vv~}" format.name$
+        s nameptr "{f. }{vv~}" format.name$
         s nameptr "{ll}" format.name$ lastnamefont *
         s nameptr "{, jj}" format.name$ *
         't :=
@@ -383,7 +383,7 @@ FUNCTION {format.names}
                 { "\btxandcomma {}" * }
                 'skip$
               if$
-              s nameptr "{ff~}{vv~}{ll}{, jj}" format.name$ "others" =
+              s nameptr "{f.~}{vv~}{ll}{, jj}" format.name$ "others" =
                 { " " "\btxetalshort {.}" etalfont * * }
                 { " \btxandlong {}\ " * t namefont * }
               if$
@@ -391,9 +391,8 @@ FUNCTION {format.names}
           if$
         }
         {
-          s nameptr "{ll}" format.name$ lastnamefont
-          s nameptr "{,~jj}{, ff{\btxfnamespacelong }}{~vv}"
-          format.name$ * namefont
+          s nameptr "{f. }{vv~}{, jj}" format.name$ namefont
+          s nameptr "{ll}" format.name$ * lastnamefont
         }
       if$
       nameptr #1 + 'nameptr :=
