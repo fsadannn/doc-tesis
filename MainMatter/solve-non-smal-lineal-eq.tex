@@ -6,9 +6,9 @@ En el capítulo anterior, se presentó la discretización Lineal Local~(\ref{ODE
 \end{equation*}
 además de la solución en forma integral, la solución también puede ser escrita de las siguientes formas
 \begin{eqnarray}
-	x(t) & = & \me{tA}x_0 \label{eqaux:lineal-solution-ex} \\
-	x(t) & = & x_0 + L\me{tM}r \label{eqaux:lineal-solution-xex} \\
-	x(t) & = & x_0 + t\varphi_1(tA)Ax_0 \label{eqaux:lineal-solution-xphix}
+	x(t) & = & \me{(t-t_0)A}x_0 \label{eqaux:lineal-solution-ex} \\
+	x(t) & = & x_0 + L\me{(t-t_0)M}r \label{eqaux:lineal-solution-xex} \\
+	x(t) & = & x_0 + (t-t_0)\varphi_1((t-t_0)A)Ax_0 \label{eqaux:lineal-solution-xphix}
 \end{eqnarray}
 donde $\varphi_1$ está definida en (\ref{phi-definition}) y
 \begin{equation*}
@@ -21,7 +21,7 @@ donde $\varphi_1$ está definida en (\ref{phi-definition}) y
 	\end{array}
 	\right]\;.
 \end{equation*}
-Cada una de estas formas de la solución puede ser aproximada utilizando subespacios Krylov. En los trabajos~\cite{Saad92,jimenez2012convergence} se utilizan aproximaciones de Krylov para las soluciones de las forma~(\ref{eqaux:lineal-solution-ex},\ref{eqaux:lineal-solution-xex}). Dichas aproximaciones son de orden $\mf$, donde $\mf$ es la dimensión del subespacio utilizado. En cambio para la solución de la forma~(\ref{eqaux:lineal-solution-xphix}) se han utilizado aproximaciones de orden  $\mf+1$~\cite{sidje1998expokit,niesen2012algorithm}. En este capítulo se introducirán aproximaciones Krylov-Padé de un orden mayor para la acción de $\varphi_1$, así como una variante que no evalúa la matriz Jacobiana. También se derivarán cotas para las aproximaciones propuestas y se propondrá una estrategia para la selección de la dimensión de los subespacios de Krylov. Los resultados de este capítulo están basados en \cite{naranjo2023computing,naranjo2023RT,naranjo2021locally,naranjo2023jacobian}.
+Cada una de estas formas de la solución puede ser aproximada utilizando subespacios Krylov. En los trabajos~\cite{Saad92,jimenez2012convergence} se utilizan aproximaciones de Krylov para las soluciones de las forma~(\ref{eqaux:lineal-solution-ex}) y~(\ref{eqaux:lineal-solution-xex}). Dichas aproximaciones son de orden $\mf$, donde $\mf$ es la dimensión del subespacio utilizado. En cambio para la solución de la forma~(\ref{eqaux:lineal-solution-xphix}) se han utilizado aproximaciones de orden  $\mf+1$~\cite{sidje1998expokit,niesen2012algorithm}. En este capítulo se introducirán aproximaciones Krylov-Padé de un orden mayor para la acción de $\varphi_1$, así como una variante que no evalúa la matriz Jacobiana. También se derivarán cotas para las aproximaciones propuestas y se propondrá una estrategia para la selección de la dimensión de los subespacios de Krylov. Los resultados de este capítulo están basados en \cite{naranjo2023computing,naranjo2023RT,naranjo2021locally,naranjo2023jacobian}.
 
 \section{Aproximaciones Krylov-Padé a la acción del operador phi}\label{section:krylov-pade-approx}
 
@@ -45,9 +45,9 @@ para obtener la identidad
     \me{\tau\overline{H}} = \left[\begin{array}{cccc}
     \me{\tau H_m} & \tau\varphi_1(\tau H_m)e_1 & \tau^{2}\varphi_2(\tau H_m)e_1 &
     \tau^{3}\varphi_3(\tau H_m)e_1 \\
-    & 1 & \tau & \frac{\tau^{2}}{2}\\
-    &  & 1 & \tau \\
-    &   &   & 1 \\
+    \bluemark{0_{1\times\mf}} & 1 & \tau & \frac{\tau^{2}}{2}\\
+    \bluemark{0_{1\times\mf}} & 0 & 1 & \tau \\
+    \bluemark{0_{1\times\mf}} & 0 & 0 & 1 \\
     \end{array}\right] \,. \label{phi_hhat_exponential}
 \end{equation}
 del Teorema \ref{theorem:exp-phi}.
@@ -67,7 +67,7 @@ donde $F_k^{\pf,\qf}$ denota la aproximación de Padé-($\pf,\qf$) con escalamie
  que define a la aproximación de Krylov-Padé para $\tau\varphi_1(\tau A)b$.
 
  \subsection{Cotas para las aproximaciones}
- En esta sección se enunciará un teorema para acotar el error de la aproximación (\ref{eq:kp_aprox}) en función de $\tau$, la dimensión del subespacio de Krylov $\mf$ y los órdenes de Padé $\pf$ y $\qf$. Para poder demostrar dicho teorema se necesitan dos lemas adicionales. El primer lema extiende para $\tau \varphi_1(\tau A)b$ los resultados del Teorema 4.7 en~\cite{Saad92} para aproximaciones de $\varphi_0(A)b$ mediante subespacios de Krylov. El segundo lema ofrece una cota para la matriz $\overline{H}$.
+ En esta sección se enunciará un teorema para acotar el error de la aproximación (\ref{eq:kp_aprox}) en función de $\tau$, la dimensión del subespacio de Krylov $\mf$, los órdenes de Padé $\pf$ y $\qf$ \redmark{y la norma $||A||_2$}. Para poder demostrar dicho teorema se necesitan dos lemas adicionales. El primer lema extiende para $\tau \varphi_1(\tau A)b$ los resultados del Teorema 4.7 en~\cite{Saad92} para aproximaciones de $\varphi_0(A)b$ mediante subespacios de Krylov. El segundo lema ofrece una cota para la matriz $\overline{H}$.
 
  \begin{lemma}\cite{naranjo2021locally}\label{lemma:CORRECTED-ERROR}
 	Sea $A\in\mathbb{C}^{d\times d}$ una matriz, $b\in\mathbb{C}^{d}$ un vector, $\tau$ un número positivo, y 
@@ -102,11 +102,11 @@ Utilizando el Lema 4.1 en \cite{Saad92} se tiene
 \begin{equation}
 s_\mf(\tau A)=\nnorm{\nnorm{b}}_2 ( r_\mf(\tau A)v_1-V_\mf r_\mf(\tau H_\mf)e_1) ,\label{eq:smeq}
 \end{equation}
-donde $r_\mf(z) = \varphi_{2}(z)-p_{2,\mf-1}(z)$, y $p_{2,\mf-1}$ es un polinomio de grado $\mf-1$. Tomando
+donde $r_\mf(z) = \varphi_{2}(z)-p_{2,\mf-1}(z)$, y $p_{2,\mf-1}$ es un polinomio de grado $\mf-1$. Se toma \bluemark{$p_{2,\mf-1}$ como}
 \begin{equation*}
 p_{2,\mf-1}(z)\equiv \frac{p_{1,\mf}(z)-1}{z},
 \end{equation*}
-donde $p_{1,\mf}$ es la expansión de Taylor de $\varphi_1$ hasta el orden  $\mf$
+$p_{1,\mf}$ es la expansión de Taylor de $\varphi_1$ hasta el orden  $\mf$
 definida por
 \[ p_{1,\mf}(z)= \frac{p_{0,\mf+1}(z)-1}{z}, \]
 donde $p_{0,\mf+1}(z)$  es la expansión de Taylor de $\me{z}$ hasta el orden $\mf+1$ dada por
@@ -267,7 +267,7 @@ $\Box$
 Obsérvese que la aproximación (\ref{eq:kp_aprox}) depende de valores no especificados para la dimensión de Krylov $\mf$ y el orden de Padé ($\pf,\qf$). Utilizando el resultado del Teorema \ref{theorem:Krylov-bound}, en la Sección \ref{section:approx-non-auto} se propone una estrategia adaptativa para la estimación de esos parámetros. Adicionalmente, dicho teorema es fundamental para establecer el orden de convergencia de los integradores numéricos propuestos en el Capítulo \ref{chapter:lldp}, análisis que no ha sido realizado con anterioridad por otros autores para establecer el orden de convergencia de los integradores exponenciales con aproximaciones de Krylov.
 
 \section{Aproximaciones Krylov-Padé libre de Jacobiano a la acción del operador phi} \label{section:fj-krylov-pade-approx}
-En general para PVI de grandes dimensiones la evaluación de la matriz Jacobiana $f_x$ del campo vectorial $f$ no siempre es posible, ya sea por no ser eficiente en términos de memoria u operaciones flotantes o por no poder almacenarla en memoria. En estos casos algunas aproximaciones libres de Jacobiano~\cite{al2009complex,knoll2004jacobian} son necesarias. Por construcción, la discretización Lineal Local~(\ref{ODE-LLA-4}), contiene productos de la matriz Jacobiana por un vector $f_x(y)b$ que pueden ser aproximadas por diferencias finitas de orden 1 or 2. A modo ilustrativo se tomará la diferencia finita hacia adelante
+En general para PVI de grandes dimensiones la evaluación de la matriz Jacobiana $f_x$ del campo vectorial $f$ no siempre es posible, ya sea por no ser eficiente en términos de memoria u operaciones flotantes o por no poder almacenarla en memoria. En estos casos algunas aproximaciones libres de Jacobiano~\cite{al2009complex,knoll2004jacobian} son necesarias. Por construcción, la discretización Lineal Local~(\ref{ODE-LLA-4}), contiene productos de la matriz Jacobiana por un vector $f_x(y)b$ que pueden ser aproximadas por diferencias finitas de orden 1 \redmark{o} 2. A modo ilustrativo se tomará la diferencia finita hacia adelante
 \begin{equation*}
 	\frac{F(u+\delta b)-F(u)}{\delta} =  \left(\begin{array}{c}
 		\frac{F_1(u_1+\delta b_1,u_2+\delta b_2)-F_1(u_1,u_2)}{\delta}\\
@@ -285,20 +285,20 @@ donde $J(u)$ es la matriz Jacobiana de $F$ y $b=[b_1,b_2]^{\intercal}$ es un vec
 	\frac{F(u+\delta b)-F(u)}{\delta} =  \left(\begin{array}{c}
 		\frac{F_1(u_1,u_2) + \delta b_1 \frac{\partial F_1}{\partial u_1} + \delta b_2 \frac{\partial F_1}{\partial u_2} -F_1(u_1,u_2)}{\delta}\\
 		\frac{F_2(u_1,u_2) + \delta b_1 \frac{\partial F_2}{\partial u_1} + \delta b_2 \frac{\partial F_2}{\partial u_2} -F_2(u_1,u_2)}{\delta}\\
-	\end{array}\right)  + O(\delta\nnnorm{b}^2),
+	\end{array}\right)  + O(\delta\nnnorm{b}_2^2),
 \end{equation*}
 y por tanto
 \begin{equation*}
-	\frac{F(u+\delta b)-F(u)}{\delta} =  J(u)b + O(\delta\nnnorm{b}^2).
+	\frac{F(u+\delta b)-F(u)}{\delta} =  J(u)b + O(\delta\nnnorm{b}_2^2).
 \end{equation*}
 
 En lo que resta del documento se asumirá que, si $f$ es $(\eta+1)$  continuamente diferenciable, existe una función $(\eta+1)$ continuamente diferenciable $g: \mathbb{R}^{d}\times \mathbb{R}^{d} \times \mathbb{R}_+ \to \mathbb{R}^{d}$ que aproxima al producto $f_x(y)b$ con orden $\eta$ para la cual la cota
 \begin{equation} \label{eq:g_bound}
-	\nnnorm{g(y,b;\delta)-f_x(y)b} \leq \mathfrak{L}\nnnorm{b}^{\eta+1}\delta^{\eta}
+	\nnnorm{g(y,b;\delta)-f_x(y)b} \leq \mathfrak{L}\nnnorm{b}_2^{\eta+1}\delta^{\eta}
 \end{equation}
 se cumple, donde $f_x(y)$ es la matriz Jacobiana del campo vectorial $f$ en el punto $y$; $y,b$ son vectores $d$-dimensionales y $\mathfrak{L}$ es una constante positiva que depende solamente de la norma de las derivadas de $f_x$.
 
-Al utilizar el Algoritmo de Arnoldi~\ref{alg:Arnoldi}, la aproximación $K_{\mf,k}^{\pf,\qf}(\tau,A,b)$ definida en~(\ref{eq:kp_aprox}) requiere de la evaluación explícita de la matriz Jacobian para calcular su producto con diferentes vectores. Al aproximar los mencionados productos de matriz Jacobiana por vector mediante una función $g$ definida como en (\ref{eq:g_bound}) se obtine el Algoritmo de Arnoldi libre de Jacobiano~\ref{alg:iArnoldi} propuesto en \cite{brown1987local} para el subspacio de Krylov de la siguiente definición. 
+Al utilizar el Algoritmo de Arnoldi~\ref{alg:Arnoldi}, la aproximación $K_{\mf,k}^{\pf,\qf}(\tau,A,b)$ definida en~(\ref{eq:kp_aprox}) con $A=f_x(y)$ requiere de la evaluación explícita de la matriz Jacobian $f_x(y)$ para calcular su producto con diferentes vectores. Al aproximar los mencionados productos de matriz Jacobiana por vector mediante una función $g$ definida como en (\ref{eq:g_bound}) se obtine el Algoritmo de Arnoldi libre de Jacobiano~\ref{alg:iArnoldi} propuesto en \cite{brown1987local} para el subspacio de Krylov de la siguiente definición. 
 
 \begin{definition}
 	\cite{brown1987local} Para $\mf\geq 1$, el $\mf$-ésimo subespacio de Krylov libre de Jacobiano de la función matricial $f_x(y)\in\mathbb{R}^{N\times N}$
@@ -376,7 +376,7 @@ donde $\mathfrak{L}$ es una constante positiva. Entonces,
 	& \leq & \left( \nnnorm{\varepsilon_1}_2^2 + \cdots + \nnnorm{\varepsilon_\mf}_2^2 \right)^{1/2} \\
 	& \leq & \sqrt{\mf}\mathfrak{L} \tau^{\eta+1}\delta^{\eta},
 \end{eqnarray*}
-con lo que concluye la demostración. $\blacksquare$\\
+\redmark{donde $||.||_F$ es la norma Frobenius}, con lo cual concluye la demostración. $\blacksquare$\\
 
 \begin{theorem}\label{theorem:Krylov-fj-bound}
 \cite{naranjo2023jacobian}~Tomando $A=f_x(y)$, sea $\widehat{K}_{\mf,k}^{\pf,\qf}\left(\tau, A , b ; \eta, \delta, \beta \right)$ la aproximación \\
@@ -446,7 +446,7 @@ hay varios esquemas (por ejemplo \cite{tokman2006efficient,delaCruz07,hochbruck2
 \begin{equation*}
 	\sum\limits_{i=1}^{l}\phi _{i}(A,t)a_{i},   \;\;\;\mathrm{con} \;\; \phi _{i}(A,t)=\int_{0}^{t}e^{A(t-s)}s^{i-1}ds,
 \end{equation*}
-sumatoria que es equivalente a resolver la ecuación lineal no autónoma \cite{skaflestad2009scaling}
+sumatoria que es equivalente a resolver la ecuación lineal no autónoma \cite{delaCruz07,skaflestad2009scaling}
 \begin{equation}\label{ODELinNoAut}
 	\frac{dz(s)}{ds} = Az(s)+\sum\limits_{i=1}^{l}a_is^{i-1},\;z(0)=0,\;s\geq 0\, ,
 \end{equation}
@@ -486,7 +486,7 @@ Como se muestra en (\ref{sum2_phiXv}), la mencionada combinación lineal de múl
 		\left\Vert \sum\limits_{i=1}^{l}\phi _{i}(A,h)a_{i} - L \widehat{K}_{\mf,k}^{\pf,\qf}\left(t, M , Mr ; \eta, \delta, \beta \right)
 		\right\Vert_2 \leq \mathfrak{c}_0 h^{\min\{\mf+2,\pf+\qf+1\}} + \mathfrak{c}_1 t^{\beta\eta+2}\delta^{\eta}, \label{phi_approx_fj}
 	\end{equation}
-	donde $K_{\mf,k}^{\pf,\qf}\left(t, M, Mr \right)$ es la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé de $t\varphi_1 (Mt)Mr$,  $C_{\mf,k}^{\pf,\qf}(\varLambda)$ definida en Teorema \ref{theorem:Krylov-bound}, $\widehat{K}_{\mf,k}^{\pf,\qf}\left(t, M , Mr ; \eta, \delta, \beta \right)$  es la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé libre de Jacobiano de $t\varphi_1 (Mt)Mr$, $\mathfrak{c}_0$ y $\mathfrak{c}_1$ son constantes positivas que dependen de $\mf,\pf,\qf,k$, $\nnnorm{M}_2$, $\nnnorm{r}_2$, $\mathfrak{L}$(constante~\ref{eq:g_bound}) y $t \in [0,1]$.
+	donde $K_{\mf,k}^{\pf,\qf}\left(t, M, Mr \right)$ es la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé de $t\varphi_1 (Mt)Mr$,  $C_{\mf,k}^{\pf,\qf}(\varLambda)$ definida en Teorema \ref{theorem:Krylov-bound}, $\widehat{K}_{\mf,k}^{\pf,\qf}\left(t, M , Mr ; \eta, \delta, \beta \right)$  es la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé libre de Jacobiano de $t\varphi_1 (Mt)Mr$, $\mathfrak{c}_0$ y $\mathfrak{c}_1$ son constantes positivas que dependen de $\mf,\pf,\qf,k$, $\nnnorm{M}_2$, $\mathfrak{L}$(constante~\ref{eq:g_bound}) y $t \in [0,1]$.
 \end{theorem}
 \textbf{Demostración} La primera afirmación se demuestra de forma directa del hecho de que $e^{tM}r$ y $r + t\varphi_1 (Mt)Mr$ representan la solución única del la ecuación differential ordinaria lineal
 \[ dx/dt= Mx,  \;\;\;\;\; x(0)=r, \]
@@ -586,7 +586,7 @@ La Figura \ref{fig:SumPhi} presenta los diagramas de tiempo-precisión para los 
 \end{figure}
 
 \subsubsection{Simulaciones numéricas para Aproximaciones Krylov-Padé libre de Jacobiano}
-Consideraremos el cálculo de (\ref{sum2_phiXv}) con matriz Jacobiana $f_x$ y campo vectorial $f$ del PVI resultante de discretizar una ecuación diferencial parcial. La siguiente matriz Jacobiana y la ecuación discretizada fue tomada de~\cite{tokman2006efficient}. 
+Consideraremos el cálculo de (\ref{sum2_phiXv}) con matriz Jacobiana $f_x$ y campo vectorial $f$ del PVI resultante de discretizar una ecuación diferencial parcial. La siguiente matriz Jacobiana y la ecuación discretizada \redmark{fueron tomadas} de~\cite{tokman2006efficient}. 
 \begin{example}
 	\label{ej:ej1-hpfj} Sean $u$ y $v$ vectores columna $N$-dimensionales. Con $x=[u^{\intercal}, v^{\intercal}]^{\intercal}$, se define la matriz Jacobiana de dimnesión $2N\times2N$
 	\begin{equation*}

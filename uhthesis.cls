@@ -94,7 +94,8 @@
     {#1}%
   }%
 }
-
+\def\@advisorplural{es}
+\newcommand{\advisorsingle}{\def\@advisorplural{}}
 \renewcommand{\nomname}{Glosario}
 \newcommand{\advisor}[1]{\def\@advisor{#1}}
 \newcommand{\degree}[1]{\def\@degree{#1}}
@@ -159,7 +160,7 @@
     \vskip 2cm
     {\Large Autor: \textbf{\@author}} \\
     \vskip 0.5cm
-    {\Large Tutores: \textbf{\@advisor}} \\
+    {\Large Tutor\@advisorplural: \textbf{\@advisor}} \\
     \vfill
     {\large Tesis de Doctorado \\presentado en opción al título de \\ \@degree} \\
     \vskip 1cm

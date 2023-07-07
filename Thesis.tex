@@ -1,7 +1,7 @@
 \documentclass[10pt,oneside]{uhthesis}
 % \usepackage[showframe]{geometry}
 \usepackage{subfigure}
-\usepackage[ruled,lined,linesnumbered,titlenumbered,algochapter,english]{algorithm2e}
+\usepackage[ruled,lined,linesnumbered,titlenumbered,algochapter,spanish,onelanguage]{algorithm2e}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsbsy}
@@ -13,6 +13,7 @@
 \usepackage{float}
 % \usepackage{todonotes}
 \usepackage{adjustbox}
+\usepackage{qtree}
 
 \floatstyle{plaintop}
 \restylefloat{table}
@@ -26,6 +27,7 @@
 \title{Métodos de Linealización Local de Orden Superior para problemas de valor inicial de dimensiones no pequeñas}
 \author{Lic. Frank Sadan Naranjo Noda}
 \advisor{Dr. Juan Carlos Jiménez Sobrino}
+\advisorsingle
 \degree{Doctor}
 \faculty{Facultad de Matemática y Computación}
 % \date{}
@@ -51,7 +53,9 @@
 \newcommand{\norme}[1]{\nnorm{\nnorm{ #1 }}_2}
 \newcommand{\scal}[2]{\left< #1, #2 \right>}
 \newtheorem{example}{Ejemplo}
-
+\newcommand{\redmark}[1]{\textcolor{red}{#1}}
+\newcommand{\bluemark}[1]{\textcolor{blue}{#1}}
+\newcommand{\mmark}[1]{\textcolor{magenta}{#1}}
 
 \begin{document}
 

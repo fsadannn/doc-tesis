@@ -104,11 +104,11 @@ El siguiente teorema trata sobre la velocidad de convergencia de las fórmulas e
 
 \begin{theorem}\label{theorem:lldp-convergence}
 	\cite{naranjo2021locally}~Sea $x$ solución del PVI (\ref{syst})-(\ref{systcond}) con campo vectorial $f$ seis veces continuamente diferenciable en un conjunto compacto $\mathfrak{K} \subset \mathfrak{D}$. Entonces, las fórmulas Runge-Kutta Localmente Linealizadas (\ref{LLDPK scheme}) tienen error de truncamiento local
-	\[\lvert\lvert x(t_{n+1}) - x(t_n) - \digamma(x(t_n);h_n) \rvert\rvert_2 \leq Kh_n^{\mathrm{min}\left\{ \mf+2,\pf+\qf+1 \right\}}+C h_n^{6}  \]
+	\[\lvert\lvert x(t_{n+1}) - x(t_n) - \digamma(x(t_n);h_n) \rvert\rvert_2 \leq Kh_n^{\mathrm{min}\left\{ \mf+2,\pf+\qf+1 \right\}}+C h_n^{6}\,,  \]
 	\[\lvert\lvert x(t_{n+1}) - x(t_n) - \widehat{\digamma }(x(t_n);h_n) \rvert\rvert_2 \leq Kh_n^{\mathrm{min}\left\{ \mf+2,\pf+\qf+1 \right\}}+C h_n^{5}  \]
 	y error global
-	\[ \lvert\lvert x(t_{n+1}) - y_{n+1} \rvert\rvert_2 \leq M h^{\mathrm{min}\left\{5,\mf+1,\pf+\qf \right\}} \]
-	\[ \lvert\lvert x(t_{n+1}) - \widehat{y}_{n+1} \rvert\rvert_2 \leq M h^{\mathrm{min}\left\{ 4,\mf+1,\pf+\qf \right\}} \]
+	\[ \lvert\lvert x(t_{n+1}) - y_{n+1} \rvert\rvert_2 \leq M h^{\mathrm{min}\left\{5,\mf+1,\pf+\qf \right\}}\,, \]
+	\[ \lvert\lvert x(t_{n+1}) - \widehat{y}_{n+1} \rvert\rvert_2 \leq M h^{\mathrm{min}\left\{ 4,\mf+1,\pf+\qf \right\}}\,, \]
 	$\forall t_{n+1},t_n\in(t)_h$ y tamaño de paso $h$ suficientemente pequeño, donde  $K,C,M$ son constantes positivas.
 \end{theorem}
 \emph{Demostración} Utilizando el Teorema~\ref{theorem:Krylov-bound}, se tiene
@@ -186,7 +186,7 @@ En el caso de $\varepsilon_{K}/\gamma_{K}< 1$, se acepta la aproximación (\ref{
             \fac\cdot\Delta\mf} } \right\rfloor,
 \end{equation*}
 \begin{equation}
-    \Delta\mf=\log(\varepsilon_{K}/\gamma_{K}) \label{delta_m}
+    \Delta\mf=\log(\varepsilon_{K}/\gamma_{K}), \label{delta_m}
 \end{equation}
 $\fac_{max}= -\frac{\mf_n}{4}$, $\fac_{min}= \frac{\mf_n}{3}$, $\fac=\frac{1}{\log( 2)}$, y $\left\lfloor \cdot \right\rfloor$ denota la función suelo (que devuelve el mayor entero menor o igual que un número real dado). De lo contrario, se rechaza la aproximación (\ref{phi_appox}) para $u_j$ para el $\mf_n$ dado y se estima un nuevo valor para la dimensión del subespacio de Krylov $\mf_{new}$ mediante (\ref{calcmnew}), pero con $\mf$ calculado por la expresión
 \begin{equation*}

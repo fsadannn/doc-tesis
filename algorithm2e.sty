@@ -756,6 +756,19 @@
 %
 \newcommand{\algocf@languagechoosen}{english}%
 %
+\DeclareOption{spanish}{%
+	\renewcommand{\listalgorithmcfname}{Lista de Algoritmos}%
+	\renewcommand{\algorithmcfname}{Algoritmo}%
+	\renewcommand{\algorithmautorefname}{algorithm}%
+	\renewcommand{\algorithmcflinename}{line}%
+	\renewcommand{\algocf@typo}{}%
+	\renewcommand{\@algocf@procname}{Procedure}%
+	\renewcommand{\@algocf@funcname}{Function}%
+	\renewcommand{\procedureautorefname}{procedure}%
+	\renewcommand{\functionautorefname}{function}%
+	\renewcommand{\algocf@languagechoosen}{spanish}%
+}
+
 \DeclareOption{english}{%
 \renewcommand{\listalgorithmcfname}{List of Algorithms}%
 \renewcommand{\algorithmcfname}{Algorithm}%
@@ -2590,6 +2603,25 @@
 \SetKwFor{ForEach}{per ciascun}{fai}{fine per ciascun}%
 \SetKwFor{ForAll}{per tutti i}{fai}{fine per tutti}%
 \SetKwFor{While}{finché}{fai}{fine finché}%
+}{}%
+\ifthenelse{\boolean{algocf@optonelanguage}\AND\equal{\algocf@languagechoosen}{spanish}}{%
+	\SetKwInput{KwIn}{Entrada}%
+	\SetKwInput{KwOut}{Salida}%
+	\SetKwInput{KwData}{Datos}%
+	\SetKwInput{KwResult}{Result}%
+	\SetKw{KwTo}{to}
+	\SetKw{KwRet}{return}%
+	\SetKw{Return}{return}%
+	\SetKwBlock{Begin}{begin}{end}%
+	\SetKwRepeat{Repeat}{repeat}{until}%
+	%
+	\SetKwIF{If}{ElseIf}{Else}{if}{then}{else if}{else}{end if}%
+	\SetKwSwitch{Switch}{Case}{Other}{switch}{do}{case}{otherwise}{end switch}%
+	\SetKwFor{For}{for}{do}{end for}%
+	\SetKwFor{ForPar}{for}{do in parallel}{end forpar}
+	\SetKwFor{ForEach}{foreach}{do}{end foreach}%
+	\SetKwFor{ForAll}{forall the}{do}{end forall}%
+	\SetKwFor{While}{while}{do}{end while}%
 }{}%
 %
 %%%% old commands compatibility
