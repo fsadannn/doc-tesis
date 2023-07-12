@@ -31,12 +31,19 @@ que resulta de aplicar la fórmula de variación de constantes a estas ecuacione
 x(t_n+h)=\me{Ah}\left(x(t_n) +\int\limits_{0}^{h} \me{-As}F(x(t_n+s)) \,ds\right)\,. \label{VCF2}
 \end{equation}
 Los integradores exponenciales obtenidos de aproximar esta expresión son, por ejemplo, los conocidos métodos de Lawson, Lawson Generalizados, Exponential Time
-Differencing y Exponential Runge-Kutta (ver \cite{Berland07} para una revisión). Por otra parte, después de la linealización local~(\bluemark{Sección \ref{section:ll-methods}}) de la ecuación (\ref{ODE-SYST}) en $t_{n}$,  la fórmula de variación de constantes lleva a
-\begin{eqnarray}
-x(t_{n}+h) &= & x(t_{n})+\int\limits_{0}^{h}e^{A_{n}(h-s)}(f(t_n,x(t_{n}))+sf_t(t_n,x(t_{n})))ds + \bluemark{r(t_n,y_n,h)} \label{VCF-full} \\
-\bluemark{r(t_n,y_n,h)} & = & \int\limits_{0}^{h}e^{A_{n}(h-s)}g_{n}(t_{n}+s,x(t_{n}+s))ds, \label{VCF}
-\end{eqnarray}
-donde $A_{n}=f_x(t_n,x(t_{n}))$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$,  $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))-f_t(t_n,x(t_{n}))(s-t_n)-f(t_n,x(t_n))$ y $f_t$ es la derivada parcial de $f$ respecto a $t$. 
+Differencing y Exponential Runge-Kutta (ver \cite{Berland07} para una revisión). Por otra parte, reescribiendo el campo vectorial de (\ref{ODE-SYST}) en la vecindad de ($t_n,x(t_n)$) como la suma de un término lineal y otro no lineal, la fórmula de variación de constantes lleva a
+\begin{equation}
+x(t_{n}+h) =  x(t_{n})+ \phi(t_{n},x(t_{n});h) + \bluemark{r(t_n,x(t_n);h)} \label{VCF-full}
+\end{equation}
+con
+\begin{equation*}
+ \phi(t_{n},x(t_{n});h) = \int\limits_{0}^{h}e^{A_{n}(h-s)}(f(t_n,x(t_{n}))+sf_t(t_n,x(t_{n})))ds 
+\end{equation*}
+y
+\begin{equation}
+ \bluemark{r(t_n,x(t_n);h)} =  \int\limits_{0}^{h}e^{A_{n}(h-s)}g_{n}(t_{n}+s,x(t_{n}+s))ds, \label{VCF}
+\end{equation}
+donde $A_{n}=f_x(t_n,x(t_{n}))$ es la matriz Jacobiana de $f$ evaluada en $(t_n,x(t_{n}))$,  $g_{n}(s,u)=f(s,u)-A_{n}(u-x(t_n))-f_t(t_n,x(t_{n}))(s-t_n)-f(t_n,x(t_n))$ es el término no lineal en la reescritura del campo vectorial de (\ref{ODE-SYST}) y $f_t$ es la derivada parcial de $f$ respecto a $t$. 
 Ejemplos de integradores exponenciales obtenidos de aproximar esta expresión son el método clásico de Pope~\cite{pope1963exponential} de orden 2, los métodos Runge-Kutta Localmente 
 Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}, los métodos Exponenciales de Propagación 
 Iterativa~\cite{tokman2006efficient, tokman2012new}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
@@ -104,19 +111,19 @@ Para todo $t\in[t_{0},T]$ se define la siguiente aproximación.
 
 La estabilidad y las propiedades dinámicas que la discretización Lineal Local (\ref{ODE-LLA-4}) posee son de vital importancia para la integración de EDOs, no obstante su bajo orden de convergencia constituye una limitante en algunas circunstancias. Para solucionar esa dificultad se construyen los métodos de Linealización Local de Orden Superior los cuales retienen las propiedades mencionadas, pero con orden de convergencia mayor. 
 
-Estos métodos de Linealización Local de Orden Superior se obtienen de agregar a la aproximación Lineal Local~(\ref{ODE-REV-FORM-LLA}) un término adicional $r$ que resulta de aproximar, con un orden superior a 2, la integral de la expresión~(\ref{VCF}) por algún método de cuadratura o por la solución numérica de la representación diferencial de la integral~(\ref{VCF})~\cite{delaCruz06}. \bluemark{Utilizando} diferentes tipos de cuadraturas para aproximar~(\ref{VCF}) se obtienen los métodos Exponenciales de Propagación 
+Estos métodos de Linealización Local de Orden Superior se obtienen de agregar a la aproximación Lineal Local~(\ref{ODE-REV-FORM-LLA}) un término adicional $\widetilde{r}$ que resulta de aproximar, con un orden superior a 2, la integral de la expresión~(\ref{VCF}) por algún método de cuadratura o por la solución numérica de la representación diferencial de la integral~(\ref{VCF}) que se obtiene derivándola con respecto a t~\cite{delaCruz06}. \bluemark{Utilizando} diferentes tipos de cuadraturas para aproximar~(\ref{VCF}) se obtienen los métodos Exponenciales de Propagación 
 Iterativa~\cite{tokman2006efficient}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
 métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los métodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}. Por otra parte, \bluemark{utilizando} esquemas Runge Kutta (RK) para resolver la mencionada ecuación diferencial se obtienen los métodos Runge-Kutta Localmente Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}.
 
 Por su relevancia en esta tesis, a continuación se expondrá con mas detalle los métodos Runge-Kutta Localmente Linealizados. 
 
 Dada una partición $(t)_{h}$, una aproximación Lineal Local de orden $%
-\gamma$ de la solución de (\ref{ODE-SYST}) se define por la expresión 
+\gamma$ de la solución de (\ref{ODE-SYST}) se define por la expresión~\cite{Jimenez13}
 \begin{equation}
-y(t)=y_{n_{t}}+\phi(t_{n_{t}},y_{n_{t}};t-t_{n_{t}})+r(t,t_{n_{t}},y_{n_{t}}),
+y(t)=y_{n_{t}}+\phi(t_{n_{t}},y_{n_{t}};t-t_{n_{t}})+\widetilde{r}(t,t_{n_{t}},y_{n_{t}}),
 \label{ODE-REV-HOLL}
 \end{equation}
-donde ${n_{t}=\maxx{n:t_{n}\leq t}}$, $r(t,t_{n_{t}},y_{n_{t}})$ es la solución numérica de orden $\gamma >2$ de la \bluemark{representación diferencial de la integral~(\ref{VCF})}
+donde ${n_{t}=\maxx{n:t_{n}\leq t}}$, $\widetilde{r}(t,t_{n_{t}},y_{n_{t}})$ es la solución numérica de orden $\gamma >2$ de la \bluemark{representación diferencial de la integral~(\ref{VCF})}
 \begin{eqnarray}
 \frac{dr}{dt} & = & q(t_{n},y_{n},t,r(t))  \label{ODE r} \\
 r(t_{n}) & = & 0 \nonumber
@@ -129,7 +136,7 @@ q(t_n,y_n,s,\varsigma)&=&f(s,y_n+\phi(t_n,y_n;s-t_n)+\varsigma)-f_x(t_n,y_n)\phi
 \end{eqnarray*}
 con $s\in [t_{n},t_{n+1})$ y $\varsigma \in \mathbb{R}^d $. 
 
-Cuando $\xi$ es la aproximación obtenida mediante un esquema Runge-Kutta de orden $\gamma$ se llega a las definiciones siguientes.
+Cuando $\widetilde{r}$ en (\ref{ODE-REV-HOLL})  es la aproximación obtenida mediante un esquema Runge-Kutta de orden $\gamma$ se llega a las definiciones siguientes.
 \begin{definition}
 	\label{definition HLLD} \cite{Jimenez13} Dada una partición $(t)_{h}$, la discretización Lineal Local Runge-Kutta 
     de orden $\gamma >2$ se define por la expresión recursiva:
@@ -198,8 +205,24 @@ y coeficientes Runge-Kutta $a_{j,i}$, $b_j$, $\hat{b}_j$ y $c_j$ definidos en Ta
 	\end{center}
 \end{table}
 
-En síntesis, a la clase de métodos de Linealización Local de Orden Superior pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original (\ref{ODE-SYST}) en dos partes: la solución $y$ de la ecuación linealizada localmente 
-(\ref{ODE-SYST-LINEAL-1}) más una solución aproximada a la representación diferencial (\ref{ODE r}) del residuo $r = x-y$ proporcionada por un integrador numérico de orden alto.
+En síntesis, a la clase de métodos de Linealización Local de Orden Superior pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución $u$ de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r = x-u$ proporcionada por un integrador numérico de orden alto.
+
+\bluemark{
+	\begin{center}
+		\leaf{\small Aproximación numérica}
+		\branch{1}{\small EDO lineal asociada a $u$\\$\frac{du(t)}{dt} = a(x(t_n);u(t))$\\$u(t_n)=x(t_n)$\\$a(x_n;\xi) = f_x(x_n)(\xi-x_n)+f(x_n)$}
+		\leaf{\small Aproximación numérica}
+		\branch{1}{\small EDO no lineal asociada a $r$\\$\frac{dr(t)}{dt} = q(x(t_n);t,r(t))$\\$r(t_n)=0$\\
+			$q(x_n;s,\xi)=f(u(s;x_n)+\xi)$\\
+			\hskip 1.0in $-f_x(x_n)(u(s;x_n)-x_n)$\\
+			\hskip 0.14in$-f(x_n)$
+		}
+		\branch{2}{$ x(t_{n+1}) = u(t_{n+1},x_n)+r(t_{n+1},x(t_n)),\; t\in[t_{n},t_{n+1}]$}
+		\branch{1}{\footnotesize $\frac{dx}{dt}=f(x(t_n))+f_x(x(t_n))(x(t)-x(t_n))+\left[ f(x(t))-f(x(t_n))-f_x(x(t_n))(x(t)-x(t_n))  \right]$\\$x(t_0)=x_0$}
+		\branch{1}{$\frac{dx}{dt}=f(x),\; x(t_0)=x_0$}
+		\qobitree
+	\end{center}
+}
 
 
 \subsection{Esquemas de Linealización Local}
@@ -223,24 +246,11 @@ calculadas analíticamente. Dependiendo de la forma de calcular  numéricamente 
 	de $\digamma$ mediante un algoritmo numérico, es
 	llamada genéricamente esquema de Linealización Local (LL).
 \end{definition}
-\bluemark{
-	\begin{center}
-	\leaf{\small Aproximación numérica}
-	\branch{1}{\small EDO lineal asociada a $u$\\$\frac{du(t)}{dt} = a(x(t_n);u(t))$\\$u(t_n)=x(t_n)$\\$a(x_n;\xi) = f_x(x_n)(\xi-x_n)+f(x_n)$}
-	\leaf{\small Aproximación numérica}
-	\branch{1}{\small EDO no lineal asociada a $r$\\$\frac{dr(t)}{dt} = q(x(t_n);t,r(t))$\\$r(t_n)=0$\\
-		$q(x_n;s,\xi)=f(u(s;x_n)+\xi)$\\
-		\hskip 1.0in $-f_x(x_n)(u(s;x_n)-x_n)$\\
-		\hskip 0.14in$-f(x_n)$
-	}
-	\branch{2}{$ x(t_{n+1}) = u(t_{n+1},x_n)+r(t_{n+1},x(t_n)),\; t\in[t_{n},t_{n+1}]$}
-	\branch{1}{\footnotesize $\frac{dx}{dt}=f(x(t_n))+f_x(x(t_n))(x(t)-x(t_n))+\left[ f(x(t))-f(x(t_n))-f_x(x(t_n))(x(t)-x(t_n))  \right]$\\$x(t_0)=x_0$}
-	\branch{1}{$\frac{dx}{dt}=f(x),\; x(t_0)=x_0$}
-	\qobitree
-\end{center}
-}
+
+Regularmente, en la literatura, la implementación numérica de la discretización Lineal Local~(\ref{ODE-LLA-4}) se denomina simplemente esquema de Linealización Local, mientras que la implementación numérica de una aproximación de orden superior como la~(\ref{ODE-REV-HOLL}) se denomina esquema de Lineal Local de Orden Superior (LLOS).
+
 Por ejemplo, cuando la fórmula de Padé con escalamiento y potenciación para exponenciales matriciales \cite{moler2003nineteen} es utilizada para
-aproximar $\phi$ en la discretización Lineal Local~(\ref{ODE-LLA-4}) se obtiene el siguiente esquema LL de orden $2$ \cite{Jimenez02AMC}:
+aproximar $\phi$ en la discretización Lineal Local~(\ref{ODE-LLA-4}) se obtiene el esquema LL de orden $2$ \cite{Jimenez02AMC}:
 \begin{equation} 
 \widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\phi}\left( t_{n},\widetilde{y}_{n};h_{n}\right) \label{LL-scheme}
 \end{equation} 
@@ -290,7 +300,7 @@ I_{d} & 0_{d\times 1}%
 \end{array}%
 \right] $ para ecuaciones autónomas.
 
-Si se utiliza la fórmula de Padé para aproximar $\phi_j$ que aparecen en las discretizaciones (\ref{LL-scheme-4}) y (\ref{LLDP-scheme-dp}) se obtienen los esquemas propuestos en \cite{Jimenez13,Jimenez14AMC} que están orientados a resolver problemas de valor inicial de dimensiones pequeñas. 
+Por otra parte, cuando la mencionada aproximación de Padé se utiliza para aproximar las $\phi_j$ en las discretizaciones~(\ref{LL-scheme-4}) y~(\ref{LLDP-scheme-dp}) se obtienen los esquemas LLOS propuestos en \cite{Jimenez13,Jimenez14AMC} orientados a resolver problemas de valor inicial de dimensiones pequeñas. La Figura ? muestra una representación gráfica resumida de como se construyen esquemas LLOS en general. 
 
 \section{Cálculo de la exponencial de una matriz}
 
@@ -332,7 +342,7 @@ y potenciación para matrices pequeñas y densas, y el de los subespacios de Kry
     \]
 \end{definition}
 
-Cuando la norma de \mmark{una} \redmark{matriz cuadrada} $A$ es grande, el costo computacional y los errores de redondeo \mmark{en $P_{\pf,\qf}$} aumentan, por lo que
+Cuando la norma de \mmark{una} \redmark{matriz cuadrada} $A$ es grande, el costo computacional y los errores de redondeo \mmark{en $P_{\pf,\qf}(A)$} aumentan, por lo que
 es necesaria la alternativa de escalamiento y potenciación.
 
 \begin{definition}\cite{golub2013matrix}~
@@ -450,7 +460,7 @@ Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obt
 
 \section{Producto de funciones phi por vectores}\label{section:phi-times-vector}
 
-Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{VCF2}) o (\ref{VCF}). Al utilizar polinomios en $s$ para aproximar las funciones $F$ y $g$ en (\ref{VCF2}) o (\ref{VCF}), típicamente, se obtienen expresiones recursivas que involucran integrales de la forma
+Como se explicó en la Sección \ref{Sec:IE}, los integradores exponenciales resultan de aproximar las expresiones (\ref{VCF2}) o (\ref{VCF-full}). Al utilizar polinomios en $s$ para aproximar las funciones $F$, $\phi$ y $g$ en (\ref{VCF2}) o (\ref{VCF-full}), típicamente, se obtienen expresiones recursivas que involucran integrales de la forma
 \begin{equation*}
 \phi _{k}(z,h)=\int_{0}^{h}e^{z(h-s)}s^{k-1}ds,\text{ \ \ \ \ \ \ \ }%
 k=1,2,\ldots ,
