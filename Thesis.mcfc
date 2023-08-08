@@ -1,0 +1,21 @@
+\contentsline {importantcodes}{Exp: m\IeC {\'e}todo que aproxima $\mathrm {e}^{tA}b$ mediante subespacios de Krylov}{27}{importantcodes.1}% 
+\contentsline {importantcodes}{Expv: m\IeC {\'e}todo que aproxima $\mathrm {e}^{tA}b$ mediante subespacios de Krylov con algoritmo iterativo adicional para mejorar la precisi\IeC {\'o}n }{27}{importantcodes.2}% 
+\contentsline {importantcodes}{Phip: m\IeC {\'e}todo que aproxima $t\varphi {tA}b$ mediante subespacios de Krylov con algoritmo iterativo adicional para mejorar la precisi\IeC {\'o}n }{27}{importantcodes.3}% 
+\contentsline {importantcodes}{Phi: m\IeC {\'e}todo que aproxima $t\varphi {tA}b$ mediante subespacios de Krylov }{27}{importantcodes.4}% 
+\contentsline {importantcodes}{JF1-Phi: m\IeC {\'e}todo que aproxima $t\varphi {tA}b$ mediante subespacios de Krylov libres de Jacobiano y diferencias finitas de primer orden}{29}{importantcodes.5}% 
+\contentsline {importantcodes}{JF2-Phi: m\IeC {\'e}todo que aproxima $t\varphi {tA}b$ mediante subespacios de Krylov libres de Jacobiano y diferencias finitas de segundo orden}{29}{importantcodes.6}% 
+\contentsline {importantcodes}{LLDP4: esquema Runge-Kutta Localmente Linealizado de Dromand y Prince de orden 4 y paso fijo}{43}{importantcodes.7}% 
+\contentsline {importantcodes}{LLDP5: esquema Runge-Kutta Localmente Linealizado de Dromand y Prince de orden 5 y paso fijo}{43}{importantcodes.8}% 
+\contentsline {importantcodes}{expms4: esquema exponencial de Adams de orden 4 y paso fijo}{43}{importantcodes.9}% 
+\contentsline {importantcodes}{expms5: esquema exponencial de Adams de orden 5 y paso fijo}{43}{importantcodes.10}% 
+\contentsline {importantcodes}{LLDP45: formulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas}{51}{importantcodes.11}% 
+\contentsline {importantcodes}{ode15s: f\IeC {\'o}rmulas diferenciales hacia atr\IeC {\'a}s de orden variable 1-5}{52}{importantcodes.12}% 
+\contentsline {importantcodes}{exp4: integrador exponencial de orden 4}{52}{importantcodes.13}% 
+\contentsline {importantcodes}{JF-LLRK4: esquema Runge-Kutta Localmente Linealizado libre de Jacobiano de orden 4 y paso fijo}{63}{importantcodes.14}% 
+\contentsline {importantcodes}{BDF4: f\IeC {\'o}rmula diferencial hacia atr\IeC {\'a}s de orden 4 libre de Jacobiano y paso fijo}{63}{importantcodes.15}% 
+\contentsline {importantcodes}{JF-Exp4: integrador exponencial de orden 4 libre de Jacobiano y paso fijo}{63}{importantcodes.16}% 
+\contentsline {importantcodes}{JF-EPIRK4: integrador exponencial de propagaci\IeC {\'o}n iterativa tipo Rungge-Kutta de orden 4 libre de Jacobiano y paso fijo}{63}{importantcodes.17}% 
+\contentsline {importantcodes}{LLDP1: formulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas libres de Jacobiano}{77}{importantcodes.18}% 
+\contentsline {importantcodes}{LLDP2: formulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas libres de Jacobiano con diferencia finita de orden 1 en la parte lineal}{77}{importantcodes.19}% 
+\contentsline {importantcodes}{ode15sk: f\IeC {\'o}rmulas diferenciales hacia atr\IeC {\'a}s de orden variable 1-5 libres de Jacobiano}{77}{importantcodes.20}% 
+\contentsline {importantcodes}{exp4jf: integrador exponencial de orden 4 libre de Jacobiano}{77}{importantcodes.21}% 

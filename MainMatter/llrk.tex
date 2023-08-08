@@ -1,6 +1,6 @@
 \chapter{Método Runge-Kutta de Dormand y Prince Localmente Linealizado}\label{chapter:lldp}
 
-En el Capítulo \ref{chapter:exp-int-and-ll-methods} se presentó la Aproximación Lineal Local de Orden Superior para EDO. Como se explicó en ese capítulo, a esa clase de métodos pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución $u$ de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r=x-u$ proporcionada por un integrador numérico de orden alto. En el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se propusieron y utilizaron las aproximaciones Krylov-Padé para resolver la ecuación diferencial lineal de dimensiones no pequeñas. En éste capítulo se utilizará las fórmulas  Runge-Kutta embebidas de Dormand y Prince para aproximar la solución de la ecuación diferencial no lineal del residuo. Combinando estas aproximaciones se obtendrá el Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDO de dimensiones no pequeñas. Utilizando las nuevas fórmulas, se construyen también estrategias adaptativas para implementar esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Los resultados de este capítulo están basados en \cite{naranjo2021locally}.
+En el Capítulo \ref{chapter:exp-int-and-ll-methods} se presentó la Aproximación Lineal Local de Orden Superior para EDO. Como se explicó en ese capítulo, a esa clase de métodos pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución $u$ de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r=x-u$ proporcionada por un integrador numérico de orden alto. En el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se propusieron y utilizaron las aproximaciones Krylov-Padé para resolver la ecuación diferencial lineal de dimensiones no pequeñas. En éste capítulo se utilizará las fórmulas embebidas Runge-Kutta de Dormand y Prince para aproximar la solución de la ecuación diferencial no lineal del residuo. Combinando estas aproximaciones se obtendrá el Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDO de dimensiones no pequeñas. Utilizando las nuevas fórmulas, se construyen también estrategias adaptativas para implementar esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Los resultados de este capítulo están basados en \cite{naranjo2021locally}.
 
 Sin pérdida de generalidad consideremos el PVI autónomo $d$-dimensional
 \begin{equation}\label{syst}
@@ -13,15 +13,15 @@ $\mathfrak{D}$ del conjunto $\{x(t):t\in [t_0,T]\}$ de $\mathbb{R}^{d}$. Se asum
 \section{Fórmulas embebidas}
 
 Sea $\left( t\right) _{h}=\left\{ t_{n}:n=0,1,\ldots ,N\right\}$ una discretización temporal con un tamaño de paso máximo $h$ definido como una secuencia de tiempos que satisfacen las condiciones $t_{0}<t_{1}<\cdots <t_{N}=T$, donde $h_{n}=t_{n+1}-t_{n}\leq h$ para $n=0,\ldots,N-1$.
-
-Consideremos las fórmulas de Runge-Kutta localmente linealizadas de Dormand y Prince
+\importantdefinition{Discretización embebida Lineal Local Runge-Kutta de Dormand and Prince}
+Consideremos la discretización embebida Lineal Local Runge-Kutta de Dormand and Prince
 \begin{equation} \label{lldis}
     z_{n+1}\,=\,z_n+u_s+h_n \sum_{j=1}^{s}b_j \kt_j \,\,\, \text{y} \,\,\, \
     \widehat{z}_{n+1}\,=\, z_n+u_s+h_n \sum_{j=1}^{s}\widehat{b}_j \kt_j
 \end{equation}
 introducidas en \cite{Jimenez14AMC} para aproximar la solución $x$ de (\ref{syst})-(\ref{systcond}) en $t_{n+1}$, para $n=0,\ldots,N -1$, donde s = 7 es el número de etapas,
 \begin{equation*}
-u_j=L\me{c_j M_n h_n}r,
+u_j=\lmatrix\me{c_j M_n h_n}\rvector,
 \end{equation*}
 \begin{equation*}
 \kt_j = f\left( z_n+u_j+h_n \sum_{i=1}^{j-1}a_{j,i}\kt_i \right) - f( z_n) - f_x(z_n)u_j,
@@ -35,7 +35,7 @@ con $\kt_1 \equiv 0$, siendo $f_x$ la matriz Jacobiana de $f$ y $a_{j,i}$, $b_j$
     \end{array}
     \right] \in \mathbb{R}^{(d+1)\times (d+1)},
 \end{equation*}
-$ L=[I_d \;\; 0_{d\times 1}] $ y $r=[0_{1\times d}\;\; 1]^T$. Como se mencionó en el Capítulo \ref{chapter:exp-int-and-ll-methods}, las fórmulas embebidas (\ref{lldis}) son instancias particulares de la clase general de Métodos de Linealización Local de Orden Superior propuestos en \cite{Jimenez13} y, con la aproximación de Padé para las exponenciales matriciales en $u_j$, fueron utilizadas en \cite{Jimenez14AMC} para integrar EDO de dimensiones pequeñas.
+$ \lmatrix=[I_d \;\; 0_{d\times 1}] $ y $\rvector=[0_{1\times d}\;\; 1]^T$. Como se mencionó en el Capítulo \ref{chapter:exp-int-and-ll-methods}, las fórmulas embebidas (\ref{lldis}) son instancias particulares de la clase general de Métodos de Linealización Local de Orden Superior propuestos en \cite{Jimenez13} y, con la aproximación de Padé para las exponenciales matriciales en $u_j$, fueron utilizadas en \cite{Jimenez14AMC} para integrar EDO de dimensiones pequeñas.
 
 A continuación, para EDO de dimensiones no pequeñas, las aproximaciones Krylov-Padé propuestas en el capítulo anterior serán utilizadas para aproximar los términos $u_j$ que aparecen en (\ref{lldis}). Para ello los $u_j$ que aparecen en (\ref{lldis}) se reescriben como
 \begin{equation}
@@ -74,24 +74,25 @@ con lo cual las cinco matrices requeridas $E_{c_j}$ son obtenidas. Como, en gene
 \[\widetilde{E}_{h_n/90} = F_k^{\pf,\qf}\left(\frac{h_n}{90}\overline{H}\right), \]
 donde $F_k^{\pf,\qf}(A)=(P_{\pf,\qf}(2^{-k}A))^{2^k}$ denota a la aproximación de Padé de $e^A$ con escalamiento y potenciación tal y como se explica en el Capítulo \ref{chapter:exp-int-and-ll-methods}. Consecuentemente, las cinco aproximaciones $\widetilde{E}_{c_jh_n}$ a $E_{c_j}$ son obtenidas remplazando $E_{1/90}$ por $\widetilde{E}_{h_n/90}$ en (\ref{flow}). Empleando esas aproximaciones y la expresión (\ref{eq:kp_aprox}), se obtienen las siguientes aproximaciones $(\mf , \pf ,\qf , k)$-Krylov-Padé
 \begin{eqnarray}
-    \frac{1}{5}h_n\varphi_1\left(\frac{1}{5}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{1}{5}}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{1}{5}}]_{13}\;  v_{\mf+1} \notag \\
-    \frac{3}{10}h_n\varphi_1\left(\frac{3}{10}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{3}{10}}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{3}{10}}]_{13}\;  v_{\mf+1} \notag \\
-    \frac{4}{5}h_n\varphi_1\left(\frac{4}{5}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{4}{5}}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{4}{5}}]_{13}\;  v_{\mf+1} \label{phi_appox} \\
-    \frac{8}{9}h_n\varphi_1\left(\frac{8}{9}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{8}{9}}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{8}{9}}]_{13}\;  v_{\mf+1} \notag \\
-    h_n\varphi_1(h_n f_x)f & \approx &  \beta V_{\mf}\; [\widetilde{E}_1]_{12}\;  + \beta\hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_1]_{13}\;  v_{\mf+1}, \notag
+    \frac{1}{5}h_n\varphi_1\left(\frac{1}{5}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{1}{5}h_n}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{1}{5}h_n}]_{13}\;  v_{\mf+1} \notag \\
+    \frac{3}{10}h_n\varphi_1\left(\frac{3}{10}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{3}{10}h_n}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{3}{10}h_n}]_{13}\;  v_{\mf+1} \notag \\
+    \frac{4}{5}h_n\varphi_1\left(\frac{4}{5}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{4}{5}h_n}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{4}{5}h_n}]_{13}\;  v_{\mf+1} \label{phi_appox} \\
+    \frac{8}{9}h_n\varphi_1\left(\frac{8}{9}h_n f_x\right)f & \approx & \beta   V_{\mf}\; [\widetilde{E}_{\frac{8}{9}h_n}]_{12}\;  + \beta \hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{\frac{8}{9}h_n}]_{13}\;  v_{\mf+1} \notag \\
+    h_n\varphi_1(h_n f_x)f & \approx &  \beta V_{\mf}\; [\widetilde{E}_{h_n}]_{12}\;  + \beta\hf_{\mf+1,\mf}e_\mf^T\; [\widetilde{E}_{h_n}]_{13}\;  v_{\mf+1}, \notag
 \end{eqnarray}
 para cada una de las $u_j$ definidas en (\ref{u-j-deff}),
-donde $[\widetilde{E}_{c_j}]_{ik}$ denota la sub-matriz $i,k$ de la matriz particionada $\widetilde{E}_{c_j}$, $V_m$ es la matriz con base ortonormal de $\mathcal{K}_ \mf(f_x,f)$ ya calculado por el Algoritmo \ref{alg:Arnoldi} para $\mathcal{K}_\mf(h_nf_x,f)$, y $\beta=\nnorm{\nnorm{f} }_2$.
-
+donde $[\widetilde{E}_{c_jh_n}]_{ik}$ denota la sub-matriz $i,k$ de la matriz particionada $\widetilde{E}_{c_jh_n}$, $V_m$ es la matriz con base ortonormal de $\mathcal{K}_ \mf(f_x,f)$ ya calculado por el Algoritmo \ref{alg:Arnoldi} para $\mathcal{K}_\mf(h_nf_x,f)$, y $\beta=\nnorm{\nnorm{f} }_2$.
+\importantdefinition{Fórmulas embebidas Runge-Kutta de Dormand y Prince Localmente Linealizadas}
 Utilizando la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé (\ref{phi_appox}) para cada $u_j$ en las fórmulas embebidas (\ref{lldis}), obtenemos las fórmulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas 
 \begin{equation}  \label{LLDPK scheme}
     y_{n+1}\,=\,y_n+\widetilde{u}_s+h_n \sum_{j=1}^{s}b_j \widetilde{\kt}_j \,\,\, \text{y} \,\,\, \
     \widehat{y}_{n+1}\,=\, y_n+\widetilde{u}_s+h_n \sum_{j=1}^{s}\widehat{b}_j \widetilde{\kt}_j,
 \end{equation}
 de orden 5 y 4, para integrar PVI de dimensiones no pequeñas, donde
-\begin{equation*}
-    \widetilde{\kt}_j = f\left( y_n+\widetilde{u}_j+h_n \sum_{i=1}^{j-1}a_{j,i}\widetilde{\kt}_i \right) - f( y_n) - f_x(y_n)\widetilde{u}_j.
-\end{equation*}
+\begin{eqnarray}
+	\widetilde{u}_j & = &K_{\mf,k}^{\pf,\qf}\left( c_jh_n, f_x(y_n) , f(y_n) \right) \;, \label{llrk-uj} \\
+    \widetilde{\kt}_j & = & f\left( y_n+\widetilde{u}_j+h_n \sum_{i=1}^{j-1}a_{j,i}\widetilde{\kt}_i \right) - f( y_n) - f_x(y_n)\widetilde{u}_j. \nonumber
+\end{eqnarray}
 y $\widetilde{\kt}_1=0$, siendo $a_{j,i}$, $b_j$, $\widehat{b}_j$ los coeficientes Runge-Kutta de  Dormand y Prince definidos en la Tabla \ref{ButcherTabla}.
 
 Es importante destacar que, a diferencia de otros integradores exponenciales de orden alto, las fórmulas embebidas (\ref{LLDPK scheme}) involucran la aproximación de un solo producto de función phi por vector. En efecto, mientras que los integradores exponenciales en general requieren de aproximar varios términos de la forma $\tau^k \varphi_k(\tau A_k)b_k$ con más de un valor de $k$, las fórmulas embebidas (\ref{LLDPK scheme}) solo requieren la aproximación de la acción de una sola función phi sobre un único vector $\tau \varphi_1(\tau A_1)b_1$. Como se explicó recientemente, las cinco aproximaciones $\widetilde{u}_j$ a los términos distintos de cero $c_jh_n\varphi_1(c_jh_nf_x)f$ que aparecen en (\ref{LLDPK scheme}) se calculan eficientemente en cada paso de integración por medio de un solo subespacio de Krylov obtenido del Algoritmo \ref{alg:Arnoldi} y solo una exponencial matricial aproximada con Padé.
@@ -115,9 +116,9 @@ El siguiente teorema trata sobre la velocidad de convergencia de las fórmulas e
 \begin{equation}\label{proof:ErrorLinearODE}
 \nnorm{\nnorm{ u_j-K_{\mf,k}^{\pf,\qf}\left(c_j h_n,f_x , f \right) }}_2 =  \nnorm{\nnorm{c_jh_n\varphi_1(c_jh_nf_x)f - K_{\mf,k}^{\pf,\qf}\left(c_j h_n, f_x , f \right) }}_2 \le Kh_n^{\mathrm{min}\left\{ \mf+2,\pf+\qf+1 \right\}},
 \end{equation}
-con $j=1,\ldots,7$, donde $K$ es una constante positiva. Dado que $z_{n+1} = y_n + u_7$ es la solución exacta de la EDO lineal $dz/dt=f(y_n)+f_x(y_n)(z-y_n)$ resultante de la linealización local de la ecuación~(\ref{syst}) en $t_n$ con la condición inicial $z(t_n)=y_n$ y que los errores de truncamiento local de las fórmulas embebidas de Runge-Kutta de Dormand y Prince son 6 y 5, los errores de truncamiento local y global de las fórmulas de Runge-Kutta localmente linealizadas (\ref{LLDPK scheme}) se derivan directamente del Teorema 15 en~\cite{Jimenez13} y (\ref{proof:ErrorLinearODE}). $\Box$\\
+con $j=1,\ldots,7$, donde $K$ es una constante positiva. Dado que $z_{n+1} = y_n + u_7$ es la solución exacta de la EDO lineal $dz/dt=f(y_n)+f_x(y_n)(z-y_n)$ resultante de la linealización local de la ecuación~(\ref{syst}) en $t_n$ con la condición inicial $z(t_n)=y_n$ y que los errores de truncamiento local de las fórmulas embebidas Runge-Kutta de Dormand y Prince son 6 y 5, los errores de truncamiento local y global de las fórmulas de Runge-Kutta localmente linealizadas (\ref{LLDPK scheme}) se derivan directamente del Teorema 15 en~\cite{Jimenez13} y (\ref{proof:ErrorLinearODE}). $\Box$\\
 
-Claramente, según este resultado, las fórmulas embebidas Runge-Kutta localmente linealizadas (\ref{LLDPK scheme}) preservan la velocidad de convergencia de las fórmulas embebidas clásicas Runge-Kutta de Dormand y Prince si las desigualdades $\mf+1 \ge 5 $ y $\pf+\qf \ge 5$ se cumplen. Además, al igual que las fórmulas embebidas para pequeños PVI y otros integradores de tipo exponencial, las nuevas fórmulas embebidas (\ref{LLDPK scheme}) son capaces de integrar PVI lineales tan precisos como sea necesario independientemente de la dimensionalidad y rigidez~(\textit{stiffness} en inglés) de las ecuaciones. Sin embargo, dado que, por construcción, las fórmulas (\ref{LLDPK scheme}) usan las fórmulas originales de Runge-Kutta de Dormand y Prince para resolver la ecuación auxiliar no lineal, las fórmulas (\ref{LLDPK scheme}) no están diseñadas para integrar PVI rígidos en general. De esta forma, las fórmulas propuestas (\ref{LLDPK scheme}) están diseñadas para aproximar la solución de PVI de dimensiones no pequeñas donde la principal fuente de rigidez surge de la linealización de la ecuación no lineal en consideración. Estos son precisamente la mayoría de los PVI resultantes de la discretización espacial de las EDP que modelan procesos físicos, biofísicos y físico-químicos.
+Claramente, según este resultado, las fórmulas embebidas Runge-Kutta localmente linealizadas (\ref{LLDPK scheme}) preservan la velocidad de convergencia de las fórmulas embebidas clásicas de Dormand y Prince si las desigualdades $\mf+1 \ge 5 $ y $\pf+\qf \ge 5$ se cumplen. Además, al igual que las fórmulas embebidas para pequeños PVI y otros integradores de tipo exponencial, las nuevas fórmulas embebidas (\ref{LLDPK scheme}) son capaces de integrar PVI lineales tan precisos como sea necesario independientemente de la dimensionalidad y rigidez~(\textit{stiffness} en inglés) de las ecuaciones. Sin embargo, dado que, por construcción, las fórmulas (\ref{LLDPK scheme}) utilizan las fórmulas embebidas originales de Dormand y Prince para resolver la ecuación auxiliar no lineal, las fórmulas (\ref{LLDPK scheme}) no están diseñadas para integrar PVI rígidos en general. De esta forma, las fórmulas propuestas (\ref{LLDPK scheme}) están diseñadas para aproximar la solución de PVI de dimensiones no pequeñas donde la principal fuente de rigidez surge de la linealización de la ecuación no lineal en consideración. Estos son precisamente la mayoría de los PVI resultantes de la discretización espacial de las EDP que modelan procesos físicos, biofísicos y físico-químicos.
 \begin{table}[htb]
 	\caption{ Valores de los coeficientes $\alpha _{i,j}$ en las fórmulas continuas (\ref{continuousLLRK45})\label{Table continuous RK}}
 	\centering
@@ -136,7 +137,7 @@ Claramente, según este resultado, las fórmulas embebidas Runge-Kutta localment
 	\end{tabular}
 \end{table}
 
-Cuando se requiere la solución en un conjunto denso de instantes de tiempo entre dos pasos de integración consecutivos, normalmente se utilizan fórmulas continuas para proceder con un costo computacional mínimo (consulte, por ejemplo, la Sección II.6 en \cite{hairer1993solving}). Regularmente, estas fórmulas continuas se construyen mediante una interpolación polinomial de las fórmulas de integración entre dos pasos de integración consecutivos $t_{n},t_{n+1}\in $ $ t_{h}$. Mediante una simple combinación de las fórmulas embebidas (\ref{LLDPK scheme}) con las fórmulas continuas de Runge-Kutta de Dormand y Prince dadas en \cite{hairer1993solving}, se obtiene la siguiente fórmula continua de $7$ etapas
+Cuando se requiere la solución en un conjunto denso de instantes de tiempo entre dos pasos de integración consecutivos, normalmente se utilizan fórmulas continuas para proceder con un costo computacional mínimo (consulte, por ejemplo, la Sección II.6 en \cite{hairer1993solving}). Regularmente, estas fórmulas continuas se construyen mediante una interpolación polinomial de las fórmulas de integración entre dos pasos de integración consecutivos $t_{n},t_{n+1}\in $ $ t_{h}$. Mediante una simple combinación de las fórmulas embebidas (\ref{LLDPK scheme}) con las fórmulas continuas de Dormand y Prince dadas en \cite{hairer1993solving}, se obtiene la siguiente fórmula continua de $7$ etapas
 \begin{equation}
     y(t_{n}+\theta h_{n})=y_n+\widetilde{u}(\theta
     h_{n})+h_{n}\sum_{j=1}^{7}b_{j}(t_{n}+\theta h_{n})\widetilde{\kt}_{j}\
@@ -155,7 +156,7 @@ Tabla \ref{Table continuous RK}, coinciden con los de la
 fórmula continua de Runge-Kutta implementada en el código de Matlab ode$45$. Para la fórmula continua (\ref{continuousLLRK45}) se pueden definir dos salidas densas convenientes. La primera, de 4 elementos, incluye los pares $(t_{n}+\theta h_{n},y(t_{n}+\theta h_{n}))$ correspondientes a los cuatro $\theta = c_j $, con $0<c_j<1$, para la cual ya se han calculado las aproximaciones $\widetilde{u}_j$ en (\ref{LLDPK scheme}). El segundo conjunto se define con los doce valores
 $\{\frac{1}{90},\frac{2}{90},\frac{4}{90},\frac{8}{90},\frac{1}{10},\frac {16}{90},c_2,c_3,\frac{32}{90},\frac{2}{5},c_4,c_5\}$ de $\theta$ para los cuales las matrices $E_\theta$ en (\ref{flow}) fueron calculadas. En este caso, $\widetilde{u}(\theta h_{n})$ debe evaluarse en los ocho valores de $\theta \ne c_j$, pero sin requerir alguna nueva aproximación del subespacio de Krylov.
 
-Antes de concluir esta sección, es importante destacar que las fórmulas embebidas (\ref{LLDPK scheme}) como implementación numérica de las fórmulas embebidas (\ref{lldis}) también pertenecen a la clase general de Métodos de Linealización Local de Orden Superior de \cite{Jimenez13}. Además, téngase en cuenta que, simplemente reemplazando en (\ref{LLDPK scheme}) los coeficientes de la Tabla \ref{ButcherTabla} por otros correspondientes a un par diferente de fórmulas de Runge-Kutta explícitas embebidas con $s$ estados se obtienen directamente un nuevo par de formulas embebidas Runge-Kutta localmente linealizadas para PVI de dimensiones no pequeñas. La velocidad de convergencia de tales nuevas fórmulas se obtiene, como en la demostración del Teorema \ref{theorem:lldp-convergence}, simplemente combinando el Teorema 15 en~\cite{Jimenez13} y el Teorema \ref{theorem:Krylov-bound}. Además, si los coeficientes de Runge-Kutta $c_i$ de las nuevas fórmulas admiten un máximo común divisor $\gamma$ entonces, un procedimiento similar al descrito anteriormente para aproximar (\ref{flow}) puede seguirse para calcular los diferentes términos $u_j$ de manera eficiente.
+Antes de concluir esta sección, es importante destacar que las fórmulas embebidas (\ref{LLDPK scheme}) como implementación numérica de las fórmulas embebidas (\ref{lldis}) también pertenecen a la clase general de Métodos de Linealización Local de Orden Superior de \cite{Jimenez13}. Además, téngase en cuenta que, simplemente reemplazando en (\ref{LLDPK scheme}) los coeficientes de la Tabla \ref{ButcherTabla} por otros correspondientes a un par diferente de fórmulas de Runge-Kutta explícitas embebidas con $s$ estados se obtienen directamente un nuevo par de fórmulas embebidas Runge-Kutta localmente linealizadas para PVI de dimensiones no pequeñas. La velocidad de convergencia de tales nuevas fórmulas se obtiene, como en la demostración del Teorema \ref{theorem:lldp-convergence}, simplemente combinando el Teorema 15 en~\cite{Jimenez13} y el Teorema \ref{theorem:Krylov-bound}. Además, si los coeficientes de Runge-Kutta $c_i$ de las nuevas fórmulas admiten un máximo común divisor $\gamma$ entonces, un procedimiento similar al descrito anteriormente para aproximar (\ref{flow}) puede seguirse para calcular los diferentes términos $u_j$ de manera eficiente.
 
 \section{Esquemas con tamaño de paso fijo y dimensión de Krylov variable}\label{section:lldp-fix-step}
 
@@ -163,11 +164,11 @@ Las nuevas fórmulas embebidas (\ref{LLDPK scheme}) introducidas en la sección 
 
 \subsection{Selección de la dimensión de Krylov}\label{sec:selkrydim}
 
-Similar al error relativo utilizado en la Sección \ref{section:num-sim-kp}, el error relativo en la aproximación (\ref{LLDPK scheme}) para $u_j$ está dado por
+Similar al error relativo utilizado en la Sección \ref{section:approx-non-auto}, el error relativo en la aproximación (\ref{llrk-uj}) para $u_j$ está dado por
 \begin{equation}
     \varepsilon_{K} = \left(\frac{1}{d}\sum\limits_{i=1}^{d} \left(\frac{\beta
         \hf_{\mf+1,\mf} e_{\mf}^T
-        [\widetilde{E}_\mathfrak{c}]_{14} \rho^{[i]}}{ATol+ RTol\cdotp
+        [\widetilde{E}_{\mathfrak{c}h_n}]_{14} \rho^{[i]}}{ATol+ RTol\cdotp
         \rvert y_{n}^{[i]}\rvert}\right)^{2}\right)^{1/2},
     \label{errrel}
 \end{equation}
@@ -204,14 +205,14 @@ donde $\fac_{max}= \maxx{ 1,\frac{\mf_{n}}{3} }$, $\fac_{min}= 1 $, $\fac=\frac{
 El estimador propuesto (\ref{calcmnew}) para $\mf_{new}$ es un refinamiento del considerado en el Algoritmo 3 de \cite{niesen2012algorithm} orientado a reducir las fluctuaciones en la estimación de la dimensión de los subespacios de Krylov. Además, el valor de $\mf_{min}$ en (\ref{calcmnew}) debe ser tal que conserve la velocidad de convergencia de las fórmulas embebidas originales de Dormand y Prince como se establece en el Teorema \ref{theorem:lldp-convergence}.
 
 \subsection{Selección del orden de Padé}\label{sec:pade-order}
-Como se ha señalado en varios artículos (ver \cite{jimenez2009rate,jimenez2012convergence, Jimenez14AMC, jimenez2015convergence}), la selección de un valor apropiado del par $(\pf,\qf)$ en la aproximación del Padé es crucial para mejorar la eficiencia computacional de los integradores exponenciales. Para este propósito, la Tabla 1 en \cite{moler2003nineteen} se usa regularmente para configurar automáticamente los valores óptimos de $\pf$, con $\qf=\pf$, en función de la norma de la matriz, la tolerancia especificada y la orden de convergencia del integrador exponencial. La Tabla \ref{table:padep}, presenta un subconjunto de la mencionada Tabla 1 en \cite{moler2003nineteen} correspondiente a $\pf \ge 3$.
+Como se ha señalado en varios artículos (ver \cite{jimenez2009rate,jimenez2012convergence, Jimenez14AMC, jimenez2015convergence}), la selección de un valor apropiado del par $(\pf,\qf)$ en la aproximación del Padé es crucial para mejorar la eficiencia computacional de los integradores exponenciales. Para este propósito, la Tabla 1 en \cite{moler2003nineteen} se usa regularmente para configurar automáticamente los valores óptimos de $\pf$, con $\qf=\pf$, en función de la norma de la matriz, la tolerancia especificada y la orden de convergencia del integrador exponencial. Por lo tanto, con $\pf=\qf$ y la restricción de convergencia $\pf+\qf\geq5$ dada por el Teorema \ref{theorem:lldp-convergence}, la selección de un valor específico de $\pf$ para la aproximación (\ref{LLDPK scheme}) se realiza en cada paso de integración de acuerdo con la Tabla \ref{table:padep}, que presenta el subconjunto de la Tabla 1 en \cite{moler2003nineteen} correspondiente a $\pf \ge 3$.
 
 \begin{table}[htb]
-	\caption{Valores óptimos de $\pf$ para la aproximación (\ref{phi_appox}), con $\qf=\pf$, como función de $\lvert\lvert \tau\overline{H} \rvert\rvert_\infty$ y la tolerancia deseada $\mathrm{RTol}$.}
+	\caption{Valores óptimos de $\pf$ para la aproximación (\ref{phi_appox}), con $\qf=\pf$, como función de $\lvert\lvert \frac{h_n}{90}\overline{H} \rvert\rvert_\infty$ y la tolerancia deseada $\mathrm{RTol}$. $\overline{H}$ denota la matriz de Hessenberg ampliada (\ref{hhat}).}
 	\begin{center}
 		\begin{tabular}{cccc}
 			\hline
-			$\lvert\lvert \tau\overline{H} \rvert\rvert_\infty \setminus RTol$ & $10^{-9}$ & $10^{-12}$ & $10^{-15}$ \\
+			$\lvert\lvert \frac{h_n}{90}\overline{H} \rvert\rvert_\infty \setminus RTol$ & $10^{-9}$ & $10^{-12}$ & $10^{-15}$ \\
 			\hline
 			$<1$ & 3 & 4 & 4 \\
 			$\geq 1$ & 4 & 5 & 6 \\
@@ -352,7 +353,7 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 \begin{table}[htb]
 	\centering
 	\caption{
-        Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\mf$, el $90\%$ límite de confianza $\Delta$ de $\widetilde {r}$, el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig3}.}
+        Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\mf$, el intervalo de $90\%$ de confianza $[\widetilde{r}-\varDelta,\widetilde{r}+\varDelta]$, el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig3}.}
 		\begin{tabular}{ c  c c c c  c  c c c c}
 			\hline
 			& \multicolumn{4}{c}{$\widehat{y}$} & & \multicolumn{4}{c}{$y$} \\
@@ -381,7 +382,7 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 \begin{table}[htb]
 	\centering
 	\caption{
-		Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\pf$, el $90\%$ límite de confianza $\Delta$ de $\widetilde {r}$, el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig2}.}
+		Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\pf$, el intervalo de $90\%$ de confianza $[\widetilde{r}-\varDelta,\widetilde{r}+\varDelta]$, el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig2}.}
 		\begin{tabular}{ c  c c c c  c  c c c c}
 			\hline
 			& \multicolumn{4}{c}{$\widehat{y}$} & & \multicolumn{4}{c}{$y$} \\
@@ -406,6 +407,10 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 \end{figure}
 
 \subsubsection{Simulaciones comparativas}
+\importantcodes{LLDP4: esquema Runge-Kutta Localmente Linealizado de Dromand y Prince de orden 4 y paso fijo}
+\importantcodes{LLDP5: esquema Runge-Kutta Localmente Linealizado de Dromand y Prince de orden 5 y paso fijo}
+\importantcodes{expms4: esquema exponencial de Adams de orden 4 y paso fijo}
+\importantcodes{expms5: esquema exponencial de Adams de orden 5 y paso fijo}
 Para este segundo conjunto de simulaciones, se consideraran los esquemas numéricos definidos en el Algoritmo \ref{alg:integratorfix} para las fórmulas (\ref{LLDPK scheme}) de orden $4$ y $5$ que se implementan, respectivamente, en los códigos \emph{LLDP4} y \emph{LLDP5}. Además, se considerará, el código \textquoteleft expms\textquoteright~con orden $4$ y $5$ disponible en \cite{jansing2011expode}, que proporciona una implementación de tamaño de paso fijo de orden $4$ y $5$ para el método exponencial de Adams~\cite{hochbruck2011exponential}; se denotaran estos códigos exponenciales como \emph{expms4} y \emph{expms5}, respectivamente.
 
 Para preservar el orden de convergencia de las fórmulas (\ref{LLDPK scheme}), se utilizaran los valores $m_{min}=3$ y $m_{min}=4$ en los códigos \emph{LLDP4} y \emph{LLDP5}, respectivamente, como lo indica el Teorema \ref{theorem:lldp-convergence}. Por el contrario, los códigos \emph{expms4} y \emph{expms5} no restringen los valores de $m_{min}$. Las tolerancias $RTol$ relativa y $ATol$ absoluta para calcular las aproximaciones de Krylov a $u_j$ se establecieron en $10^{-9}$ y $10^{-12}$, respectivamente.
@@ -540,7 +545,7 @@ Además, las tablas muestran la efectividad de la estrategia propuesta para la s
 \end{table}
 
 \section{Esquemas adaptativos con tamaño de paso variable}
-Para escribir un código que determine automáticamente el tamaños de paso lo suficientemente pequeños para obtener la precisión adecuada y lo suficientemente grandes para evitar trabajo computacional innecesario, es necesaria una estrategia adaptativa adecuada. Como se mostró en \cite{Jimenez14AMC}, el control del tamaño de paso automático de las fórmulas embebidas originales de Runge-Kutta de Dormand y Prince se adapta bien a las fórmulas embebidas (\ref{LLDPK scheme}) para PVI pequeños. Es fácil notar que con ciertas modificaciones relacionadas con la aproximación Krylov-Padé (\ref{eq:kp_aprox}), esta estrategia para la selección del tamaño del paso parece adecuada para las fórmulas embebidas (\ref{LLDPK scheme}) para PVI de dimensiones no pequeñas. A continuación, se describirá la estrategia adaptativa para las fórmulas embebidas (\ref{LLDPK scheme}).
+Para escribir un código que determine automáticamente el tamaños de paso lo suficientemente pequeños para obtener la precisión adecuada y lo suficientemente grandes para evitar trabajo computacional innecesario, es necesaria una estrategia adaptativa adecuada. Como se mostró en \cite{Jimenez14AMC}, el control del tamaño de paso automático de las fórmulas embebidas originales de Dormand y Prince se adapta bien a las fórmulas embebidas (\ref{LLDPK scheme}) para PVI pequeños. Es fácil notar que con ciertas modificaciones relacionadas con la aproximación Krylov-Padé (\ref{eq:kp_aprox}), esta estrategia para la selección del tamaño del paso parece adecuada para las fórmulas embebidas (\ref{LLDPK scheme}) para PVI de dimensiones no pequeñas. A continuación, se describirá la estrategia adaptativa para las fórmulas embebidas (\ref{LLDPK scheme}).
 
 \subsection{Estimación del tamaño de paso}\label{secc:stepsizes}
 Se denotará $h_{max}$ y $h_{min}$ como los tamaños de paso máximos y mínimos permisibles. La estimación de los tamaños de paso se calcula mediante las mismas expresiones utilizadas para las fórmulas originales de Dormand y Prince en el código de Matlab \textit{ode45} \cite{shampine1997matlab} y para las fórmulas embebidas en \cite{Jimenez14AMC}. Para el tamaño de paso inicial $h_0$, tenemos la estimación
@@ -745,10 +750,11 @@ Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \r
 \end{algorithm}}
 
 \subsection{Experimentos numéricos}\label{section:num-exp-lldp-var-step}
-Con este conjunto de simulaciones, se estudiará el desempeño del esquema adaptativo descrito en el Algoritmo \ref{alg:integrator} para las fórmulas embebidas (\ref{LLDPK scheme}). Con este propósito se implementó el código Matlab \emph{LLDP45}. Este código \emph{LLDP45} es una copia exacta del código \emph{ode45} \cite{shampine1997matlab} de Matlab18a con la excepción de las líneas del programa correspondientes a las fórmulas originales de Dormand y Prince y su error relativo, que fueron reemplazadas por las líneas 7 a 16 del Algoritmo \ref{alg:integrator} que implementan la evaluación de las fórmulas localmente linealizadas (\ref{LLDPK scheme}) con control de reutilización del Jacobiano. El código de Matlab \emph{ode45} implementa la estrategia de tamaño de paso variable descrita en la Sección \ref{secc:stepsizes} para las fórmulas embebidas de Runge-Kutta de Dormand y Prince. Para preservar el orden de convergencia establecido en el Teorema \ref{theorem:lldp-convergence} para las fórmulas embebidas (\ref{LLDPK scheme}), se establece $m_{min}=4$ en el código \emph{LLDP45}.
-
+\importantcodes{LLDP45: formulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas}
+Con este conjunto de simulaciones, se estudiará el desempeño del esquema adaptativo descrito en el Algoritmo \ref{alg:integrator} para las fórmulas embebidas (\ref{LLDPK scheme}). Con este propósito se implementó el código Matlab \emph{LLDP45}. Este código \emph{LLDP45} es una copia exacta del código \emph{ode45} \cite{shampine1997matlab} de Matlab18a con la excepción de las líneas del programa correspondientes a las fórmulas originales de Dormand y Prince y su error relativo, que fueron reemplazadas por las líneas 7 a 16 del Algoritmo \ref{alg:integrator} que implementan la evaluación de las fórmulas localmente linealizadas (\ref{LLDPK scheme}) con control de reutilización del Jacobiano. El código de Matlab \emph{ode45} implementa la estrategia de tamaño de paso variable descrita en la Sección \ref{secc:stepsizes} para las fórmulas embebidas de Dormand y Prince. Para preservar el orden de convergencia establecido en el Teorema \ref{theorem:lldp-convergence} para las fórmulas embebidas (\ref{LLDPK scheme}), se establece $m_{min}=4$ en el código \emph{LLDP45}.
+\importantcodes{ode15s: fórmulas diferenciales hacia atrás de orden variable 1-5}
 Los resultados del código \emph{LLDP45} en la integración de las ecuaciones de prueba de Sección \ref{section:test-eq} se compararán con los obtenidos por el código adaptativo \emph{ode15sk} con una implementación de tamaño de paso casi constante de las fórmulas diferenciales hacia atrás (BDF) hasta orden 5 y un método de subespacios de Krylov para resolver sistemas lineales de ecuaciones algebraicas. Para comparar con una implementación eficiente de estas fórmulas, este código \emph{ode15sk} es una copia exacta del código Matlab18a \emph{ode15s} \cite{shampine1997matlab} con la excepción de las líneas de programa correspondientes a los métodos directos (función Matlab \emph{mldivide}) para resolver sistemas lineales de ecuaciones algebraicas y la factorización LU, que fueron reemplazadas por el método Generalized Minimal Residual (GMRES) (función Matlab \emph{gmres} con tolerancia $RTol$) con \emph{ILU(0)} de precondicionador (función Matlab \emph{ilu}), donde \emph{ILU(0)} representa el método de factorización LU incompleto con 0 nivel de relleno. En la función de Matlab \emph{gmres}, se eliminaron las comprobaciones computacionalmente costosas de las funciones de Matlab \emph{iterchk} y \emph{iterapp}. El código \emph{ode15sk} conserva la estrategia del código Matlab \emph{ode15s} para la reutilización de la matriz Jacobiana, pero no la aproximación numérica computacionalmente costosa de matrices Jacobianas grandes que fue reemplazada por la evaluación exacta de estas matrices.
-
+\importantcodes{exp4: integrador exponencial de orden 4}
 Además, se compararán los resultados del código \emph{LLDP45} con los obtenidos por el código adaptativo \emph{exp4} tomado de \cite{jansing2011expode} que implementa el célebre integrador exponencial de orden 4 de \cite{hochbruck1998exponential} con tamaño de paso y dimensión Krylov variables. Para calcular las tres funciones $phi$ que aparecen en las fórmulas de integración \emph{exp4} en cada paso de integración, este código realiza tres aproximaciones del subespacio de Krylov y tres descomposiciones propias de la matriz de Hessenberg resultantes del Algoritmo de Arnoldi. El código \emph{exp4} no restringe el
 valor mínimo ($\mf_{min}$) que puede tomar la dimensión de los subespacios de Krylov.
 
@@ -1000,3 +1006,10 @@ Las Tablas \ref{tab:num-exp-lldp-var-step:cuspburg} - \ref{tab:num-exp-lldp-var-
 Además, las Tablas \ref{tab:num-exp-lldp-var-step:cuspburg}-\ref{tab:num-exp-lldp-var-step:brussdnd} muestran que la precisión del código \emph{exp4} es más cercana a la del código \emph{LLDP45} que a la del código \emph{ode15sk}. Sin embargo, el costo computacional del código \emph{exp4} es mucho más alto que el de los otros dos códigos. Esto se debe principalmente a la gran cantidad de pasos de integración (\textit{A-Steps} + \textit{R-Steps}), de aproximaciones del subespacio de Krylov (\textit{K-subspace}) y de iteraciones ($\mf_ {total}$) requerido por el código \emph{exp4} para integrar las ecuaciones de prueba.
 
 Finalmente es importante notar que, debido a la falta de precisión del código \emph{ode15sk} para integrar la ecuación CUSP, la solución ``exacta'' de esta ecuación en (\ref{num-exp-lldp-fix-step:ER}) se estima mediante la fórmula continua (\ref{continuousLLRK45}) del código \emph{LLDP45} con $RTol = 10^{-12}$, $ATol = 10^{-14}$, $\mf_{min} = \mf_{max} = 100$ y factor de seguridad $\gamma_J=\infty$ para la reutilización de la matriz Jacobiana en el Algoritmo \ref{alg:jaccontrol}.
+
+\subsubsection{Conclusiones}
+	La Aproximación Lineal Local de Orden Superior para EDO consiste en dividir en intervalos de tiempo consecutivos la solución de la ecuación original en una parte lineal , que es solución de la ecuación linealizada localmente, más una parte no lineal, que es solución de la representación diferencial del residuo. Combinando la aproximación Krylov-Padé con evaluación de Jacobiano, para aproximar la parte lineal, con las fórmulas embebidas Runge-Kutta de Dormand y Prince, para aproximar la parte no lineal, se construyeron nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas para problemas de valor inicial de dimensiones no pequeñas. Para estas nuevas fórmulas se derivaron cotas para los errores y condiciones de orden simples ya que las cotas dependen de la dimensión del subespacio de Krylov, del orden de Padé y del orden del esquema Runge-Kutta utilizado.
+	
+	Para estas formulas construidas se desarrollaron diversas estrategias. Como el costo computacional de evaluar el Jacobiano en cada paso de integración puede ser grande se desarrolló una estrategia para su reutilización, donde bajo un criterio de error se decide si es posible utilizar el Jacobiano de pasos anteriores o es necesario volver a evaluarlo. Basado en la estrategia de selección de la dimensión de Krylov y el orden de Padé propuesta en el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se desarrolló una estrategia específica para este estas nuevas fórmulas embebidas. Además desarrolló una estrategia adaptativa para la selección del tamaño de paso de integración.
+	
+	Con la aplicación de estas estrategias a las nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas se implementaron esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Mediante la integración de diferentes ecuaciones  se comprobó la eficacia de esos nuevos esquemas y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, un número menor de pasos de integración.

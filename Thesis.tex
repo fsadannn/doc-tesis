@@ -9,11 +9,14 @@
 \captionsetup{
 	justification = centering
 }
+\usepackage[subfigure]{tocloft}
 %\usepackage{mathpazo}
 \usepackage{float}
 % \usepackage{todonotes}
 \usepackage{adjustbox}
 \usepackage{qtree}
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc,positioning,babel}
 
 \floatstyle{plaintop}
 \restylefloat{table}
@@ -22,6 +25,39 @@
 \renewcommand{\listalgorithmcfname}{Índice de Algoritmos}%
 %\dontprintsemicolon
 \SetAlgoNoEnd
+
+% list of definitions
+\newcommand{\listdefinitions}{Índice de definiciones}
+\newlistof{importantdefinition}{mcf}{\listdefinitions}
+
+% Reset section numbering between unnumbered chapters
+% https://tex.stackexchange.com/questions/71162/reset-section-numbering-between
+\newcommand{\importantdefinition}[1]
+{%
+	\refstepcounter{importantdefinition}
+	\addcontentsline{mcf}{importantdefinition}
+	{\protect #1}\par
+%	{\protect\numberline{\theimportantdefinition}#1}\par
+}
+
+% end of list of definitions
+
+
+% list of Codes
+\newcommand{\listcodes}{Índice de Códigos}
+\newlistof{importantcodes}{mcfc}{\listcodes}
+
+% Reset section numbering between unnumbered chapters
+% https://tex.stackexchange.com/questions/71162/reset-section-numbering-between
+\newcommand{\importantcodes}[1]
+{%
+	\refstepcounter{importantcodes}
+	\addcontentsline{mcfc}{importantcodes}
+	{\protect #1}\par
+	%	{\protect\numberline{\theimportantdefinition}#1}\par
+}
+
+% end of list of definitions
 
 
 \title{Métodos de Linealización Local de Orden Superior para problemas de valor inicial de dimensiones no pequeñas}
@@ -56,6 +92,33 @@
 \newcommand{\redmark}[1]{\textcolor{black}{#1}}
 \newcommand{\bluemark}[1]{\textcolor{black}{#1}}
 \newcommand{\mmark}[1]{\textcolor{black}{#1}}
+\newcommand{\lmatrix}{\mathtt{L}}
+\newcommand{\rvector}{\mathtt{r}}
+
+% marker tikz in qtree
+\makeatletter
+\newcommand{\myLines}[1]{% Three-way only
+	\begin{picture}(1,1)
+	%	\put(0,0){\line(2,1){2}}
+	%	\put(1,0){\vector(0,1){0.7}}
+	%	\put(4,0){\line(-2,1){2}}
+\end{picture}}
+\let\qdrawReal=\qdraw@branches
+\newcommand\brOverride{\let\qdraw@branches=\myLines}
+
+\makeatletter
+\newcommand{\myLiness}[1]{% Three-way only
+	\begin{picture}(4,1)
+		\put(0,0){\line(2,1){2}}
+		%\put(1,0){\vector(0,1){0.7}}
+		\put(4,0){\line(-2,1){2}}
+\end{picture}}
+\let\qdrawReal=\qdraw@branches
+\newcommand\brOverridedd{\let\qdraw@branches=\myLiness}
+
+\newcommand\brRestore{\let\qdraw@branches=\qdrawReal}
+\makeatother
+
 
 \begin{document}
 

@@ -84,6 +84,7 @@ donde
 Aplicando recursivamente la expresión anterior obtenemos la siguiente
 definición.
 
+\importantdefinition{Discretización Lineal Local}
 \begin{definition}
 	\label{definition LLD} Dada una partición $(t)_{h}$, la discretización Lineal Local de la solución de (\ref{ODE-SYST}) está dada por la expresión recursiva
 	\begin{equation}
@@ -93,6 +94,7 @@ definición.
 \end{definition}
 
 Para todo $t\in[t_{0},T]$ se define la siguiente aproximación.
+\importantdefinition{Aproximación Lineal Local}
 \begin{definition}
 	\label{definition LLA} Dada una partición $(t)_{h}$, la aproximación
 	Lineal Local de la solución de (\ref{ODE-SYST}) está dada por 
@@ -106,17 +108,17 @@ Para todo $t\in[t_{0},T]$ se define la siguiente aproximación.
 
  La convergencia, la estabilidad lineal y varias propiedades dinámicas de  la discretización Lineal Local (\ref{ODE-LLA-4}) se pueden encontrar en \cite{Jimenez02AMC}. 
  
- Obsérvese que $\phi(t_{n},x(t_n);h_n)$ en la discretización Lineal Local (\ref{ODE-LLA-4}) representa la primera integral de la \bluemark{expresión (\ref{VCF-full})}. De esta forma la integral de la expresión (\ref{VCF}) representa el residuo de dicha aproximación a la solución de la ecuación diferencial (\ref{ODE-SYST}).
+ Obsérvese que $\phi$ en la discretización Lineal Local (\ref{ODE-LLA-4}) representa la primera integral de la \bluemark{expresión (\ref{VCF-full})}. De esta forma la integral de la expresión (\ref{VCF}) representa el residuo de dicha aproximación a la solución de la ecuación diferencial (\ref{ODE-SYST}).
 \subsection{Aproximación Lineal Local de Orden Superior}
 
 La estabilidad y las propiedades dinámicas que la discretización Lineal Local (\ref{ODE-LLA-4}) posee son de vital importancia para la integración de EDOs, no obstante su bajo orden de convergencia constituye una limitante en algunas circunstancias. Para solucionar esa dificultad se construyen los métodos de Linealización Local de Orden Superior los cuales retienen las propiedades mencionadas, pero con orden de convergencia mayor. 
 
-Estos métodos de Linealización Local de Orden Superior se obtienen de agregar a la aproximación Lineal Local~(\ref{ODE-REV-FORM-LLA}) un término adicional $\widetilde{r}$ que resulta de aproximar, con un orden superior a 2, la integral de la expresión~(\ref{VCF}) por algún método de cuadratura o por la solución numérica de la representación diferencial de la integral~(\ref{VCF}) que se obtiene derivándola con respecto a t~\cite{delaCruz06}. \bluemark{Utilizando} diferentes tipos de cuadraturas para aproximar~(\ref{VCF}) se obtienen los métodos Exponenciales de Propagación 
+Estos métodos de Linealización Local de Orden Superior se obtienen de agregar a la aproximación Lineal Local~(\ref{ODE-REV-FORM-LLA}) un término adicional $\widetilde{r}$ que resulta de aproximar, con un orden superior a 2, la integral de la expresión~(\ref{VCF}) por algún método de cuadratura o por la solución numérica de la representación diferencial de la integral~(\ref{VCF})~\cite{delaCruz06}. \bluemark{Utilizando} diferentes tipos de cuadraturas para aproximar~(\ref{VCF}) se obtienen los métodos Exponenciales de Propagación 
 Iterativa~\cite{tokman2006efficient}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
 métodos Exponenciales tipo Rosenbrok~\cite{hochbruck2009exponential} y los métodos Exponenciales tipo Adams~\cite{hochbruck2011exponential}. Por otra parte, \bluemark{utilizando} esquemas Runge Kutta (RK) para resolver la mencionada ecuación diferencial se obtienen los métodos Runge-Kutta Localmente Linealizados~\cite{delaCruz06,Jimenez13,Jimenez14AMC}.
 
 Por su relevancia en esta tesis, a continuación se expondrá con mas detalle los métodos Runge-Kutta Localmente Linealizados. 
-
+\importantdefinition{Aproximación Lineal Local de Orden Superior}
 Dada una partición $(t)_{h}$, una aproximación Lineal Local de orden $%
 \gamma$ de la solución de (\ref{ODE-SYST}) se define por la expresión~\cite{Jimenez13}
 \begin{equation}
@@ -134,9 +136,10 @@ q(t_n,y_n,s,\varsigma)&=&f(s,y_n+\phi(t_n,y_n;s-t_n)+\varsigma)-f_x(t_n,y_n)\phi
 % & &-f_t(t_n,y_n)(s-t_n) -f(t_n,y_n) ,
 %\label{AUX-ODE}
 \end{eqnarray*}
-con $s\in [t_{n},t_{n+1})$ y $\varsigma \in \mathbb{R}^d $. 
+con $s\in [t_{n},t_{n+1})$ y $\varsigma \in \mathbb{R}^d $. Aquí, la ecuación (\ref{ODE r}) resulta de derivar (\ref{VCF}) con respecto a t. 
 
 Cuando $\widetilde{r}$ en (\ref{ODE-REV-HOLL})  es la aproximación obtenida mediante un esquema Runge-Kutta de orden $\gamma$ se llega a las definiciones siguientes.
+\importantdefinition{Discretización Lineal Local Runge-Kutta}
 \begin{definition}
 	\label{definition HLLD} \cite{Jimenez13} Dada una partición $(t)_{h}$, la discretización Lineal Local Runge-Kutta 
     de orden $\gamma >2$ se define por la expresión recursiva:
@@ -146,7 +149,7 @@ Cuando $\widetilde{r}$ en (\ref{ODE-REV-HOLL})  es la aproximación obtenida med
 	\end{equation*}%
 	con $y_{0}=x_{0}$, donde las constantes $b_{j}$ y las funciones $k_{j}$ están definidas por el método Runge-Kutta de $s$ estados aplicado a la ecuación~(\ref{ODE r}).
 \end{definition}
-
+\importantdefinition{Aproximación Lineal Local Runge-Kutta}
 \begin{definition}
 	\label{definition HOLLA} \cite{Jimenez13} Dada una partición $(t)_{h}$, la aproximación Lineal Local Runge-Kutta de orden $\gamma$ se define por 
 	\begin{equation*}
@@ -205,24 +208,37 @@ y coeficientes Runge-Kutta $a_{j,i}$, $b_j$, $\hat{b}_j$ y $c_j$ definidos en Ta
 	\end{center}
 \end{table}
 
-En síntesis, a la clase de métodos de Linealización Local de Orden Superior pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución $u$ de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r = x-u$ proporcionada por un integrador numérico de orden alto.
-
-\bluemark{
+En síntesis, a la clase de métodos de Linealización Local de Orden Superior pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución $u$ de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r = x-u$ proporcionada por un integrador numérico de orden alto. La Figura \ref{fig:ll-graph} muestra una representación gráfica de esta explicación. 
+\begin{figure}
+%	\qtreeshowframes
 	\begin{center}
-		\leaf{\small Aproximación numérica}
+		\leaf{\small \tikzmark{c} Aproximación $\widetilde{u}$  \tikzmark{d} }
 		\branch{1}{\small EDO lineal asociada a $u$\\$\frac{du(t)}{dt} = a(x(t_n);u(t))$\\$u(t_n)=x(t_n)$\\$a(x_n;\xi) = f_x(x_n)(\xi-x_n)+f(x_n)$}
-		\leaf{\small Aproximación numérica}
+		\brOverride
+		\leaf{ \tikzmark[top]{a} $\widetilde{y}_{n+1} = \widetilde{u}(t_{n},\widetilde{y}_n)+\widetilde{r}(t_{n},\widetilde{y}_n)$  \tikzmark[top]{b}\\
+		$\widetilde{y_0}=x(t_0)$}
+		\branch{1}{ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\}
+		\brRestore
+		\leaf{\small \tikzmark{e} Aproximación $\widetilde{r}$ \tikzmark{f}}
 		\branch{1}{\small EDO no lineal asociada a $r$\\$\frac{dr(t)}{dt} = q(x(t_n);t,r(t))$\\$r(t_n)=0$\\
 			$q(x_n;s,\xi)=f(u(s;x_n)+\xi)$\\
-			\hskip 1.0in $-f_x(x_n)(u(s;x_n)-x_n)$\\
-			\hskip 0.14in$-f(x_n)$
+			 $-f_x(x_n)(u(s;x_n)-x_n)$\\
+			$-f(x_n)$
 		}
-		\branch{2}{$ x(t_{n+1}) = u(t_{n+1},x_n)+r(t_{n+1},x(t_n)),\; t\in[t_{n},t_{n+1}]$}
-		\branch{1}{\footnotesize $\frac{dx}{dt}=f(x(t_n))+f_x(x(t_n))(x(t)-x(t_n))+\left[ f(x(t))-f(x(t_n))-f_x(x(t_n))(x(t)-x(t_n))  \right]$\\$x(t_0)=x_0$}
-		\branch{1}{$\frac{dx}{dt}=f(x),\; x(t_0)=x_0$}
+		\brOverridedd
+		\branch{3}{$ x(t_{n+1}) = u(t_{n},x(t_n))+r(t_{n},x(t_n))$}
+		\brRestore
+		\branch{1}{\footnotesize $\frac{dx}{dt}=f(x(t_n))+f_x(x(t_n))(x(t)-x(t_n))+\left[ f(x(t))-f(x(t_n))-f_x(x(t_n))(x(t)-x(t_n))  \right]$\\$ t\in[t_{n},t_{n+1}]$}
+		\branch{1}{$\frac{dx}{dt}=f(x),\; x(t_0)=x_0\;,\; t\geq t_0$}
 		\qobitree
 	\end{center}
-}
+	\begin{tikzpicture}[overlay, remember picture]
+		\draw [-, shorten >=22pt, shorten <=10pt] ($(pic cs:c)!1/2!(pic cs:d)$) -- ($(pic cs:a)!1/2!(pic cs:b)$);
+		\draw [-, shorten >=28pt, shorten <=12pt] ($(pic cs:e)!1/2!(pic cs:f)$) -- ($(pic cs:a)!1/2!(pic cs:b)$);
+	\end{tikzpicture}
+	\caption{Representación gráfica de la descomposicion Lineal Local (\ref{VCF-full}) de la solución x de una ecuacion diferencial ordinaria, y de un esquema de  Linealización Local de Orden Superior $\widetilde{y}_{n+1}$.}
+	\label{fig:ll-graph}
+\end{figure}
 
 
 \subsection{Esquemas de Linealización Local}
@@ -233,6 +249,7 @@ estar expresadas en término de integrales o ecuaciones diferenciales que en gen
 calculadas analíticamente. Dependiendo de la forma de calcular  numéricamente esas integrales,
  diferentes esquemas numéricos pueden ser obtenidos \cite{Jimenez05AMC,Jimenez13}.
  Más precisamente tenemos la siguiente definición.
+ \importantdefinition{Esquema de Linealización Local}
 \begin{definition}
 	\label{definition LLS} Dada la discretización Lineal Local 
 	  $y_n=y_{n}+\digamma(t_{n},y_{n},t-t_{n})$
@@ -246,8 +263,8 @@ calculadas analíticamente. Dependiendo de la forma de calcular  numéricamente 
 	de $\digamma$ mediante un algoritmo numérico, es
 	llamada genéricamente esquema de Linealización Local (LL).
 \end{definition}
-
-Regularmente, en la literatura, la implementación numérica de la discretización Lineal Local~(\ref{ODE-LLA-4}) se denomina simplemente esquema de Linealización Local, mientras que la implementación numérica de una aproximación de orden superior como la~(\ref{ODE-REV-HOLL}) se denomina esquema de Lineal Local de Orden Superior (LLOS).
+\importantdefinition{Esquema de Linealización Local de Orden Superior}
+Regularmente, en la literatura, la implementación numérica de la discretización Lineal Local~(\ref{ODE-LLA-4}) se denomina simplemente esquema de Linealización Local, mientras que la implementación numérica de una aproximación de orden superior como la~(\ref{ODE-REV-HOLL}) se denomina esquema de Linealización Local de Orden Superior (LLOS).
 
 Por ejemplo, cuando la fórmula de Padé con escalamiento y potenciación para exponenciales matriciales \cite{moler2003nineteen} es utilizada para
 aproximar $\phi$ en la discretización Lineal Local~(\ref{ODE-LLA-4}) se obtiene el esquema LL de orden $2$ \cite{Jimenez02AMC}:
@@ -255,11 +272,11 @@ aproximar $\phi$ en la discretización Lineal Local~(\ref{ODE-LLA-4}) se obtiene
 \widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\phi}\left( t_{n},\widetilde{y}_{n};h_{n}\right) \label{LL-scheme}
 \end{equation} 
 donde $\widetilde{\phi }\left( t_{n},\widetilde{y}
-_{n},h_{n}\right) =L\,(P_{\pf,\qf}(2^{-k_{n}}\widetilde{M}_{n}h_{n}))^{2^{k_{n}}}\,r$, 
+_{n},h_{n}\right) =\lmatrix\,(P_{\pf,\qf}(2^{-k_{n}}\widetilde{M}_{n}h_{n}))^{2^{k_{n}}}\rvector$, 
 $(P_{\pf,\qf}(2^{-k_{n}}\widetilde{M}_{n}h_{n}))^{2^{k_{n}}}$ es la aproximación
 de Padé de orden $(\pf,\qf)$ de  $\me{\widetilde{M}_{n}h_{n}}$, donde
 $k$ es el menor número natural tal que $\left\Vert 2^{-k_{n}}\widetilde{M}_{n}h_{n}\right\Vert \leq \frac{1}{2}$, 
-y las matrices $\widetilde{M}_{n}$, $L$, $r$ están definidas como
+y las matrices $\widetilde{M}_{n}$, $\lmatrix$, $\rvector$ están definidas como
 
 \begin{equation*}
 \widetilde{M}_{n}=\left[ 
@@ -272,11 +289,11 @@ _{t}(t_{n},\widetilde{y}_{n}) & f(t_{n},\widetilde{
 \end{array}%
 \right] \in \mathbb{R}^{(d+2)\times (d+2)},
 \end{equation*}%
-$L=\left[ 
+$\lmatrix=\left[ 
 \begin{array}{ll}
 I_{d} & 0_{d\times 2}%
 \end{array}%
-\right] $ y $r^{\intercal }=\left[ 
+\right] $ y $\rvector^{\intercal }=\left[ 
 \begin{array}{ll}
 \mathbf{0}_{1\times (d+1)} & 1%
 \end{array}%
@@ -290,17 +307,17 @@ f_{x}(t_{n},\widetilde{y}_{n}) & f(t_{n},%
 \end{array}%
 \right] \in \mathbb{R}^{(d+1)\times (d+1)},
 \end{equation*}%
-$L=\left[ 
+$\lmatrix=\left[ 
 \begin{array}{ll}
 I_{d} & 0_{d\times 1}%
 \end{array}%
-\right] $ y $r^{\intercal }=\left[ 
+\right] $ y $\rvector^{\intercal }=\left[ 
 \begin{array}{ll}
 \mathbf{0}_{1\times d} & 1%
 \end{array}%
 \right] $ para ecuaciones autónomas.
 
-Por otra parte, cuando la mencionada aproximación de Padé se utiliza para aproximar las $\phi_j$ en las discretizaciones~(\ref{LL-scheme-4}) y~(\ref{LLDP-scheme-dp}) se obtienen los esquemas LLOS propuestos en \cite{Jimenez13,Jimenez14AMC} orientados a resolver problemas de valor inicial de dimensiones pequeñas. La Figura ? muestra una representación gráfica resumida de como se construyen esquemas LLOS en general. 
+Por otra parte, cuando la mencionada aproximación de Padé se utiliza para aproximar $\phi$ y $\phi_j$ en las discretizaciones~(\ref{LL-scheme-4}) y~(\ref{LLDP-scheme-dp}) se obtienen los esquemas LLOS propuestos en \cite{Jimenez13,Jimenez14AMC} orientados a resolver problemas de valor inicial de dimensiones pequeñas. La Figura \ref{fig:ll-graph} muestra una representación gráfica resumida de como se construyen esquemas LLOS en general. 
 
 \section{Cálculo de la exponencial de una matriz}
 
@@ -325,7 +342,7 @@ y potenciación para matrices pequeñas y densas, y el de los subespacios de Kry
 
 
 \subsection{Aproximación de Padé}\label{section:pade-approx}
-
+\importantdefinition{Aproximación de Padé}
 \begin{definition}
     \cite{golub2013matrix}~La aproximación racional de Padé $P_{\pf,\qf}(z)$
     de $\me{z}$ está dada por 
@@ -400,7 +417,7 @@ propios~\cite{golub2013matrix}.
 Es importante destacar que en la mayoría de los integradores exponenciales
  no se necesita el cálculo de la matriz $\me{A}$ completa, sino
 el producto $\me{A}b$ donde $b$ es un vector determinado. Por ejemplo, la solución del problema de valor inicial homogéneo $\dot{x}(t)=Ax(t),\;x(0)=x_0$, es $x(t)=\me{At}x_0$ en forma de producto exponencial de matriz y vector. 
-
+\importantdefinition{$\mf$-ésimo subespacio de Krylov}
 \begin{definition}
         \cite{Saad92} Para $\mf\geq 1$, el $\mf$-ésimo subespacio de Krylov de la matriz $A\in\mathbb{C}^{N\times N}$
     y el vector $b\in\mathbb{C}^{N}$ se define como
