@@ -195,10 +195,11 @@ $\widetilde{k}_1\equiv 0$, $c=[0,1/2,1/2,1]$ y condición de orden  (\ref{order 
 De acuerdo con las definiciones anteriores, se puede obtener un esquema de tercer orden a partir de (\ref{JFLLRK3}) utilizando la diferencia finita hacia adelante de primer orden como aproximaciones $g_1$ y $g_2$, y estableciendo $\beta=\alpha_1 =\alpha_2=1$. De manera similar, se puede obtener un esquema de cuarto orden a partir de (\ref{JFLLRK4}) utilizando la diferencia finita hacia adelante de primer y segundo orden como aproximaciones $g_1$ y $g_2$, respectivamente, y estableciendo $\beta= \alpha_1=1,5$ y $\alpha_2=0,5$. Los valores de $\mf,\pf,\qf$ en los esquemas mencionados se pueden estimar adaptativamente en cada paso de integración como se indica en la Sección \ref{section:approx-non-auto} y cumpliendo la condición de orden correspondiente.
 
 \subsection{Experimentos numéricos}
+\importantcodes{JF-LLRK: esquema Runge-Kutta Localmente Linealizado libre de Jacobiano de orden variable y paso fijo}
 \importantcodes{JF-LLRK4: esquema Runge-Kutta Localmente Linealizado libre de Jacobiano de orden 4 y paso fijo}
-\importantcodes{BDF4: fórmula diferencial hacia atrás de orden 4 libre de Jacobiano y paso fijo}
-\importantcodes{JF-Exp4: integrador exponencial de orden 4 libre de Jacobiano y paso fijo}
-\importantcodes{JF-EPIRK4: integrador exponencial de propagación iterativa tipo Rungge-Kutta de orden 4 libre de Jacobiano y paso fijo}
+\importantcodes{BDF4: esquema para la fórmula diferencial hacia atrás de orden 4 libre de Jacobiano y paso fijo}
+\importantcodes{JF-Exp4: esquema exponencial de orden 4 libre de Jacobiano y paso fijo}
+\importantcodes{JF-EPIRK4: esquema exponencial de propagación iterativa tipo Rungge-Kutta de orden 4 libre de Jacobiano y paso fijo}
 Se implementó el esquema LLRK libre de Jacobiano (\ref{JFLLRK4}) en un código Matlab flexible \textit{JF-LLRK} con parámetros variables. Con este código, se realizaron experimentos numéricos que ilustran los resultados de convergencia discutidos anteriormente. También se utilizó la expresión (\ref{JFLLRK4}) para implementar el código de Matlab \textit{JF-LLRK4} con el esquema LLRK libre de Jacobiano de cuarto orden mencionado en la sección anterior, es decir, con diferencias finitas de primer y segundo orden como aproximaciones $g_1$ y $g_2$, $\beta=\alpha_1=1.5$ y $\alpha_2=0.5$. Para ilustrar el potencial de la nueva clase de integradores, en un segundo conjunto de simulaciones, se comparará el rendimiento del código \textit{JF-LLRK4} con el de los códigos Matlab \textit{BDF4} y \textit{JF-Exp4}, que son implementaciones libres de Jacobiano de la fórmula diferencial hacia atrás de cuarto orden \cite{hairer1993solving} y el integrador exponencial de cuarto orden (5.8) de \cite{hochbruck1998exponential}. Esta comparación también incluye la implementación libre de Jacobiano \textit{JF-EPIRK4} del método de cuatro orden de paso constante \textit{EPIRK4} \cite{rainwater2016new} considerado en \cite{einkemmer2017performance}, que usa el código Matlab \textit {phipm} de \cite{niesen2012algorithm} para calcular la combinación lineal de productos  la función phi por vector y la diferencia finita hacia adelante para aproximar los productos del Jacobiano por un vector. Para una comparación justa, el valor de $\delta$ para calcular la diferencia finita en los códigos \textit{BDF4}, \textit{JF-Exp4} y \textit{JF-EPIRK4} se establece como en el código \textit {JF-LLRK4}, es decir, $\delta=h^{1.5}$. Es importante recalcar nuevamante que, en principio, desde un punto de vista práctico, la matriz Jacobiana exacta o su producto con un vector en cualquier integrador numérico puede ser reemplazada por una aproximación pero, desde un punto de vista teórico, esa aproximación conduce a muchos cambios importantes en las propiedades de integrador original (tales como orden de convergencia, condición de orden y estabilidad) que distorsionan notablemente el desempeño del integrador original en la práctica \cite{hairer1993solving,hochbruck1998exponential, tranquilli2014rosenbrock}. Por lo tanto, para las comparaciones, se utilizaron los tres métodos libre de Jacobianos mencionados anteriormente que han sido considerados previamente en la literatura (consulte, por ejemplo, las Secciones 3.2 y 7.3 en \cite{hochbruck1998exponential}, la Sección 6 en \cite{einkemmer2017performance} y sus referencias) y no otros que podrían derivarse directamente de un simple reemplazo de la acción de la matriz Jacobiana por alguna aproximación.
 
 
@@ -208,7 +209,7 @@ En este primer conjunto de simulaciones, con el código \textit{JF-LLRK}, se eva
 \begin{figure}[htb]
 	\centering
 	\subfigure{\includegraphics[width=0.95\textwidth]{Graphics/lldp-fj/mp_new.png}}
-	\caption{Gráfico Log-log de error ${e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty}$ contra $h_i$ integrando la ecuación del Ejemplo \ref{ex:Brus} con el esquema (\ref{JFLLRK4}), fijados $\eta_1=\eta_2=2$, $\alpha_1=\alpha_2$=0.5, $\beta=1$ y $h_i=2^{-i}$, $i=7,8,9,10,11$, y : Izquierda, $\mf=1,2,3$, $\pf=2$; y Derecha, $\pf=1,2,3$, $\mf=3$.} \label{Fig1}
+	\caption{Gráfico Log-log de error ${e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty}$ contra $h_i$ integrando la ecuación del Ejemplo \ref{ex:Brus} con el código \textit{JF-LLRK}, fijando $\eta_1=\eta_2=2$, $\alpha_1=\alpha_2$=0.5, $\beta=1$ y $h_i=2^{-i}$, $i=7,8,9,10,11$, y : Izquierda, $\mf=1,2,3$, $\pf=2$; y Derecha, $\pf=1,2,3$, $\mf=3$.} \label{Fig1}
 \end{figure}
 
 \begin{table}[htb]
@@ -240,7 +241,7 @@ Análogamente, las Figuras \ref{Fig2}, \ref{Fig3} y las Tablas \ref{tab:out}, \r
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.95\textwidth]{Graphics/lldp-fj/out_new.png}
-	\caption{Gráfico Log-log de error $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ contra $h_i$ integrando la ecuación del Ejemplo \ref{ex:Brus} con el esquema (\ref{JFLLRK4}), fijados $\mf=14$, $\pf=4$, $\eta_1=2$, $\alpha_1$=0.5, $\beta=1$, y: Izquierda, $\eta_2=1$, $\alpha_2$=0,0.5,1,1.5, $h_i=2^{-i}$, $i=7,8,9,10$ y Derecha, $\eta_2=2$, $\alpha_2$=0,0.125,0.25,0.5, $h_i=2^{-i}$, $i=5,6,7,8,9$.}
+	\caption{Gráfico Log-log de error $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ contra $h_i$ integrando la ecuación del Ejemplo \ref{ex:Brus} con el código \textit{JF-LLRK}, fijando $\mf=14$, $\pf=4$, $\eta_1=2$, $\alpha_1$=0.5, $\beta=1$, y: Izquierda, $\eta_2=1$, $\alpha_2$=0,0.5,1,1.5, $h_i=2^{-i}$, $i=7,8,9,10$ y Derecha, $\eta_2=2$, $\alpha_2$=0,0.125,0.25,0.5, $h_i=2^{-i}$, $i=5,6,7,8,9$.}
 	\label{Fig2}
 \end{figure}
 
@@ -269,7 +270,7 @@ Análogamente, las Figuras \ref{Fig2}, \ref{Fig3} y las Tablas \ref{tab:out}, \r
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.95\textwidth]{Graphics/lldp-fj/in_new.png}
-	\caption{Gráfico Log-log de error $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ contra $h_i$ integrando la ecuación del Ejemplo \ref{ex:Brus} con el esquema (\ref{JFLLRK4}), fijados $\mf=14$, $\pf=4$, $\eta_2=2$, $\alpha_2=1$, $h_i=2^{-i}$, $i=5,6,7,8,9$, y: Izquierda, $\alpha_1=0,1,2$ para $\eta_1=1,\beta=1$; Derecha, $\alpha_1$=0.5,1,1.5 para $\eta_1=2,\beta=0$.}
+	\caption{Gráfico Log-log de error $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ contra $h_i$ integrando la ecuación del Ejemplo \ref{ex:Brus} con el código \textit{JF-LLRK}, fijando $\mf=14$, $\pf=4$, $\eta_2=2$, $\alpha_2=1$, $h_i=2^{-i}$, $i=5,6,7,8,9$, y: Izquierda, $\alpha_1=0,1,2$ para $\eta_1=1,\beta=1$; Derecha, $\alpha_1$=0.5,1,1.5 para $\eta_1=2,\beta=0$.}
 	\label{Fig3}
 \end{figure}
 
@@ -304,7 +305,7 @@ Para cada ecuación de prueba, los resultados de la integración numérica se si
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=1\textwidth]{Graphics/lldp-fj/Diagram_new.jpg}
-	\caption{Diagramas comparativos de precisión contra tiempo en escala log-log para cada uno de los cuatro códigos en la integración delas cuatro ecuaciones de prueba.} \label{work-precision diagram}
+	\caption{Diagramas comparativos de precisión contra tiempo en escala log-log para cada uno de los cuatro códigos de paso fijo en la integración de las cuatro ecuaciones de prueba. $\vartriangle$: código \emph{BDF4}, $\triangledown$: código \emph{JF-EPIRK4},  $\circ$ : código \emph{JF-Exp4}, y $\square$: código \emph{JF-LLRK4}} \label{work-precision diagram}
 \end{figure}
 
 Para cada código, las Tablas \ref{tab:br}-\ref{tab:gs2d} presentan el tamaño del paso \textit{h}, el número de pasos \textit{Pasos}, el número de evaluaciones del campo vectorial \textit{f-Eval}, el número de aproximaciones del subespacio Krylov \textit{K-subspace} a los productos de la función phi por un vector, el número de sistemas lineales en el código \textit{BDF4} resuelto por el método General Minimal Residue \textit {GMRES}, y el número de aproximaciones de Padé \textit{Padé} requeridas por los tres integradores exponenciales. Además, la dimensión mínima $\mf_{min}$, máxima $\mf_{max}$ y total $\mf_{total}$ de los subespacios de Krylov requerida por los códigos \textit{JF-LLRK4}, \textit{JF-Exp4} y \textit{JF-EPIRK4} para integrar las ecuaciones de prueba en todo el intervalo de integración también se especifica. Para el código \emph{BDF4}, $\mf_{min}$, $\mf_{max}$ y $\mf_{total}$ representan el número mínimo, máximo y total de iteraciones realizadas por el método GMRES sobre todo el intervalo de integración. En las tablas $d$ especifica el número de ecuaciones de cada ejemplo de prueba.
@@ -316,7 +317,7 @@ El código \textit{JF-EPIRK4} requiere de las mismas descomposiciones de Krylov 
 Para resolver los sistemas algebraicos no lineales, en cada paso de integración, el código \textit{BDF4} emplea el método clásico de Newton junto con el método General Minimal Residue (GMRES) (función de Matlab \textit{gmres} con tolerancia $RTol=10^{-6}$) y la diferencia finita hacia adelante de primer orden como una aproximación al producto de la matriz Jacobiana por vector. En la función de Matlab \textit{gmres}, se eliminaron las comprobaciones computacionalmente costosas de las funciones de Matlab \textit{iterchk} y \textit{iterapp}.
 
 \begin{table}[htb]
-	\caption{Desempeño de los códigos en la integración de la ecuación Brusselator con $M=100$, $d=200$.}
+	\caption{Desempeño de los códigos de paso fijo \textit{JF-LLRK4}, \textit{JF-Exp4}, \textit{JF-EPIRK4} y \textit{BDF4} en la integración de la ecuación Brusselator con $M=100$, $d=200$.}
 	\centering
 	\begin{adjustbox}{width=0.9\columnwidth,center}
 		\begin{tabular}{cccccccccc}
@@ -372,7 +373,7 @@ Para resolver los sistemas algebraicos no lineales, en cada paso de integración
 
 
 \begin{table}[htb]
-	\caption{Desempeño de los códigos en la integración de la ecuación Brusselator 2D con $M=40$, $d=3200$.}
+	\caption{Desempeño de los códigos de paso fijo \textit{JF-LLRK4}, \textit{JF-Exp4}, \textit{JF-EPIRK4} y \textit{BDF4} en la integración de la ecuación Brusselator 2D con $M=40$, $d=3200$.}
 	\centering
 	\begin{adjustbox}{width=0.9\columnwidth,center}
 		\begin{tabular}{cccccccccc}
@@ -426,7 +427,7 @@ Para resolver los sistemas algebraicos no lineales, en cada paso de integración
 \end{table}
 
 \begin{table}[htb]
-	\caption{Desempeño de los códigos en la integración de la ecuación Burger's con $M=400$, $d=400$.}
+	\caption{Desempeño de los códigos de paso fijo \textit{JF-LLRK4}, \textit{JF-Exp4}, \textit{JF-EPIRK4} y \textit{BDF4} en la integración de la ecuación Burger's con $M=400$, $d=400$.}
 	\centering
 	\begin{adjustbox}{width=0.9\columnwidth,center}
 		\begin{tabular}{cccccccccc}
@@ -481,7 +482,7 @@ Para resolver los sistemas algebraicos no lineales, en cada paso de integración
 
 
 \begin{table}[htb]
-	\caption{Desempeño de los códigos en la integración de la ecuación Gray-Scott 2D con $M=20$, $d=800$.}
+	\caption{Desempeño de los códigos de paso fijo \textit{JF-LLRK4}, \textit{JF-Exp4}, \textit{JF-EPIRK4} y \textit{BDF4} en la integración de la ecuación Gray-Scott 2D con $M=20$, $d=800$.}
 	\centering
 	\begin{adjustbox}{width=0.9\columnwidth,center}
 		\begin{tabular}{cccccccccc}
@@ -594,14 +595,14 @@ En esta sección, se propone una implementación adaptativa de las fórmulas emb
 
 {\SetAlgoNoLine
 	\begin{algorithm}[htb]
-		\caption{Esquema Libre de Jacobiano de orden, tamaño de paso, dimensión de Krylov y orden de Padé variables}
+		\caption{Algoritmo del esquema libre de Jacobiano de orden, tamaño de paso, dimensión de Krylov y orden de Padé variables para las fórmulas embebidas (\ref{Jacobian-free LLDPK scheme})}
 		\label{alg:integrator-fj}
 		\KwIn{intervalo de tiempo $[t_0, T]$, valor incial $y_0$, tolerancia absoluta y relativa $Atol$ y $Rtol$, dimensión máxima y mínima de los subespacios de Krylov $\mf_{max}$ y $\mf_{min}$, tamaño de paso máximo $h_{max}$}
 		\KwOut{$\{(t_0,y_0),\ldots,(t_n,y_n)\}$}
 		$n=0$, $fail=false$, $\mf_0=\mf_{min}$, $h_{min}=16 \cdot \epsilon(t_0)$ \\
 		Calcular tamaño de paso inicial $h_0$ mediante fórmula (\ref{hcero-fj}) \\
 		\While{$t_n<T$}{
-			Calcular $\delta_1$ y $\delta_2$ mediante (\ref{deltavalue}), y determinar $g_1$ y $g_2$ según (\ref{g1}) y (\ref{g2}) \label{set delta}\\
+			Calcular $\delta_1$ y $\delta_2$ con (\ref{deltavalue}), y determinar adaptativamante $g_1$ y $g_2$ según (\ref{g1}) y (\ref{g2}) \label{set delta}\\
 			\If{$fail=false$}{
 				Ejecutar Algoritmo~\ref{alg:iArnoldi} para obtener matrices $\widehat{H}^*_{m_n}$ y $\widehat{V}_{m_n}$ of $\widehat{\mathcal{K}}_\mf(h_n^\beta f_x(y),f(y);\delta_1)$, y establecer valor $\widehat{H}_{m_n}=\widehat{H}^*_{m_n}/h_n^\beta$ \\
 			}
@@ -635,7 +636,7 @@ El cálculo adaptativo de los términos $\widetilde{u}_j$ en (\ref{Jacobian-free
 
 {\SetAlgoNoLine
 	\begin{algorithm}[htb]
-		\caption{Cálculo de $\{u_1,\dots,u_s\}$ mediante aproximaciones Krylov-Padé libres de Jacobiano adaptativas}
+		\caption{Algoritmo para el cálculo de las funciones $\{u_1,\dots,u_s\}$ en las fórmulas embebidas (\ref{Jacobian-free LLDPK scheme}) mediante aproximaciones Krylov-Padé libres de Jacobiano adaptativas}
 		\label{alg:errcontrol-fj}
 		\KwIn{$\{c_1,\dots,c_s\}$, $h_n$, $y_n$, $f$, $\mf_n$, $\widehat{V}_{\mf_n}$, $\widehat{H}_{\mf_n}$,
 			$\widehat{v}_{\mf_{n}+1}$,  $\widehat{\hf}_{\mf_{n}+1,\mf_n}$, $\widehat{H}^*_{m_{n}}$, $\delta_1$, $breakdown$}
@@ -744,14 +745,14 @@ tomando
 con $\alpha_1=\alpha_2=3$ y $\beta=1$. De esta forma, las fórmulas embebidas libres de Jacobiano (\ref{Jacobian-free LLDPK scheme}) conservan el orden $5$ y $4$ de las fórmulas originales de Dormand y Prince con un coste computacional mínimo.
 
 Sin embargo, como se ha señalado en varios artículos (ver, por ejemplo, \cite{chan1984nonlinearly,knoll2004jacobian}), la precisión de la diferencia finita $(f(y+\delta v)-f(y))/ \delta$ a $f_x(y)v$ depende en gran medida de la selección del llamado parámetro de perturbación $\delta$. Si $\delta$ es demasiado grande, el producto $f_x(y)v$ estará mal aproximado, mientras que si es demasiado pequeño, el resultado de la diferencia finita estará contaminado con errores de redondeo de punto flotante. En la práctica, los valores de $\delta$ inferiores a cierto valor alrededor de la raíz cuadrada del épsilon de la máquina  $\epsilon_{mach}$ no mejoran la precisión de la diferencia finita \cite{knoll2004jacobian}.
-Sin embargo, una estimación efectiva del valor de $\delta$ viene dada por la expresión \cite{knoll2004jacobian}
+No obstante, una estimación efectiva del valor de $\delta$ viene dada por la expresión \cite{knoll2004jacobian}
 \[ \delta = \frac{\sqrt{(1+||y||_2)\epsilon_{mach}}}{||v||_2}. \]
 De ahí que, para obtener una precisión adecuada para las aproximaciones $g_1$ y $g_2$ en (\ref{FDO1}), es necesario determinar $\delta_1$ y $\delta_2$ de las expresiones
 \begin{equation} \label{deltavalue}
 	\delta_1 = \frac{\sqrt{(1+||y_n||_2)\epsilon_{mach}}}{\epsilon_{mach}+\tau}
 	\;\;\; \text{y} \;\;\; \delta_2 = \frac{\sqrt{(1+||y_n||_2)\epsilon_{mach}}}{\epsilon_{mach}+||u_j||_2}.
 \end{equation}
-y al fijar $\beta=0$ se tiene
+y fijar $\beta=0$ para tener
 \begin{equation}
 	\tau = h^\beta=1 \label{tau-h-beta}
 \end{equation}
@@ -834,14 +835,24 @@ denota el orden de la fórmula $y$ en (\ref{Jacobian-free LLDPK scheme}) en el p
 $\alpha_1$ y $\alpha_2$ son las definidas en (\ref{alpha_formulas}).
 
 \subsection{Experimentos numéricos}
-\importantcodes{LLDP1: formulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas libres de Jacobiano}
+\importantcodes{LLDP1: esquema adaptativo para las formulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas y libres de Jacobiano descrito en Algoritmo \ref{alg:integrator-fj}}
 Con el propósito de estudiar el desempeño del esquema adaptativo descrito en el Algoritmo \ref{alg:integrator-fj} para las fórmulas embebidas libres de Jacobiano (\ref{Jacobian-free LLDPK scheme}), se construyó el código Matlab \emph{LLDP1}. Este código \emph{LLDP1} es una copia exacta del código Matlab18a \emph{ode45} \cite{shampine1997matlab} con la excepción de las líneas de programa correspondientes a las fórmulas originales de Dormand y Prince y su error relativo, que fueron reemplazadas por las líneas 4 a 12 del Algoritmo \ref{alg:integrator-fj} que implementan la evaluación de las fórmulas libres de Jacobiano (\ref{Jacobian-free LLDPK scheme}). Recordemos que el código de Matlab \emph{ode45} implementa la estrategia de tamaño de paso variable descrita en la Sección \ref{Sec:AdaptiveLLscheme}, pero con $r_n=5$ fijo en la expresión para $\rho$ dentro de (\ref{hnewcalc-fj}) para todos los pasos de integración. Similar al Capítulo \ref{chapter:lldp}, $m_{min}=4$ se estableció en el código \emph{LLDP1}.
-\importantcodes{LLDP2: formulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas libres de Jacobiano con diferencia finita de orden 1 en la parte lineal}
-\importantcodes{ode15sk: fórmulas diferenciales hacia atrás de orden variable 1-5 libres de Jacobiano}
-\importantcodes{exp4jf: integrador exponencial de orden 4 libre de Jacobiano}
+\importantcodes{ode15sk: esquema adaptativo para las fórmulas diferenciales hacia atrás de orden variable 1-5 libres de Jacobiano}
+\importantcodes{exp4jf: esquema adaptativo para el integrador exponencial de orden 4 libre de Jacobiano}
+
 Los resultados del código \emph{LLDP1} en la integración de ecuaciones de prueba se compararán con los obtenidos por los códigos adaptativos \emph{ode15sk}, \emph{exp4jf} y \emph{LLDP2}. El código \emph{ode15sk} es una implementación de tamaño de paso casi constante de las fórmulas diferenciales hacia atrás (BDF) hasta el orden 5 combinada con un método de subespacios de Krylov para resolver sistemas lineales de ecuaciones algebraicas. Para comparar con una implementación eficiente de estas fórmulas, el código \emph{ode15sk} es una copia exacta del código \emph{ode15s} \cite{shampine1997matlab} de Matlab18a con la excepción de las líneas de programa correspondientes a los métodos directos (función Matlab \emph{mldivide}) para resolver sistemas lineales de ecuaciones algebraicas y la factorización LU, que fueron reemplazadas por el método de residuos mínimos generales libre de Jacobiano (GMRES) (es decir, la función de Matlab \emph{gmres} con tolerancia $RTol$, la diferencia finita  hacia adelante de orden 1 que aproxima al producto del Jacobiano por  vector, y el parámetro de perturbación $\delta$ calculado como en \cite{knoll2004jacobian}). En la función de Matlab \emph{gmres} se eliminaron las comprobaciones computacionalmente costosas de las funciones de Matlab \emph{iterchk} y \emph{iterapp}. Por otro lado, el código \emph{exp4jf} es una versión libre de Jacobiano del código adaptativo \emph{exp4} tomado de \cite{jansing2011expode} que implementa el integrador exponencial de orden 4 de \cite{hochbruck1998exponential} con tamaño de paso y dimensión de Krylov variables.
 En cada paso de integración, al igual que para el esquema (5.8) de \cite{hochbruck1998exponential}, el código \textit{exp4jf} realiza tres descomposiciones de Krylov y, al menos, tres aproximaciones (6,6)-Padé a la función phi $\varphi_1$ de las matrices de Hessenberg resultantes del Algoritmo de Arnoldi libre de Jacobiano \ref{alg:iArnoldi}. \textit{exp4jf} utiliza la diferencia finita hacia delante de orden 1 como aproximación al producto de la matriz Jacobiana por vector en el Algoritmo \ref{alg:iArnoldi}, lo cual reduce en un orden la velocidad de convergencia del esquema (5.8) de \cite{hochbruck1998exponential} (ver Teorema 5.1 en \cite{hochbruck1998exponential}).
-El parámetro de perturbación $\delta$ para la diferencia finita también se calcula como en \cite{knoll2004jacobian}. Para estimar la dimensión de Krylov $\mf$, el código \textit{exp4jf} utiliza la estrategia adaptativa de \cite{hochbruck1998exponential} y ninguna restricción al valor mínimo de $\mf$. Por otro lado, el código \emph{LLDP2} es idéntico al código \emph{LLDP1} con la excepción del paso \ref{set delta} en Algoritmo \ref{alg:integrator} en el que la aproximación $g_1$ siempre se calcula con la diferencia finita hacia delante de orden 1.
+El parámetro de perturbación $\delta$ para la diferencia finita también se calcula como en \cite{knoll2004jacobian}. Para estimar la dimensión de Krylov $\mf$, el código \textit{exp4jf} utiliza la estrategia adaptativa de \cite{hochbruck1998exponential} y ninguna restricción al valor mínimo de $\mf$. Por otro lado, el código \emph{LLDP2} es idéntico al código \emph{LLDP1} con la excepción del paso \ref{set delta} en Algoritmo \ref{alg:integrator-fj} en el que la aproximación $g_1$ siempre se calcula con la diferencia finita hacia delante de orden 1. \importantcodes{LLDP2: esquema adaptativo similar al del código LLDP1, pero con diferencia finita de orden 1 fija para la aproximación $g_1$ en Algoritmo \ref{alg:integrator-fj}}
+
+\begin{figure}
+	\begin{center}
+		\hspace{-0.75in}
+		\includegraphics[scale=0.7]{Graphics/lldp-fj/compare_graph.pdf}
+		\vspace{-0.95in}
+		\caption{Diagrama log-log comparativo de precisión contra tiempo para cada uno de los cuatro códigos adaptativos en la integración de las seis ecuaciones de prueba. $\vartriangle$: código \emph{LLDP1}, $\triangledown$: código \emph{LLDP2}, $\circ$ : código \emph{exp4jf}, y $\square$: código \emph{ode15sk}}
+		\label{lldpfj:Fig1}
+	\end{center}
+\end{figure}
 
 A continuación, para cada ecuación de prueba de la Sección \ref{section:test-eq}, se compara el desempeño de los cuatro códigos con tres niveles de tolerancia: crudo, con $ Atol = 10^{-6}$ y $Rtol = 10^{-3}$; medio, con $Atol = 10^{-9}$ y $Rtol = 10^{-6}$; y refinado, con $ Atol = 10^{-12}$ y $Rtol = 10^{-9}$. El tamaño de paso máximo se estableció, como de costumbre, como $h_{max}=0\mathord{.}1\cdot(T-t_0)$.
 
@@ -869,18 +880,9 @@ con $\mf_{min}=4$, $\pf_{min}=3$, $\beta=0$, $\eta_2=2$. Para el código \emph{L
 
 Observe que, solo para una de las seis ecuaciones de prueba, el integrador \emph{LLDP1} conserva el orden de convergencia de las fórmulas originales de Dormand y Prince durante todo el proceso de integración y, solo para la misma ecuación, las aproximaciones en diferencias finitas son intercambiados dentro del Algoritmo de Arnoldi sin Jacobiano \ref{alg:iArnoldi}. Para las otras cuatro ecuaciones de prueba, el integrador \emph{LLDP1} alcanza el orden de $5$ en algunos pasos de integración, mientras que para la restante ecuación nunca alcanza ese orden. Por otro lado, dado que la velocidad de convergencia de la aproximación $g_1$ dentro del Algoritmo \ref{alg:iArnoldi} para el integrador \emph{LLDP1} es siempre mayor que la de la aproximación utilizada por el integrador \emph{LLDP2}, la velocidad de convergencia del primero siempre es mayor que la del segundo integrador. Esto justifica los menores errores del código \emph{LLDP1} reportados en las Tablas \ref{tab:cuspburg} - \ref{tab:brussdnd}. Sin embargo, analizando los resultados generales para las ecuaciones de prueba consideradas, podemos afirmar que el código \emph{LLDP2} es tan efectivo como el código \emph{LLDP1}.
 
-\begin{figure}
-	\begin{center}
-		\hspace{-0.75in}
-		\includegraphics[scale=0.7]{Graphics/lldp-fj/compare_graph.pdf}
-		\vspace{-0.95in}
-		\caption{Diagrama log-log comparativo de precisión contra tiempo para cada uno de los códigos en la integración de las seis ecuaciones de prueba. $\vartriangle$: código \emph{JF-ode15sk1}, $\circ$ : código \emph{JF-ode15sk2}, y $\square$: código \emph{JF-LLDP45}}
-		\label{lldpfj:Fig1}
-	\end{center}
-\end{figure}
 
 \begin{table}
-	\caption{Desempeño de los códigos \emph{ODE15sk}, \emph{LLDP1}, \emph{LLDP2} y \emph{Exp4} en la integración de las ecuaciones  CUSP y Burgers.}
+	\caption{Desempeño de los códigos adaptativos \emph{ODE15sk}, \emph{LLDP1}, \emph{LLDP2} y \emph{Exp4} en la integración de las ecuaciones  CUSP y Burgers.}
 	\label{tab:cuspburg}
 	\begin{adjustbox}{width=0.95\columnwidth,center}
 		\begin{tabular}{ccccccccccc}
@@ -945,7 +947,7 @@ Observe que, solo para una de las seis ecuaciones de prueba, el integrador \emph
 \end{table}
 
 \begin{table}
-	\caption{Desempeño de los códigos \emph{ODE15sk}, \emph{LLDP1}, \emph{LLDP2} y \emph{Exp4} en la integración de las ecuaciones the Brusselator2D y GrayScott2D.}
+	\caption{Desempeño de los códigos adaptativos \emph{ODE15sk}, \emph{LLDP1}, \emph{LLDP2} y \emph{Exp4} en la integración de las ecuaciones the Brusselator2D y GrayScott2D.}
 	\label{tab:bruss2DGrayScott}
 	\begin{adjustbox}{width=0.95\columnwidth,center}
 		\begin{tabular}{ccccccccccc}
@@ -1010,7 +1012,7 @@ Observe que, solo para una de las seis ecuaciones de prueba, el integrador \emph
 \end{table}
 
 \begin{table}
-	\caption{Desempeño de los códigos \emph{ODE15sk}, \emph{LLDP1}, \emph{LLDP2} y \emph{Exp4} en la integración de las ecuaciones Brusselator y DND.}
+	\caption{Desempeño de los códigos adaptativos \emph{ODE15sk}, \emph{LLDP1}, \emph{LLDP2} y \emph{Exp4} en la integración de las ecuaciones Brusselator y DND.}
 	\label{tab:brussdnd}
 	\begin{adjustbox}{width=0.95\columnwidth,center}
 		\begin{tabular}{ccccccccccc}
@@ -1115,8 +1117,14 @@ Observe que, solo para una de las seis ecuaciones de prueba, el integrador \emph
 	\end{adjustbox}
 \end{table}
 
-\subsubsection{Conclusiones}
- Los métodos Localmente Linealizados de Orden Superior dependen explícitamente de la matriz Jacobiana, pero en muchos casos no es posible evaluar dicha matriz. Para poder afrontar esta limitación se extendió la concepción de los métodos Localmente Linealizados de Orden Superior a problemas en los que no es posible evaluar la matriz Jacobiana obteniéndose la nueva familia de métodos de  Linealización Local de Orden Superior Libres de Jacobiano. Para nueva familia se obtuvieron cotas para los errores y condiciones de orden simples ya que las cotas dependen de los ordenes de las aproximaciones de la parte lineal y no lineal respectivamente y del orden utilizado para aproximar los productos del Jacobiano por vector en la parte lineal y no lineal. Es importante notar que esta nueva familia permite construir una gran variedad de nuevos esquemas y que mientras se satisfagan las cotas de error se preserva el orden de convergencia; en cambio, otros métodos tienen fuertes condiciones de orden o sufren pérdida dl orden al utilizar aproximaciones libres de Jacobiano.
-Además las condiciones de orden simples sirven como guía a la hora de seleccionar las aproximaciones para la parte lineal y no lineal y las aproxmaciones libres de Jacobiano.
+\vspace{2cm}
 
- Utilizando las aproximaciones de Krylov-Padé libre de Jacobiano, se introdujo la subclase particular de esquemas Runge-Kutta Localmente Linealizados Libres de Jacobiano y, en particular, con las fórmulas Runge-Kutta embebidas de Dormand y Prince Localmente Linealizadas, se implementó un esquema adaptativo de orden variable libre de Jacobiano. Mediante la integración de diferentes ecuaciones se comprobó la eficacia de esos nuevos esquemas libres de Jacobiano y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, pero con un costo computacional menor en la mayoría de los casos.
+\subsubsection{Conclusiones}
+En este Capítulo se extendió la concepción de los métodos Localmente Linealizados de Orden Superior a problemas en los que no es posible evaluar la matriz Jacobiana obteniéndose la nueva familia de métodos de Linealización Local de Orden Superior Libres de Jacobiano. Para ésta nueva familia se obtuvieron cotas de errores y condiciones de orden simples. Utilizando las aproximaciones de Krylov-Padé libre de Jacobiano, se introdujo la subclase particular de esquemas Runge-Kutta Localmente Linealizados
+Libres de Jacobiano y, en particular, con las fórmulas Runge-Kutta embebidas de Dormand y Prince Localmente Linealizadas, se implementó un esquema adaptativo de orden variable libre de Jacobiano. Se comprobó la eficacia de los nuevos esquemas libres de Jacobiano en la integración de
+ecuaciones de prueba y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados, pero con un costo computacional menor en la mayoría de los casos.
+
+% Los métodos Localmente Linealizados de Orden Superior dependen explícitamente de la matriz Jacobiana, pero en muchos casos no es posible evaluar dicha matriz. Para poder afrontar esta limitación se extendió la concepción de los métodos Localmente Linealizados de Orden Superior a problemas en los que no es posible evaluar la matriz Jacobiana obteniéndose la nueva familia de métodos de  Linealización Local de Orden Superior Libres de Jacobiano. Para nueva familia se obtuvieron cotas para los errores y condiciones de orden simples ya que las cotas dependen de los ordenes de las aproximaciones de la parte lineal y no lineal respectivamente y del orden utilizado para aproximar los productos del Jacobiano por vector en la parte lineal y no lineal. Es importante notar que esta nueva familia permite construir una gran variedad de nuevos esquemas y que mientras se satisfagan las cotas de error se preserva el orden de convergencia; en cambio, otros métodos tienen fuertes condiciones de orden o sufren pérdida dl orden al utilizar aproximaciones libres de Jacobiano.
+%Además las condiciones de orden simples sirven como guía a la hora de seleccionar las aproximaciones para la parte lineal y no lineal y las aproxmaciones libres de Jacobiano.
+%
+% Utilizando las aproximaciones de Krylov-Padé libre de Jacobiano, se introdujo la subclase particular de esquemas Runge-Kutta Localmente Linealizados Libres de Jacobiano y, en particular, con las fórmulas Runge-Kutta embebidas de Dormand y Prince Localmente Linealizadas, se implementó un esquema adaptativo de orden variable libre de Jacobiano. Mediante la integración de diferentes ecuaciones se comprobó la eficacia de esos nuevos esquemas libres de Jacobiano y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, pero con un costo computacional menor en la mayoría de los casos.

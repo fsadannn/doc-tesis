@@ -208,7 +208,7 @@ El estimador propuesto (\ref{calcmnew}) para $\mf_{new}$ es un refinamiento del 
 Como se ha señalado en varios artículos (ver \cite{jimenez2009rate,jimenez2012convergence, Jimenez14AMC, jimenez2015convergence}), la selección de un valor apropiado del par $(\pf,\qf)$ en la aproximación del Padé es crucial para mejorar la eficiencia computacional de los integradores exponenciales. Para este propósito, la Tabla 1 en \cite{moler2003nineteen} se usa regularmente para configurar automáticamente los valores óptimos de $\pf$, con $\qf=\pf$, en función de la norma de la matriz, la tolerancia especificada y la orden de convergencia del integrador exponencial. Por lo tanto, con $\pf=\qf$ y la restricción de convergencia $\pf+\qf\geq5$ dada por el Teorema \ref{theorem:lldp-convergence}, la selección de un valor específico de $\pf$ para la aproximación (\ref{LLDPK scheme}) se realiza en cada paso de integración de acuerdo con la Tabla \ref{table:padep}, que presenta el subconjunto de la Tabla 1 en \cite{moler2003nineteen} correspondiente a $\pf \ge 3$.
 
 \begin{table}[htb]
-	\caption{Valores óptimos de $\pf$ para la aproximación (\ref{phi_appox}), con $\qf=\pf$, como función de $\lvert\lvert \frac{h_n}{90}\overline{H} \rvert\rvert_\infty$ y la tolerancia deseada $\mathrm{RTol}$. $\overline{H}$ denota la matriz de Hessenberg ampliada (\ref{hhat}).}
+	\caption{Valores óptimos de $\pf$ para la aproximación de Krylov-Padé (\ref{phi_appox}), con $\qf=\pf$, como función de $\lvert\lvert \frac{h_n}{90}\overline{H} \rvert\rvert_\infty$ y la tolerancia deseada $\mathrm{RTol}$. $\overline{H}$ denota la matriz de Hessenberg ampliada (\ref{hhat}).}
 	\begin{center}
 		\begin{tabular}{cccc}
 			\hline
@@ -228,7 +228,7 @@ En las dos sub-secciones anteriores se propusieron procedimientos automáticos p
 
 {\SetAlgoNoLine
 \begin{algorithm}[htb]
-	\caption{Esquema de orden $r\,(=4,5)$ con tamaño de paso fijo y dimensión de Krylov variable}
+	\caption{Algoritmo del esquema de orden $r\,(=4,5)$ con tamaño de paso fijo y dimensión de Krylov variable para las fórmulas (\ref{LLDPK scheme})}
 	\label{alg:integratorfix}
 	\KwIn{intervalo de tiempo $[t_0, T]$, valor inicial $y_0$, tamaño de paso $h$, dimensión máxima y mínima de los subespacios de Krylov $\mf_{max}$ y $\mf_{min}$, tolerancia absoluta y relativa $Atol$ y $Rtol$}
 
@@ -407,8 +407,8 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 \end{figure}
 
 \subsubsection{Simulaciones comparativas}
-\importantcodes{LLDP4: esquema Runge-Kutta Localmente Linealizado de Dromand y Prince de orden 4 y paso fijo}
-\importantcodes{LLDP5: esquema Runge-Kutta Localmente Linealizado de Dromand y Prince de orden 5 y paso fijo}
+\importantcodes{LLDP4: esquema Runge-Kutta Localmente Linealizado de Dromand y Prince de orden 4 y paso fijo descrito en Algoritmo \ref{alg:integratorfix}}
+\importantcodes{LLDP5: esquema Runge-Kutta Localmente Linealizado de Dromand y Prince de orden 5 y paso fijo descrito en Algoritmo \ref{alg:integratorfix}}
 \importantcodes{expms4: esquema exponencial de Adams de orden 4 y paso fijo}
 \importantcodes{expms5: esquema exponencial de Adams de orden 5 y paso fijo}
 Para este segundo conjunto de simulaciones, se consideraran los esquemas numéricos definidos en el Algoritmo \ref{alg:integratorfix} para las fórmulas (\ref{LLDPK scheme}) de orden $4$ y $5$ que se implementan, respectivamente, en los códigos \emph{LLDP4} y \emph{LLDP5}. Además, se considerará, el código \textquoteleft expms\textquoteright~con orden $4$ y $5$ disponible en \cite{jansing2011expode}, que proporciona una implementación de tamaño de paso fijo de orden $4$ y $5$ para el método exponencial de Adams~\cite{hochbruck2011exponential}; se denotaran estos códigos exponenciales como \emph{expms4} y \emph{expms5}, respectivamente.
@@ -426,7 +426,7 @@ Las Tablas \ref{tab:num-exp-lldp-fix-step:cpna} - \ref{tab:num-exp-lldp-fix-step
 Además, las tablas muestran la efectividad de la estrategia propuesta para la selección de la dimensión de Krylov $\mf$ en cada paso de integración, con mínima variación entre los valores de $\mf_{min}$ y $\mf_{max}$, y así, con un valor menor de $\mf_{total}$.
 
 \begin{table}[htb]
-	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación CUSP con $M=32$, $d=96$.}
+	\caption{Desempeño de los códigos de paso fijo \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación CUSP con $M=32$, $d=96$.}
 	\centering
 		\begin{tabular}{lccccccccc}
 			\hline
@@ -457,7 +457,7 @@ Además, las tablas muestran la efectividad de la estrategia propuesta para la s
 
 
 \begin{table}[htb]
-	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Burgers con $M=500$, $d=500$.}
+	\caption{Desempeño de los códigos de paso fijo \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Burgers con $M=500$, $d=500$.}
 	\centering
 	\begin{tabular}{lccccccccc}
 		\hline
@@ -487,7 +487,7 @@ Además, las tablas muestran la efectividad de la estrategia propuesta para la s
 
 
 \begin{table}[htb]
-	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Brusselator2D con $M=50$, $d=5000$.}
+	\caption{Desempeño de los códigos de paso fijo \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Brusselator2D con $M=50$, $d=5000$.}
 	\centering
 	\begin{tabular}{lccccccccc}
 		\hline
@@ -516,7 +516,7 @@ Además, las tablas muestran la efectividad de la estrategia propuesta para la s
 \end{table}
 
 \begin{table}[htb]
-	\caption{Desempeño de los códigos \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Brusselator con $M=100$, $d=200$.}
+	\caption{Desempeño de los códigos de paso fijo \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Brusselator con $M=100$, $d=200$.}
 	\centering
 	\begin{tabular}{lccccccccc}
 		\hline
@@ -636,7 +636,7 @@ Con esta medida relativa de disimilitud, el Jacobiano se evalúa en el punto $y_
 
 {\SetAlgoNoLine
 \begin{algorithm}[htb]
-	\caption{Control de Reutilización del Jacobiano}
+	\caption{Algoritmo de control para la reutilización de la matriz Jacobiana}
 	\label{alg:jaccontrol}
 	\KwIn{$n$,$y_n$,$fail,J,J_{old},f_{old},freshJ$}
 	\KwOut{$J,J_{old},f_{old},freshJ$}
@@ -676,7 +676,7 @@ Con una combinación adecuada de los procedimientos de las Secciones \ref{sec:se
 
 {\SetAlgoNoLine
 \begin{algorithm}[!htb]
-	\caption{Cálculo de $u_j$ mediante la aproximación adaptativa Krylov-Padé}
+	\caption{Algoritmo para el cálculo de las funciones $u_j$ en (\ref{LLDPK scheme}) mediante la aproximación adaptativa Krylov-Padé}
 	\label{alg:errcontrol}
 	\KwIn{$c_j$, $h_n$, $J$, $f$, $\mf_n$, $V_{\mf_n}$, $H_{\mf_n}$,
 		$v_{\mf_{n}+1}$,  $\hf_{\mf_{n}+1,\mf_n}$, $H^*_{m_{n}}$, $breakdown$}
@@ -712,7 +712,7 @@ Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \r
 
 {\SetAlgoNoLine
 \begin{algorithm}[htb]
-	\caption{Esquema con tamaño de paso y dimensión de Krylov variables}
+	\caption{Algoritmo del esquema de orden $5$ con tamaño de paso y dimensión de Krylov variable para las fórmulas embebidas  (\ref{LLDPK scheme})}
 	\label{alg:integrator}
 	\KwIn{intervalo de tiempo $[t_0, T]$, valor inicial $y_0$, tolerancia absoluta y relativa $Atol$ y $Rtol$, dimensión máxima y mínima de los subespacios de Krylov $\mf_{max}$ y $\mf_{min}$, tamaño de paso máximo $h_{max}$}
 	\KwOut{$\{(t_0,y_0),\ldots,(t_n,y_n)\}$}
@@ -750,13 +750,12 @@ Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \r
 \end{algorithm}}
 
 \subsection{Experimentos numéricos}\label{section:num-exp-lldp-var-step}
-\importantcodes{LLDP45: formulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas}
+\importantcodes{LLDP45: esquema adaptativo para las fórmulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas descrito en Algoritmo \ref{alg:integrator}}
 Con este conjunto de simulaciones, se estudiará el desempeño del esquema adaptativo descrito en el Algoritmo \ref{alg:integrator} para las fórmulas embebidas (\ref{LLDPK scheme}). Con este propósito se implementó el código Matlab \emph{LLDP45}. Este código \emph{LLDP45} es una copia exacta del código \emph{ode45} \cite{shampine1997matlab} de Matlab18a con la excepción de las líneas del programa correspondientes a las fórmulas originales de Dormand y Prince y su error relativo, que fueron reemplazadas por las líneas 7 a 16 del Algoritmo \ref{alg:integrator} que implementan la evaluación de las fórmulas localmente linealizadas (\ref{LLDPK scheme}) con control de reutilización del Jacobiano. El código de Matlab \emph{ode45} implementa la estrategia de tamaño de paso variable descrita en la Sección \ref{secc:stepsizes} para las fórmulas embebidas de Dormand y Prince. Para preservar el orden de convergencia establecido en el Teorema \ref{theorem:lldp-convergence} para las fórmulas embebidas (\ref{LLDPK scheme}), se establece $m_{min}=4$ en el código \emph{LLDP45}.
-\importantcodes{ode15s: fórmulas diferenciales hacia atrás de orden variable 1-5}
+\importantcodes{ode15s: esquema adaptativo para las fórmulas diferenciales hacia atrás de orden variable 1-5}
 Los resultados del código \emph{LLDP45} en la integración de las ecuaciones de prueba de Sección \ref{section:test-eq} se compararán con los obtenidos por el código adaptativo \emph{ode15sk} con una implementación de tamaño de paso casi constante de las fórmulas diferenciales hacia atrás (BDF) hasta orden 5 y un método de subespacios de Krylov para resolver sistemas lineales de ecuaciones algebraicas. Para comparar con una implementación eficiente de estas fórmulas, este código \emph{ode15sk} es una copia exacta del código Matlab18a \emph{ode15s} \cite{shampine1997matlab} con la excepción de las líneas de programa correspondientes a los métodos directos (función Matlab \emph{mldivide}) para resolver sistemas lineales de ecuaciones algebraicas y la factorización LU, que fueron reemplazadas por el método Generalized Minimal Residual (GMRES) (función Matlab \emph{gmres} con tolerancia $RTol$) con \emph{ILU(0)} de precondicionador (función Matlab \emph{ilu}), donde \emph{ILU(0)} representa el método de factorización LU incompleto con 0 nivel de relleno. En la función de Matlab \emph{gmres}, se eliminaron las comprobaciones computacionalmente costosas de las funciones de Matlab \emph{iterchk} y \emph{iterapp}. El código \emph{ode15sk} conserva la estrategia del código Matlab \emph{ode15s} para la reutilización de la matriz Jacobiana, pero no la aproximación numérica computacionalmente costosa de matrices Jacobianas grandes que fue reemplazada por la evaluación exacta de estas matrices.
-\importantcodes{exp4: integrador exponencial de orden 4}
-Además, se compararán los resultados del código \emph{LLDP45} con los obtenidos por el código adaptativo \emph{exp4} tomado de \cite{jansing2011expode} que implementa el célebre integrador exponencial de orden 4 de \cite{hochbruck1998exponential} con tamaño de paso y dimensión Krylov variables. Para calcular las tres funciones $phi$ que aparecen en las fórmulas de integración \emph{exp4} en cada paso de integración, este código realiza tres aproximaciones del subespacio de Krylov y tres descomposiciones propias de la matriz de Hessenberg resultantes del Algoritmo de Arnoldi. El código \emph{exp4} no restringe el
-valor mínimo ($\mf_{min}$) que puede tomar la dimensión de los subespacios de Krylov.
+\importantcodes{exp4: esquema adaptativo para el integrador exponencial de orden 4}
+Además, se compararán los resultados del código \emph{LLDP45} con los obtenidos por el código adaptativo \emph{exp4} tomado de \cite{jansing2011expode} que implementa el célebre integrador exponencial de orden 4 de \cite{hochbruck1998exponential} con tamaño de paso y dimensión Krylov variables. Para calcular las tres funciones $phi$ que aparecen en las fórmulas de integración \emph{exp4} en cada paso de integración, este código realiza tres aproximaciones del subespacio de Krylov y tres descomposiciones propias de la matriz de Hessenberg resultantes del Algoritmo de Arnoldi. El código \emph{exp4} no restringe el valor mínimo ($\mf_{min}$) que puede tomar la dimensión de los subespacios de Krylov.
 
 A continuación, se compararán los tres códigos con tres niveles de tolerancia: crudo, con $ Atol = 10^{-6}$ y $Rtol = 10^{-3}$; medio, con $Atol = 10^{-9}$ y $Rtol = 10^{-6}$; y refinado, con $ Atol = 10^{-12}$ y $Rtol = 10^{-9}$.
 
@@ -767,7 +766,7 @@ Los principales resultados del estudio de simulación se resumen en la Figura \r
     \hspace{-0.5in}
 	\includegraphics[scale=0.7]{Graphics/lldp/compare_graph.pdf}
 	\vspace{-0.75in}
-	\caption{ Diagrama log-log comparativo de precisión contra tiempo para cada uno de los códigos en la integración de las seis ecuaciones de prueba. $\vartriangle$: código \emph{exp4}, $\circ$ : código \emph{ode15sk}, y $\square$: código \emph{LLDP45}}
+	\caption{ Diagrama log-log comparativo de precisión contra tiempo para cada uno de los códigos adaptativos en la integración de las seis ecuaciones de prueba. $\vartriangle$: código \emph{exp4}, $\circ$ : código \emph{ode15sk}, y $\square$: código \emph{LLDP45}}
 	\label{num-exp-lldp-var-step:Fig1}
 	\end{center}
 \end{figure}
@@ -775,7 +774,7 @@ Los principales resultados del estudio de simulación se resumen en la Figura \r
 Para explicar estos resultados, para cada ecuación de prueba, los detalles de ejecución de cada código se presentan en una tabla. El error relativo \textit{RError} de cada código se mide nuevamente por la expresión (\ref{num-exp-lldp-fix-step:ER}) y el tiempo computacional relativo \textit{RTime} de cada código se calcula con respecto al tiempo computacional del código \emph{ode15sk}. Además, las tablas presentan el número de pasos \textit{A-Steps} aceptados y \textit{R-Steps} rechazados, así como el número de evaluaciones del campo vectorial \textit{f-Eval} y del Jacobiano \textit{J-Evaluación}. La dimensión mínima $\mf_ {min}$, máxima $\mf_ {max}$ y total $\mf_{total}$ de los subespacios de Krylov requeridos por los códigos \emph{LLDP45} y \emph{exp4} para integrar las ecuaciones de prueba sobre todo el intervalo de integración  también se dan, así como el orden de Padé mínimo $\pf_{min}$ y máximo $\pf_{max}$ requerido por el código \emph{LLDP45}. Para el código \emph{ode15sk}, $\mf_{min}$, $\mf_{max}$ y $\mf_{total}$ representan el número mínimo, máximo y total de iteraciones realizadas por el método GMRES sobre el intervalo de integración completo. Además, \textit{ME} denota el número de matrices exponenciales, \textit{ILU(0)} el número de factorizaciones LU incompletas, \textit{K-subspace} el número de aproximaciones del subespacio de Krylov, y \textit{GMRES} el número de sistemas lineales resueltos por el método GMRES. En las tablas $d$ especifica el número de ecuaciones de cada ejemplo de prueba.
 
 \begin{table}[htb]
-	\caption{Desempeño de los códigos \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones  CUSP y Burgers.}
+	\caption{Desempeño de los códigos adaptativos \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones  CUSP y Burgers.}
 	\label{tab:num-exp-lldp-var-step:cuspburg}
 	%\centering
 	\begin{adjustbox}{width=0.8\columnwidth,center}
@@ -852,7 +851,7 @@ Para explicar estos resultados, para cada ecuación de prueba, los detalles de e
 
 \begin{table}[htb]
 	%\centering
-	\caption{Desempeño de los códigos \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones Brusselator2D y GrayScott2D .}	\label{tab:num-exp-lldp-var-step:bruss2dgray2d}
+	\caption{Desempeño de los códigos adaptativos  \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones Brusselator2D y GrayScott2D .}	\label{tab:num-exp-lldp-var-step:bruss2dgray2d}
 	\begin{adjustbox}{width=0.8\columnwidth,center}
 	\begin{tabular}{  ccccccccc }
 		\hline
@@ -928,7 +927,7 @@ Para explicar estos resultados, para cada ecuación de prueba, los detalles de e
 
 \begin{table}[htb]
 	%\centering
-	\caption{Desempeño de los códigos \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones Brusselator y DND.}
+	\caption{Desempeño de los códigos  adaptativos \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones Brusselator y DND.}
 	\begin{adjustbox}{width=0.8\columnwidth,center}
 	\begin{tabular}{  ccccccccc }
 		\hline
@@ -1007,9 +1006,13 @@ Además, las Tablas \ref{tab:num-exp-lldp-var-step:cuspburg}-\ref{tab:num-exp-ll
 
 Finalmente es importante notar que, debido a la falta de precisión del código \emph{ode15sk} para integrar la ecuación CUSP, la solución ``exacta'' de esta ecuación en (\ref{num-exp-lldp-fix-step:ER}) se estima mediante la fórmula continua (\ref{continuousLLRK45}) del código \emph{LLDP45} con $RTol = 10^{-12}$, $ATol = 10^{-14}$, $\mf_{min} = \mf_{max} = 100$ y factor de seguridad $\gamma_J=\infty$ para la reutilización de la matriz Jacobiana en el Algoritmo \ref{alg:jaccontrol}.
 
-\subsubsection{Conclusiones}
-	La Aproximación Lineal Local de Orden Superior para EDO consiste en dividir en intervalos de tiempo consecutivos la solución de la ecuación original en una parte lineal , que es solución de la ecuación linealizada localmente, más una parte no lineal, que es solución de la representación diferencial del residuo. Combinando la aproximación Krylov-Padé con evaluación de Jacobiano, para aproximar la parte lineal, con las fórmulas embebidas Runge-Kutta de Dormand y Prince, para aproximar la parte no lineal, se construyeron nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas para problemas de valor inicial de dimensiones no pequeñas. Para estas nuevas fórmulas se derivaron cotas para los errores y condiciones de orden simples ya que las cotas dependen de la dimensión del subespacio de Krylov, del orden de Padé y del orden del esquema Runge-Kutta utilizado.
-	
-	Para estas formulas construidas se desarrollaron diversas estrategias. Como el costo computacional de evaluar el Jacobiano en cada paso de integración puede ser grande se desarrolló una estrategia para su reutilización, donde bajo un criterio de error se decide si es posible utilizar el Jacobiano de pasos anteriores o es necesario volver a evaluarlo. Basado en la estrategia de selección de la dimensión de Krylov y el orden de Padé propuesta en el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se desarrolló una estrategia específica para este estas nuevas fórmulas embebidas. Además desarrolló una estrategia adaptativa para la selección del tamaño de paso de integración.
-	
-	Con la aplicación de estas estrategias a las nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas se implementaron esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Mediante la integración de diferentes ecuaciones  se comprobó la eficacia de esos nuevos esquemas y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, un número menor de pasos de integración.
+\subsubsection{Conclusiones del Capítulo}
+En este Capítulo se construyeron nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas para problemas de valor inicial de dimensiones no pequeñas utilizando las aproximaciones Krylov-Padé
+con evaluación de Jacobiano en el cálculo de los productos de función phi por vector. Se derivaron cotas para los errores y condiciones de orden simples. Se desarrollaron estrategias adaptativas para la reutilización del Jacobiano, la selección del tamaño de paso de integración, la dimensión de Krylov y el orden de Padé con las que se implementaron esquemas con tamaño de paso fijo y dimensión
+de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Se comprobó la eficacia de esos nuevos esquemas en la integración de diferentes ecuaciones y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, un número menor de pasos de integración.
+
+%	La Aproximación Lineal Local de Orden Superior para EDO consiste en dividir en intervalos de tiempo consecutivos la solución de la ecuación original en una parte lineal , que es solución de la ecuación linealizada localmente, más una parte no lineal, que es solución de la representación diferencial del residuo. Combinando la aproximación Krylov-Padé con evaluación de Jacobiano, para aproximar la parte lineal, con las fórmulas embebidas Runge-Kutta de Dormand y Prince, para aproximar la parte no lineal, se construyeron nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas para problemas de valor inicial de dimensiones no pequeñas. Para estas nuevas fórmulas se derivaron cotas para los errores y condiciones de orden simples ya que las cotas dependen de la dimensión del subespacio de Krylov, del orden de Padé y del orden del esquema Runge-Kutta utilizado.
+%	
+%	Para estas formulas construidas se desarrollaron diversas estrategias. Como el costo computacional de evaluar el Jacobiano en cada paso de integración puede ser grande se desarrolló una estrategia para su reutilización, donde bajo un criterio de error se decide si es posible utilizar el Jacobiano de pasos anteriores o es necesario volver a evaluarlo. Basado en la estrategia de selección de la dimensión de Krylov y el orden de Padé propuesta en el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se desarrolló una estrategia específica para este estas nuevas fórmulas embebidas. Además desarrolló una estrategia adaptativa para la selección del tamaño de paso de integración.
+%	
+%	Con la aplicación de estas estrategias a las nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas se implementaron esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Mediante la integración de diferentes ecuaciones  se comprobó la eficacia de esos nuevos esquemas y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, un número menor de pasos de integración.

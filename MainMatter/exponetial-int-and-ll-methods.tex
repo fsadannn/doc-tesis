@@ -209,36 +209,45 @@ y coeficientes Runge-Kutta $a_{j,i}$, $b_j$, $\hat{b}_j$ y $c_j$ definidos en Ta
 \end{table}
 
 En síntesis, a la clase de métodos de Linealización Local de Orden Superior pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución $u$ de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r = x-u$ proporcionada por un integrador numérico de orden alto. La Figura \ref{fig:ll-graph} muestra una representación gráfica de esta explicación. 
-\begin{figure}
-%	\qtreeshowframes
-	\begin{center}
-		\leaf{\small \tikzmark{c} Aproximación $\widetilde{u}$  \tikzmark{d} }
-		\branch{1}{\small EDO lineal asociada a $u$\\$\frac{du(t)}{dt} = a(x(t_n);u(t))$\\$u(t_n)=x(t_n)$\\$a(x_n;\xi) = f_x(x_n)(\xi-x_n)+f(x_n)$}
-		\brOverride
-		\leaf{ \tikzmark[top]{a} $\widetilde{y}_{n+1} = \widetilde{u}(t_{n},\widetilde{y}_n)+\widetilde{r}(t_{n},\widetilde{y}_n)$  \tikzmark[top]{b}\\
-		$\widetilde{y_0}=x(t_0)$}
-		\branch{1}{ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\}
-		\brRestore
-		\leaf{\small \tikzmark{e} Aproximación $\widetilde{r}$ \tikzmark{f}}
-		\branch{1}{\small EDO no lineal asociada a $r$\\$\frac{dr(t)}{dt} = q(x(t_n);t,r(t))$\\$r(t_n)=0$\\
-			$q(x_n;s,\xi)=f(u(s;x_n)+\xi)$\\
-			 $-f_x(x_n)(u(s;x_n)-x_n)$\\
-			$-f(x_n)$
-		}
-		\brOverridedd
-		\branch{3}{$ x(t_{n+1}) = u(t_{n},x(t_n))+r(t_{n},x(t_n))$}
-		\brRestore
-		\branch{1}{\footnotesize $\frac{dx}{dt}=f(x(t_n))+f_x(x(t_n))(x(t)-x(t_n))+\left[ f(x(t))-f(x(t_n))-f_x(x(t_n))(x(t)-x(t_n))  \right]$\\$ t\in[t_{n},t_{n+1}]$}
-		\branch{1}{$\frac{dx}{dt}=f(x),\; x(t_0)=x_0\;,\; t\geq t_0$}
-		\qobitree
-	\end{center}
-	\begin{tikzpicture}[overlay, remember picture]
-		\draw [-, shorten >=22pt, shorten <=10pt] ($(pic cs:c)!1/2!(pic cs:d)$) -- ($(pic cs:a)!1/2!(pic cs:b)$);
-		\draw [-, shorten >=28pt, shorten <=12pt] ($(pic cs:e)!1/2!(pic cs:f)$) -- ($(pic cs:a)!1/2!(pic cs:b)$);
-	\end{tikzpicture}
-	\caption{Representación gráfica de la descomposicion Lineal Local (\ref{VCF-full}) de la solución x de una ecuacion diferencial ordinaria, y de un esquema de  Linealización Local de Orden Superior $\widetilde{y}_{n+1}$.}
+
+
+\begin{figure}[ht]
+	% \centering
+	\includegraphics[scale=0.55]{Graphics/diagram-ll.jpg}
+	\caption{Representación gráfica de la descomposición Lineal Local (\ref{VCF-full}) de la solución x de una ecuación diferencial ordinaria, y de un esquema de  Linealización Local de Orden Superior $\widetilde{y}_{n+1}$.}
 	\label{fig:ll-graph}
 \end{figure}
+
+%\begin{figure}
+%%	\qtreeshowframes
+%	\begin{center}
+%		\leaf{\small \tikzmark{c} Aproximación $\widetilde{u}$  \tikzmark{d} }
+%		\branch{1}{\small EDO lineal asociada a $u$\\$\frac{du(t)}{dt} = a(x(t_n);u(t))$\\$u(t_n)=x(t_n)$\\$a(x_n;\xi) = f_x(x_n)(\xi-x_n)+f(x_n)$}
+%		\brOverride
+%		\leaf{ \tikzmark[top]{a} $\widetilde{y}_{n+1} = \widetilde{u}(t_{n},\widetilde{y}_n)+\widetilde{r}(t_{n},\widetilde{y}_n)$  \tikzmark[top]{b}\\
+%		$\widetilde{y_0}=x(t_0)$}
+%		\branch{1}{ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\}
+%		\brRestore
+%		\leaf{\small \tikzmark{e} Aproximación $\widetilde{r}$ \tikzmark{f}}
+%		\branch{1}{\small EDO no lineal asociada a $r$\\$\frac{dr(t)}{dt} = q(x(t_n);t,r(t))$\\$r(t_n)=0$\\
+%			$q(x_n;s,\xi)=f(u(s;x_n)+\xi)$\\
+%			 $-f_x(x_n)(u(s;x_n)-x_n)$\\
+%			$-f(x_n)$
+%		}
+%		\brOverridedd
+%		\branch{3}{$ x(t_{n+1}) = u(t_{n},x(t_n))+r(t_{n},x(t_n))$}
+%		\brRestore
+%		\branch{1}{\footnotesize $\frac{dx}{dt}=f(x(t_n))+f_x(x(t_n))(x(t)-x(t_n))+\left[ f(x(t))-f(x(t_n))-f_x(x(t_n))(x(t)-x(t_n))  \right]$\\$ t\in[t_{n},t_{n+1}]$}
+%		\branch{1}{$\frac{dx}{dt}=f(x),\; x(t_0)=x_0\;,\; t\geq t_0$}
+%		\qobitree
+%	\end{center}
+%	\begin{tikzpicture}[overlay, remember picture]
+%		\draw [-, shorten >=22pt, shorten <=10pt] ($(pic cs:c)!1/2!(pic cs:d)$) -- ($(pic cs:a)!1/2!(pic cs:b)$);
+%		\draw [-, shorten >=28pt, shorten <=12pt] ($(pic cs:e)!1/2!(pic cs:f)$) -- ($(pic cs:a)!1/2!(pic cs:b)$);
+%	\end{tikzpicture}
+%	\caption{Representación gráfica de la descomposición Lineal Local (\ref{VCF-full}) de la solución x de una ecuación diferencial ordinaria, y de un esquema de  Linealización Local de Orden Superior $\widetilde{y}_{n+1}$.}
+%	\label{fig:ll-graph}
+%\end{figure}
 
 
 \subsection{Esquemas de Linealización Local}
