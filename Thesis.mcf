@@ -3,17 +3,17 @@
 \contentsline {importantdefinition}{Aproximaci\IeC {\'o}n Lineal Local de Orden Superior}{7}{importantdefinition.3}% 
 \contentsline {importantdefinition}{Discretizaci\IeC {\'o}n Lineal Local Runge-Kutta}{7}{importantdefinition.4}% 
 \contentsline {importantdefinition}{Aproximaci\IeC {\'o}n Lineal Local Runge-Kutta}{7}{importantdefinition.5}% 
-\contentsline {importantdefinition}{Esquema de Linealizaci\IeC {\'o}n Local}{10}{importantdefinition.6}% 
-\contentsline {importantdefinition}{Esquema de Linealizaci\IeC {\'o}n Local de Orden Superior}{10}{importantdefinition.7}% 
-\contentsline {importantdefinition}{Aproximaci\IeC {\'o}n de Pad\IeC {\'e}}{11}{importantdefinition.8}% 
-\contentsline {importantdefinition}{$\mathfrak {m}$-\IeC {\'e}simo subespacio de Krylov}{12}{importantdefinition.9}% 
+\contentsline {importantdefinition}{Esquema de Linealizaci\IeC {\'o}n Local}{9}{importantdefinition.6}% 
+\contentsline {importantdefinition}{Esquema de Linealizaci\IeC {\'o}n Local de Orden Superior}{9}{importantdefinition.7}% 
+\contentsline {importantdefinition}{Aproximaci\IeC {\'o}n de Pad\IeC {\'e}}{10}{importantdefinition.8}% 
+\contentsline {importantdefinition}{$\mathfrak {m}$-\IeC {\'e}simo subespacio de Krylov}{11}{importantdefinition.9}% 
 \contentsline {importantdefinition}{$K_\mathfrak {m}(\tau ,A,b)$ aproximaci\IeC {\'o}n de Krylov para $\tau \varphi _1(\tau A)b$}{16}{importantdefinition.10}% 
 \contentsline {importantdefinition}{$K_{\mathfrak {m},k}^{\mathfrak {p},\mathfrak {q}}(\tau ,A,b)$ aproximaci\IeC {\'o}n de Krylov-Pad\IeC {\'e} para $\tau \varphi _1(\tau A)b$}{16}{importantdefinition.11}% 
 \contentsline {importantdefinition}{$\mathfrak {m}$-\IeC {\'e}simo subespacio de Krylov libre de Jacobiano}{21}{importantdefinition.12}% 
 \contentsline {importantdefinition}{$\setbox \z@ \hbox {\mathsurround \z@ $\textstyle K$}\mathaccent "0362{K}_\mathfrak {m}(\tau ,f_x(y) , b ; \eta , \delta , \beta )$ aproximaci\IeC {\'o}n de Krylov libre de Jacobiano para $\tau \varphi _1(\tau f_x(y))b$}{21}{importantdefinition.13}% 
-\contentsline {importantdefinition}{$\setbox \z@ \hbox {\mathsurround \z@ $\textstyle K$}\mathaccent "0362{K}_{\mathfrak {m},k}^{\mathfrak {p},\mathfrak {q}}\left (\tau , A , b ; \eta , \delta , \beta \right )$ aproximaci\IeC {\'o}n de Krylov-Pad\IeC {\'e} libre de Jacobiano para $\tau \varphi _1(\tau f_x(y))b$}{21}{importantdefinition.14}% 
+\contentsline {importantdefinition}{$\setbox \z@ \hbox {\mathsurround \z@ $\textstyle K$}\mathaccent "0362{K}_{\mathfrak {m},k}^{\mathfrak {p},\mathfrak {q}}\left (\tau , f_x(y) , b ; \eta , \delta , \beta \right )$ aproximaci\IeC {\'o}n de Krylov-Pad\IeC {\'e} libre de Jacobiano para $\tau \varphi _1(\tau f_x(y))b$}{21}{importantdefinition.14}% 
 \contentsline {importantdefinition}{Dimensi\IeC {\'o}n \IeC {\'o}ptima de Krylov}{27}{importantdefinition.15}% 
-\contentsline {importantdefinition}{Discretizaci\IeC {\'o}n embebida Lineal Local Runge-Kutta de Dormand and Prince}{32}{importantdefinition.16}% 
-\contentsline {importantdefinition}{F\IeC {\'o}rmulas embebidas Runge-Kutta de Dormand y Prince Localmente Linealizadas}{34}{importantdefinition.17}% 
-\contentsline {importantdefinition}{Esquema de Linealizaci\IeC {\'o}n Local de Orden Superior Libre de Jacobiano}{59}{importantdefinition.18}% 
-\contentsline {importantdefinition}{F\IeC {\'o}rmulas embebidas Runge-Kutta de Dormand y Prince Localmente Linealizadas y libres de Jacobiano}{69}{importantdefinition.19}% 
+\contentsline {importantdefinition}{Discretizaci\IeC {\'o}n embebida Lineal Local Runge-Kutta de Dormand and Prince}{31}{importantdefinition.16}% 
+\contentsline {importantdefinition}{F\IeC {\'o}rmulas embebidas Runge-Kutta de Dormand y Prince Localmente Linealizadas}{33}{importantdefinition.17}% 
+\contentsline {importantdefinition}{Esquema de Linealizaci\IeC {\'o}n Local de Orden Superior Libre de Jacobiano}{58}{importantdefinition.18}% 
+\contentsline {importantdefinition}{F\IeC {\'o}rmulas embebidas Runge-Kutta de Dormand y Prince Localmente Linealizadas y libres de Jacobiano}{68}{importantdefinition.19}% 

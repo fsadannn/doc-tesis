@@ -18,12 +18,12 @@ h_{n}=t_{n+1}-t_{n}\leq h$; para $n=0,\ldots,N-1$.
 \section{Integradores exponenciales} \label{Sec:IE}
 
 En general, se denomina integradores exponenciales a la familia
-de esquemas numéricos para EDOs que requieren del cálculo de algún término exponencial. Inicialmente, los integradores de este tipo comenzaron a desarrollarse en los años 60 del siglo pasado~\cite{Berland07} con el propósito de resolver sistemas de ecuaciones semilineales de la forma
+de esquemas numéricos para EDO que requieren del cálculo de algún término exponencial. Inicialmente, los integradores de este tipo comenzaron a desarrollarse en los años 60 del siglo pasado~\cite{Berland07} con el propósito de resolver sistemas de ecuaciones semilineales de la forma
 \begin{equation}
 \frac{dx(t)}{dt} = Ax(t) + F(x(t))  \;\;  \label{ODE Lines Method}
 \end{equation}
 que resultan de la discretización de una ecuación diferencial en derivadas parciales al utilizar el método de líneas, donde $A$ es una
-matriz cuadrada, $F$ una función vectorial no lineal de $x(t)\in\mathbb{R}^d$ y $t\geq t_0 \in \mathbb{R}$. Típicamante, la matriz $A$ en (\ref{ODE Lines Method}) resulta mal condicionada, lo que establece un determinado nivel de rigidez (stiffness en inglés) para ese sistema de ecuaciones \cite{schiesser2012}. La rigidez del sistema (\ref{ODE Lines Method}) se incrementa con la disminución de la distancia entre los puntos de la discretización del método de líneas o con el aumento del número ecuaciones, lo que dificulta su integración con esquemas numéricos explícitos tradicionales \cite{schiesser2012}. Más recientemente, a finales de los años 90, la clase de integradores exponenciales fue extendida a EDOs rígidas (stiff en ingles) de la forma general (\ref{ODE-SYST}).
+matriz cuadrada, $F$ una función vectorial no lineal de $x(t)\in\mathbb{R}^d$ y $t\geq t_0 \in \mathbb{R}$. Típicamante, la matriz $A$ en (\ref{ODE Lines Method}) resulta mal condicionada, lo que establece un determinado nivel de rigidez (stiffness en inglés) para ese sistema de ecuaciones \cite{schiesser2012}. La rigidez del sistema (\ref{ODE Lines Method}) se incrementa con la disminución de la distancia entre los puntos de la discretización del método de líneas o con el aumento del número ecuaciones, lo que dificulta su integración con esquemas numéricos explícitos tradicionales \cite{schiesser2012}. Más recientemente, a finales de los años 90, la clase de integradores exponenciales fue extendida a EDO rígidas (stiff en ingles) de la forma general (\ref{ODE-SYST}).
 
 Los integradores exponenciales tanto para ecuaciones semilineales (\ref{ODE Lines Method}) como para ecuaciones generales (\ref{ODE-SYST}) se derivan de aproximar la integral
 que resulta de aplicar la fórmula de variación de constantes a estas ecuaciones~\cite{jimenez2020}. Al aplicar dicha fórmula la solución de la ecuación (\ref{ODE Lines Method}) se escribe como
@@ -111,7 +111,7 @@ Para todo $t\in[t_{0},T]$ se define la siguiente aproximación.
  Obsérvese que $\phi$ en la discretización Lineal Local (\ref{ODE-LLA-4}) representa la primera integral de la \bluemark{expresión (\ref{VCF-full})}. De esta forma la integral de la expresión (\ref{VCF}) representa el residuo de dicha aproximación a la solución de la ecuación diferencial (\ref{ODE-SYST}).
 \subsection{Aproximación Lineal Local de Orden Superior}
 
-La estabilidad y las propiedades dinámicas que la discretización Lineal Local (\ref{ODE-LLA-4}) posee son de vital importancia para la integración de EDOs, no obstante su bajo orden de convergencia constituye una limitante en algunas circunstancias. Para solucionar esa dificultad se construyen los métodos de Linealización Local de Orden Superior los cuales retienen las propiedades mencionadas, pero con orden de convergencia mayor. 
+La estabilidad y las propiedades dinámicas que la discretización Lineal Local (\ref{ODE-LLA-4}) posee son de vital importancia para la integración de EDO, no obstante su bajo orden de convergencia constituye una limitante en algunas circunstancias. Para solucionar esa dificultad se construyen los métodos de Linealización Local de Orden Superior~(LLOS) los cuales retienen las propiedades mencionadas, pero con orden de convergencia mayor. 
 
 Estos métodos de Linealización Local de Orden Superior se obtienen de agregar a la aproximación Lineal Local~(\ref{ODE-REV-FORM-LLA}) un término adicional $\widetilde{r}$ que resulta de aproximar, con un orden superior a 2, la integral de la expresión~(\ref{VCF}) por algún método de cuadratura o por la solución numérica de la representación diferencial de la integral~(\ref{VCF})~\cite{delaCruz06}. \bluemark{Utilizando} diferentes tipos de cuadraturas para aproximar~(\ref{VCF}) se obtienen los métodos Exponenciales de Propagación 
 Iterativa~\cite{tokman2006efficient}, los métodos de Taylor Localmente Linealizados~\cite{delaCruz07}, los
@@ -306,7 +306,7 @@ I_{d} & 0_{d\times 2}%
 \begin{array}{ll}
 \mathbf{0}_{1\times (d+1)} & 1%
 \end{array}%
-\right] $ para EDOs no autónomas; y 
+\right] $ para EDO no autónomas; y 
 \begin{equation*}
 \widetilde{M}_{n}=\left[ 
 \begin{array}{cc}
