@@ -2,14 +2,15 @@
 
 En este capítulo se presenta una revisión de la clase general de  integradores numéricos de tipo exponencial y de los Métodos de Linealización Local en particular, así como resultados básicos sobre el cálculo de la exponencial matricial.
 
-En general, se considerarán los problemas de valor inicial definidos por los sistemas de ecuaciones diferenciales no autónomas de la forma
+En general, se considerarán los problemas de valor inicial definidos por los sistemas de $d$ ecuaciones diferenciales no autónomas de la forma
  \begin{equation}
  \frac{dx}{dt}=f(t,x), \;\; \label{ODE-SYST}
  \end{equation}
+con condición inicial
  \begin{equation*}
  x(t_0)=x_0,
  \end{equation*}
- donde $x_0\in \mathfrak{D}$ es un vector columna inicial dado, $f: [t_0,T] \times \mathfrak{D}\longrightarrow \mathbb{R}^{d}$ es una función vectorial diferenciable, $\mathfrak{D}\subset\mathbb{R}^{d}$ un conjunto abierto, con $d\geq 1$ y $t_0<T \in \mathbb{R}$. Se asumen condiciones de suavidad y condición de Lipschitz en $f$ para asegurar la unicidad de la solución en $\mathfrak{D}$. Denotaremos por $f_x$ la matriz Jacobiana de $f$ respecto a $x$ y por $f_t$ la derivada parcial de $f$ con respecto a $t$.
+ donde $x_0\in \mathfrak{D}$ es un vector columna de un conjunto abierto $\mathfrak{D}\subset\mathbb{R}^{d}$, $f: [t_0,T] \times \mathfrak{D}\longrightarrow \mathbb{R}^{d}$ es una función vectorial diferenciable y $t_0<T \in \mathbb{R}$. Se asumen condiciones de suavidad y condición de Lipschitz en $f$ para asegurar la unicidad de la solución en $\mathfrak{D}$. Denotaremos por $f_x$ la matriz Jacobiana de $f$ respecto a $x$ y por $f_t$ la derivada parcial de $f$ con respecto a $t$.
 
 Consideremos, ademas, una partición $(t)_{h}={t_{n}:n=0,1,\ldots,N}$ del
 intervalo $[t_{0},T]$ tal que $t_{0}<t_{1}<\ldots<t_{N}=T$, y $%
@@ -74,7 +75,7 @@ y(t_{n})& = & y_{n}  \nonumber
 para todo $t\in[t_{n},t_{n+1}]$ es una aproximación de la solución
 de (\ref{ODE-SYST}) con condición inicial \mbox{$x(t_{n})=y_{n}$}. Mediante la fórmula de variación de constantes obtenemos 
 \begin{equation*}
-y(t)=y_{n}+\phi(t_{n},y_{n};t-t_{n})  %\label{ODE-SYST-FORM-LL}
+y(t)=y_{n}+\phi(t_{n},y_{n};t-t_{n}),  %\label{ODE-SYST-FORM-LL}
 \end{equation*}
 donde 
 \begin{equation}
@@ -132,11 +133,11 @@ r(t_{n}) & = & 0 \nonumber
 \end{eqnarray}
 para todo $t\in [t_{n},t_{n+1})$, con campo vectorial 
 \begin{eqnarray*}
-q(t_n,y_n,s,\varsigma)&=&f(s,y_n+\phi(t_n,y_n;s-t_n)+\varsigma)-f_x(t_n,y_n)\phi(t_n,y_n;s-t_n)-f(t_n,y_n)%\\
-% & &-f_t(t_n,y_n)(s-t_n) -f(t_n,y_n) ,
+q(t_n,y_n,s,\varsigma)&=&f(s,y_n+\phi(t_n,y_n;s-t_n)+\varsigma)-f_x(t_n,y_n)\phi(t_n,y_n;s-t_n)\\
+ & &-f_t(t_n,y_n)(s-t_n) -f(t_n,y_n) ,
 %\label{AUX-ODE}
 \end{eqnarray*}
-con $s\in [t_{n},t_{n+1})$ y $\varsigma \in \mathbb{R}^d $. Aquí, la ecuación (\ref{ODE r}) resulta de derivar (\ref{VCF}) con respecto a t. 
+para todo $s\in [t_{n},t_{n+1})$ y $\varsigma \in \mathbb{R}^d $. Aquí, la ecuación (\ref{ODE r}) resulta de derivar (\ref{VCF}) con respecto a t. 
 
 Cuando $\widetilde{r}$ en (\ref{ODE-REV-HOLL})  es la aproximación obtenida mediante un esquema Runge-Kutta de orden $\gamma$ se llega a las definiciones siguientes.
 \importantdefinition{Discretización Lineal Local Runge-Kutta}
@@ -144,7 +145,7 @@ Cuando $\widetilde{r}$ en (\ref{ODE-REV-HOLL})  es la aproximación obtenida med
 	\label{definition HLLD} \cite{Jimenez13} Dada una partición $(t)_{h}$, la discretización Lineal Local Runge-Kutta 
     de orden $\gamma >2$ se define por la expresión recursiva:
 	\begin{equation*}
-	y_{n+1}=y_{n}+\phi \left( t_{n},y_{n};h_{n}\right) +h_{n}\sum_{j=1}^{s}b_{j}\kt_{j}
+	y_{n+1}=y_{n}+\phi \left( t_{n},y_{n};h_{n}\right) +h_{n}\sum_{j=1}^{s}b_{j}\kt_{j}(t_n,y_n,h_n)
 	%\label{LLRK_Discretizat}
 	\end{equation*}%
 	con $y_{0}=x_{0}$, donde las constantes $b_{j}$ y las funciones $k_{j}$ están definidas por el método Runge-Kutta de $s$ estados aplicado a la ecuación~(\ref{ODE r}).
@@ -252,7 +253,7 @@ En síntesis, a la clase de métodos de Linealización Local de Orden Superior p
 
 \subsection{Esquemas de Linealización Local}
 
-Como puede notarse de las Definiciones \ref{definition LLD},\ref{definition HLLD} , las
+Como puede notarse de las Definiciones \ref{definition LLD} y \ref{definition HLLD} , las
 discretizaciones Lineales Locales no pueden ser implementadas directamente por
 estar expresadas en término de integrales o ecuaciones diferenciales que en general no pueden ser
 calculadas analíticamente. Dependiendo de la forma de calcular  numéricamente esas integrales,
@@ -276,15 +277,14 @@ calculadas analíticamente. Dependiendo de la forma de calcular  numéricamente 
 Regularmente, en la literatura, la implementación numérica de la discretización Lineal Local~(\ref{ODE-LLA-4}) se denomina simplemente esquema de Linealización Local, mientras que la implementación numérica de una aproximación de orden superior como la~(\ref{ODE-REV-HOLL}) se denomina esquema de Linealización Local de Orden Superior (LLOS).
 
 Por ejemplo, cuando la fórmula de Padé con escalamiento y potenciación para exponenciales matriciales \cite{moler2003nineteen} es utilizada para
-aproximar $\phi$ en la discretización Lineal Local~(\ref{ODE-LLA-4}) se obtiene el esquema LL de orden $2$ \cite{Jimenez02AMC}:
+aproximar $\phi$ en la discretización Lineal Local~(\ref{ODE-LLA-4}) se obtiene el esquema LL de orden $2$ \cite{Jimenez02AMC}
 \begin{equation} 
-\widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\phi}\left( t_{n},\widetilde{y}_{n};h_{n}\right) \label{LL-scheme}
+\widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\phi}\left( t_{n},\widetilde{y}_{n};h_{n}\right), \label{LL-scheme}
 \end{equation} 
 donde $\widetilde{\phi }\left( t_{n},\widetilde{y}
 _{n},h_{n}\right) =\lmatrix\,(P_{\pf,\qf}(2^{-k_{n}}\widetilde{M}_{n}h_{n}))^{2^{k_{n}}}\rvector$, 
 $(P_{\pf,\qf}(2^{-k_{n}}\widetilde{M}_{n}h_{n}))^{2^{k_{n}}}$ es la aproximación
-de Padé de orden $(\pf,\qf)$ de  $\me{\widetilde{M}_{n}h_{n}}$, donde
-$k$ es el menor número natural tal que $\left\Vert 2^{-k_{n}}\widetilde{M}_{n}h_{n}\right\Vert \leq \frac{1}{2}$, 
+de Padé de orden $(\pf,\qf)$ de  $\me{\widetilde{M}_{n}h_{n}}$, $k_{n}$ es el menor número natural tal que $\left\Vert 2^{-k_{n}}\widetilde{M}_{n}h_{n}\right\Vert \leq \frac{1}{2}$ 
 y las matrices $\widetilde{M}_{n}$, $\lmatrix$, $\rvector$ están definidas como
 
 \begin{equation*}
@@ -344,7 +344,7 @@ En muchas aplicaciones se utiliza $\me{tA}$ donde $t$ es un escalar, por tanto
     para todo $t$ para $A$ fija. La serie converge uniformemente en cualquier región de t del plano complejo.
 \end{theorem}
 
-En \cite{golub2013matrix} se presenta una revisión de los métodos numéricos
+En \cite{moler2003nineteen} se presenta una revisión de los métodos numéricos
 para aproximar
 la exponencial de matrices. Los métodos más utilizados son la aproximación de Padé con escalamiento
 y potenciación para matrices pequeñas y densas, y el de los subespacios de Krylov para matices grandes y esparcidas.
@@ -442,41 +442,40 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
     \caption{Algoritmo de Arnoldi para construir una base ortonormal $\{ v_1,\ldots,v_\mf \}$ del $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(A,b)=\mathrm{span} \{ b,Ab,\ldots, A^{\mf-1}b \}$}
     \label{alg:Arnoldi}
     \KwIn{Matriz $A\in \mathbb{R}^{d\times d}$ y vector $b\in \mathbb{R}^{d}$}
-    \KwOut{$V_\mf=\left[ v_1 \, \cdots \, v_\mf \right]\in\mathbb{R}^{d\times\mf}$, matriz de Hessenberg $H_\mf^*=V_\mf^{\intercal}A V_\mf $, $v_{\mf}\in\mathbb{R}^d$, $\hf_{\mf+1,\mf}$, $\mf_{cut}$, $breakdown$ }
+    \KwOut{$V_\mf=\left[ v_1 \, \cdots \, v_\mf \right]\in\mathbb{R}^{d\times\mf}$, matriz de Hessenberg superior $H_\mf^*=V_\mf^{\intercal}A V_\mf $, $v_{\mf}\in\mathbb{R}^d$, $\hf^*_{\mf+1,\mf}$, $\mf_{cut}$, $breakdown$ }
 
     $breakdown=false$\\
     $v_1=b/\lVert b \rVert_2$\\
     \For{ $j=1,2,\ldots,\mf$ }{
         $w_j= A v_j$\\
         \For{ $i=1,\ldots,j$}{
-            $\hf_{ij}=\langle w_j,v_i \rangle$\\
-            $w_j=w_j-\hf_{ij}v_i$
+            $\hf^*_{ij}=\langle w_j,v_i \rangle$\\
+            $w_j=w_j-\hf^*_{ij}v_i$
         }
-        $\hf_{j+1,i}=\lVert w_j \rVert_2$\\
-        \eIf(\tcp*[h] \emph{Break Down}\label{alg:breakdown}){$\hf_{j+1,i}<2\epsilon_{mach}$}{
+        $\hf^*_{j+1,i}=\lVert w_j \rVert_2$\\
+        \eIf(\tcp*[h] \emph{Break Down}\label{alg:breakdown}){$\hf^*_{j+1,i}<2\epsilon_{mach}$}{
             $\mf_{cut}=j$\\
              $breakdown=true$\\
             Stop
         }{
-            $v_{j+1}=w_j/\hf_{j+1,i}$
+            $v_{j+1}=w_j/\hf^*_{j+1,i}$
         }
     }
-\nonl $\epsilon_{mach}$ denota el espaciamiento del numero en punto flotante 1 y $\langle . , .\rangle$ denota producto escalar
+\nonl $\epsilon_{mach}$ denota el espaciamiento del número en punto flotante 1 y $\langle . , .\rangle$ denota producto escalar
 \end{algorithm}
 
 
-\begin{definition}
-    \cite{Saad92} Sea $V_\mf$ una base ortonormal de $\mathcal{K}_\mf(A,b)$ y sea $f$ una función matricial definida
-    en el espectro de $A$. La aproximación de $f(A)b$ por el  $\mf$-ésimo subespacio de Krylov se define
+\begin{definition}\label{def:exp-k-approx}
+    \cite{Saad92} Sea $V_\mf$ una base ortonormal del $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(A,b)$, $f: \mathbb{C}^{N\times N} \to \mathbb{C}^{N\times N}$ una función matricial definida
+    en el espectro de la matriz $A\in\mathbb{C}^{N\times N}$ y $b\in\mathbb{C}^{N}$ un vector. La aproximación de $f(A)b$ por el  $\mf$-ésimo subespacio de Krylov se define como
     \begin{equation}
         f(A)b\approx ||b||_2 V_\mf f(H^*_\mf)e_1, \label{MFUNC-APROX}
     \end{equation}
-    donde $H_\mf^*=V_\mf^{\intercal}AV_\mf$ y $e_1$ es el primer vector canónico de $\mathbb{R}^\mf$.
+    donde $H_\mf^*=V_\mf^{\intercal}AV_\mf$ es la matriz de Hessenberg y $e_1$ es el primer vector canónico de $\mathbb{C}^\mf$.
 \end{definition}
 Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obtiene el siguiente resultado.
 \begin{theorem}\label{exp-bound}
-	\cite{Saad92} Sea $A\in\mathbb{C}^{N\times N}$ una matriz. El error de aproximación de $\me{A}b$ por el $\mf$-ésimo subespacio
-	de Krylov es
+	\cite{Saad92} Sean $A,H^*_\mf,V_\mf$ las matrices y $b$ el vector de la Definición \ref{def:exp-k-approx}. El error de aproximación de $\me{A}b$ por el $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(A,b)$ es
 	\begin{equation*}
 	\left\lvert\left\lvert \me{A}b - \lvert\lvert b \rvert\rvert_2 V_\mf\me{H^*_\mf}e_1 \right\rvert\right\rvert_2 
 	\leq \frac{2\vert\lvert b \rvert\rvert_2 \left( \sigma(A) \right)^{\mf}\me{\sigma(A)}}{\mf!},
@@ -525,7 +524,7 @@ Para calcular simultáneamente varias funciones $\varphi$ como las que aparecen 
 \begin{theorem}\label{theorem:exp-phi}
     \cite{sidje1998expokit} Sea $c\in\mathbb{C}^{m}$ un vector columna, $H_m\in\mathbb{C}^{m\times m}$ una matriz cuadrada y 
     \begin{equation}
-    \overline{H}_{m+p} = \left[\begin{array}{ccccc}
+    \overline{H} = \left[\begin{array}{ccccc}
     H_m & c & 0_{m \times 1} & \cdots & 0_{m \times 1} \\
           & 0 & 1 & \ddots & \vdots \\
           &   & 0 & \ddots & 0 \\
@@ -535,7 +534,7 @@ Para calcular simultáneamente varias funciones $\varphi$ como las que aparecen 
     \end{equation}
     entonces
      \begin{equation}
-    \me{\tau\overline{H}_{m+p}} = \left[\begin{array}{ccccc}
+    \me{\tau\overline{H}} = \left[\begin{array}{ccccc}
     \me{\tau H_m} & \tau\varphi_1(\tau H_m)c & \tau^{2}\varphi_2(\tau H_m)c & \cdots & \tau^{p}\varphi_p(\tau H_m)c \\
       & 1 & \frac{\tau}{1!} & \cdots & \frac{\tau^{p-1}}{(p-1)!} \\
       &   & 1 & \ddots & \vdots \\

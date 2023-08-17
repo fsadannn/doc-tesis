@@ -13,7 +13,7 @@
 \contentsline {importantdefinition}{$\setbox \z@ \hbox {\mathsurround \z@ $\textstyle K$}\mathaccent "0362{K}_\mathfrak {m}(\tau ,f_x(y) , b ; \eta , \delta , \beta )$ aproximaci\IeC {\'o}n de Krylov libre de Jacobiano para $\tau \varphi _1(\tau f_x(y))b$}{21}{importantdefinition.13}% 
 \contentsline {importantdefinition}{$\setbox \z@ \hbox {\mathsurround \z@ $\textstyle K$}\mathaccent "0362{K}_{\mathfrak {m},k}^{\mathfrak {p},\mathfrak {q}}\left (\tau , f_x(y) , b ; \eta , \delta , \beta \right )$ aproximaci\IeC {\'o}n de Krylov-Pad\IeC {\'e} libre de Jacobiano para $\tau \varphi _1(\tau f_x(y))b$}{21}{importantdefinition.14}% 
 \contentsline {importantdefinition}{Dimensi\IeC {\'o}n \IeC {\'o}ptima de Krylov}{27}{importantdefinition.15}% 
-\contentsline {importantdefinition}{Discretizaci\IeC {\'o}n embebida Lineal Local Runge-Kutta de Dormand and Prince}{31}{importantdefinition.16}% 
+\contentsline {importantdefinition}{Discretizaci\IeC {\'o}n embebida Lineal Local Runge-Kutta de Dormand y Prince}{31}{importantdefinition.16}% 
 \contentsline {importantdefinition}{F\IeC {\'o}rmulas embebidas Runge-Kutta de Dormand y Prince Localmente Linealizadas}{33}{importantdefinition.17}% 
 \contentsline {importantdefinition}{Esquema de Linealizaci\IeC {\'o}n Local de Orden Superior Libre de Jacobiano}{58}{importantdefinition.18}% 
 \contentsline {importantdefinition}{F\IeC {\'o}rmulas embebidas Runge-Kutta de Dormand y Prince Localmente Linealizadas y libres de Jacobiano}{68}{importantdefinition.19}% 
