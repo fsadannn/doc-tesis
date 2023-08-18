@@ -339,11 +339,6 @@ En el marco de los integradores exponenciales, los seis modelos que se considera
 \subsection{Experimentos numéricos}\label{section:num-exp-lldp-fix-step}
 En la Sección \ref{section:lldp-fix-step}, se introdujeron las nuevas fórmulas embebidas (\ref{LLDPK scheme}) para integrar PVI de dimensiones no pequeñas. Además, se diseñó el Algoritmo \ref{alg:integratorfix} para estas fórmulas con tamaño de paso fijo. En esta sección, primero se estimará con simulaciones el orden de convergencia de las fórmulas embebidas (\ref{LLDPK scheme}) para ilustrar los resultados de convergencia establecidos en el Teorema \ref{theorem:lldp-convergence}. Posteriormente, también con simulaciones numéricas, se analizará el desempeño de los esquemas del Algoritmo \ref{alg:integratorfix}. Esto incluirá la integración numérica de las ecuaciones de prueba de la sección anterior y una comparación con otros integradores exponenciales.
 
-\subsubsection{Simulaciones preliminares}
-En este primer conjunto de simulaciones, se evaluará el orden de convergencia de las fórmulas $y_n$ y $\widehat{y}_n$ definidas en (\ref{LLDPK scheme}) en función de la dimensión de Krylov $\mf$ y el orden de Padé $\pf$. Con ese propósito, los errores $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ y $\widehat{e}_i=\max_{t_n\in(t )_{h_i}}\nnnorm{\widehat{y}_n-x(t_n)}_\infty$ en la integración del Ejemplo \ref{ex:Brus} con $M=100$ ($d=200$ ) se calcularon para cinco discretizaciones de tiempo diferentes $(t)_{h_i}$ con un tamaño de paso fijo $h_i$, donde la \textquotedblleft solución exacta\textquotedblright~ $x$ se estima mediante el código Matlab \textit{ode15s} con tolerancias $RTol=10^{ -12}$ y $ATol=10^{-14}$. La Figura \ref{fig:num-exp-lldp-fix-step:Fig3} muestra estos cinco errores para las fórmulas (\ref{LLDPK scheme}) con varios valores de $\mf$ y $\pf=6$ fijo, así como la línea recta ajustada a los puntos $(\log_2( h_i),\log_2(e_i))$ y $(\log_2(h_i),\log_2(\widehat{e}_i))$ con $i=1,...,5$. La Tabla \ref{tab:num-exp-lldp-fix-step:morders} presenta el valor de la pendiente $\widetilde{r}$ de la recta ajustada para cada valor de $\mf$, lo que proporciona una estimación del orden de convergencia $r$ de cada esquema. La tabla también presenta los límites de confianza de $90\%$ de $\widetilde{r}$, el coeficiente de determinación como indicador de la bondad de la línea ajustada y el orden de convergencia esperado que, de acuerdo con el Teorema \ref{theorem:lldp-convergence}, las fórmulas (\ref{LLDPK scheme}) tienen para el $\mf$ dado. La Figura \ref{fig:num-exp-lldp-fix-step:Fig2} y la Tabla \ref{tab:num-exp-lldp-fix-step:porders} presentan resultados similares pero para las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ fijo y varios valores de $\pf$. Se puede observar que el orden de convergencia estimado $\widetilde{r}$ proporcionado en las Tablas \ref{tab:num-exp-lldp-fix-step:morders} y \ref{tab:num-exp-lldp-fix-step:porders} está de acuerdo con el orden de convergencia de las fórmulas (\ref{LLDPK scheme}) indicado por el Teorema \ref{theorem:lldp-convergence} para los valores considerados de $\mf$ y $\pf$. Además, la Figura \ref{fig:num-exp-lldp-fix-step:Fig4} muestra los errores $e_i$ y $\widehat{e}_i$ de las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ y $\pf=6$ fijos calculado para el tamaño de cinco pasos $h_i$ y la línea recta ajustada. En este caso, el orden de convergencia estimado $\widetilde{r}$ para las fórmulas $y_n$ y $\widehat{y}_n$ son $5.01 \pm 0.47$ y $3.93 \pm 0.19$ , respectivamente, lo cual concuerda con el orden de convergencia 5 y 4 dados en el Teorema \ref{theorem:lldp-convergence} para estas fórmulas.
-
-
-
 \begin{figure}[htb]
 	\begin{center}
 		\includegraphics[scale=0.45]{Graphics/lldp/m-plots.jpg}
@@ -355,22 +350,28 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 \begin{table}[htb]
 	\centering
 	\caption{
-        Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\mf$, el intervalo de $90\%$ de confianza $[\widetilde{r}-\varDelta,\widetilde{r}+\varDelta]$ y el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig3}.}
-		\begin{tabular}{ c  c c c c  c  c c c c}
-			\hline
-			& \multicolumn{4}{c}{$\widehat{y}$} & & \multicolumn{4}{c}{$y$} \\
-			\cline{2-5} \cline{7-10}
-			$\mf$ & $r$ & $\widetilde{r}$ & $\pm\varDelta$ & $R^2$ & & $r$ & $\widetilde{r}$ & $\pm\varDelta$ & $R^2$ \\
-			\hline
-			1 & 2 & 1.99 & 0.01 & 0.99 & & 2 & 1.98 & 0.01 & 0.99 \\
-			2 & 3 & 3.02 & 0.01 & 0.99 & & 3 & 3.04 & 0.01 & 0.99 \\
-			3 & 4 & 3.93 & 0.20 & 0.99 & & 4 & 3.82 & 0.20 & 0.99 \\
-			4 & 4 & 3.93 & 0.19 & 0.99 & & 5 & 5.02 & 0.45 & 0.99 \\
-			5 & 4 & 3.93 & 0.19 & 0.99 & & 5 & 5.01 & 0.47 & 0.99 \\
-			\hline
-		\end{tabular}
+		Orden de convergencia $r$ de las fórmulas (\ref{LLDPK scheme}) y su estimado  $\widetilde{r}$ para diferentes valores de $\mf$, el intervalo de $90\%$ de confianza $[\widetilde{r}-\varDelta,\widetilde{r}+\varDelta]$ y el coeficiente de determinación $R^2$ de la línea ajustada en la Figura \ref{fig:num-exp-lldp-fix-step:Fig3}.}
+	\begin{tabular}{ c  c c c c  c  c c c c}
+		\hline
+		& \multicolumn{4}{c}{$\widehat{y}$} & & \multicolumn{4}{c}{$y$} \\
+		\cline{2-5} \cline{7-10}
+		$\mf$ & $r$ & $\widetilde{r}$ & $\pm\varDelta$ & $R^2$ & & $r$ & $\widetilde{r}$ & $\pm\varDelta$ & $R^2$ \\
+		\hline
+		1 & 2 & 1.99 & 0.01 & 0.99 & & 2 & 1.98 & 0.01 & 0.99 \\
+		2 & 3 & 3.02 & 0.01 & 0.99 & & 3 & 3.04 & 0.01 & 0.99 \\
+		3 & 4 & 3.93 & 0.20 & 0.99 & & 4 & 3.82 & 0.20 & 0.99 \\
+		4 & 4 & 3.93 & 0.19 & 0.99 & & 5 & 5.02 & 0.45 & 0.99 \\
+		5 & 4 & 3.93 & 0.19 & 0.99 & & 5 & 5.01 & 0.47 & 0.99 \\
+		\hline
+	\end{tabular}
 	\label{tab:num-exp-lldp-fix-step:morders}
 \end{table}
+
+
+\subsubsection{Simulaciones preliminares}
+En este primer conjunto de simulaciones, se evaluará el orden de convergencia de las fórmulas $y_n$ y $\widehat{y}_n$ definidas en (\ref{LLDPK scheme}) en función de la dimensión de Krylov $\mf$ y el orden de Padé $\pf$. Con ese propósito, los errores $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ y $\widehat{e}_i=\max_{t_n\in(t )_{h_i}}\nnnorm{\widehat{y}_n-x(t_n)}_\infty$ en la integración del Ejemplo \ref{ex:Brus} con $M=100$ ($d=200$ ) se calcularon para cinco discretizaciones de tiempo diferentes $(t)_{h_i}$ con un tamaño de paso fijo $h_i$, donde la \textquotedblleft solución exacta\textquotedblright~ $x$ se estima mediante el código Matlab \textit{ode15s} con tolerancias $RTol=10^{ -12}$ y $ATol=10^{-14}$. La Figura \ref{fig:num-exp-lldp-fix-step:Fig3} muestra estos cinco errores para las fórmulas (\ref{LLDPK scheme}) con varios valores de $\mf$ y $\pf=6$ fijo, así como la línea recta ajustada a los puntos $(\log_2( h_i),\log_2(e_i))$ y $(\log_2(h_i),\log_2(\widehat{e}_i))$ con $i=1,...,5$. La Tabla \ref{tab:num-exp-lldp-fix-step:morders} presenta el valor de la pendiente $\widetilde{r}$ de la recta ajustada para cada valor de $\mf$, lo que proporciona una estimación del orden de convergencia $r$ de cada esquema. La tabla también presenta los límites de confianza de $90\%$ de $\widetilde{r}$, el coeficiente de determinación como indicador de la bondad de la línea ajustada y el orden de convergencia esperado que, de acuerdo con el Teorema \ref{theorem:lldp-convergence}, las fórmulas (\ref{LLDPK scheme}) tienen para el $\mf$ dado. La Figura \ref{fig:num-exp-lldp-fix-step:Fig2} y la Tabla \ref{tab:num-exp-lldp-fix-step:porders} presentan resultados similares pero para las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ fijo y varios valores de $\pf$. Se puede observar que el orden de convergencia estimado $\widetilde{r}$ proporcionado en las Tablas \ref{tab:num-exp-lldp-fix-step:morders} y \ref{tab:num-exp-lldp-fix-step:porders} está de acuerdo con el orden de convergencia de las fórmulas (\ref{LLDPK scheme}) indicado por el Teorema \ref{theorem:lldp-convergence} para los valores considerados de $\mf$ y $\pf$. Además, la Figura \ref{fig:num-exp-lldp-fix-step:Fig4} muestra los errores $e_i$ y $\widehat{e}_i$ de las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ y $\pf=6$ fijos calculado para el tamaño de cinco pasos $h_i$ y la línea recta ajustada. En este caso, el orden de convergencia estimado $\widetilde{r}$ para las fórmulas $y_n$ y $\widehat{y}_n$ son $5.01 \pm 0.47$ y $3.93 \pm 0.19$ , respectivamente, lo cual concuerda con el orden de convergencia 5 y 4 dados en el Teorema \ref{theorem:lldp-convergence} para estas fórmulas.
+
+\vspace{1.5cm}
 
 \begin{figure}[htb]
 	\begin{center}
@@ -380,6 +381,7 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 	\end{center}
 \end{figure}
 
+\vspace{0.5cm}
 
 \begin{table}[htb]
 	\centering
@@ -423,9 +425,7 @@ Los resultados en la integración de cada ecuación de prueba obtenidos con los 
 \end{equation}
 entre la \textquotedblleft solución exacta\textquotedblright~$x$ de la ecuación de prueba y la solución aproximada $y$ de cada código, donde $\epsilon_{mach}$ denota el épsilon de la máquina. Siguiendo \cite{tokman2006efficient}, la \textquotedblleft solución exacta\textquotedblright~de las ecuaciones de prueba se estima mediante el código Matlab \textit{ode15s} con tolerancias $RTol=10^{-12}$ y $ATol=10^{-14}$. En cada tabla, la columna \textit{RTime} presenta el tiempo computacional total relativo de cada código con respecto al código \emph{expms4} en la integración de cada ejemplo. Esta relación de tiempo general funciona como un indicador simple para comparar el costo computacional total de cada código. Las tablas también muestran el número de pasos de integración $Steps$, el número de evaluaciones de campos vectoriales \textit{f-Eval}, el número de evaluaciones de la matriz Jacobianas \textit{J-Eval}, el número de aproximaciones del subespacio de Krylov \textit{K-subspace}, la dimensión mínima $\mf_{min}$, la dimensión máxima $\mf_{max}$ y la dimensión total $\mf_{total}$ de los subespacios de Krylov utilizados por cada código en la integración de las ecuaciones de prueba con tamaño de paso $h$, donde $m_{total}$ es la suma acumulada de la dimensión de los subespacios de Krylov utilizada en cada paso de integración. En las tablas, $d$ especifica el número de ecuaciones de cada ejemplo de prueba.
 
-Las Tablas \ref{tab:num-exp-lldp-fix-step:cpna} - \ref{tab:num-exp-lldp-fix-step:brna} presentan los resultados de la integración de las ecuaciones de prueba de los Ejemplos \ref{ex:cusp}-\ref{ex:Brus}, mostrando que, con tamaño de paso fijo y dimensión variable de Krylov, los códigos \emph{LLDP4} y \emph{LLDP5} son más precisos que los códigos \emph{expms4} y \emph{expms5}, con un costo computacional similar o menor. Los códigos \emph{LLDP} son más rápidos porque requieren el cálculo de solo un subespacio de Krylov por paso de integración con dimensiones más pequeñas, mientras que los otros códigos calculan más de un subespacio de Krylov con dimensiones más altas. El código \emph{LLDP5} es más rápido que el \emph{LLDP4} porque la fórmula de orden 4 en (\ref{LLDPK scheme}) requiere de una evaluación adicional del campo vectorial $f$ en cada paso de integración. Con tamaño de paso $h = 0.0064$, el código \emph{expms5} produce desbordamiento en la precisión del punto flotante~(\textit{overflow} en inglés) en la integración de la ecuación de Burges, razón por la cual falta información en la Tabla \ref{tab:num-exp-lldp-fix-step:bgna}. Por la misma razón, falta un valor en la Tabla \ref{tab:num-exp-lldp-fix-step:brna} para el código \emph{expms5} con un tamaño de paso $h = 0.0008$.
-
-Además, las tablas muestran la efectividad de la estrategia propuesta para la selección de la dimensión de Krylov $\mf$ en cada paso de integración, con mínima variación entre los valores de $\mf_{min}$ y $\mf_{max}$, y así, con un valor menor de $\mf_{total}$.
+\vspace{0.5cm}
 
 \begin{table}[htb]
 	\caption{Desempeño de los códigos de paso fijo \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación CUSP con $M=32$, $d=96$.}
@@ -458,39 +458,40 @@ Además, las tablas muestran la efectividad de la estrategia propuesta para la s
 	\label{tab:num-exp-lldp-fix-step:cpna}
 \end{table}
 
-
+\vspace{0.3cm}
 
 \begin{table}[htb]
 	\caption{Desempeño de los códigos de paso fijo \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Burgers con $M=500$, $d=500$.}
 	\centering
 	\begin{adjustbox}{width=0.95\columnwidth,center}
-	\begin{tabular}{lccccccccc}
-		\hline
-		& RTime & RError & Steps & f-Eval & J-Eval & K-subspace & $\mf_{total}$ & $\mf_{min}$ & $\mf_{max}$ \\
-		\hline
-		h = 0.001600 &  &  &  &  &  &  &  &  &  \\
-		expms4 & 1.0000 & 2.0411e-03 & 313 & 630 & 313 & 937 & 5984 & 2 & 11  \\
-		expms5 & 1.3115 & 6.2805e-04 & 313 & 635 & 313 & 1249 & 7744 & 2 & 11  \\
-		LLDP4 & 0.1109 & 3.7647e-06 & 313 & 2191 & 313 & 313 & 2174 & 4 & 8  \\
-		LLDP5 & 0.1081 & 6.8065e-07 & 313 & 1878 & 313 & 313 & 2174 & 4 & 8  \\
-		\hline
-		h = 0.003200 &  &  &  &  &  &  &  &  &  \\
-		expms4 & 1.0000 & 2.0005e-02 & 157 & 318 & 157 & 469 & 5802 & 3 & 46  \\
-		expms5 & 1.2350 & 1.1603e-02 & 157 & 323 & 157 & 625 & 7747 & 3 & 57  \\
-		LLDP4 & 0.0719 & 7.8449e-05 & 157 & 1099 & 157 & 157 & 1425 & 6 & 10  \\
-		LLDP5 & 0.0719 & 4.5654e-05 & 157 & 942 & 157 & 157 & 1425 & 6 & 10  \\
-		\hline
-		h = 0.006400 &  &  &  &  &  &  &  &  &  \\
-		expms4 & 1.0000 & 5.7742e-01 & 79 & 162 & 79 & 235 & 6267 & 6 & 100  \\
-		expms5 & - & - & - & - & - & - &- & - & -\\
-		LLDP4 & 0.0281 & 2.3688e-03 & 79 & 553 & 79 & 79 & 954 & 8 & 14  \\
-		LLDP5 & 0.0278 & 3.6646e-03 & 79 & 474 & 79 & 79 & 964 & 8 & 15  \\
-		\hline
-	\end{tabular}
-\end{adjustbox}
+		\begin{tabular}{lccccccccc}
+			\hline
+			& RTime & RError & Steps & f-Eval & J-Eval & K-subspace & $\mf_{total}$ & $\mf_{min}$ & $\mf_{max}$ \\
+			\hline
+			h = 0.001600 &  &  &  &  &  &  &  &  &  \\
+			expms4 & 1.0000 & 2.0411e-03 & 313 & 630 & 313 & 937 & 5984 & 2 & 11  \\
+			expms5 & 1.3115 & 6.2805e-04 & 313 & 635 & 313 & 1249 & 7744 & 2 & 11  \\
+			LLDP4 & 0.1109 & 3.7647e-06 & 313 & 2191 & 313 & 313 & 2174 & 4 & 8  \\
+			LLDP5 & 0.1081 & 6.8065e-07 & 313 & 1878 & 313 & 313 & 2174 & 4 & 8  \\
+			\hline
+			h = 0.003200 &  &  &  &  &  &  &  &  &  \\
+			expms4 & 1.0000 & 2.0005e-02 & 157 & 318 & 157 & 469 & 5802 & 3 & 46  \\
+			expms5 & 1.2350 & 1.1603e-02 & 157 & 323 & 157 & 625 & 7747 & 3 & 57  \\
+			LLDP4 & 0.0719 & 7.8449e-05 & 157 & 1099 & 157 & 157 & 1425 & 6 & 10  \\
+			LLDP5 & 0.0719 & 4.5654e-05 & 157 & 942 & 157 & 157 & 1425 & 6 & 10  \\
+			\hline
+			h = 0.006400 &  &  &  &  &  &  &  &  &  \\
+			expms4 & 1.0000 & 5.7742e-01 & 79 & 162 & 79 & 235 & 6267 & 6 & 100  \\
+			expms5 & - & - & - & - & - & - &- & - & -\\
+			LLDP4 & 0.0281 & 2.3688e-03 & 79 & 553 & 79 & 79 & 954 & 8 & 14  \\
+			LLDP5 & 0.0278 & 3.6646e-03 & 79 & 474 & 79 & 79 & 964 & 8 & 15  \\
+			\hline
+		\end{tabular}
+	\end{adjustbox}
 	\label{tab:num-exp-lldp-fix-step:bgna}
 \end{table}
 
+\vspace{0.5cm}
 
 \begin{table}[htb]
 	\caption{Desempeño de los códigos de paso fijo \emph{expms4}, \emph{expms5}, \emph{LLDP4} y \emph{LLDP5} en la integración de la ecuación Brusselator2D con $M=50$, $d=5000$.}
@@ -553,6 +554,11 @@ Además, las tablas muestran la efectividad de la estrategia propuesta para la s
 \end{adjustbox}
 	\label{tab:num-exp-lldp-fix-step:brna}
 \end{table}
+
+Las Tablas \ref{tab:num-exp-lldp-fix-step:cpna} - \ref{tab:num-exp-lldp-fix-step:brna} presentan los resultados de la integración de las ecuaciones de prueba de los Ejemplos \ref{ex:cusp}-\ref{ex:Brus}, mostrando que, con tamaño de paso fijo y dimensión variable de Krylov, los códigos \emph{LLDP4} y \emph{LLDP5} son más precisos que los códigos \emph{expms4} y \emph{expms5}, con un costo computacional similar o menor. Los códigos \emph{LLDP} son más rápidos porque requieren el cálculo de solo un subespacio de Krylov por paso de integración con dimensiones más pequeñas, mientras que los otros códigos calculan más de un subespacio de Krylov con dimensiones más altas. El código \emph{LLDP5} es más rápido que el \emph{LLDP4} porque la fórmula de orden 4 en (\ref{LLDPK scheme}) requiere de una evaluación adicional del campo vectorial $f$ en cada paso de integración. Con tamaño de paso $h = 0.0064$, el código \emph{expms5} produce desbordamiento en la precisión del punto flotante~(\textit{overflow} en inglés) en la integración de la ecuación de Burges, razón por la cual falta información en la Tabla \ref{tab:num-exp-lldp-fix-step:bgna}. Por la misma razón, falta un valor en la Tabla \ref{tab:num-exp-lldp-fix-step:brna} para el código \emph{expms5} con un tamaño de paso $h = 0.0008$.
+
+Además, las tablas muestran la efectividad de la estrategia propuesta para la selección de la dimensión de Krylov $\mf$ en cada paso de integración, con mínima variación entre los valores de $\mf_{min}$ y $\mf_{max}$, y así, con un valor menor de $\mf_{total}$.
+
 
 \section{Esquemas adaptativos con tamaño de paso variable}
 Para escribir un código que determine automáticamente el tamaños de paso lo suficientemente pequeños para obtener la precisión adecuada y lo suficientemente grandes para evitar trabajo computacional innecesario, es necesaria una estrategia adaptativa adecuada. Como se mostró en \cite{Jimenez14AMC}, el control del tamaño de paso automático de las fórmulas embebidas originales de Dormand y Prince se adapta bien a las fórmulas embebidas (\ref{LLDPK scheme}) para PVI pequeños. Es fácil notar que con ciertas modificaciones relacionadas con la aproximación Krylov-Padé (\ref{eq:kp_aprox}), esta estrategia para la selección del tamaño del paso parece adecuada para las fórmulas embebidas (\ref{LLDPK scheme}) para PVI de dimensiones no pequeñas. A continuación, se describirá la estrategia adaptativa para las fórmulas embebidas (\ref{LLDPK scheme}).
@@ -782,6 +788,8 @@ Los principales resultados del estudio de simulación se resumen en la Figura \r
 \end{figure}
 
 Para explicar estos resultados, para cada ecuación de prueba, los detalles de ejecución de cada código se presentan en una tabla. El error relativo \textit{RError} de cada código se mide nuevamente por la expresión (\ref{num-exp-lldp-fix-step:ER}) y el tiempo computacional relativo \textit{RTime} de cada código se calcula con respecto al tiempo computacional del código \emph{ode15sk}. Además, las tablas presentan el número de pasos \textit{A-Steps} aceptados y \textit{R-Steps} rechazados, así como el número de evaluaciones del campo vectorial \textit{f-Eval} y del Jacobiano \textit{J-Eval}. La dimensión mínima $\mf_ {min}$, máxima $\mf_ {max}$ y total $\mf_{total}$ de los subespacios de Krylov requeridos por los códigos \emph{LLDP45} y \emph{exp4} para integrar las ecuaciones de prueba sobre todo el intervalo de integración  también se dan, así como el orden de Padé mínimo $\pf_{min}$ y máximo $\pf_{max}$ requerido por el código \emph{LLDP45}. Para el código \emph{ode15sk}, $\mf_{min}$, $\mf_{max}$ y $\mf_{total}$ representan el número mínimo, máximo y total de iteraciones realizadas por el método GMRES sobre el intervalo de integración completo. Además, \textit{ME} denota el número de matrices exponenciales, \textit{ILU(0)} el número de factorizaciones LU incompletas, \textit{K-subspace} el número de aproximaciones del subespacio de Krylov, y \textit{GMRES} el número de sistemas lineales resueltos por el método GMRES. En las tablas, $d$ especifica el número de ecuaciones de cada ejemplo de prueba.
+
+\vspace{1.1cm}
 
 \begin{table}[htb]
 	\caption{Desempeño de los códigos adaptativos \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones  CUSP y Burgers.}

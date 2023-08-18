@@ -442,23 +442,23 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
     \caption{Algoritmo de Arnoldi para construir una base ortonormal $\{ v_1,\ldots,v_\mf \}$ del $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(A,b)=\mathrm{span} \{ b,Ab,\ldots, A^{\mf-1}b \}$}
     \label{alg:Arnoldi}
     \KwIn{Matriz $A\in \mathbb{R}^{d\times d}$ y vector $b\in \mathbb{R}^{d}$}
-    \KwOut{$V_\mf=\left[ v_1 \, \cdots \, v_\mf \right]\in\mathbb{R}^{d\times\mf}$, matriz de Hessenberg superior $H_\mf^*=V_\mf^{\intercal}A V_\mf $, $v_{\mf}\in\mathbb{R}^d$, $\hf^*_{\mf+1,\mf}$, $\mf_{cut}$, $breakdown$ }
+    \KwOut{$V_\mf=\left[ v_1 \, \cdots \, v_\mf \right]\in\mathbb{R}^{d\times\mf}$, matriz de Hessenberg superior $H_\mf=V_\mf^{\intercal}A V_\mf $, $v_{\mf+1}\in\mathbb{R}^d$, $\hf_{\mf+1,\mf}$, $\mf_{cut}$, $breakdown$ }
 
     $breakdown=false$\\
     $v_1=b/\lVert b \rVert_2$\\
     \For{ $j=1,2,\ldots,\mf$ }{
         $w_j= A v_j$\\
         \For{ $i=1,\ldots,j$}{
-            $\hf^*_{ij}=\langle w_j,v_i \rangle$\\
-            $w_j=w_j-\hf^*_{ij}v_i$
+            $\hf_{ij}=\langle w_j,v_i \rangle$\\
+            $w_j=w_j-\hf_{ij}v_i$
         }
-        $\hf^*_{j+1,i}=\lVert w_j \rVert_2$\\
-        \eIf(\tcp*[h] \emph{Break Down}\label{alg:breakdown}){$\hf^*_{j+1,i}<2\epsilon_{mach}$}{
+        $\hf_{j+1,i}=\lVert w_j \rVert_2$\\
+        \eIf(\tcp*[h] \emph{Break Down}\label{alg:breakdown}){$\hf_{j+1,i}<2\epsilon_{mach}$}{
             $\mf_{cut}=j$\\
              $breakdown=true$\\
             Stop
         }{
-            $v_{j+1}=w_j/\hf^*_{j+1,i}$
+            $v_{j+1}=w_j/\hf_{j+1,i}$
         }
     }
 \nonl $\epsilon_{mach}$ denota el espaciamiento del número en punto flotante 1 y $\langle . , .\rangle$ denota producto escalar
@@ -482,6 +482,14 @@ Cuando la función $f$ en~(\ref{MFUNC-APROX}) es la exponencial matricial se obt
 	\end{equation*}
 	donde $\sigma(A)$ es el radio espectral de $A$.
 \end{theorem}
+
+Cuando la función $f$ en (\ref{MFUNC-APROX}) actua sobre la matriz $A$ reescalada por un factor $\tau$ se cumple que \cite{Saad92}
+\begin{equation*}
+	f(\tau A)b\approx ||b||_2 V_\mf f(\tau H_\mf)e_1,
+\end{equation*}
+expresion que se deriva de propiedad de invarianza ante escalado de las bases ortonormales de Krylov. Esta propiedad de invarianza se refiere al siguiente resultado. Si $V^*_m$ y $H^*_m$ denotan a la base ortonormal y a la matriz de Hessenberg resultante del Algoritmo de Arnoldi \ref{alg:Arnoldi} para el subspacio de Krylov $\mathcal{K}_\mf(\tau A,b)$, entonces
+\[ V^*_m=V_m       \text{   y    }      H^*_m=\tau H_m,\]
+donde $V_m$ es la base ortonormal y $H_m$  la matriz de Hessenberg resultante del Algoritmo de Arnoldi \ref{alg:Arnoldi} para el subspacio de Krylov $\mathcal{K}_\mf(A,b)$.
 
 \section{Producto de funciones phi por vectores}\label{section:phi-times-vector}
 
