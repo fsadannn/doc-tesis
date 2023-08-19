@@ -673,7 +673,7 @@ El cálculo adaptativo de los términos $\widetilde{u}_j$ en (\ref{Jacobian-free
 				$work=false$
 			}{
 				\eIf{$breakdown$ = $true$ \textbf{or} $\mf_n=\mf_{max}$}{
-					$h_{new}=\maxx{h_{min},0.9\cdot h_{n}}$\\
+					$h_{new}=\maxx{h_{min},0\mathord{.} 9\cdot h_{n}}$\\
 					$h_{n}=h_{new}$\\
 					\If{$h_n = h_{min}$}{work = false}
 				}{
