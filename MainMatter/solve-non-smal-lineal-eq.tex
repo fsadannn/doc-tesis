@@ -341,14 +341,14 @@ donde $\widehat{H}_\mf=\widehat{H}^*_\mf/\tau$ y $\widehat{\hf}_{\mf+1,\mf}=\wid
 %con $q_1=g(y,b;\delta_1)$, $q_j=g(y,q_{j-1};\delta_1)$; $j=2,\ldots,\mf-1$
 
 {\SetAlgoNoLine
-	\begin{algorithm}
+	\begin{algorithm}[htb]
 		\caption{Algoritmo de Arnoldi libre de Jacobiano para construir una base ortonormal $\{\widehat{v}_1,\ldots,\widehat{v}_\mf \}$ 
 			del $\mf$-ésimo subespacio de Krylov $\widehat{\mathcal{K}}_\mf(\tau f_x(y),b;\delta) = \mathrm{span} \left\{ b,\widehat{q}_1,\ldots,\widehat{q}_{\mf-1} \right\}$}
 		\label{alg:iArnoldi}
 		\KwIn{función $g: \mathbb{R}^{d}\times \mathbb{R}^{d}\times \mathbb{R}_+ \to \mathbb{R}^{d}$ definida en (\ref{eq:g_bound}), $y,b \in \mathbb{R}^{d}$, $\tau,\delta>0$, y $\mf$ la dimensión del subespacio de Krylov}
 		\KwOut{$\widehat{V}_{\mf}=[\widehat{v_1}\,\cdots \,\widehat{v}_\mf]\in \mathbb{R}^{d\times \mf}$,
 			matriz de Hessenberg superior $\widehat{H}^*_\mf=(\widehat{\hf}^*_{ij})\in \mathbb{R}^{\mf\times \mf} $,
-			$\widehat{v}_{\mf+1} \in \mathbb{R}^d$, $\widehat{\hf}^*_{\mf+1,\mf}$}
+			$\widehat{v}_{\mf+1} \in \mathbb{R}^d$, $\widehat{\hf}^*_{\mf+1,\mf}$, $\mf$, $breakdown$}
 		$\widehat{v}_1=b/\lVert b \rVert_2$\\
 		\For{ $j=1,\ldots,\mf$ }{
 			$\widehat{q}_j=g(y,\tau \widehat{v}_j;\delta)$, \\
@@ -358,7 +358,13 @@ donde $\widehat{H}_\mf=\widehat{H}^*_\mf/\tau$ y $\widehat{\hf}_{\mf+1,\mf}=\wid
 				$\widehat{w}_j=\widehat{w}_j - \widehat{\hf}^*_{ij}\widehat{v}_i$ \\
 			}
 			$\widehat{\hf}^*_{j+1,j}=\lVert \widehat{w}_j \rVert_2$\\
-			$\widehat{v}_{j+1}=\widehat{w}_j/\widehat{\hf}^*_{j+1,j}$
+			\eIf(\tcp*[h] \emph{Break Down}\label{alg:breakdown-fj}){$\widehat{\hf}^*_{j+1,j}<2\epsilon_{mach}$}{
+				$\mf=j$\\
+				$breakdown=true$\\
+				Stop
+			}{
+				$\widehat{v}_{j+1}=\widehat{w}_j/\widehat{\hf}^*_{j+1,j}$
+			}
 		}
 	\nonl $\langle . , .\rangle$ denota producto escalar
 	\end{algorithm}
@@ -581,7 +587,7 @@ donde $ATol$ y $RTol$ son las tolerancias absoluta y relativa deseadas y $\rho =
 		\fac\cdot\Delta\mf} } \right\rceil,
 \end{equation}
 \importantdefinition{Dimensión óptima de Krylov} \vspace{-0.1in}
-\hspace{-0.26in} donde $\Delta\mf=\log(\varepsilon(\mf)/\gamma)$, $\gamma=0.005$ es un factor de seguridad, $\fac_{max}= \maxx{ 1, \frac{\mf}{3} }$, $\fac_{min}= 1 $, $\fac=\frac{1}{\log(2)}$, y el símbolo $\left\lceil \cdot \right\rceil$ denota la función de techo (que devuelve el menor entero mayor o igual que un número real dado). Luego, con $\mf=\mf_{new}$, se repite el procedimiento explicado hasta que se satisface $\varepsilon(\mf)/\gamma< 1$. Obsérvese que la dimensión óptima de Krylov es el menor valor de $\mf$ tal que se satisface la desigualdad  $\varepsilon(\mf)/\gamma< 1$ para el error relativo.
+\hspace{-0.26in} donde $\Delta\mf=\log(\varepsilon(\mf)/\gamma)$, $\gamma=0$.005 es un factor de seguridad, $\fac_{max}= \maxx{ 1, \frac{\mf}{3} }$, $\fac_{min}= 1 $, $\fac=\frac{1}{\log(2)}$, y el símbolo $\left\lceil \cdot \right\rceil$ denota la función de techo (que devuelve el menor entero mayor o igual que un número real dado). Luego, con $\mf=\mf_{new}$, se repite el procedimiento explicado hasta que se satisface $\varepsilon(\mf)/\gamma< 1$. Obsérvese que la dimensión óptima de Krylov es el menor valor de $\mf$ tal que se satisface la desigualdad  $\varepsilon(\mf)/\gamma< 1$ para el error relativo.
 
 \subsection{Experimentos numéricos}\label{section:num-sim-kp}
 El objetivo de esta sección es realizar un conjunto de simulaciones numéricas para medir el desempeño de las aproximaciones de Krylov-Padé propuestas y compararlas con aproximaciones existentes.

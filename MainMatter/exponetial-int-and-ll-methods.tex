@@ -441,8 +441,8 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
 \begin{algorithm}
     \caption{Algoritmo de Arnoldi para construir una base ortonormal $\{ v_1,\ldots,v_\mf \}$ del $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(A,b)=\mathrm{span} \{ b,Ab,\ldots, A^{\mf-1}b \}$}
     \label{alg:Arnoldi}
-    \KwIn{Matriz $A\in \mathbb{R}^{d\times d}$ y vector $b\in \mathbb{R}^{d}$}
-    \KwOut{$V_\mf=\left[ v_1 \, \cdots \, v_\mf \right]\in\mathbb{R}^{d\times\mf}$, matriz de Hessenberg superior $H_\mf=V_\mf^{\intercal}A V_\mf $, $v_{\mf+1}\in\mathbb{R}^d$, $\hf_{\mf+1,\mf}$, $\mf_{cut}$, $breakdown$ }
+    \KwIn{Matriz $A\in \mathbb{R}^{d\times d}$, vector $b\in \mathbb{R}^{d}$ y dimensión de Krylov $\mf$}
+    \KwOut{$V_\mf=\left[ v_1 \, \cdots \, v_\mf \right]\in\mathbb{R}^{d\times\mf}$, matriz de Hessenberg superior $H_\mf=V_\mf^{\intercal}A V_\mf $, $v_{\mf+1}\in\mathbb{R}^d$, $\hf_{\mf+1,\mf}$, $\mf$, $breakdown$ }
 
     $breakdown=false$\\
     $v_1=b/\lVert b \rVert_2$\\
@@ -452,13 +452,13 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
             $\hf_{ij}=\langle w_j,v_i \rangle$\\
             $w_j=w_j-\hf_{ij}v_i$
         }
-        $\hf_{j+1,i}=\lVert w_j \rVert_2$\\
-        \eIf(\tcp*[h] \emph{Break Down}\label{alg:breakdown}){$\hf_{j+1,i}<2\epsilon_{mach}$}{
-            $\mf_{cut}=j$\\
+        $\hf_{j+1,j}=\lVert w_j \rVert_2$\\
+        \eIf(\tcp*[h] \emph{Break Down}\label{alg:breakdown}){$\hf_{j+1,j}<2\epsilon_{mach}$}{
+            $\mf=j$\\
              $breakdown=true$\\
             Stop
         }{
-            $v_{j+1}=w_j/\hf_{j+1,i}$
+            $v_{j+1}=w_j/\hf_{j+1,j}$
         }
     }
 \nonl $\epsilon_{mach}$ denota el espaciamiento del número en punto flotante 1 y $\langle . , .\rangle$ denota producto escalar
