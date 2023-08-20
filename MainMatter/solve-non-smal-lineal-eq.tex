@@ -359,7 +359,7 @@ donde $\widehat{H}_\mf=\widehat{H}^*_\mf/\tau$ y $\widehat{\hf}_{\mf+1,\mf}=\wid
 			}
 			$\widehat{\hf}^*_{j+1,j}=\lVert \widehat{w}_j \rVert_2$\\
 			\eIf(\tcp*[h] \emph{Break Down}\label{alg:breakdown-fj}){$\widehat{\hf}^*_{j+1,j}<2\epsilon_{mach}$}{
-				$\mf=j$\\
+				$\mf=j-1$\\
 				$breakdown=true$\\
 				Stop
 			}{

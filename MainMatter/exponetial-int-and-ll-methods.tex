@@ -437,7 +437,7 @@ Antes de definir la aproximación por subespacios de Krylov del producto de una 
 necesario construir una base ortonormal. Para construir dicha base se utiliza el algoritmo de
 Arnoldi~\ref{alg:Arnoldi} para matrices generales y el algoritmo de 
 Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
-
+{\SetAlgoNoLine
 \begin{algorithm}
     \caption{Algoritmo de Arnoldi para construir una base ortonormal $\{ v_1,\ldots,v_\mf \}$ del $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(A,b)=\mathrm{span} \{ b,Ab,\ldots, A^{\mf-1}b \}$}
     \label{alg:Arnoldi}
@@ -454,7 +454,7 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
         }
         $\hf_{j+1,j}=\lVert w_j \rVert_2$\\
         \eIf(\tcp*[h] \emph{Break Down}\label{alg:breakdown}){$\hf_{j+1,j}<2\epsilon_{mach}$}{
-            $\mf=j$\\
+            $\mf=j-1$\\
              $breakdown=true$\\
             Stop
         }{
@@ -463,7 +463,7 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
     }
 \nonl $\epsilon_{mach}$ denota el espaciamiento del número en punto flotante 1 y $\langle . , .\rangle$ denota producto escalar
 \end{algorithm}
-
+}
 
 \begin{definition}\label{def:exp-k-approx}
     \cite{Saad92} Sea $V_\mf$ una base ortonormal del $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(A,b)$, $f: \mathbb{C}^{N\times N} \to \mathbb{C}^{N\times N}$ una función matricial definida
