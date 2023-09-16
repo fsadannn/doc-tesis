@@ -8,7 +8,7 @@
 \contentsline {importantcodes}{LLDP5: esquema Runge-Kutta Localmente Linealizado de Dromand y Prince de orden 5 y paso fijo descrito en Algoritmo \ref {alg:integratorfix}}{43}{importantcodes.8}% 
 \contentsline {importantcodes}{expms4: esquema exponencial de Adams de orden 4 y paso fijo}{43}{importantcodes.9}% 
 \contentsline {importantcodes}{expms5: esquema exponencial de Adams de orden 5 y paso fijo}{43}{importantcodes.10}% 
-\contentsline {importantcodes}{LLDP45: esquema adaptativo para las f\IeC {\'o}rmulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas descrito en Algoritmo \ref {alg:integrator}}{50}{importantcodes.11}% 
+\contentsline {importantcodes}{LLDP45: esquema adaptativo para las f\IeC {\'o}rmulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas descrito en Algoritmo \ref {alg:integrator}}{51}{importantcodes.11}% 
 \contentsline {importantcodes}{ode15s: esquema adaptativo para las f\IeC {\'o}rmulas diferenciales hacia atr\IeC {\'a}s de orden variable 1-5}{51}{importantcodes.12}% 
 \contentsline {importantcodes}{exp4: esquema adaptativo para el integrador exponencial de orden 4}{51}{importantcodes.13}% 
 \contentsline {importantcodes}{JF-LLRK: esquema Runge-Kutta Localmente Linealizado libre de Jacobiano de orden variable y paso fijo}{62}{importantcodes.14}% 
@@ -16,7 +16,7 @@
 \contentsline {importantcodes}{BDF4: esquema para la f\IeC {\'o}rmula diferencial hacia atr\IeC {\'a}s de orden 4 libre de Jacobiano y paso fijo}{62}{importantcodes.16}% 
 \contentsline {importantcodes}{JF-Exp4: esquema exponencial de orden 4 libre de Jacobiano y paso fijo}{62}{importantcodes.17}% 
 \contentsline {importantcodes}{JF-EPIRK4: esquema exponencial de propagaci\IeC {\'o}n iterativa tipo Rungge-Kutta de orden 4 libre de Jacobiano y paso fijo}{62}{importantcodes.18}% 
-\contentsline {importantcodes}{LLDP1: esquema adaptativo para las formulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas y libres de Jacobiano descrito en Algoritmo \ref {alg:integrator-fj}}{77}{importantcodes.19}% 
-\contentsline {importantcodes}{ode15sk: esquema adaptativo para las f\IeC {\'o}rmulas diferenciales hacia atr\IeC {\'a}s de orden variable 1-5 libres de Jacobiano}{77}{importantcodes.20}% 
-\contentsline {importantcodes}{exp4jf: esquema adaptativo para el integrador exponencial de orden 4 libre de Jacobiano}{77}{importantcodes.21}% 
-\contentsline {importantcodes}{LLDP2: esquema adaptativo similar al del c\IeC {\'o}digo LLDP1, pero con diferencia finita de orden 1 fija para la aproximaci\IeC {\'o}n $g_1$ en Algoritmo \ref {alg:integrator-fj}}{77}{importantcodes.22}% 
+\contentsline {importantcodes}{LLDP1: esquema adaptativo para las formulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas y libres de Jacobiano descrito en Algoritmo \ref {alg:integrator-fj}}{78}{importantcodes.19}% 
+\contentsline {importantcodes}{ode15sk: esquema adaptativo para las f\IeC {\'o}rmulas diferenciales hacia atr\IeC {\'a}s de orden variable 1-5 libres de Jacobiano}{78}{importantcodes.20}% 
+\contentsline {importantcodes}{exp4jf: esquema adaptativo para el integrador exponencial de orden 4 libre de Jacobiano}{78}{importantcodes.21}% 
+\contentsline {importantcodes}{LLDP2: esquema adaptativo similar al del c\IeC {\'o}digo LLDP1, pero con diferencia finita de orden 1 fija para la aproximaci\IeC {\'o}n $g_1$ en Algoritmo \ref {alg:integrator-fj}}{78}{importantcodes.22}% 

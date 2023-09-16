@@ -168,14 +168,14 @@ Las nuevas fórmulas embebidas (\ref{LLDPK scheme}) introducidas en la sección 
 Similar al error relativo utilizado en la Sección \ref{section:approx-non-auto}, el error relativo en la aproximación (\ref{llrk-uj}) para $u_j$ está dado por
 \begin{equation}
     \varepsilon_{K} = \left(\frac{1}{d}\sum\limits_{i=1}^{d} \left(\frac{\beta
-        \hf_{\mf+1,\mf} e_{\mf}^T
+        \hf_{\mf_n+1,\mf_n} e_{\mf_n}^T
         [\widetilde{E}_{\mathfrak{c}h_n}]_{14} \rho^{[i]}}{ATol+ RTol\cdotp
         \rvert y_{n}^{[i]}\rvert}\right)^{2}\right)^{1/2},
     \label{errrel}
 \end{equation}
-donde $ATol$ y $RTol$ son las tolerancias absoluta y relativa, $\mathfrak{c}=\maxx{c_j}$, $\rho = f_x v_{\mf+1}$ y $\beta=\nnorm{\nnorm{f}}_2$.
+donde $\mf_n$ denota la dimension del subspacio de Kyrlov en el paso de integración $n$, $ATol$ y $RTol$ son las tolerancias absoluta y relativa, $\mathfrak{c}=\maxx{c_j}$, $\rho = f_x v_{\mf_n+1}$ y $\beta=\nnorm{\nnorm{f}}_2$.
 
-Después de la construcción de la base ortonormal del $\mf$-ésimo subespacio Krylov $\mathcal{K}_\mf(f_x,f)$, dos alternativas son posibles: $\varepsilon_{K}/\gamma_{K}< 1$ o al contrario, donde $\varepsilon_{K}$
+Después de la construcción de la base ortonormal del $\mf_n$-ésimo subespacio Krylov $\mathcal{K}_{\mf_n}(f_x,f)$, dos alternativas son posibles: $\varepsilon_{K}/\gamma_{K}< 1$ o al contrario, donde $\varepsilon_{K}$
 es el error relativo~(\ref{errrel}) y $\gamma_{K}=$ 0.005 es un factor de seguridad.
 
 En el caso de $\varepsilon_{K}/\gamma_{K}< 1$, se acepta la aproximación (\ref{phi_appox}) para $u_j$ y la nueva dimensión del subespacio de Krylov $\mathfrak{m}_{new}$ que se utilizará en el siguiente paso de integración se calcula mediante la fórmula
@@ -195,13 +195,13 @@ $\fac_{max}= -\frac{\mf_n}{4}$, $\fac_{min}= \frac{\mf_n}{3}$, $\fac=\frac{1}{\l
     \mf = \left\lceil \mf_{n} + \minn{\fac_{max} , \maxx{\fac_{min},
             \fac\cdot\Delta\mf} } \right\rceil,
 \end{equation*}
-donde $\fac_{max}= \maxx{ 1,\frac{\mf_{n}}{3} }$, $\fac_{min}= 1 $, $\fac=\frac{1}{\log (2)}$, y $\left\lceil \cdot \right\rceil$ denota la función techo (que devuelve el menor entero mayor o igual que un número real dado). Los vectores ortonormales extra $\{v_{\mf+1},\ldots,v_{\mf_{new}} \}$ correspondientes al $\mf_{new}$-ésimo subespacio de Krylov $\mathcal{K}_{\mf_{new}}(f_x,f)$ son calculados a través del Algoritmo \ref{alg:Arnoldiexpand}.
+donde $\fac_{max}= \maxx{ 1,\frac{\mf_{n}}{3} }$, $\fac_{min}= 1 $, $\fac=\frac{1}{\log (2)}$, y $\left\lceil \cdot \right\rceil$ denota la función techo (que devuelve el menor entero mayor o igual que un número real dado). Los vectores ortonormales extra $\{v_{\mf_n+1},\ldots,v_{\mf_{new}} \}$ correspondientes al $\mf_{new}$-ésimo subespacio de Krylov $\mathcal{K}_{\mf_{new}}(f_x,f)$ son calculados a través del Algoritmo \ref{alg:Arnoldiexpand}.
 \begin{algorithm}[!htb]
 	\caption{Algoritmo de Arnoldi para expandir la base ortonormal $\{v_1,\ldots,v_{\mf} \}$ del $\mf$-ésimo subespacio de Krylov $\mathcal{K}_{\mf}(A,b)=span\{b,Ab,\ldots,A^{\mf-1}b\}$ a la base ortonormal $\{v_1,\ldots,v_{\mf},\ldots,v_{\mf_{new}} \}$ del $\mf_{new}$-ésimo subespacio de Krylov ${\mathcal{K}_{\mf_{new}}(A,b)=span\{b,Ab,\ldots,A^{\mf_{new}-1}b\}}$}
     \label{alg:Arnoldiexpand}
-	\KwIn{$A\in \mathbb{R}^{d\times d}$, $b\in \mathbb{R}^{d}$, $V_{\mf}\in \mathbb{R}^{d\times \mf}$, $H^*_{\mf}\in\mathbb{R}^{\mf\times \mf}$, $v_{\mf+1}\in \mathbb{R}^{d}$, $\hf_{\mf+1,\mf} \ge 0$, y la nueva dimensión $\mf_{new}$ del subespacio de Krylov}
-	\KwOut{$V_{\mf_{new}}=[v_1\,\cdots \,v_{\mf_{new}}]\in \mathbb{R}^{d\times \mf_{new}}$, matriz de Hessenberg superior $H^*_{\mf_{new}}=V_\mf^{\intercal} A V_{\mf_{new}} $, $v_{\mf_{new}+1}$,  $\hf_{\mf_{new}+1}$, $\mf_{new}$, $\mf_{cut}$, $breakdown$}
-	Líneas 3-17 en el Algoritmo \ref{alg:Arnoldi}, pero reemplazando la línea 3 por \textbf{for} $j=\mf+1,\ldots,\mf_{new}$ \textbf{do}
+	\KwIn{$A\in \mathbb{R}^{d\times d}$, $b\in \mathbb{R}^{d}$, $V_{\mf}\in \mathbb{R}^{d\times \mf}$, $H^*_{\mf}\in\mathbb{R}^{\mf\times \mf}$ y la nueva dimensión $\mf_{new}$ del subespacio de Krylov}
+	\KwOut{$V_{\mf_{new}}=[v_1\,\cdots \,v_{\mf_{new}}]\in \mathbb{R}^{d\times \mf_{new}}$, matriz de Hessenberg superior $H^*_{\mf_{new}}=V_\mf^{\intercal} A V_{\mf_{new}} $, $v_{\mf_{new}+1}$,  $\hf^*_{\mf_{new}+1}$, $\mf_{new}$, $breakdown$}
+	Líneas 3-17 en el Algoritmo \ref{alg:Arnoldi}, pero reemplazando la línea 3 por \textbf{for} $j=\mf+1,\ldots,\mf_{new}$ \textbf{do} y la línea 11 por $\mf_{new}=j-1$
 \end{algorithm}
 El estimador propuesto (\ref{calcmnew}) para $\mf_{new}$ es un refinamiento del considerado en el Algoritmo 3 de \cite{niesen2012algorithm} orientado a reducir las fluctuaciones en la estimación de la dimensión de los subespacios de Krylov. Además, el valor de $\mf_{min}$ en (\ref{calcmnew}) debe ser tal que conserve el orden de convergencia de las fórmulas embebidas originales de Dormand y Prince como se establece en el Teorema \ref{theorem:lldp-convergence}.
 
@@ -236,13 +236,15 @@ En las dos sub-secciones anteriores se propusieron procedimientos automáticos p
 	\KwOut{$\{y_0,\ldots,y_n\}$}
 	$n=0$, $\mf_0=\mf_{min}$ \\
 	\While{$t_n \le T$}{
-		Ejecutar Algoritmo~\ref{alg:Arnoldi} para obtener matrices $H^*_{m_n}$ y $V_{m_n}$ de $\mathcal{K}_{\mf_n}(hf_x,f)$, y calcular $H_{m_n}=H^*_{m_n}/h_n$  \\
+		Ejecutar Algoritmo~\ref{alg:Arnoldi} para obtener $V_{m_n}$, $H^*_{m_n}$, $v_{\mf_n+1}$ y $\hf^*_{\mf_{n}+1,\mf_{n}}$ de $\mathcal{K}_{\mf_n}(hf_x,f)$ \\
+		Calcular $H_{m_n}=H^*_{m_n}/h$ y $\hf_{\mf_{n}+1,\mf_{n}}=\hf^*_{\mf_{n}+1,\mf_{n}}/h$ \\
 		Seleccionar orden de Padé $\pf$ según Sección~\ref{sec:pade-order} \\
 		Estimar error relativo $\varepsilon_{K}$ mediante fórmula~(\ref{errrel}) \\
 		\While{$\varepsilon_{K}/\gamma_{K} \geq 1$ y $\mf_n<\mf_{max}$}{
 			Estimar nueva dimensión de Krylov $\mf_{new}$ mediante fórmula (\ref{calcmnew}) \\
-			Ejecutar Algoritmo~\ref{alg:Arnoldiexpand} para obtener matrices $H^*_{m_{new}}$ y $V_{m_{new}}$ de $\mathcal{K}_{\mf_{new}}(hf_x,f)$, y calcular $H_{m_{new}}=H^*_{m_{new}}/h_n$ \\
-			Hacer $\mf_n=\mf_{new}$ y actualizar todas las variables que dependan de $\mf_n$ \\
+			Ejecutar Algoritmo~\ref{alg:Arnoldiexpand} para obtener $V_{m_{new}}$, $H^*_{m_{new}}$, $v_{\mf_{new}+1}$ y $\hf^*_{\mf_{new}+1,\mf_{new}}$ de $\mathcal{K}_{\mf_{new}}(hf_x,f)$\\
+			Calcular $H_{m_{new}}=H^*_{m_{new}}/h$ y $\hf_{\mf_{new}+1,\mf_{new}}=\hf^*_{\mf_{new}+1,\mf_{new}}/h$ \\
+			Hacer $\mf_n=\mf_{new}$ y reemplazar $\mf_{new}$ por $\mf_n$ en las cuatro variables que dependen de $\mf_{new}$ \\
             Seleccionar orden de Padé $\pf$ según Sección~\ref{sec:pade-order} \\
 		    Estimar error relativo $\varepsilon_{K}$ mediante fórmula~(\ref{errrel}) \\
 		}
@@ -371,8 +373,6 @@ En la Sección \ref{section:lldp-fix-step}, se introdujeron las nuevas fórmulas
 \subsubsection{Simulaciones preliminares}
 En este primer conjunto de simulaciones, se evaluará el orden de convergencia de las fórmulas $y_n$ y $\widehat{y}_n$ definidas en (\ref{LLDPK scheme}) en función de la dimensión de Krylov $\mf$ y el orden de Padé $\pf$. Con ese propósito, los errores $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ y $\widehat{e}_i=\max_{t_n\in(t )_{h_i}}\nnnorm{\widehat{y}_n-x(t_n)}_\infty$ en la integración del Ejemplo \ref{ex:Brus} con $M=100$ ($d=200$ ) se calcularon para cinco discretizaciones de tiempo diferentes $(t)_{h_i}$ con un tamaño de paso fijo $h_i$, donde la \textquotedblleft solución exacta\textquotedblright~ $x$ se estima mediante el código Matlab \textit{ode15s} con tolerancias $RTol=10^{ -12}$ y $ATol=10^{-14}$. La Figura \ref{fig:num-exp-lldp-fix-step:Fig3} muestra estos cinco errores para las fórmulas (\ref{LLDPK scheme}) con varios valores de $\mf$ y $\pf=6$ fijo, así como la línea recta ajustada a los puntos $(\log_2( h_i),\log_2(e_i))$ y $(\log_2(h_i),\log_2(\widehat{e}_i))$ con $i=1,...,5$. La Tabla \ref{tab:num-exp-lldp-fix-step:morders} presenta el valor de la pendiente $\widetilde{r}$ de la recta ajustada para cada valor de $\mf$, lo que proporciona una estimación del orden de convergencia $r$ de cada esquema. La tabla también presenta los límites de confianza de $90\%$ de $\widetilde{r}$, el coeficiente de determinación como indicador de la bondad de la línea ajustada y el orden de convergencia esperado que, de acuerdo con el Teorema \ref{theorem:lldp-convergence}, las fórmulas (\ref{LLDPK scheme}) tienen para el $\mf$ dado. La Figura \ref{fig:num-exp-lldp-fix-step:Fig2} y la Tabla \ref{tab:num-exp-lldp-fix-step:porders} presentan resultados similares pero para las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ fijo y varios valores de $\pf$. Se puede observar que el orden de convergencia estimado $\widetilde{r}$ proporcionado en las Tablas \ref{tab:num-exp-lldp-fix-step:morders} y \ref{tab:num-exp-lldp-fix-step:porders} está de acuerdo con el orden de convergencia de las fórmulas (\ref{LLDPK scheme}) indicado por el Teorema \ref{theorem:lldp-convergence} para los valores considerados de $\mf$ y $\pf$. Además, la Figura \ref{fig:num-exp-lldp-fix-step:Fig4} muestra los errores $e_i$ y $\widehat{e}_i$ de las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ y $\pf=6$ fijos calculado para el tamaño de cinco pasos $h_i$ y la línea recta ajustada. En este caso, el orden de convergencia estimado $\widetilde{r}$ para las fórmulas $y_n$ y $\widehat{y}_n$ son 5.01 $\pm$ 0.47 y 3.93 $\pm$ 0.19 , respectivamente, lo cual concuerda con el orden de convergencia 5 y 4 dados en el Teorema \ref{theorem:lldp-convergence} para estas fórmulas.
 
-\vspace{1.5cm}
-
 \begin{figure}[htb]
 	\begin{center}
 		\includegraphics[scale=0.45]{Graphics/lldp/p-plots.jpg}
@@ -380,8 +380,6 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 		\label{fig:num-exp-lldp-fix-step:Fig2}
 	\end{center}
 \end{figure}
-
-\vspace{0.5cm}
 
 \begin{table}[htb]
 	\centering
@@ -594,7 +592,7 @@ donde
         0\mathord{.}5\cdot h_n & \text{si } \varepsilon_y > RTol \text{ y } fail=true
         \end{cases},
 \end{equation*}
-siendo
+con $\rho = 1\mathord{.}25 \left( \frac{\varepsilon_y}{RTol} \right)^{1/5}$, siendo
 \begin{equation}\label{epsilon_y}
 	\varepsilon_y =  \max_{i=1\ldots d}\left\{ \frac{\left\lvert y^{[i]}_{n+1}-\hat{y}^{[i]}_{n+1} \right\rvert}
 	{\maxx{\left\lvert y^{[i]}_{n+1}  \right\rvert,\left\lvert y^{[i]}_{n}\right\rvert,\frac{ATol}{RTol}}} \right\}
@@ -694,12 +692,14 @@ Con una combinación adecuada de los procedimientos de las Secciones \ref{sec:se
 \begin{algorithm}[!htb]
 	\caption{Algoritmo para el cálculo de las funciones $u_j$ en (\ref{LLDPK scheme}) mediante la aproximación adaptativa Krylov-Padé}
 	\label{alg:errcontrol}
-	\KwIn{$c_j$, $h_n$, $J$, $f$, $\mf_n$, $V_{\mf_n}$, $H_{\mf_n}$,
-		$v_{\mf_{n}+1}$,  $\hf_{\mf_{n}+1,\mf_n}$, $H^*_{m_{n}}$, $breakdown$}
-	\KwOut{$\widetilde{u }_j$, $h_n$, $\mf_n$, $V_{\mf_n}$,   $H_{\mf_n}$,
-		$v_{\mf_{n}+1}$,  $\hf_{\mf_{n}+1,\mf_n}$, $H^*_{m_{n}}$, $\varepsilon_{K}$}
+	\KwIn{$c_j$, $h_n$, $J$, $f$, $\mf_n$, $V_{\mf_n}$, $H^*_{\mf_n}$,
+		$v_{\mf_{n}+1}$, $\hf^*_{\mf_{n}+1,\mf_n}$, $breakdown$}
+	\KwOut{$\widetilde{u }_j$, $h_n$, $\mf_n$, $V_{\mf_n}$, $H^*_{\mf_n}$,
+		$v_{\mf_{n}+1}$, $\hf^*_{\mf_{n}+1,\mf_n}$, $\varepsilon_{K}$}
 	$work=true$\\
 	\While{work}{
+		Calcular $H_{\mf_n}=H^*_{\mf_n}/h_n$ y $\hf_{\mf_{n}+1,\mf_n}=\hf^*_{\mf_{n}+1,\mf_n}/h_n$ \\
+		Control del tamaño de paso como se especifica en la sección~\ref{secc:hcontrol} \\
 		Selecionar el orden de Padé $\pf$ según Sección \ref{sec:pade-order} \\
 		Estimar el error relativo $\varepsilon_{K}$ mediante fórmula~(\ref{errrel}) \\
 		\eIf{$\varepsilon_{K}/\gamma_{K}< 1$}{
@@ -707,13 +707,11 @@ Con una combinación adecuada de los procedimientos de las Secciones \ref{sec:se
 		}{
 			\eIf{$breakdown$ = $true$ \textbf{or} $\mf_n=\mf_{max}$}{
 				$h_{new}=\maxx{h_{min},0\mathord{.}9\cdot h_{n}}$\\
-				$h_{n}=h_{new}$\\
-				\If{$h_n = h_{min}$}{work = false}
+				\eIf{$h_n = h_{min}$}{work = false}{$h_{n}=h_{new}$}
 			}{
-				Estimar la nueva dimensión de Krylov $\mf_{new}$ mediante fórmula
-				(\ref{calcmnew}) \\
-				Ejecutar Algoritmo~\ref{alg:Arnoldiexpand} para obtener matrices $H^*_{m_{new}}$ y $V_{m_{new}}$ de $\mathcal{K}_{\mf_{new}}(h_nJ,f)$, y calcular $H_{m_{new}}=H^*_{m_{new}}/h_n$\\
-				Hacer $\mf_n=\mf_{new}$ y actualizar todas las variables que dependen de $\mf_n$,
+				Estimar la nueva dimensión de Krylov $\mf_{new}$ fórmula (\ref{calcmnew}) \\
+				Ejecutar Algoritmo~\ref{alg:Arnoldiexpand} para obtener $V_{\mf_{new}}$, $H^*_{\mf_{new}}$, $v_{\mf_{new}}$ y $\hf^*_{\mf_{new}+1,\mf_{new}}$ de $\mathcal{K}_{\mf_{new}}(h_nJ,f)$\\
+				Hacer $\mf_n=\mf_{new}$ y reemplazar $\mf_{new}$ por $\mf_n$ en las cuatro variables que dependen de $\mf_{new}$
 			}
 		}
 
@@ -739,9 +737,9 @@ Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \r
 	$f_{old} = f(y_n)$ \\
 	\While{$t_n<T$}{
 		Control de reutilización del Jacobiano mediante Algoritmo~\ref{alg:jaccontrol} \\
-		Control del tamaño de paso como se especifica en la sección~\ref{secc:hcontrol} \\
 		\If{$fail=false$ or $reuse=false$}{
-			Ejecutar Algoritmo~\ref{alg:Arnoldi} para obtener matrices $H^*_{m_n}$ y $V_{m_n}$ de $\mathcal{K}_{\mf_n}(h_nJ,f)$, y calcular $H_{m_n}=H^*_{m_n}/h_n$ \\
+			Ejecutar Algoritmo~\ref{alg:Arnoldi} para obtener $V_{m_n}$, $H^*_{m_n}$, $v_{\mf_n+1}$ y $\hf^*_{\mf
+				_n+1,\mf_n}$ de $\mathcal{K}_{\mf_n}(h_nJ,f)$ \\
 		}
 		Calcular $\widetilde{u}_j$ mediante Algoritmo~\ref{alg:errcontrol}\\
 		Evaluar las fórmulas embebidas (\ref{LLDPK scheme}) \\
@@ -788,8 +786,6 @@ Los principales resultados del estudio de simulación se resumen en la Figura \r
 \end{figure}
 
 Para explicar estos resultados, para cada ecuación de prueba, los detalles de ejecución de cada código se presentan en una tabla. El error relativo \textit{RError} de cada código se mide nuevamente por la expresión (\ref{num-exp-lldp-fix-step:ER}) y el tiempo computacional relativo \textit{RTime} de cada código se calcula con respecto al tiempo computacional del código \emph{ode15sk}. Además, las tablas presentan el número de pasos \textit{A-Steps} aceptados y \textit{R-Steps} rechazados, así como el número de evaluaciones del campo vectorial \textit{f-Eval} y del Jacobiano \textit{J-Eval}. La dimensión mínima $\mf_ {min}$, máxima $\mf_ {max}$ y total $\mf_{total}$ de los subespacios de Krylov requeridos por los códigos \emph{LLDP45} y \emph{exp4} para integrar las ecuaciones de prueba sobre todo el intervalo de integración  también se dan, así como el orden de Padé mínimo $\pf_{min}$ y máximo $\pf_{max}$ requerido por el código \emph{LLDP45}. Para el código \emph{ode15sk}, $\mf_{min}$, $\mf_{max}$ y $\mf_{total}$ representan el número mínimo, máximo y total de iteraciones realizadas por el método GMRES sobre el intervalo de integración completo. Además, \textit{ME} denota el número de matrices exponenciales, \textit{ILU(0)} el número de factorizaciones LU incompletas, \textit{K-subspace} el número de aproximaciones del subespacio de Krylov, y \textit{GMRES} el número de sistemas lineales resueltos por el método GMRES. En las tablas, $d$ especifica el número de ecuaciones de cada ejemplo de prueba.
-
-\vspace{1.1cm}
 
 \begin{table}[htb]
 	\caption{Desempeño de los códigos adaptativos \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones  CUSP y Burgers.}
@@ -1017,6 +1013,8 @@ Para explicar estos resultados, para cada ecuación de prueba, los detalles de e
 \end{adjustbox}
 	\label{tab:num-exp-lldp-var-step:brussdnd}
 \end{table}
+
+\vspace{0.5cm}
 
 Las Tablas \ref{tab:num-exp-lldp-var-step:cuspburg} - \ref{tab:num-exp-lldp-var-step:brussdnd} muestran que, cuando el número de iteraciones del Algoritmo de Arnoldi ($\mf_{total}$) para calcular las funciones phi por vectores es similar o menor que el número de iteraciones del algoritmo GMRES ($\mf_{total}$) para resolver ecuaciones lineales, el costo computacional del código \emph{LLDP45} es menor que el del código \emph{ode15sk}. Este es un resultado esperado ya que estos dos algoritmos son las principales fuentes de complejidad computacional en los integradores mencionados. Además, aunque el número de exponenciales matriciales (\textit{ME}) calculadas con el código \emph{LLDP45} es mayor que el número de factorizaciones LU incompletas (\textit{ILU(0)}) del código \emph{ode15sk}, el costo computacional general de los primeros es menor que el de los segundos. Esto es así porque la exponencial matricial se calcula para matrices de dimensión significativamente menor (entre $\mf_{min}$ y $\mf_{max}$) que la dimensión $d$ de las matrices para las que se realiza la factorización LU incompleta. Por otro lado, con la excepción de la ecuación DND, el código \emph{LLDP45} requiere menos pasos de integración (\textit{A-Steps} + \textit{R-Steps}) que el código \emph{ode15sk}, que hace que la diferencia entre el número de evaluaciones de campos vectoriales (\textit{f-Eval}) de estos dos códigos no sea tan grande.
 
