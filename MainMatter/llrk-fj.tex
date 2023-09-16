@@ -680,7 +680,7 @@ El cálculo adaptativo de los términos $\widetilde{u}_j$ en (\ref{Jacobian-free
 				$work=false$
 			}{
 				\eIf{$breakdown$ = $true$ \textbf{or} $\mf_n=\mf_{max}$}{
-				    \textcolor{red}{Calcular $h_{new}$ como en (\ref{hnew})} \\
+				   Calcular $h_{new}$ como en (\ref{hnew}) \\
 					\eIf{$h_{new} = h_{min}$}{work = false}{$h_{n}=h_{new}$}
 				}{
 					Estimar la nueva dimensión de Krylov $\mf_{new}$ mediante fórmula
@@ -750,10 +750,9 @@ En la Sección \ref{section:approx-non-auto}, para la selección de la dimensió
 $\widehat{K}_{\mathfrak{m},k}^{\mathfrak{p},\mathfrak{q}}\left(
 c_{j}h_{n},f_{x}(y_{n}),f(y_{n});\eta _{1},\delta _{1},\beta \right)
 $ definida en (\ref{eq:gen_kp_aprox_fj}) en lugar de (\ref{eq:adapt_gen_kp_aprox}). Las nuevas expresiones (\ref{calcmnew-fj}) y (\ref{eq:adapt_gen_kp_aprox}) se utilizan para reducir el impacto negativo de la convergencia oscilatoria de la serie (\ref{PHI-EXPANSION}) para $\tau\varphi_1(\tau A) b$ lo cual provoca oscilaciones indeseadas en la precisión del conjunto de aproximaciones resultantes de sucesivos truncamientos de esta serie y en los correspondientes términos de error. Obsérvese que la aproximación (\ref{eq:adapt_gen_kp_aprox}) es la de menor error entre las que incluyen el segundo o tercer término de dicha serie, con $\tau = c_jh_n$, $A=f_x(y_n)$ y $b=f(y_n)$.
-
 %\end{sloppypar}
-\textcolor{red}{
-	Adicionalmente, la estimación de $\mf_{new}$ (\ref{calcmnew-fj}) se calcula siempre que se cumpla la condición $\varepsilon_{K}/\gamma_{K}< 1 $, o mientras no haya ocurrido un \textit{breakdown} en los algoritmos \ref{alg:iArnoldi} o \ref{alg:iArnoldiexpand}, o mientras que la dimensión de Krylov cumpla $\mf_n\neq\mf_{max}$. En el caso de estas dos excepciones en la Sección (\ref{sec:brcontrol}) se propone reducir el tamaño del paso $h_n$ por el factor $0\mathord{.}9$ con el propósito de tratar de satisfacer la condición $\varepsilon_{K}/\gamma_{K}< 1$. Sin embargo, esta reducción empírica del tamaño del paso se puede mejorar de la siguiente manera. De la condición mencionada y $\epsilon_{r}$ en (\ref{errrel-fj}), tenemos
+
+ Adicionalmente, como en la línea (\ref{step10}) del Algoritmo \ref{alg:errcontrol}, la estimación de $\mf_{new}$ (\ref{calcmnew-fj}) se calcula siempre que se cumpla la condición $\varepsilon_{K}/\gamma_{K}< 1 $, o mientras no haya ocurrido un \textit{breakdown} en los Algoritmos \ref{alg:iArnoldi} o \ref{alg:iArnoldiexpand}, o mientras que la dimensión de Krylov cumpla $\mf_n\neq\mf_{max}$. En el caso de estas dos excepciones en la Sección (\ref{sec:brcontrol}) se propone reducir el tamaño del paso $h_n$ por el factor $0\mathord{.}9$ con el propósito de tratar de satisfacer la condición $\varepsilon_{K}/\gamma_{K}< 1$. Sin embargo, esta reducción empírica del tamaño del paso se puede mejorar de la siguiente manera. De la condición mencionada y $\epsilon_{r}$ en (\ref{errrel-fj}), tenemos
 	\begin{equation}\label{desigualdad}
 		\log{\epsilon_{r}}<\log{\gamma},
 	\end{equation}
@@ -776,7 +775,7 @@ $ definida en (\ref{eq:gen_kp_aprox_fj}) en lugar de (\ref{eq:adapt_gen_kp_aprox
 	\begin{equation}
 		h_{new} = \max \left\{ h_{\min }, \min \left\{ 0\mathord{.}9h_n,0\mathord{.}95\overline{h}_*\right\} \right\}.\label{hnew}
 	\end{equation}
-}
+
 
 Por otra parte, el orden de la aproximación $(\mathfrak{p},\mathfrak{q})$-Padé se estima como la Sección \ref{sec:pade-order}. Además, para evitar la pérdida de precisión por errores de redondeo en la aproximación de Padé se establece el valor de $h_n$ como $h_n=\maxx{h_{min},600/||\overline{H}||_\infty}$ cuando $||\overline{H}||_\infty>600$.
 
@@ -873,7 +872,7 @@ donde
         0\mathord{.}5\cdot h_n & \text{si } \varepsilon_y > RTol \text{ y } fail=true
         \end{cases},
 \end{equation*}
-con  $\rho = 1\mathord{.}25 \left( \frac{\varepsilon_y}{RTol} \right)^{1/\textcolor{red}{5}}$, siendo
+con  $\rho = 1\mathord{.}25 \left( \frac{\varepsilon_y}{RTol} \right)^{1/5}$, siendo
 \begin{equation}\label{epsilon_y-fj}
 	\varepsilon_y =  \max_{i=1\ldots d}\left\{ \frac{\left\lvert y^{[i]}_{n+1}-\hat{y}^{[i]}_{n+1} \right\rvert}
 	{\maxx{\left\lvert y^{[i]}_{n+1}  \right\rvert,\left\lvert y^{[i]}_{n}\right\rvert,\frac{ATol}{RTol}}} \right\}
@@ -914,7 +913,7 @@ Las Tablas \ref{tab:cuspburg}-\ref{tab:brussdnd} muestran que, para las toleranc
 
 Además, las Tablas \ref{tab:cuspburg}-\ref{tab:brussdnd} muestran que la precisión del código \emph{LLDP1} es similar o ligeramente superior a la del código \emph{LLDP2} pero con mayor costo computacional. Este es también otro resultado esperado ya que el código \emph{LLDP1} cambia adaptativamente la diferencia finita dentro del Algoritmo de Arnoldi sin Jacobiano \ref{alg:iArnoldi} para aumentar el orden de convergencia de las fórmulas embebidas, mientras que el código \emph{ LLDP2} siempre usa la diferencia finita de orden más bajo. 
 
-\vspace{1cm}
+%\vspace{1cm}
 
 \begin{table}[htb]
 	\caption{Desempeño de los códigos adaptativos \emph{ODE15sk}, \emph{LLDP1}, \emph{LLDP2} y \emph{Exp4} en la integración de las ecuaciones  CUSP y Burgers.}
@@ -1145,7 +1144,7 @@ con $\mf_{min}=4$, $\pf_{min}=3$, $\beta=0$, $\eta_2=2$. Para el código \emph{L
 
 
 \begin{table}[htb]
-	\caption{Valores mínimos y máximos de $\alpha _{1}$ y $\alpha _{2}$ correspondientes a los valores de estos parámetros en el esquema \emph{LLDP2} al integrar las seis ecuaciones de prueba. $r^{min}-r^{max}$ es el rango de fluctuaciones en el orden de convergencia $r$ del integrador \emph{LLDP2} durante el proceso de integración. \textcolor{red}{El símbolo} $+$ y $*$ indican, respectivamente, intercambios de fórmulas de diferencias finitas en la expresión (\ref{Jacobian-free LLDPK scheme}) durante el proceso de integración.}
+	\caption{Valores mínimos y máximos de $\alpha _{1}$ y $\alpha _{2}$ correspondientes a los valores de estos parámetros en el esquema \emph{LLDP2} al integrar las seis ecuaciones de prueba. $r^{min}-r^{max}$ es el rango de fluctuaciones en el orden de convergencia $r$ del integrador \emph{LLDP2} durante el proceso de integración. El símbolo $*$ indica el intercambio de fórmulas de diferencias finitas en la expresión (\ref{Jacobian-free LLDPK scheme}) durante el proceso de integración.}
 	\label{tab:R_LLDP2}
 	\begin{adjustbox}{width=0.95\columnwidth,center}
 		\begin{tabular}{lccccccccccc}
@@ -1162,6 +1161,7 @@ con $\mf_{min}=4$, $\pf_{min}=3$, $\beta=0$, $\eta_2=2$. Para el código \emph{L
 		\end{tabular}
 	\end{adjustbox}
 \end{table}
+\vphantom{aa}
 
 Observe que, solo para una de las seis ecuaciones de prueba, el integrador \emph{LLDP1} conserva el orden de convergencia de las fórmulas originales de Dormand y Prince durante todo el proceso de integración y, solo para la misma ecuación, las aproximaciones en diferencias finitas son intercambiados dentro del Algoritmo de Arnoldi sin Jacobiano \ref{alg:iArnoldi}. Para otras cuatro ecuaciones de prueba, el integrador \emph{LLDP1} alcanza el orden de $5$ en algunos pasos de integración, mientras que para la restante ecuación nunca alcanza ese orden. Por otro lado, dado que el orden de convergencia de la aproximación $g_1$ dentro del Algoritmo \ref{alg:iArnoldi} para el integrador \emph{LLDP1} es siempre mayor que la de la aproximación utilizada por el integrador \emph{LLDP2}, el orden de convergencia del primero siempre es mayor que la del segundo integrador. Esto justifica los menores errores del código \emph{LLDP1} reportados en las Tablas \ref{tab:cuspburg} - \ref{tab:brussdnd}. Sin embargo, analizando los resultados generales para las ecuaciones de prueba consideradas, podemos afirmar que el código \emph{LLDP2} es tan efectivo como el código \emph{LLDP1}.
 
