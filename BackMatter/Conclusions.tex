@@ -4,8 +4,8 @@
 	
 	1)- Se desarrollaron nuevas aproximaciones Krylov-Padé con y sin la evaluación de Jacobiano para la solución de ecuaciones diferenciales lineales de dimensiones no pequeñas y se acotaron sus errores.
 	Para cada aproximación, se propusieron estrategias efectivas para la estimación práctica de la dimensión de espacio Krylov, el orden de Padé y el error de aproximación. Se comprobó la eficacia de
-	ambas aproximaciones para calcular la acción de funciones phi sobre vectores y, en ese aspecto, se 	mostró las ventajas del uso de la aproximación Krylov-Padé con evaluación de Jacobiano en relación
-	con otras aproximaciones similares existentes.
+	ambas aproximaciones para calcular la acción de funciones phi sobre vectores y, en ese aspecto, se 	mostró que la aproximación Krylov-Padé 
+	presenta mejor o igual precision que las aproximaciones existentes con un costo computacional menor cuando se utiliza la dimensión óptima de Krylov.
 	
 	2)- Se construyeron nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas para problemas de valor inicial de dimensiones no pequeñas utilizando las aproximaciones Krylov-Padé
 	con evaluación de Jacobiano en el cálculo de los productos de función phi por vector. Se derivaron cotas para los errores y condiciones de orden simples. Se desarrollaron nuevas estrategias adaptativas para la reutilización del Jacobiano, la selección del tamaño de paso de integración, la dimensión de Krylov
@@ -18,6 +18,8 @@
 	de Jacobiano, se introdujo la subclase particular de esquemas Runge-Kutta Localmente Linealizados Libres de Jacobiano y, en particular, con las fórmulas Runge-Kutta embebidas de Dormand y
 	Prince Localmente Linealizadas, se implementó un esquema adaptativo de orden variable libre de Jacobiano. Se comprobó la eficacia de los nuevos esquemas libres de Jacobiano en la integración de
 	ecuaciones de prueba y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados, pero con un costo computacional menor en la mayoría de los casos.
+	
+	4) Se implementaron códigos Matlab para los nuevos integradores y para otros integradores de la literatura con los que se realizó la amplia experimentación numérica que evaluó la efectividad de los integradores propuestos.
 	
 	En resumen, se puede concluir que los resultados obtenidos validan la hipotesis de la tesis y demuestran que se alcanzaron los objetivos propuestos. 
 	
