@@ -84,7 +84,7 @@ donde $F_k^{\pf,\qf}(A)=(P_{\pf,\qf}(2^{-k}A))^{2^k}$ denota a la aproximación 
 para cada una de las $u_j$ definidas en (\ref{u-j-deff}),
 donde $[\widetilde{E}_{c_jh_n}]_{ik}$ denota la sub-matriz $i,k$ de la matriz particionada $\widetilde{E}_{c_jh_n}$, $V_m$ es la base ortonormal de $\mathcal{K}_ \mf(f_x,f)$ ya calculado por el Algoritmo \ref{alg:Arnoldi} para $\mathcal{K}_\mf(h_nf_x,f)$, y $\beta=\nnorm{\nnorm{f} }_2$.
 \importantdefinition{Fórmulas embebidas Runge-Kutta de Dormand y Prince Localmente Linealizadas}
-Utilizando la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé (\ref{phi_appox}) para cada $u_j$ en las fórmulas embebidas (\ref{lldis}), obtenemos las fórmulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas 
+Utilizando la aproximación $(\mf , \pf ,\qf , k)$-Krylov-Padé (\ref{phi_appox}) para cada $u_j$ en las fórmulas embebidas (\ref{lldis}), obtenemos las fórmulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas
 \begin{equation}  \label{LLDPK scheme}
     y_{n+1}\,=\,y_n+\widetilde{u}_s+h_n \sum_{j=1}^{s}b_j \widetilde{\kt}_j \,\,\, \text{y} \,\,\, \
     \widehat{y}_{n+1}\,=\, y_n+\widetilde{u}_s+h_n \sum_{j=1}^{s}\widehat{b}_j \widetilde{\kt}_j,
@@ -602,9 +602,9 @@ la medida del error relativo entre las fórmulas integradas $y$ y $\hat{y}$ defi
 \subsection{Control del tamaño de paso}\label{secc:hcontrol}
 Como en \cite{Jimenez14AMC}, para obtener una tolerancia deseada y evitar el desbordamiento en el cálculo de la matriz exponencial $e^{\frac{1}{90}h_n\overline{H}}$ a través de la aproximación $(\pf,\pf)$-Padé con escalamiento y potenciación, el valor de $\left\Vert \frac{1}{90}h_n\overline{H} \right\Vert_\infty$ debe ser controlado. Debido a los errores de redondeo, si
 \begin{equation}
-	\left\Vert \frac{1}{90}h_n\overline{H} \right\Vert_\infty \ge 600\,,  \label{eq:H-bound-1} 
+	\left\Vert \frac{1}{90}h_n\overline{H} \right\Vert_\infty \ge 600\,,  \label{eq:H-bound-1}
 \end{equation}
- la aproximación de Padé a $e^{\frac{1 }{90}h_n\overline{H}}$ carece de precisión. Dado que $H_\mf$ en (\ref{hhat}) es la matriz de Hessenberg correspondiente a $\mathcal{K}_\mf(f_x,f)$, el Lema \ref{H-bound} implica que 
+ la aproximación de Padé a $e^{\frac{1 }{90}h_n\overline{H}}$ carece de precisión. Dado que $H_\mf$ en (\ref{hhat}) es la matriz de Hessenberg correspondiente a $\mathcal{K}_\mf(f_x,f)$, el Lema \ref{H-bound} implica que
  \begin{equation}
  	|| \overline{H} ||_\infty \leq 1 + || f_x ||_\infty\,.  \label{eq:H-bound-2}
  \end{equation}
@@ -765,7 +765,7 @@ Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \r
 
 \subsection{Experimentos numéricos}\label{section:num-exp-lldp-var-step}
 \importantcodes{LLDP45: esquema adaptativo para las fórmulas embebidas Runge-Kutta de Dormand y Prince localmente linealizadas descrito en Algoritmo \ref{alg:integrator}}
-En esta subsección se estudiará el desempeño del esquema adaptativo descrito en el Algoritmo \ref{alg:integrator} para las fórmulas embebidas (\ref{LLDPK scheme}). Con este propósito se implementó el código Matlab \emph{LLDP45}. Este código \emph{LLDP45} es una copia exacta del código \emph{ode45} \cite{shampine1997matlab} de Matlab18a con la excepción de las líneas del programa correspondientes a las fórmulas originales de Dormand y Prince y su error relativo, que fueron reemplazadas por las líneas 7 a 16 del Algoritmo \ref{alg:integrator} que implementan la evaluación de las fórmulas localmente linealizadas (\ref{LLDPK scheme}) con control de reutilización del Jacobiano. El código de Matlab \emph{ode45} implementa la estrategia de tamaño de paso variable descrita en la Sección \ref{secc:stepsizes} para las fórmulas embebidas de Dormand y Prince. Para preservar el orden de convergencia establecido en el Teorema \ref{theorem:lldp-convergence} para las fórmulas embebidas (\ref{LLDPK scheme}), se establece $m_{min}=4$ en el código \emph{LLDP45}.
+En esta subsección se estudiará el desempeño del esquema adaptativo descrito en el Algoritmo \ref{alg:integrator} para las fórmulas embebidas (\ref{LLDPK scheme}). Con este propósito se implementó el código Matlab \href{https://github.com/fsadannn/JF-LLDPschemes}{{\emph{LLDP45} \faExternalLink}}. Este código \emph{LLDP45} es una copia exacta del código \emph{ode45} \cite{shampine1997matlab} de Matlab18a con la excepción de las líneas del programa correspondientes a las fórmulas originales de Dormand y Prince y su error relativo, que fueron reemplazadas por las líneas 7 a 16 del Algoritmo \ref{alg:integrator} que implementan la evaluación de las fórmulas localmente linealizadas (\ref{LLDPK scheme}) con control de reutilización del Jacobiano. El código de Matlab \emph{ode45} implementa la estrategia de tamaño de paso variable descrita en la Sección \ref{secc:stepsizes} para las fórmulas embebidas de Dormand y Prince. Para preservar el orden de convergencia establecido en el Teorema \ref{theorem:lldp-convergence} para las fórmulas embebidas (\ref{LLDPK scheme}), se establece $m_{min}=4$ en el código \emph{LLDP45}.
 \importantcodes{ode15s: esquema adaptativo para las fórmulas diferenciales hacia atrás de orden variable 1-5}
 Los resultados del código \emph{LLDP45} en la integración de las ecuaciones de prueba de Sección \ref{section:test-eq} se compararán con los obtenidos por el código adaptativo \emph{ode15sk} con una implementación de tamaño de paso casi constante de las fórmulas diferenciales hacia atrás (BDF) hasta orden 5 y un método de subespacios de Krylov para resolver sistemas lineales de ecuaciones algebraicas. Para comparar con una implementación eficiente de estas fórmulas, este código \emph{ode15sk} es una copia exacta del código Matlab18a \emph{ode15s} \cite{shampine1997matlab} con la excepción de las líneas de programa correspondientes a los métodos directos (función Matlab \emph{mldivide}) para resolver sistemas lineales de ecuaciones algebraicas y la factorización LU, que fueron reemplazadas por el método Generalized Minimal Residual (GMRES) (función Matlab \emph{gmres} con tolerancia $RTol$) con \emph{ILU(0)} de precondicionador (función Matlab \emph{ilu}), donde \emph{ILU(0)} representa el método de factorización LU incompleto con 0 nivel de relleno. En la función de Matlab \emph{gmres}, se eliminaron las comprobaciones computacionalmente costosas de las funciones de Matlab \emph{iterchk} y \emph{iterapp}. El código \emph{ode15sk} conserva la estrategia del código Matlab \emph{ode15s} para la reutilización de la matriz Jacobiana, pero no la aproximación numérica computacionalmente costosa de matrices Jacobianas de grande dimensiones que fue reemplazada por la evaluación exacta de estas matrices.
 \importantcodes{exp4: esquema adaptativo para el integrador exponencial de orden 4}
@@ -937,79 +937,69 @@ Para explicar estos resultados, para cada ecuación de prueba, los detalles de e
 \end{adjustbox}
 \end{table}
 
-
-
 \begin{table}[htb]
 	%\centering
 	\caption{Desempeño de los códigos  adaptativos \emph{exp4}, \emph{ode15sk} y \emph{LLDP45} en la integración de las ecuaciones Brusselator y DND.}
 	\begin{adjustbox}{width=0.8\columnwidth,center}
-	\begin{tabular}{  ccccccccc }
-		\hline
-		& & \multicolumn{3}{c}{Brusselator $M=500$, $d=1000$ } & & \multicolumn{3}{c}{DND $M=500$, $d=500$}\\
-		\cline{3-5} \cline{7-9}
-		& Tolerancia & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} & & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} \\
-		\hline
-		& crudo & 2.3013 & 1.0000 & 0.7131  & & 7.6714 & 1.0000 & 3.4038 \\
-		RTime  & medio & 84.1038 & 1.0000 & 0.6988  & & 5.9656 & 1.0000 & 2.3140  \\
-		& refinado & 942.6567 & 1.0000 & 1.9127  & & 35.0007 & 1.0000 & 1.4193 \\
-		\hline
-		& crudo & 1.33e-01 & 4.67e-03 & 1.42e-03  & & 8.17e-01 & 1.49e-01 & 1.71e-01 \\
-		RError  & medio & 7.68e-05 & 1.46e-04 & 3.91e-05  & & 7.11e-03 & 3.98e-03 & 4.63e-05 \\
-		& refinado & 8.73e-07 & 2.72e-08 & 7.66e-08  & & 3.57e-05 & 2.79e-05 & 5.81e-07 \\
-		\hline
-		& crudo & 5896 & 6151 & 5421 &  & 3546 & 4580 & 19170 \\
-		A-Steps  & medio & 253547 & 6995 & 9336  & & 21641 & 7260 & 19192 \\
-		& refinado & 2585918 & 9847 & 34346  & & 209088 & 14628 & 28798 \\
-		\hline
-		& crudo & 40 & 5623 & 180  & & 4 & 1166 & 3176 \\
-		R-Steps  & medio & 5 & 4827 & 0  & & 4 & 619 & 2708 \\
-		& refinado & 4 & 4629 & 0  & & 2 & 145 & 105 \\
-		\hline
-		& crudo & 23714 & 19746 & 33607  & & 14198 & 13048 & 134077 \\
-		$f$-Eval  & medio & 1014205 & 20842 & 56017  & & 86578 & 20159 & 131401 \\
-		& refinado & 10343686 & 24450 & 206077  & & 836360 & 32775 & 173419 \\
-		\hline
-		& crudo & 5898 & 1865 & 4002 &  & 3546 & 581 & 17037 \\
-		$J$-Eval  & medio & 253547 & 1894 & 131 & &  21641 & 294 & 15864  \\
-		& refinado & 2585918 & 2123 & 135  & & 209088 & 9 & 2047 \\
-		\hline
-		& crudo & 17808 & 0 & 6601  & & 10644 & 0 & 22346 \\
-		K-subspace  & medio & 760656 & 0 & 9336  & & 64935 & 0 & 21900 \\
-		& refinado & 7757766 & 0 & 34346  & &  627270 & 0 & 28903 \\
-		\hline
-		& crudo & 0 & 19744 & 0  & & 0 & 13046 & 0 \\
-		GMRES  & medio & 0 & 20840 & 0  & & 0 & 20157 & 0 \\
-		& refinado & 0 & 24448 & 0  & & 0 & 32773 & 0 \\
-		\hline
-		& crudo & 17990 & 0 & 5601  & & 47516 & 0 & 22364 \\
-		ME  & medio & 760690 & 0 & 9336  & & 85071 & 0 & 25659 \\
-		& refinado & 7757796 & 0 & 34346  & & 790370 & 0 & 32463 \\
-		\hline
-		& crudo & 0 & 7603 & 0  & & 0 & 2163 & 0 \\
-		ILU(0)  & medio & 0 & 6573 & 0  & & 0 & 1632 & 0 \\
-		& refinado & 0 & 6732 & 0 & &  0 & 709 & 0 \\
-		\hline
-		& crudo & 35807 & 22779 & 22750  & & 81634 & 13046 & 95055 \\
-		$\mf_{total}$  & medio & 1521373 & 41927 & 37344  & & 150087 & 20157 & 100908 \\
-		& refinado & 15515593 & 64496 & 137384 &  & 1417707 & 32773 & 121723 \\
-		\hline
-		& crudo & 2 & 1 & 4  & & 2 & 1 & 4 \\
-		$\mf_{min}$  & medio & 2 & 1 & 4 &  & 2 & 1 & 4  \\
-		& refinado & 2 & 1 & 4  & & 2 & 1 & 4 \\
-		\hline
-		& crudo & 20 & 2 & 6  & & 36 & 1 & 14  \\
-		$\mf_{max}$  & medio & 15 & 3 & 4  & & 36 & 1 & 12  \\
-		& refinado & 36 & 3 & 4  & & 36 & 1 & 11 \\
-		\hline
-		& crudo & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		$\pf_{min}$  & medio & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		& refinado & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		\hline
-		& crudo & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		$\pf_{max}$  & medio & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		& refinado & 0 & 0 & 3  & & 0 & 0 & 3 \\
-		\hline
-	\end{tabular}
+\begin{tabular}{  ccccccccc }
+    \hline
+    & & \multicolumn{3}{c}{Brusselator $M=500$, $d=1000$ } & & \multicolumn{3}{c}{DND $M=500$, $d=500$}\\
+    \cline{3-5} \cline{7-9}
+    & Tolerancia & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} & & \emph{exp4} & \emph{ode15sk} & \emph{LLDP45} \\
+    \hline
+    & crude & 31.6821 & 1.0000 & 18.4162 &  & 8.8745 & 1.0000 & 3.8159 \\
+    RTime & mild & 32.8974 & 1.0000 & 7.3547 &  & 9.2235 & 1.0000 & 2.1792 \\
+    & refine & 79.7112 & 1.0000 & 5.5239 &  & 16.1348 & 1.0000 & 1.0895 \\
+    \hline
+    & crude & 6.30e-05 & 7.11e-04 & 4.98e-04 &  & 1.58e-03 & 2.49e-03 & 1.37e-03 \\
+    RError & mild & 3.18e-08 & 1.99e-05 & 4.18e-07 &  & 1.49e-07 & 2.88e-06 & 1.28e-06 \\
+    & refine & 1.43e-10 & 2.06e-07 & 1.12e-09 &  & 1.85e-10 & 4.65e-09 & 1.25e-09 \\
+    \hline
+    & crude & 68 & 31 & 361 &  & 24 & 78 & 268 \\
+    A-Steps & mild & 158 & 85 & 365 &  & 103 & 182 & 276 \\
+    & refine & 1084 & 219 & 644 &  & 549 & 452 & 330 \\
+    \hline
+    & crude & 0 & 0 & 3 &  & 4 & 10 & 44 \\
+    R-Steps & mild & 0 & 0 & 8 &  & 3 & 3 & 31 \\
+    & refine & 1 & 0 & 194 &  & 3 & 1 & 30 \\
+    \hline
+    & crude & 274 & 52 & 2185 &  & 94 & 186 & 1873 \\
+    $f$-Eval & mild & 634 & 128 & 2239 &  & 411 & 387 & 1843 \\
+    & refine & 4337 & 323 & 5029 &  & 2195 & 820 & 2161 \\
+    \hline
+    & crude & 204 & 31 & 364 &  & 84 & 88 & 312 \\
+    K-subspace & mild & 474 & 85 & 373 &  & 318 & 185 & 307 \\
+    & refine & 3255 & 219 & 838 &  & 1656 & 453 & 360 \\
+    \hline
+    & crude & 664 & 50 & 0 &  & 326 & 184 & 0 \\
+    LS & mild & 2516 & 126 & 0 &  & 1218 & 385 & 0 \\
+    & refine & 15975 & 321 & 0 &  & 5956 & 818 & 0 \\
+    \hline
+    & crude & 0 & 0 & 718 &  & 0 & 0 & 329 \\
+    ME & mild & 0 & 0 & 724 &  & 0 & 0 & 518 \\
+    & refine & 0 & 0 & 1584 &  & 0 & 0 & 651 \\
+    \hline
+    & crude & 1553 & 132 & 3587 &  & 636 & 184 & 1408 \\
+    $\mf_{total}$ & mild & 5128 & 436 & 4420 &  & 1941 & 385 & 1835 \\
+    & refine & 27430 & 1213 & 9742 &  & 8840 & 818 & 2467 \\
+    \hline
+    & crude & 2 & 1 & 4 &  & 2 & 1 & 4 \\
+    $\mf_{min}$ & mild & 3 & 2 & 4 &  & 2 & 1 & 4 \\
+    & refine & 3 & 2 & 4 &  & 2 & 1 & 4 \\
+    \hline
+    & crude & 20 & 4 & 30 &  & 27 & 1 & 14 \\
+    $\mf_{max}$ & mild & 20 & 5 & 30 &  & 20 & 1 & 11 \\
+    & refine & 15 & 5 & 21 &  & 15 & 1 & 11 \\
+    \hline
+    & crude & 0 & 0 & 3 &  & 0 & 0 & 3 \\
+    $\mathfrak{p}_{min}$ & mild & 0 & 0 & 3 &  & 0 & 0 & 3 \\
+    & refine & 0 & 0 & 3 &  & 0 & 0 & 3 \\
+    \hline
+    & crude & 0 & 0 & 3 &  & 0 & 0 & 3 \\
+    $\mathfrak{p}_{max}$ & mild & 0 & 0 & 3 &  & 0 & 0 & 3 \\
+    & refine & 0 & 0 & 3 &  & 0 & 0 & 3 \\
+    \hline
+\end{tabular}
 \end{adjustbox}
 	\label{tab:num-exp-lldp-var-step:brussdnd}
 \end{table}
@@ -1020,7 +1010,7 @@ Las Tablas \ref{tab:num-exp-lldp-var-step:cuspburg} - \ref{tab:num-exp-lldp-var-
 
 Además, las Tablas \ref{tab:num-exp-lldp-var-step:cuspburg}-\ref{tab:num-exp-lldp-var-step:brussdnd} muestran que la precisión del código \emph{exp4} es más cercana a la del código \emph{LLDP45} que a la del código \emph{ode15sk}. Sin embargo, el costo computacional del código \emph{exp4} es mucho más alto que el de los otros dos códigos. Esto se debe principalmente a la gran cantidad de pasos de integración (\textit{A-Steps} + \textit{R-Steps}), de aproximaciones del subespacio de Krylov (\textit{K-subspace}) y de iteraciones ($\mf_ {total}$) requerido por el código \emph{exp4} para integrar las ecuaciones de prueba.
 
-Finalmente es importante notar que, debido a la falta de precisión del código \emph{ode15sk} para integrar la ecuación CUSP, la solución ``exacta'' de esta ecuación en (\ref{num-exp-lldp-fix-step:ER}) se estima mediante la fórmula continua (\ref{continuousLLRK45}) del código \emph{LLDP45} con $RTol = 10^{-12}$, $ATol = 10^{-14}$, $\mf_{min} = \mf_{max} = 100$ y factor de seguridad $\gamma_J=\infty$ para la reutilización de la matriz Jacobiana en el Algoritmo \ref{alg:jaccontrol}.
+Finalmente es importante notar que, debido a la falta de precisión del código \emph{ode15sk} para integrar la ecuación CUSP, la solución ``exacta'' de esta ecuación en (\ref{num-exp-lldp-fix-step:ER}) se estima mediante la fórmula continua (\ref{continuousLLRK45}) del código \emph{LLDP45} con $RTol = 10^{-12}$, $ATol = 10^{-14}$, $\mf_{min} = \mf_{max} = 100$ y factor de seguridad $\gamma_J=\infty$ para la reutilización de la matriz Jacobiana en el Algoritmo \ref{alg:jaccontrol}. El código Matlab LLDP45 esta disponible en repositorio público \url{https://github.com/fsadannn/JF-LLDPschemes}.
 
 \subsubsection{Conclusiones del Capítulo}
 En este Capítulo se construyeron nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas para problemas de valor inicial de dimensiones no pequeñas utilizando las aproximaciones Krylov-Padé
@@ -1028,7 +1018,7 @@ con evaluación de Jacobiano en el cálculo de los productos de función phi por
 de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Se comprobó la eficacia de esos nuevos esquemas en la integración de diferentes ecuaciones y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, un número menor de pasos de integración.
 
 %	La Aproximación Lineal Local de Orden Superior para EDO consiste en dividir en intervalos de tiempo consecutivos la solución de la ecuación original en una parte lineal , que es solución de la ecuación linealizada localmente, más una parte no lineal, que es solución de la representación diferencial del residuo. Combinando la aproximación Krylov-Padé con evaluación de Jacobiano, para aproximar la parte lineal, con las fórmulas embebidas Runge-Kutta de Dormand y Prince, para aproximar la parte no lineal, se construyeron nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas para problemas de valor inicial de dimensiones no pequeñas. Para estas nuevas fórmulas se derivaron cotas para los errores y condiciones de orden simples ya que las cotas dependen de la dimensión del subespacio de Krylov, del orden de Padé y del orden del esquema Runge-Kutta utilizado.
-%	
+%
 %	Para estas formulas construidas se desarrollaron diversas estrategias. Como el costo computacional de evaluar el Jacobiano en cada paso de integración puede ser grande se desarrolló una estrategia para su reutilización, donde bajo un criterio de error se decide si es posible utilizar el Jacobiano de pasos anteriores o es necesario volver a evaluarlo. Basado en la estrategia de selección de la dimensión de Krylov y el orden de Padé propuesta en el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se desarrolló una estrategia específica para este estas nuevas fórmulas embebidas. Además desarrolló una estrategia adaptativa para la selección del tamaño de paso de integración.
-%	
+%
 %	Con la aplicación de estas estrategias a las nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas se implementaron esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Mediante la integración de diferentes ecuaciones  se comprobó la eficacia de esos nuevos esquemas y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, un número menor de pasos de integración.
