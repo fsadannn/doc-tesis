@@ -1,4 +1,4 @@
-# My phd thesis "Métodos de Linealización Local de Orden Superior para problemas de valor inicial de dimensiones no pequeñas"
+# My phd thesis "Higher-Order Local Linearization Methods large systems of initial value problems"
 
 The tesis was write in Spanish but all the papers are write English. You can get the las version from the [Release assets](https://github.com/fsadannn/doc-tesis/releases/download/before-defense/Thesis.pdf)
 
