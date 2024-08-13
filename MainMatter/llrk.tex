@@ -1,6 +1,6 @@
 \chapter{Método Runge-Kutta de Dormand y Prince Localmente Linealizado}\label{chapter:lldp}
 
-En el Capítulo \ref{chapter:exp-int-and-ll-methods} se presentó la Aproximación Lineal Local de Orden Superior para EDO. Como se explicó en ese capítulo, a esa clase de métodos pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución $u$ de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r=x-u$ proporcionada por un integrador numérico de orden alto. En el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se propusieron y utilizaron las aproximaciones Krylov-Padé para resolver la ecuación diferencial lineal de dimensiones no pequeñas. En éste capítulo se utilizarán las fórmulas embebidas Runge-Kutta de Dormand y Prince para aproximar la solución de la ecuación diferencial no lineal del residuo. Combinando estas aproximaciones se obtendrá el Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDO de dimensiones no pequeñas. Utilizando las nuevas fórmulas, se construirán también estrategias adaptativas para implementar esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Los resultados de este capítulo están basados en \cite{naranjo2021locally}.
+En el Capítulo \ref{chapter:exp-int-and-ll-methods} se presentó la Aproximación Lineal Local de Orden Superior para EDO. Como se explicó en ese capítulo, a esa clase de métodos pertenecen los integradores numéricos derivados de dividir, en intervalos de tiempo consecutivos, la solución $x$ de la ecuación original en dos partes: la solución $u$ de la ecuación linealizada localmente más una solución aproximada a la representación diferencial del residuo $r=x-u$ proporcionada por un integrador numérico de orden alto. En el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se propusieron y utilizaron las aproximaciones Krylov-Padé para resolver la ecuación diferencial lineal de dimensiones no pequeñas. En este capítulo se utilizarán las fórmulas embebidas Runge-Kutta de Dormand y Prince para aproximar la solución de la ecuación diferencial no lineal del residuo. Combinando estas aproximaciones se obtendrá el Método Runge-Kutta de Dormand y Prince Localmente Linealizado para EDO de dimensiones no pequeñas. Utilizando las nuevas fórmulas, se construirán también estrategias adaptativas para implementar esquemas con tamaño de paso fijo y dimensión del subespacio de Krylov variable, y esquemas con tamaño de paso y dimensión del subespacio de Krylov variable. Los resultados de este capítulo están basados en \cite{naranjo2021locally}.
 
 Sin pérdida de generalidad consideremos el PVI autónomo $d$-dimensional
 \begin{equation}\label{syst}
@@ -159,11 +159,11 @@ $\{\frac{1}{90},\frac{2}{90},\frac{4}{90},\frac{8}{90},\frac{1}{10},\frac {16}{9
 
 Antes de concluir esta sección, es importante destacar que las fórmulas embebidas (\ref{LLDPK scheme}) como implementación numérica de las fórmulas embebidas (\ref{lldis}) también pertenecen a la clase general de Métodos de Linealización Local de Orden Superior de \cite{Jimenez13}. Además, téngase en cuenta que, simplemente reemplazando en (\ref{LLDPK scheme}) los coeficientes de la Tabla \ref{ButcherTabla} por otros correspondientes a un par diferente de fórmulas de Runge-Kutta explícitas embebidas con $s$ estados se obtienen directamente un nuevo par de fórmulas embebidas Runge-Kutta localmente linealizadas para PVI de dimensiones no pequeñas. El orden de convergencia de tales nuevas fórmulas se obtiene, como en la demostración del Teorema \ref{theorem:lldp-convergence}, simplemente combinando el Teorema 15 en~\cite{Jimenez13} y el Teorema \ref{theorem:Krylov-bound}. Además, si los coeficientes de Runge-Kutta $c_i$ de las nuevas fórmulas admiten un máximo común divisor $\gamma$ entonces, un procedimiento similar al descrito anteriormente para aproximar (\ref{flow}) puede seguirse para calcular los diferentes términos $u_j$ de manera eficiente.
 
-\section{Esquemas con tamaño de paso fijo y dimensión de Krylov variable}\label{section:lldp-fix-step}
+\section{Esquemas con tamaño de paso fijo y dimensión del subespacio de Krylov variable}\label{section:lldp-fix-step}
 
 Las nuevas fórmulas embebidas (\ref{LLDPK scheme}) introducidas en la sección anterior dependen de valores no especificados para la dimensión Krylov $\mf$ y el orden Padé $(\pf ,\qf)$. En esta sección se propone una estrategia adaptativa para la estimación de valores adecuados para $\mf, \pf ,\qf$ en las fórmulas (\ref{LLDPK scheme}) en cada paso de integración sobre una partición de tiempo uniforme.
 
-\subsection{Selección de la dimensión de Krylov}\label{sec:selkrydim}
+\subsection{Selección de la dimensión del subespacio de Krylov}\label{sec:selkrydim}
 
 Similar al error relativo utilizado en la Sección \ref{section:approx-non-auto}, el error relativo en la aproximación (\ref{llrk-uj}) para $u_j$ está dado por
 \begin{equation}
@@ -173,7 +173,7 @@ Similar al error relativo utilizado en la Sección \ref{section:approx-non-auto}
         \rvert y_{n}^{[i]}\rvert}\right)^{2}\right)^{1/2},
     \label{errrel}
 \end{equation}
-donde $\mf_n$ denota la dimension del subspacio de Kyrlov en el paso de integración $n$, $ATol$ y $RTol$ son las tolerancias absoluta y relativa, $\mathfrak{c}=\maxx{c_j}$, $\rho = f_x v_{\mf_n+1}$ y $\beta=\nnorm{\nnorm{f}}_2$.
+donde $\mf_n$ denota la dimension del subespacio de Kyrlov en el paso de integración $n$, $ATol$ y $RTol$ son las tolerancias absoluta y relativa, $\mathfrak{c}=\maxx{c_j}$, $\rho = f_x v_{\mf_n+1}$ y $\beta=\nnorm{\nnorm{f}}_2$.
 
 Después de la construcción de la base ortonormal del $\mf_n$-ésimo subespacio Krylov $\mathcal{K}_{\mf_n}(f_x,f)$, dos alternativas son posibles: $\varepsilon_{K}/\gamma_{K}< 1$ o al contrario, donde $\varepsilon_{K}$
 es el error relativo~(\ref{errrel}) y $\gamma_{K}=$ 0.005 es un factor de seguridad.
@@ -182,7 +182,7 @@ En el caso de $\varepsilon_{K}/\gamma_{K}< 1$, se acepta la aproximación (\ref{
 \begin{equation}\label{calcmnew}
     \mathfrak{m}_{new}= \maxx{\mf_{min}, \minn{\mf , \mf_{max} }},
 \end{equation}
-    donde $\mf_{min}$ y $\mf_{max}$ son los valores máximo y mínimo posibles para la dimensión del Krylov,
+    donde $\mf_{min}$ y $\mf_{max}$ son los valores máximo y mínimo posibles para la dimensión del subespacio de Krylov,
 \begin{equation*}
     \mf = \left\lfloor \mf_{n} + \maxx{\fac_{max} , \minn{\fac_{min},
             \fac\cdot\Delta\mf} } \right\rfloor,
@@ -225,11 +225,11 @@ Como se ha señalado en varios artículos (ver \cite{jimenez2009rate,jimenez2012
 
 \subsection{Esbozo del Esquema}
 
-En las dos sub-secciones anteriores se propusieron procedimientos automáticos para la selección de la dimensión Krylov $\mf$ y el orden $\pf,\qf$ de Padé en la aproximación Krylov-Padé (\ref{phi_appox}) para $u_j$. Al combinar estos procedimientos con las fórmulas (\ref{LLDPK scheme}), se pueden construir dos esquemas con tamaño de paso fijo y dimensión de Krylov variable. La implementación de estos esquemas, de orden $r=4$ y $r=5$, se esboza en el Algoritmo~\ref{alg:integratorfix}.
+En las dos sub-secciones anteriores se propusieron procedimientos automáticos para la selección de la dimensión Krylov $\mf$ y el orden $\pf,\qf$ de Padé en la aproximación Krylov-Padé (\ref{phi_appox}) para $u_j$. Al combinar estos procedimientos con las fórmulas (\ref{LLDPK scheme}), se pueden construir dos esquemas con tamaño de paso fijo y dimensión del subespacio de Krylov variable. La implementación de estos esquemas, de orden $r=4$ y $r=5$, se esboza en el Algoritmo~\ref{alg:integratorfix}.
 
 {\SetAlgoNoLine
 \begin{algorithm}[htb]
-	\caption{Algoritmo del esquema de orden $r\,(=4,5)$ con tamaño de paso fijo y dimensión de Krylov variable para las fórmulas (\ref{LLDPK scheme})}
+	\caption{Algoritmo del esquema de orden $r\,(=4,5)$ con tamaño de paso fijo y dimensión del subespacio de Krylov variable para las fórmulas (\ref{LLDPK scheme})}
 	\label{alg:integratorfix}
 	\KwIn{intervalo de tiempo $[t_0, T]$, valor inicial $y_0$, tamaño de paso $h$, dimensión máxima y mínima de los subespacios de Krylov $\mf_{max}$ y $\mf_{min}$, tolerancia absoluta y relativa $Atol$ y $Rtol$}
 
@@ -241,7 +241,7 @@ En las dos sub-secciones anteriores se propusieron procedimientos automáticos p
 		Seleccionar orden de Padé $\pf$ según Sección~\ref{sec:pade-order} \\
 		Estimar error relativo $\varepsilon_{K}$ mediante fórmula~(\ref{errrel}) \\
 		\While{$\varepsilon_{K}/\gamma_{K} \geq 1$ y $\mf_n<\mf_{max}$}{
-			Estimar nueva dimensión de Krylov $\mf_{new}$ mediante fórmula (\ref{calcmnew}) \\
+			Estimar nueva dimensión del subespacio de Krylov $\mf_{new}$ mediante fórmula (\ref{calcmnew}) \\
 			Ejecutar Algoritmo~\ref{alg:Arnoldiexpand} para obtener $V_{m_{new}}$, $H^*_{m_{new}}$, $v_{\mf_{new}+1}$ y $\hf^*_{\mf_{new}+1,\mf_{new}}$ de $\mathcal{K}_{\mf_{new}}(hf_x,f)$\\
 			Calcular $H_{m_{new}}=H^*_{m_{new}}/h$ y $\hf_{\mf_{new}+1,\mf_{new}}=\hf^*_{\mf_{new}+1,\mf_{new}}/h$ \\
 			Hacer $\mf_n=\mf_{new}$ y reemplazar $\mf_{new}$ por $\mf_n$ en las cuatro variables que dependen de $\mf_{new}$ \\
@@ -250,7 +250,7 @@ En las dos sub-secciones anteriores se propusieron procedimientos automáticos p
 		}
      	Calcular $\widetilde{u}_j$ mediante fórmula (\ref{eq:kp_aprox})\\
         Evaluar la fórmula de orden $r$ en (\ref{LLDPK scheme})~(es decir, $\widehat{y}_{n+1}$ o $y_{n+1}$) \\
-	    Estimar nueva dimensión de Krylov $\mf_{new}$ mediante fórmula (\ref{calcmnew})\\
+	    Estimar nueva dimensión del subespacio de Krylov $\mf_{new}$ mediante fórmula (\ref{calcmnew})\\
 		$n=n+1$, $t_n=t_{n-1}+h$, $\mf_n=\mf_{new}$
 	}
 \end{algorithm}
@@ -371,7 +371,7 @@ En la Sección \ref{section:lldp-fix-step}, se introdujeron las nuevas fórmulas
 
 
 \subsubsection{Simulaciones preliminares}
-En este primer conjunto de simulaciones, se evaluará el orden de convergencia de las fórmulas $y_n$ y $\widehat{y}_n$ definidas en (\ref{LLDPK scheme}) en función de la dimensión de Krylov $\mf$ y el orden de Padé $\pf$. Con ese propósito, los errores $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ y $\widehat{e}_i=\max_{t_n\in(t )_{h_i}}\nnnorm{\widehat{y}_n-x(t_n)}_\infty$ en la integración del Ejemplo \ref{ex:Brus} con $M=100$ ($d=200$ ) se calcularon para cinco discretizaciones de tiempo diferentes $(t)_{h_i}$ con un tamaño de paso fijo $h_i$, donde la \textquotedblleft solución exacta\textquotedblright~ $x$ se estima mediante el código Matlab \textit{ode15s} con tolerancias $RTol=10^{ -12}$ y $ATol=10^{-14}$. La Figura \ref{fig:num-exp-lldp-fix-step:Fig3} muestra estos cinco errores para las fórmulas (\ref{LLDPK scheme}) con varios valores de $\mf$ y $\pf=6$ fijo, así como la línea recta ajustada a los puntos $(\log_2( h_i),\log_2(e_i))$ y $(\log_2(h_i),\log_2(\widehat{e}_i))$ con $i=1,...,5$. La Tabla \ref{tab:num-exp-lldp-fix-step:morders} presenta el valor de la pendiente $\widetilde{r}$ de la recta ajustada para cada valor de $\mf$, lo que proporciona una estimación del orden de convergencia $r$ de cada esquema. La tabla también presenta los límites de confianza de $90\%$ de $\widetilde{r}$, el coeficiente de determinación como indicador de la bondad de la línea ajustada y el orden de convergencia esperado que, de acuerdo con el Teorema \ref{theorem:lldp-convergence}, las fórmulas (\ref{LLDPK scheme}) tienen para el $\mf$ dado. La Figura \ref{fig:num-exp-lldp-fix-step:Fig2} y la Tabla \ref{tab:num-exp-lldp-fix-step:porders} presentan resultados similares pero para las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ fijo y varios valores de $\pf$. Se puede observar que el orden de convergencia estimado $\widetilde{r}$ proporcionado en las Tablas \ref{tab:num-exp-lldp-fix-step:morders} y \ref{tab:num-exp-lldp-fix-step:porders} está de acuerdo con el orden de convergencia de las fórmulas (\ref{LLDPK scheme}) indicado por el Teorema \ref{theorem:lldp-convergence} para los valores considerados de $\mf$ y $\pf$. Además, la Figura \ref{fig:num-exp-lldp-fix-step:Fig4} muestra los errores $e_i$ y $\widehat{e}_i$ de las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ y $\pf=6$ fijos calculado para el tamaño de cinco pasos $h_i$ y la línea recta ajustada. En este caso, el orden de convergencia estimado $\widetilde{r}$ para las fórmulas $y_n$ y $\widehat{y}_n$ son 5.01 $\pm$ 0.47 y 3.93 $\pm$ 0.19 , respectivamente, lo cual concuerda con el orden de convergencia 5 y 4 dados en el Teorema \ref{theorem:lldp-convergence} para estas fórmulas.
+En este primer conjunto de simulaciones, se evaluará el orden de convergencia de las fórmulas $y_n$ y $\widehat{y}_n$ definidas en (\ref{LLDPK scheme}) en función de la dimensión del subespacio de Krylov $\mf$ y el orden de Padé $\pf$. Con ese propósito, los errores $e_i=\max_{t_n\in(t)_{h_i}}\nnnorm{y_n-x(t_n)}_\infty$ y $\widehat{e}_i=\max_{t_n\in(t )_{h_i}}\nnnorm{\widehat{y}_n-x(t_n)}_\infty$ en la integración del Ejemplo \ref{ex:Brus} con $M=100$ ($d=200$ ) se calcularon para cinco discretizaciones de tiempo diferentes $(t)_{h_i}$ con un tamaño de paso fijo $h_i$, donde la \textquotedblleft solución exacta\textquotedblright~ $x$ se estima mediante el código Matlab \textit{ode15s} con tolerancias $RTol=10^{ -12}$ y $ATol=10^{-14}$. La Figura \ref{fig:num-exp-lldp-fix-step:Fig3} muestra estos cinco errores para las fórmulas (\ref{LLDPK scheme}) con varios valores de $\mf$ y $\pf=6$ fijo, así como la línea recta ajustada a los puntos $(\log_2( h_i),\log_2(e_i))$ y $(\log_2(h_i),\log_2(\widehat{e}_i))$ con $i=1,...,5$. La Tabla \ref{tab:num-exp-lldp-fix-step:morders} presenta el valor de la pendiente $\widetilde{r}$ de la recta ajustada para cada valor de $\mf$, lo que proporciona una estimación del orden de convergencia $r$ de cada esquema. La tabla también presenta los límites de confianza de $90\%$ de $\widetilde{r}$, el coeficiente de determinación como indicador de la bondad de la línea ajustada y el orden de convergencia esperado que, de acuerdo con el Teorema \ref{theorem:lldp-convergence}, las fórmulas (\ref{LLDPK scheme}) tienen para el $\mf$ dado. La Figura \ref{fig:num-exp-lldp-fix-step:Fig2} y la Tabla \ref{tab:num-exp-lldp-fix-step:porders} presentan resultados similares pero para las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ fijo y varios valores de $\pf$. Se puede observar que el orden de convergencia estimado $\widetilde{r}$ proporcionado en las Tablas \ref{tab:num-exp-lldp-fix-step:morders} y \ref{tab:num-exp-lldp-fix-step:porders} está de acuerdo con el orden de convergencia de las fórmulas (\ref{LLDPK scheme}) indicado por el Teorema \ref{theorem:lldp-convergence} para los valores considerados de $\mf$ y $\pf$. Además, la Figura \ref{fig:num-exp-lldp-fix-step:Fig4} muestra los errores $e_i$ y $\widehat{e}_i$ de las fórmulas (\ref{LLDPK scheme}) con $\mf=11$ y $\pf=6$ fijos calculado para el tamaño de cinco pasos $h_i$ y la línea recta ajustada. En este caso, el orden de convergencia estimado $\widetilde{r}$ para las fórmulas $y_n$ y $\widehat{y}_n$ son 5.01 $\pm$ 0.47 y 3.93 $\pm$ 0.19 , respectivamente, lo cual concuerda con el orden de convergencia 5 y 4 dados en el Teorema \ref{theorem:lldp-convergence} para estas fórmulas.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -413,15 +413,15 @@ En este primer conjunto de simulaciones, se evaluará el orden de convergencia d
 \importantcodes{LLDP5: esquema Runge-Kutta Localmente Linealizado de Dromand y Prince de orden 5 y paso fijo descrito en Algoritmo \ref{alg:integratorfix}}
 \importantcodes{expms4: esquema exponencial de Adams de orden 4 y paso fijo}
 \importantcodes{expms5: esquema exponencial de Adams de orden 5 y paso fijo}
-Para este segundo conjunto de simulaciones, se consideraran los esquemas numéricos definidos en el Algoritmo \ref{alg:integratorfix} para las fórmulas (\ref{LLDPK scheme}) de orden $4$ y $5$ que se implementan, respectivamente, en los códigos \emph{LLDP4} y \emph{LLDP5}. Además, se considerará, el código \textquoteleft expms\textquoteright~con orden $4$ y $5$ disponible en \cite{jansing2011expode}, que proporciona una implementación de tamaño de paso fijo de orden $4$ y $5$ para el método exponencial de Adams~\cite{hochbruck2011exponential}. Los códigos de estos dos equemas exponeciales se denotarán como \emph{expms4} y \emph{expms5}, respectivamente.
+Para este segundo conjunto de simulaciones, se considerarán los esquemas numéricos definidos en el Algoritmo \ref{alg:integratorfix} para las fórmulas (\ref{LLDPK scheme}) de orden $4$ y $5$ que se implementan, respectivamente, en los códigos \emph{LLDP4} y \emph{LLDP5}. Además, se considerará, el código \textquoteleft expms\textquoteright~con orden $4$ y $5$ disponible en \cite{jansing2011expode}, que proporciona una implementación de tamaño de paso fijo de orden $4$ y $5$ para el método exponencial de Adams~\cite{hochbruck2011exponential}. Los códigos de estos dos equemas exponeciales se denotarán como \emph{expms4} y \emph{expms5}, respectivamente.
 
-Para preservar el orden de convergencia de las fórmulas (\ref{LLDPK scheme}), se utilizaran los valores $m_{min}=3$ y $m_{min}=4$ en los códigos \emph{LLDP4} y \emph{LLDP5}, respectivamente, como lo indica el Teorema \ref{theorem:lldp-convergence}. Por el contrario, los códigos \emph{expms4} y \emph{expms5} no restringen los valores de $m_{min}$. Las tolerancias $RTol$ relativa y $ATol$ absoluta para calcular las aproximaciones de Krylov a $u_j$ se establecieron en $10^{-9}$ y $10^{-12}$, respectivamente.
+Para preservar el orden de convergencia de las fórmulas (\ref{LLDPK scheme}), se utilizarán los valores $m_{min}=3$ y $m_{min}=4$ en los códigos \emph{LLDP4} y \emph{LLDP5}, respectivamente, como lo indica el Teorema \ref{theorem:lldp-convergence}. Por el contrario, los códigos \emph{expms4} y \emph{expms5} no restringen los valores de $m_{min}$. Las tolerancias $RTol$ relativa y $ATol$ absoluta para calcular las aproximaciones de Krylov a $u_j$ se establecieron en $10^{-9}$ y $10^{-12}$, respectivamente.
 
 Los resultados en la integración de cada ecuación de prueba obtenidos con los códigos antes mencionados se resumen en una tabla. La precisión de cada código se mide por el error relativo
 \begin{equation}\label{num-exp-lldp-fix-step:ER}
 	RError = \max_{i=1,\ldots,d} \;\ \max_{t_n\in(t)_h}  \;\ \left\lvert\frac{x^{[i]}(t_j)-y^{[i]}(t_j)}{\maxx{x^{[i]}(t_j),\epsilon_{mach}}}\right\rvert
 \end{equation}
-entre la \textquotedblleft solución exacta\textquotedblright~$x$ de la ecuación de prueba y la solución aproximada $y$ de cada código, donde $\epsilon_{mach}$ denota el épsilon de la máquina. Siguiendo \cite{tokman2006efficient}, la \textquotedblleft solución exacta\textquotedblright~de las ecuaciones de prueba se estima mediante el código Matlab \textit{ode15s} con tolerancias $RTol=10^{-12}$ y $ATol=10^{-14}$. En cada tabla, la columna \textit{RTime} presenta el tiempo computacional total relativo de cada código con respecto al código \emph{expms4} en la integración de cada ejemplo. Esta relación de tiempo general funciona como un indicador simple para comparar el costo computacional total de cada código. Las tablas también muestran el número de pasos de integración $Steps$, el número de evaluaciones de campos vectoriales \textit{f-Eval}, el número de evaluaciones de la matriz Jacobianas \textit{J-Eval}, el número de aproximaciones del subespacio de Krylov \textit{K-subspace}, la dimensión mínima $\mf_{min}$, la dimensión máxima $\mf_{max}$ y la dimensión total $\mf_{total}$ de los subespacios de Krylov utilizados por cada código en la integración de las ecuaciones de prueba con tamaño de paso $h$, donde $m_{total}$ es la suma acumulada de la dimensión de los subespacios de Krylov utilizada en cada paso de integración. En las tablas, $d$ especifica el número de ecuaciones de cada ejemplo de prueba.
+entre la \textquotedblleft solución exacta\textquotedblright~$x$ de la ecuación de prueba y la solución aproximada $y$ de cada código, donde $\epsilon_{mach}$ denota el épsilon de la máquina. Siguiendo \cite{tokman2006efficient}, la \textquotedblleft solución exacta\textquotedblright~de las ecuaciones de prueba se estima mediante el código Matlab \textit{ode15s} con tolerancias $RTol=10^{-12}$ y $ATol=10^{-14}$. En cada tabla, la columna \textit{RTime} presenta el tiempo computacional total relativo de cada código con respecto al código \emph{expms4} en la integración de cada ejemplo. Esta relación de tiempo general funciona como un indicador simple para comparar el costo computacional total de cada código. Las tablas también muestran el número de pasos de integración $Steps$, el número de evaluaciones de campos vectoriales \textit{f-Eval}, el número de evaluaciones de la matriz Jacobiana \textit{J-Eval}, el número de aproximaciones del subespacio de Krylov \textit{K-subspace}, la dimensión mínima $\mf_{min}$, la dimensión máxima $\mf_{max}$ y la dimensión total $\mf_{total}$ de los subespacios de Krylov utilizados por cada código en la integración de las ecuaciones de prueba con tamaño de paso $h$, donde $m_{total}$ es la suma acumulada de la dimensión de los subespacios de Krylov utilizada en cada paso de integración. En las tablas, $d$ especifica el número de ecuaciones de cada ejemplo de prueba.
 
 \vspace{0.5cm}
 
@@ -555,7 +555,7 @@ entre la \textquotedblleft solución exacta\textquotedblright~$x$ de la ecuació
 
 Las Tablas \ref{tab:num-exp-lldp-fix-step:cpna} - \ref{tab:num-exp-lldp-fix-step:brna} presentan los resultados de la integración de las ecuaciones de prueba de los Ejemplos \ref{ex:cusp}-\ref{ex:Brus}, mostrando que, con tamaño de paso fijo y dimensión variable de Krylov, los códigos \emph{LLDP4} y \emph{LLDP5} son más precisos que los códigos \emph{expms4} y \emph{expms5}, con un costo computacional similar o menor. Los códigos \emph{LLDP} son más rápidos porque requieren el cálculo de solo un subespacio de Krylov por paso de integración con dimensiones más pequeñas, mientras que los otros códigos calculan más de un subespacio de Krylov con dimensiones más altas. El código \emph{LLDP5} es más rápido que el \emph{LLDP4} porque la fórmula de orden 4 en (\ref{LLDPK scheme}) requiere de una evaluación adicional del campo vectorial $f$ en cada paso de integración. Con tamaño de paso $h = 0$.0064, el código \emph{expms5} produce desbordamiento en la precisión del punto flotante~(\textit{overflow} en inglés) en la integración de la ecuación de Burges, razón por la cual falta información en la Tabla \ref{tab:num-exp-lldp-fix-step:bgna}. Por la misma razón, falta un valor en la Tabla \ref{tab:num-exp-lldp-fix-step:brna} para el código \emph{expms5} con un tamaño de paso $h = 0$.0008.
 
-Además, las tablas muestran la efectividad de la estrategia propuesta para la selección de la dimensión de Krylov $\mf$ en cada paso de integración, con mínima variación entre los valores de $\mf_{min}$ y $\mf_{max}$, y así, con un valor menor de $\mf_{total}$.
+Además, las tablas muestran la efectividad de la estrategia propuesta para la selección de la dimensión del subespacio de Krylov $\mf$ en cada paso de integración, con mínima variación entre los valores de $\mf_{min}$ y $\mf_{max}$, y así, con un valor menor de $\mf_{total}$.
 
 
 \section{Esquemas adaptativos con tamaño de paso variable}
@@ -686,7 +686,7 @@ El \emph{breakdown} en el Algoritmo de Arnoldi~\ref{alg:Arnoldi}, línea $10$, p
 En el caso de que $\varepsilon_{K}/\gamma_K< 1$, se acepta la aproximación de Krylov. De lo contrario, la aproximación de Krylov-Padé no satisface los requisitos de tolerancia y se calcula un nuevo valor de $h_n$. Con $h_{old}=h_n$, el nuevo valor del tamaño del paso se calcula como $h_n=\maxx{h_{min},0\mathord{.}9\cdot h_{old}}$. De esta forma, se debe calcular también un nuevo valor del orden de Padé $\pf$ y de la medida de error $\varepsilon_{K}$.
 
 \subsection{Aproximación Krylov-Padé adaptativa}\label{secc:krylov-Pade}
-Con una combinación adecuada de los procedimientos de las Secciones \ref{sec:selkrydim} y \ref{sec:pade-order} para la estimación óptima de la dimensión de Krylov $\mf$ y el orden de Padé $\pf$, el Algoritmo \ref{alg:errcontrol} presenta el esquema adaptativo de la aproximación de Krylov-Padé para $u_j$ en cada paso de integración.
+Con una combinación adecuada de los procedimientos de las Secciones \ref{sec:selkrydim} y \ref{sec:pade-order} para la estimación óptima de la dimensión del subespacio de Krylov $\mf$ y el orden de Padé $\pf$, el Algoritmo \ref{alg:errcontrol} presenta el esquema adaptativo de la aproximación de Krylov-Padé para $u_j$ en cada paso de integración.
 
 {\SetAlgoNoLine
 \begin{algorithm}[!htb]
@@ -709,7 +709,7 @@ Con una combinación adecuada de los procedimientos de las Secciones \ref{sec:se
 				$h_{new}=\maxx{h_{min},0\mathord{.}9\cdot h_{n}}$\\
 				\eIf{$h_n = h_{min}$}{work = false}{$h_{n}=h_{new}$}
 			}{
-				Estimar la nueva dimensión de Krylov $\mf_{new}$ fórmula (\ref{calcmnew}) \\
+				Estimar la nueva dimensión del subespacio de Krylov $\mf_{new}$ fórmula (\ref{calcmnew}) \\
 				Ejecutar Algoritmo~\ref{alg:Arnoldiexpand} para obtener $V_{\mf_{new}}$, $H^*_{\mf_{new}}$, $v_{\mf_{new}}$ y $\hf^*_{\mf_{new}+1,\mf_{new}}$ de $\mathcal{K}_{\mf_{new}}(h_nJ,f)$\\
 				Hacer $\mf_n=\mf_{new}$ y reemplazar $\mf_{new}$ por $\mf_n$ en las cuatro variables que dependen de $\mf_{new}$
 			}
@@ -726,7 +726,7 @@ Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \r
 
 {\SetAlgoNoLine
 \begin{algorithm}[htb]
-	\caption{Algoritmo del esquema de orden $5$ con tamaño de paso y dimensión de Krylov variable para las fórmulas embebidas  (\ref{LLDPK scheme})}
+	\caption{Algoritmo del esquema de orden $5$ con tamaño de paso y dimensión del subespacio de Krylov variable para las fórmulas embebidas  (\ref{LLDPK scheme})}
 	\label{alg:integrator}
 	\KwIn{intervalo de tiempo $[t_0, T]$, valor inicial $y_0$, tolerancia absoluta y relativa $Atol$ y $Rtol$, dimensión máxima y mínima de los subespacios de Krylov $\mf_{max}$ y $\mf_{min}$, tamaño de paso máximo $h_{max}$}
 	\KwOut{$\{(t_0,y_0),\ldots,(t_n,y_n)\}$}
@@ -744,7 +744,7 @@ Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \r
 		Calcular $\widetilde{u}_j$ mediante Algoritmo~\ref{alg:errcontrol}\\
 		Evaluar las fórmulas embebidas (\ref{LLDPK scheme}) \\
 		Estimar el error (\ref{epsilon_y}) de las formulas embebidas \\
-		Estimar la nueva dimensión de Krylov $\mf_{new}$ mediante fórmula (\ref{calcmnew}) \\
+		Estimar la nueva dimensión del subespacio de Krylov $\mf_{new}$ mediante fórmula (\ref{calcmnew}) \\
 		Estimar le nuevo tamaño de paso $h_{new}$ mediante fórmula (\ref{hnewcalc}) \\
 		\eIf{$\varepsilon_y< RTol$}{
 			\If{$t_n+h_n+h_{new}>T$}{
@@ -955,9 +955,9 @@ Para explicar estos resultados, para cada ecuación de prueba, los detalles de e
     RError & mild & 3.18e-08 & 1.99e-05 & 4.18e-07 &  & 1.49e-07 & 2.88e-06 & 1.28e-06 \\
     & refine & 1.43e-10 & 2.06e-07 & 1.12e-09 &  & 1.85e-10 & 4.65e-09 & 1.25e-09 \\
     \hline
-    & crude & 68 & 31 & 361 &  & 24 & 78 & 268 \\
-    A-Steps & mild & 158 & 85 & 365 &  & 103 & 182 & 276 \\
-    & refine & 1084 & 219 & 644 &  & 549 & 452 & 330 \\
+    & crude & 68 & 31 & 361 &  & 20 & 78 & 268 \\
+    A-Steps & mild & 158 & 85 & 365 &  & 100 & 182 & 276 \\
+    & refine & 1083 & 219 & 644 &  & 546 & 452 & 330 \\
     \hline
     & crude & 0 & 0 & 3 &  & 4 & 10 & 44 \\
     R-Steps & mild & 0 & 0 & 8 &  & 3 & 3 & 31 \\
@@ -967,17 +967,25 @@ Para explicar estos resultados, para cada ecuación de prueba, los detalles de e
     $f$-Eval & mild & 634 & 128 & 2239 &  & 411 & 387 & 1843 \\
     & refine & 4337 & 323 & 5029 &  & 2195 & 820 & 2161 \\
     \hline
+     & crude & 68 & 1 & 359 &  & 20 & 6 & 266 \\
+    $J$-Eval & mild & 158 & 1 & 362 &  & 100 & 3 & 263 \\
+    & refine & 1083 & 1 & 434 &  & 543 & 2 & 185 \\
+    \hline
     & crude & 204 & 0 & 364 &  & 84 & 0 & 312 \\
     K-subspace & mild & 474 & 0 & 373 &  & 318 & 0 & 307 \\
     & refine & 3255 & 0 & 838 &  & 1656 & 0 & 360 \\
     \hline
-    & crude & 664 & 50 & 0 &  & 326 & 184 & 0 \\
-    LS & mild & 2516 & 126 & 0 &  & 1218 & 385 & 0 \\
-    & refine & 15975 & 321 & 0 &  & 5956 & 818 & 0 \\
+    & crude & 0 & 50 & 0 &  & 0 & 184 & 0 \\
+    GMRES & mild & 0 & 126 & 0 &  & 0 & 385 & 0 \\
+    & refine & 0 & 321 & 0 &  & 0 & 818 & 0 \\
     \hline
-    & crude & 0 & 0 & 718 &  & 0 & 0 & 329 \\
-    ME & mild & 0 & 0 & 724 &  & 0 & 0 & 518 \\
-    & refine & 0 & 0 & 1584 &  & 0 & 0 & 651 \\
+    & crude & 664 & 0 & 718 &  & 326 & 0 & 329 \\
+    ME & mild & 2516 & 0 & 724 &  & 1218 & 0 & 518 \\
+    & refine & 15975 & 0 & 1584 &  & 5956 & 0 & 651 \\
+    \hline
+    & crude & 0 & 8 & 0 &  & 0 & 29 & 0 \\
+    ILU(0) & mild & 0 & 16 & 0 &  & 0 & 34 & 0 \\
+    & refine & 0 & 33 & 0 &  & 0 & 58 & 0 \\
     \hline
     & crude & 1553 & 132 & 3587 &  & 636 & 184 & 1408 \\
     $\mf_{total}$ & mild & 5128 & 436 & 4420 &  & 1941 & 385 & 1835 \\
@@ -1014,11 +1022,11 @@ Finalmente es importante notar que, debido a la falta de precisión del código 
 
 \subsubsection{Conclusiones del Capítulo}
 En este Capítulo se construyeron nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas para problemas de valor inicial de dimensiones no pequeñas utilizando las aproximaciones Krylov-Padé
-con evaluación de Jacobiano en el cálculo de los productos de función phi por vector. Se derivaron cotas para los errores y condiciones de orden simples. Se desarrollaron estrategias adaptativas para la reutilización del Jacobiano, la selección del tamaño de paso de integración, la dimensión de Krylov y el orden de Padé con las que se implementaron esquemas con tamaño de paso fijo y dimensión
-de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Se comprobó la eficacia de esos nuevos esquemas en la integración de diferentes ecuaciones y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, un número menor de pasos de integración.
+con evaluación de Jacobiano en el cálculo de los productos de función $\varphi$ por vector. Se derivaron cotas para los errores y condiciones de orden simples. Se desarrollaron estrategias adaptativas para la reutilización del Jacobiano, la selección del tamaño de paso de integración, la dimensión del subespacio de Krylov y el orden de Padé con las que se implementaron esquemas con tamaño de paso fijo y dimensión
+de Krylov variable, y esquemas con tamaño de paso y dimensión del subespacio de Krylov variable. Se comprobó la eficacia de esos nuevos esquemas en la integración de diferentes ecuaciones y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, un número menor de pasos de integración.
 
 %	La Aproximación Lineal Local de Orden Superior para EDO consiste en dividir en intervalos de tiempo consecutivos la solución de la ecuación original en una parte lineal , que es solución de la ecuación linealizada localmente, más una parte no lineal, que es solución de la representación diferencial del residuo. Combinando la aproximación Krylov-Padé con evaluación de Jacobiano, para aproximar la parte lineal, con las fórmulas embebidas Runge-Kutta de Dormand y Prince, para aproximar la parte no lineal, se construyeron nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas para problemas de valor inicial de dimensiones no pequeñas. Para estas nuevas fórmulas se derivaron cotas para los errores y condiciones de orden simples ya que las cotas dependen de la dimensión del subespacio de Krylov, del orden de Padé y del orden del esquema Runge-Kutta utilizado.
 %
-%	Para estas formulas construidas se desarrollaron diversas estrategias. Como el costo computacional de evaluar el Jacobiano en cada paso de integración puede ser grande se desarrolló una estrategia para su reutilización, donde bajo un criterio de error se decide si es posible utilizar el Jacobiano de pasos anteriores o es necesario volver a evaluarlo. Basado en la estrategia de selección de la dimensión de Krylov y el orden de Padé propuesta en el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se desarrolló una estrategia específica para este estas nuevas fórmulas embebidas. Además desarrolló una estrategia adaptativa para la selección del tamaño de paso de integración.
+%	Para estas formulas construidas se desarrollaron diversas estrategias. Como el costo computacional de evaluar el Jacobiano en cada paso de integración puede ser grande se desarrolló una estrategia para su reutilización, donde bajo un criterio de error se decide si es posible utilizar el Jacobiano de pasos anteriores o es necesario volver a evaluarlo. Basado en la estrategia de selección de la dimensión del subespacio de Krylov y el orden de Padé propuesta en el Capítulo \ref{chapter:solve-non-smal-lineal-eq} se desarrolló una estrategia específica para este estas nuevas fórmulas embebidas. Además desarrolló una estrategia adaptativa para la selección del tamaño de paso de integración.
 %
-%	Con la aplicación de estas estrategias a las nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas se implementaron esquemas con tamaño de paso fijo y dimensión de Krylov variable, y esquemas con tamaño de paso y dimensión de Krylov variable. Mediante la integración de diferentes ecuaciones  se comprobó la eficacia de esos nuevos esquemas y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, un número menor de pasos de integración.
+%	Con la aplicación de estas estrategias a las nuevas fórmulas embebidas de Dormand y Prince localmente linealizadas se implementaron esquemas con tamaño de paso fijo y dimensión del subespacio de Krylov variable, y esquemas con tamaño de paso y dimensión del subespacio de Krylov variable. Mediante la integración de diferentes ecuaciones  se comprobó la eficacia de esos nuevos esquemas y se constató que presentan igual o mejor precisión que los esquemas con los que fueron comparados requiriendo, en la mayoría de los casos, un número menor de pasos de integración.

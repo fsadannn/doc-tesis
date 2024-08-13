@@ -24,7 +24,7 @@ de esquemas numéricos para EDO que requieren del cálculo de algún término ex
 \frac{dx(t)}{dt} = Ax(t) + F(x(t))  \;\;  \label{ODE Lines Method}
 \end{equation}
 que resultan de la discretización de una ecuación diferencial en derivadas parciales al utilizar el método de líneas, donde $A$ es una
-matriz cuadrada, $F$ una función vectorial no lineal de $x(t)\in\mathbb{R}^d$ y $t\geq t_0 \in \mathbb{R}$. Típicamante, la matriz $A$ en (\ref{ODE Lines Method}) resulta mal condicionada, lo que establece un determinado nivel de rigidez (stiffness en inglés) para ese sistema de ecuaciones \cite{schiesser2012}. La rigidez del sistema (\ref{ODE Lines Method}) se incrementa con la disminución de la distancia entre los puntos de la discretización del método de líneas o con el aumento del número ecuaciones, lo que dificulta su integración con esquemas numéricos explícitos tradicionales \cite{schiesser2012}. Más recientemente, a finales de los años 90, la clase de integradores exponenciales fue extendida a EDO rígidas (stiff en ingles) de la forma general (\ref{ODE-SYST}).
+matriz cuadrada, $F: \mathbb{R}^d\to\mathbb{R}^d$ una función vectorial no lineal de $x(t)\in\mathbb{R}^d$ y $t\geq t_0 \in \mathbb{R}$. Típicamante, la matriz $A$ en (\ref{ODE Lines Method}) resulta mal condicionada, lo que establece un determinado nivel de rigidez (stiffness en inglés) para ese sistema de ecuaciones \cite{schiesser2012}. La rigidez del sistema (\ref{ODE Lines Method}) se incrementa con la disminución de la distancia entre los puntos de la discretización del método de líneas o con el aumento del número ecuaciones, lo que dificulta su integración con esquemas numéricos explícitos tradicionales \cite{schiesser2012}. Más recientemente, a finales de los años 90, la clase de integradores exponenciales fue extendida a EDO rígidas (stiff en inglés) de la forma general (\ref{ODE-SYST}).
 
 Los integradores exponenciales tanto para ecuaciones semilineales (\ref{ODE Lines Method}) como para ecuaciones generales (\ref{ODE-SYST}) se derivan de aproximar la integral
 que resulta de aplicar la fórmula de variación de constantes a estas ecuaciones~\cite{jimenez2020}. Al aplicar dicha fórmula la solución de la ecuación (\ref{ODE Lines Method}) se escribe como
@@ -225,7 +225,7 @@ En síntesis, a la clase de métodos de Linealización Local de Orden Superior p
 		\leaf{\small \tikzmark{c} Aproximación $\widetilde{u}$  \tikzmark{d} }
 		\branch{1}{\small EDO lineal asociada a $u$\\$\frac{du(t)}{dt} = a(x(t_n);u(t))$\\$u(t_n)=x(t_n)$\\$a(x_n;\xi) = f_x(x_n)(\xi-x_n)+f(x_n)$}
 		\brOverride
-		\leaf{ \tikzmark[top]{a} $\widetilde{y}_{n+1} = \widetilde{u}(t_{n},\widetilde{y}_n)+\widetilde{r}(t_{n},\widetilde{y}_n)$  \tikzmark[top]{b}\\
+		\leaf{ \tikzmark[top]{a} $\widetilde{y}_{n+1} = \widetilde{u}(t_{n+1};\widetilde{y}_n)+\widetilde{r}(t_{n+1};\widetilde{y}_n)$  \tikzmark[top]{b}\\
 		$\widetilde{y_0}=x(t_0)$}
 		\branch{1}{ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\}
 		\brRestore
@@ -236,7 +236,7 @@ En síntesis, a la clase de métodos de Linealización Local de Orden Superior p
 			$-f(x_n)$
 		}
 		\brOverridedd
-		\branch{3}{$ x(t_{n+1}) = u(t_{n},x(t_n))+r(t_{n},x(t_n))$}
+		\branch{3}{$ x(t_{n+1}) = u(t_{n+1};x(t_n))+r(t_{n+1};x(t_n))$}
 		\brRestore
 		\branch{1}{\footnotesize $\frac{dx}{dt}=f(x(t_n))+f_x(x(t_n))(x(t)-x(t_n))+\left[ f(x(t))-f(x(t_n))-f_x(x(t_n))(x(t)-x(t_n))  \right]$\\$ t\in[t_{n},t_{n+1}]$}
 		\branch{1}{$\frac{dx}{dt}=f(x),\; x(t_0)=x_0\;,\; t\geq t_0$}
@@ -262,7 +262,7 @@ calculadas analíticamente. Dependiendo de la forma de calcular  numéricamente 
  \importantdefinition{Esquema de Linealización Local}
 \begin{definition}
 	\label{definition LLS} Dada la discretización Lineal Local 
-	  $y_n=y_{n}+\digamma(t_{n},y_{n},t-t_{n})$
+	  $y_{n+1}=y_{n}+\digamma(t_{n},y_{n},t-t_{n})$
 	 de orden $\gamma $, toda fórmula recursiva de la forma 
 	\begin{equation*}
 	 \widetilde{y}_{n+1}=\widetilde{y}_{n}+\widetilde{\digamma}(t_{n},\widetilde{y}_{n},t-t_{n})
@@ -346,7 +346,7 @@ En muchas aplicaciones se utiliza $\me{tA}$ donde $t$ es un escalar, por tanto
 En \cite{moler2003nineteen} se presenta una revisión de los métodos numéricos
 para aproximar
 la exponencial de matrices. Los métodos más utilizados son la aproximación de Padé con escalamiento
-y potenciación para matrices pequeñas y densas, y el de los subespacios de Krylov para matices grandes y esparcidas.
+y potenciación para matrices pequeñas y densas, y el de los subespacios de Krylov para matrices grandes y ralas.
 
 
 \subsection{Aproximación de Padé}\label{section:pade-approx}
@@ -440,7 +440,7 @@ Lanczos para matrices hermíticas~\cite{arnoldi,saad2003iterative}.
 \begin{algorithm}
     \caption{Algoritmo de Arnoldi para construir una base ortonormal $\{ v_1,\ldots,v_\mf \}$ del $\mf$-ésimo subespacio de Krylov $\mathcal{K}_\mf(A,b)=\mathrm{span} \{ b,Ab,\ldots, A^{\mf-1}b \}$}
     \label{alg:Arnoldi}
-    \KwIn{Matriz $A\in \mathbb{R}^{d\times d}$, vector $b\in \mathbb{R}^{d}$ y dimensión de Krylov $\mf$}
+    \KwIn{Matriz $A\in \mathbb{R}^{d\times d}$, vector $b\in \mathbb{R}^{d}$ y dimensión del subespacio de Krylov $\mf$}
     \KwOut{$V_\mf=\left[ v_1 \, \cdots \, v_\mf \right]\in\mathbb{R}^{d\times\mf}$, matriz de Hessenberg superior $H_\mf=V_\mf^{\intercal}A V_\mf $, $v_{\mf+1}\in\mathbb{R}^d$, $\hf_{\mf+1,\mf}$, $\mf$, $breakdown$ }
 
     $breakdown=false$\\
@@ -486,9 +486,9 @@ Cuando la función $f$ en (\ref{MFUNC-APROX}) actua sobre la matriz $A$ reescala
 \begin{equation*}
 	f(\tau A)b\approx ||b||_2 V_\mf f(\tau H_\mf)e_1,
 \end{equation*}
-expresion que se deriva de propiedad de invarianza ante escalado de las bases ortonormales de Krylov. Esta propiedad de invarianza se refiere al siguiente resultado. Si $V^*_m$ y $H^*_m$ denotan a la base ortonormal y a la matriz de Hessenberg resultante del Algoritmo de Arnoldi \ref{alg:Arnoldi} para el subspacio de Krylov $\mathcal{K}_\mf(\tau A,b)$, entonces
+expresion que se deriva de propiedad de invarianza ante escalado de las bases ortonormales de Krylov. Esta propiedad de invarianza se refiere al siguiente resultado. Si $V^*_m$ y $H^*_m$ denotan a la base ortonormal y a la matriz de Hessenberg resultante del Algoritmo de Arnoldi \ref{alg:Arnoldi} para el subespacio de Krylov $\mathcal{K}_\mf(\tau A,b)$, entonces
 \[ V^*_m=V_m       \text{   y    }      H^*_m=\tau H_m,\]
-donde $V_m$ es la base ortonormal y $H_m$  la matriz de Hessenberg resultante del Algoritmo de Arnoldi \ref{alg:Arnoldi} para el subspacio de Krylov $\mathcal{K}_\mf(A,b)$.
+donde $V_m$ es la base ortonormal y $H_m$  la matriz de Hessenberg resultante del Algoritmo de Arnoldi \ref{alg:Arnoldi} para el subespacio de Krylov $\mathcal{K}_\mf(A,b)$.
 
 \section{Producto de funciones phi por vectores}\label{section:phi-times-vector}
 
