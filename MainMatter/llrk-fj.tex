@@ -22,7 +22,7 @@ Sin pérdida de generalidad, similar a Sección \ref{section:fj-krylov-pade-appr
 \end{equation}
 se cumple, donde $f_x(y)$ es la matriz Jacobiana del campo vectorial $f(y)$, $y,b$ son vectores $d$-dimensionales y $\mathfrak{L}$ es una constante positiva que depende solamente de la norma de las derivadas de $f_x$.
 
-Además, supondremos que la función $g$ (\ref{eq:g_bound2}) se utiliza para aproximar el producto de la matriz Jacobiana por el vector en el PVI auxiliar (\ref{ODE r}), y que existe una aproximación libre de Jacobiano $\widehat{z}(\cdotp ;\widetilde{y}_n)$ a la solución del PVI lineal
+Además, supondremos que la función $g$ en (\ref{eq:g_bound2}) se utiliza para aproximar el producto de la matriz Jacobiana por el vector en el PVI auxiliar (\ref{ODE r}), y que existe una aproximación libre de Jacobiano $\widehat{z}(\cdotp ;\widetilde{y}_n)$ a la solución del PVI lineal
 \begin{equation}
     \frac{dz(t)}{dt} = a(\widetilde{y}_n;z(t)) \,,\;\;\; z(t_n)=\widetilde{y}_n \,,\;\;\; t\in[t_n,t_{n+1}]\label{fjsyst0}
 \end{equation}
@@ -330,12 +330,10 @@ Para cada ecuación de prueba, los resultados de la integración numérica se si
 
 Para cada código, las Tablas \ref{tab:br}-\ref{tab:gs2d} presentan el tamaño del paso \textit{h}, el número de pasos \textit{Pasos}, el número de evaluaciones del campo vectorial \textit{f-Eval}, el número de aproximaciones del subespacio Krylov \textit{K-subspace} a los productos de la función phi por un vector, el número de sistemas lineales en el código \textit{BDF4} resuelto por el método General Minimal Residue \textit {GMRES}, y el número de aproximaciones de Padé \textit{Padé} requeridas por los tres integradores exponenciales. Además, la dimensión mínima $\mf_{min}$, máxima $\mf_{max}$ y total $\mf_{total}$ de los subespacios de Krylov requerida por los códigos \textit{JF-LLRK4}, \textit{JF-Exp4} y \textit{JF-EPIRK4} para integrar las ecuaciones de prueba en todo el intervalo de integración también se especifica. Para el código \emph{BDF4}, $\mf_{min}$, $\mf_{max}$ y $\mf_{total}$ representan el número mínimo, máximo y total de iteraciones realizadas por el método GMRES sobre todo el intervalo de integración. En las tablas, $d$ especifica el número de ecuaciones de cada ejemplo de prueba.
 
-\vspace{0.1cm}
-
 \begin{table}[htb]
 	\caption{Desempeño de los códigos de paso fijo \textit{JF-LLRK4}, \textit{JF-Exp4}, \textit{JF-EPIRK4} y \textit{BDF4} en la integración de la ecuación Brusselator con $M=100$, $d=200$.}
 	\centering
-	\begin{adjustbox}{width=0.9\columnwidth,center}
+	\begin{adjustbox}{width=0.88\columnwidth,center}
 		\begin{tabular}{cccccccccc}
 			\hline
 			\textit{h} & Código & Pasos & f-Eval & K-subspace & GMRES & Padé & $\mf_{total}$ & $\mf%

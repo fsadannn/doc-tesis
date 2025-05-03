@@ -207,6 +207,7 @@ El estimador propuesto (\ref{calcmnew}) para $\mf_{new}$ es un refinamiento del 
 
 \subsection{Selección del orden de Padé}\label{sec:pade-order}
 Como se ha señalado en varios artículos (ver \cite{jimenez2009rate,jimenez2012convergence, Jimenez14AMC, jimenez2015convergence}), la selección de un valor apropiado del par $(\pf,\qf)$ en la aproximación del Padé es crucial para mejorar la eficiencia computacional de los integradores exponenciales. Para este propósito, la Tabla 1 en \cite{moler2003nineteen} se usa regularmente para configurar automáticamente los valores óptimos de $\pf$, con $\qf=\pf$, en función de la norma de la matriz, la tolerancia especificada y el orden de convergencia del integrador exponencial. Por lo tanto, con $\pf=\qf$ y la restricción de convergencia $\pf+\qf\geq5$ dada por el Teorema \ref{theorem:lldp-convergence}, la selección de un valor específico de $\pf$ para la aproximación (\ref{LLDPK scheme}) se realiza en cada paso de integración de acuerdo con la Tabla \ref{table:padep}, que presenta el subconjunto de la Tabla 1 en \cite{moler2003nineteen} correspondiente a $\pf \ge 3$.
+\vspace{0.2cm}
 
 \begin{table}[htb]
 	\caption{Valores óptimos de $\pf$ para la aproximación de Krylov-Padé (\ref{phi_appox}), con $\qf=\pf$, como función de $\lvert\lvert \frac{h_n}{90}\overline{H} \rvert\rvert_\infty$ y la tolerancia deseada $\mathrm{RTol}$. $\overline{H}$ denota la matriz de Hessenberg ampliada (\ref{hhat}).}
@@ -255,7 +256,7 @@ En las dos sub-secciones anteriores se propusieron procedimientos automáticos p
 	}
 \end{algorithm}
 }
-
+\vspace{0.1cm}
 \subsection{Ecuaciones de prueba}\label{section:test-eq}
 En el marco de los integradores exponenciales, los seis modelos que se considerarán a continuación (y, también, en el próximo Capítulo) se han utilizado ampliamente en la literatura como ecuaciones de prueba. Véase, por ejemplo, \cite{tokman2006efficient,tokman2012new,tokman2013comparative} y sus referencias. Como en \cite{tokman2006efficient,tokman2012new,tokman2013comparative}, estos modelos que involucran ecuaciones diferenciales parciales se discretizan espacialmente mediante el método de líneas para obtener PVI de dimensiones no pequeñas. Específicamente, siguiendo \cite{tokman2006efficient,tokman2012new,tokman2013comparative}, la primera y la segunda derivada parcial con respecto a las variables espaciales se discretizan con la diferencia finita centrada de segundo orden.
 
@@ -721,7 +722,7 @@ Con una combinación adecuada de los procedimientos de las Secciones \ref{sec:se
 
 \subsection{Esbozo del Esquema}
 
-Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \ref{secc:hcontrol} para la estimación y control del tamaño de paso $h_n$, el criterio de la Sección \ref{secc:jaccontrol} para la reutilización del Jacobiano, y la aproximación adaptativa de Krylov-Padé a $u_j$ descrita en la Sección \ref{secc:krylov-Pade}, el Algoritmo \ref{alg:integrator} presenta el esquema de la estrategia adaptativa para las fórmulas embebidas  (\ref{LLDPK scheme}) con tamaño de paso y dimensión Krylov variables. Obsérvese que, para tamaños de paso no fallidos, el Algoritmo \ref{alg:Arnoldi} es utilizado solo una vez por paso de integración. Cuando un tamaño de paso $h_n$ es rechazado, el Algoritmo \ref{alg:Arnoldi} es utilizado solo si la matriz Jacobiana no se ha actualizado en $y_n$, es decir, cuando $J \neq f_x(y_n)$.
+Teniendo en cuenta los procedimientos de las Secciones \ref{secc:stepsizes} y \ref{secc:hcontrol} para la estimación y control del tamaño de paso $h_n$, el criterio de la Sección \ref{secc:jaccontrol} para la reutilización del Jacobiano, y la aproximación adaptativa de Krylov-Padé a $u_j$ descrita en la Sección \ref{secc:krylov-Pade}, el Algoritmo \ref{alg:integrator} presenta el esquema de la estrategia adaptativa para las fórmulas embebidas  (\ref{LLDPK scheme}) con tamaño de paso y dimensión de  Krylov variables. Obsérvese que, para tamaños de paso no fallidos, el Algoritmo \ref{alg:Arnoldi} es utilizado solo una vez por paso de integración. Cuando un tamaño de paso $h_n$ es rechazado, el Algoritmo \ref{alg:Arnoldi} es utilizado solo si la matriz Jacobiana no se ha actualizado en $y_n$, es decir, cuando $J \neq f_x(y_n)$.
 
 
 {\SetAlgoNoLine
